@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>DEX 学习笔记 | 去中心化交易所实战指南</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析">
+    <meta name="generator" content="Hugo 0.158.0">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="孙洋">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+  
+    <link rel="stylesheet" href="/css/custom.css">
+  
+
+
+    
+
+
+    
+      
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+
+    
+
+    
+    
+      <link href="/categories/%E5%AE%9E%E6%88%98%E7%AD%96%E7%95%A5/index.xml" rel="alternate" type="application/rss+xml" title="DEX 学习笔记 | 去中心化交易所实战指南" />
+      <link href="/categories/%E5%AE%9E%E6%88%98%E7%AD%96%E7%95%A5/index.xml" rel="feed" type="application/rss+xml" title="DEX 学习笔记 | 去中心化交易所实战指南" />
+      
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/categories/%E5%AE%9E%E6%88%98%E7%AD%96%E7%95%A5/">
+    
+
+    
+    
+    <meta property="og:url" content="http://localhost:1313/categories/%E5%AE%9E%E6%88%98%E7%AD%96%E7%95%A5/">
+  <meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南">
+  <meta property="og:title" content="实战策略">
+  <meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="website">
+
+  <meta itemprop="name" content="实战策略">
+  <meta itemprop="description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析">
+  <meta itemprop="datePublished" content="2026-03-18T21:24:00+08:00">
+  <meta itemprop="dateModified" content="2026-03-18T21:24:00+08:00">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="实战策略">
+  <meta name="twitter:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析">
+
+	
+  </head><body class="ma0 avenir bg-near-white development is-term">
+    
+
+  <header>
+    <div class="pb3-m pb6-l bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        DEX 学习笔记 | 去中心化交易所实战指南
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/" title="首页 page">
+              首页
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/posts/" title="文章 page">
+              文章
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/guides/" title="教程 page">
+              教程
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/tools/" title="工具 page">
+              工具
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/about/" title="关于 page">
+              关于
+            </a>
+          </li>
+          
+        </ul>
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+      <div class="tc-l pv3 ph3 ph4-ns">
+        <h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">
+          实战策略
+        </h1>
+        
+      </div>
+    </div>
+  </header>
+
+
+    <main class="pb7" role="main">
+      
+  <article class="pa3 pa4-ns nested-copy-line-height">
+    <section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section>
+    <section class="flex-ns mt5 flex-wrap justify-around">
+      
+        <div class="w-100 w-30-l mb4 relative bg-white">
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">文章</span>
+    <h1 class="f3 near-black">
+      <a href="/posts/06-layer2-dex/" class="link black dim">
+        Layer2 DEX 完全指南 - Gas 费节省 90%
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h2 id="为什么需要-layer2">为什么需要 Layer2</h2>
+<p><strong>以太坊主网问题</strong>：</p>
+<ul>
+<li>Gas 费高：swap 一次 $10-50</li>
+<li>速度慢：15 秒出块</li>
+<li>拥堵时更严重</li>
+</ul>
+<p><strong>Layer2 解决方案</strong>：</p>
+<ul>
+<li>Gas 费：$0.1-1（节省 90%+）</li>
+<li>速度：秒级确认</li>
+<li>安全性：继承以太坊</li>
+</ul>
+<hr>
+<h2 id="主流-layer2-对比">主流 Layer2 对比</h2>
+<table>
+  <thead>
+      <tr>
+          <th>网络</th>
+          <th>TVL</th>
+          <th>Gas 费</th>
+          <th>生态</th>
+          <th>推荐度</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Arbitrum</td>
+          <td>$25 亿</td>
+          <td>$0.2-0.5</td>
+          <td>丰富</td>
+          <td>⭐⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>Optimism</td>
+          <td>$10 亿</td>
+          <td>$0.3-0.8</td>
+          <td>丰富</td>
+          <td>⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>Base</td>
+          <td>$8 亿</td>
+          <td>$0.1-0.3</td>
+          <td>快速增长</td>
+          <td>⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>Polygon</td>
+          <td>$5 亿</td>
+          <td>$0.01-0.1</td>
+          <td>成熟</td>
+          <td>⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>zkSync</td>
+          <td>$3 亿</td>
+          <td>$0.05-0.2</td>
+          <td>早期</td>
+          <td>⭐⭐⭐</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="arbitrum-">Arbitrum ⭐⭐⭐⭐⭐</h2>
+<h3 id="优势">优势</h3>
+<ul>
+<li>TVL 最高，流动性最好</li>
+<li>生态项目最多</li>
+<li>Gas 费稳定低廉</li>
+<li>桥接方便</li>
+</ul>
+<h3 id="主要-dex">主要 DEX</h3>
+<table>
+  <thead>
+      <tr>
+          <th>DEX</th>
+          <th>TVL</th>
+          <th>特色</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Uniswap V3</td>
+          <td>$8 亿</td>
+          <td>主流选择</td>
+      </tr>
+      <tr>
+          <td>Camelot</td>
+          <td>$3 亿</td>
+          <td>原生 DEX</td>
+      </tr>
+      <tr>
+          <td>SushiSwap</td>
+          <td>$2 亿</td>
+          <td>多链支持</td>
+      </tr>
+      <tr>
+          <td>Trader Joe</td>
+          <td>$1 亿</td>
+          <td>AVAX 跨链</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="推荐池子">推荐池子</h3>
+<ul>
+<li>USDC/USDT（稳定币）</li>
+<li>ETH/USDC（主流）</li>
+<li>ARB/ETH（治理代币）</li>
+</ul>
+<h3 id="跨链桥">跨链桥</h3>
+<ul>
+<li>官方桥：bridge.arbitrum.io</li>
+<li>第三方：Hop、Stargate</li>
+</ul>
+<hr>
+<h2 id="optimism-">Optimism ⭐⭐⭐⭐</h2>
+<h3 id="优势-1">优势</h3>
+<ul>
+<li>OP 空投历史</li>
+<li>Coinbase 支持</li>
+<li>生态发展快</li>
+</ul>
+<h3 id="主要-dex-1">主要 DEX</h3>
+<table>
+  <thead>
+      <tr>
+          <th>DEX</th>
+          <th>TVL</th>
+          <th>特色</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Uniswap V3</td>
+          <td>$4 亿</td>
+          <td>主流</td>
+      </tr>
+      <tr>
+          <td>Velodrome</td>
+          <td>$3 亿</td>
+          <td>原生 AMM</td>
+      </tr>
+      <tr>
+          <td>Synthetix</td>
+          <td>$1 亿</td>
+          <td>衍生品</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="推荐策略">推荐策略</h3>
+<ul>
+<li>Velodrome 高收益池</li>
+<li>OP 治理代币质押</li>
+<li>关注空投机会</li>
+</ul>
+<hr>
+<h2 id="base-">Base ⭐⭐⭐⭐</h2>
+<h3 id="优势-2">优势</h3>
+<ul>
+<li>Coinbase 出品</li>
+<li>增长最快</li>
+<li>Gas 费最低</li>
+<li>社交属性强</li>
+</ul>
+<h3 id="主要-dex-2">主要 DEX</h3>
+<table>
+  <thead>
+      <tr>
+          <th>DEX</th>
+          <th>TVL</th>
+          <th>特色</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Aerodrome</td>
+          <td>$2 亿</td>
+          <td>原生 AMM</td>
+      </tr>
+      <tr>
+          <td>Uniswap V3</td>
+          <td>$1.5 亿</td>
+          <td>主流</td>
+      </tr>
+      <tr>
+          <td>BaseSwap</td>
+          <td>$5000 万</td>
+          <td>原生</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="风险提示">风险提示</h3>
+<ul>
+<li>较新网络，审计较少</li>
+<li>生态仍在发展</li>
+<li>长期可持续性待验证</li>
+</ul>
+<hr>
+<h2 id="跨链操作指南">跨链操作指南</h2>
+<h3 id="第一步选择桥">第一步：选择桥</h3>
+<table>
+  <thead>
+      <tr>
+          <th>桥</th>
+          <th>速度</th>
+          <th>费用</th>
+          <th>推荐</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>官方桥</td>
+          <td>慢（10 分钟）</td>
+          <td>低</td>
+          <td>⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>Hop</td>
+          <td>快（1 分钟）</td>
+          <td>中</td>
+          <td>⭐⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>Stargate</td>
+          <td>快（2 分钟）</td>
+          <td>中</td>
+          <td>⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>Across</td>
+          <td>快（1 分钟）</td>
+          <td>低</td>
+          <td>⭐⭐⭐⭐</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="第二步跨链步骤">第二步：跨链步骤</h3>
+<pre tabindex="0"><code>1. 访问桥网站（如 hop.exchange）
+2. 选择源网络（Ethereum）
+3. 选择目标网络（Arbitrum）
+4. 输入金额
+5. 确认交易
+6. 等待到账（1-10 分钟）
+</code></pre><h3 id="第三步开始交易">第三步：开始交易</h3>
+<p>跨链完成后，在 Layer2 上正常使用 DEX。</p>
+    </div>
+    <a href="/posts/06-layer2-dex/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        </div>
+      
+        <div class="w-100 w-30-l mb4 relative bg-white">
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">文章</span>
+    <h1 class="f3 near-black">
+      <a href="/posts/02-liquidity-strategies/" class="link black dim">
+        流动性管理策略 - 从被动 LP 到主动管理
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h2 id="三种-lp-策略对比">三种 LP 策略对比</h2>
+<table>
+  <thead>
+      <tr>
+          <th>策略</th>
+          <th>难度</th>
+          <th>收益潜力</th>
+          <th>风险</th>
+          <th>适合人群</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>被动 LP</td>
+          <td>⭐</td>
+          <td>⭐⭐</td>
+          <td>⭐⭐</td>
+          <td>新手</td>
+      </tr>
+      <tr>
+          <td>主动调仓</td>
+          <td>⭐⭐⭐</td>
+          <td>⭐⭐⭐</td>
+          <td>⭐⭐⭐</td>
+          <td>进阶</td>
+      </tr>
+      <tr>
+          <td>集中流动性</td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td>专业</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="策略一被动-lp">策略一：被动 LP</h2>
+<h3 id="操作方式">操作方式</h3>
+<ol>
+<li>存入 50:50 双币</li>
+<li>获得 LP Token</li>
+<li>坐收手续费，不做任何操作</li>
+</ol>
+<h3 id="优点">优点</h3>
+<ul>
+<li>简单，一次设置即可</li>
+<li>无需关注市场波动</li>
+<li>适合长期看好双币</li>
+</ul>
+<h3 id="缺点">缺点</h3>
+<ul>
+<li>资金效率低</li>
+<li>无常损失完全暴露</li>
+<li>APY 通常较低（5-15%）</li>
+</ul>
+<h3 id="推荐场景">推荐场景</h3>
+<ul>
+<li>稳定币对（USDC/DAI）</li>
+<li>强相关资产（ETH/stETH）</li>
+<li>长期持有信念强</li>
+</ul>
+<hr>
+<h2 id="策略二主动调仓">策略二：主动调仓</h2>
+<h3 id="核心思路">核心思路</h3>
+<p>定期 rebalance 回 50:50 比例，降低无常损失。</p>
+<h3 id="操作步骤">操作步骤</h3>
+<pre tabindex="0"><code>1. 监控池子比例
+2. 当偏离&gt;20% 时触发
+3. 卖出多的，买入少的
+4. 重新存入池子
+</code></pre><h3 id="优点-1">优点</h3>
+<ul>
+<li>降低无常损失 30-50%</li>
+<li>可在震荡市获利</li>
+<li>灵活性高</li>
+</ul>
+<h3 id="缺点-1">缺点</h3>
+<ul>
+<li>需要频繁操作</li>
+<li>产生额外 gas 费</li>
+<li>可能错过单边行情</li>
+</ul>
+<h3 id="工具推荐">工具推荐</h3>
+<ul>
+<li><strong>DeFi Saver</strong>：自动 rebalance</li>
+<li><strong>Gelato</strong>：条件触发执行</li>
+<li>自建脚本监控</li>
+</ul>
+<hr>
+<h2 id="策略三集中流动性uniswap-v3">策略三：集中流动性（Uniswap V3）</h2>
+<h3 id="革命性创新">革命性创新</h3>
+<p>V3 允许自定义价格区间，资金效率提升 10-100 倍。</p>
+    </div>
+    <a href="/posts/02-liquidity-strategies/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        </div>
+      
+    </section>
+    </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="http://localhost:1313/" >
+    &copy;  DEX 学习笔记 | 去中心化交易所实战指南 2026 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>

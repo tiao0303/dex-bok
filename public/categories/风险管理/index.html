@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>DEX 学习笔记 | 去中心化交易所实战指南</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析">
+    <meta name="generator" content="Hugo 0.158.0">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="孙洋">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+  
+    <link rel="stylesheet" href="/css/custom.css">
+  
+
+
+    
+
+
+    
+      
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+
+    
+
+    
+    
+      <link href="/categories/%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86/index.xml" rel="alternate" type="application/rss+xml" title="DEX 学习笔记 | 去中心化交易所实战指南" />
+      <link href="/categories/%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86/index.xml" rel="feed" type="application/rss+xml" title="DEX 学习笔记 | 去中心化交易所实战指南" />
+      
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/categories/%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86/">
+    
+
+    
+    
+    <meta property="og:url" content="http://localhost:1313/categories/%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86/">
+  <meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南">
+  <meta property="og:title" content="风险管理">
+  <meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="website">
+
+  <meta itemprop="name" content="风险管理">
+  <meta itemprop="description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析">
+  <meta itemprop="datePublished" content="2026-03-18T21:26:00+08:00">
+  <meta itemprop="dateModified" content="2026-03-18T21:26:00+08:00">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="风险管理">
+  <meta name="twitter:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析">
+
+	
+  </head><body class="ma0 avenir bg-near-white development is-term">
+    
+
+  <header>
+    <div class="pb3-m pb6-l bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        DEX 学习笔记 | 去中心化交易所实战指南
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/" title="首页 page">
+              首页
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/posts/" title="文章 page">
+              文章
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/guides/" title="教程 page">
+              教程
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/tools/" title="工具 page">
+              工具
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/about/" title="关于 page">
+              关于
+            </a>
+          </li>
+          
+        </ul>
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+      <div class="tc-l pv3 ph3 ph4-ns">
+        <h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">
+          风险管理
+        </h1>
+        
+      </div>
+    </div>
+  </header>
+
+
+    <main class="pb7" role="main">
+      
+  <article class="pa3 pa4-ns nested-copy-line-height">
+    <section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section>
+    <section class="flex-ns mt5 flex-wrap justify-around">
+      
+        <div class="w-100 w-30-l mb4 relative bg-white">
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">文章</span>
+    <h1 class="f3 near-black">
+      <a href="/posts/08-impermanent-loss/" class="link black dim">
+        无常损失详解 - LP 最大的隐形成本
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h2 id="什么是无常损失">什么是无常损失</h2>
+<p><strong>无常损失</strong>（Impermanent Loss, IL）= 提供流动性 vs 持有 的价值差异</p>
+<p>简单说：币价波动时，LP 可能比直接持有亏钱。</p>
+<hr>
+<h2 id="经典案例">经典案例</h2>
+<p><strong>场景</strong>：ETH = $1800 时存入 LP</p>
+<table>
+  <thead>
+      <tr>
+          <th>操作</th>
+          <th>存入</th>
+          <th>ETH 涨到$3600 后价值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>持有</td>
+          <td>1 ETH + 1800 USDC</td>
+          <td>$5400</td>
+      </tr>
+      <tr>
+          <td>LP</td>
+          <td>1 ETH + 1800 USDC</td>
+          <td>$4242</td>
+      </tr>
+      <tr>
+          <td><strong>差异</strong></td>
+          <td>-</td>
+          <td><strong>-$1158 (-21.5%)</strong></td>
+      </tr>
+  </tbody>
+</table>
+<p>这就是无常损失。</p>
+<hr>
+<h2 id="计算公式">计算公式</h2>
+<pre tabindex="0"><code>IL = (2 * sqrt(price_ratio) / (1 + price_ratio)) - 1
+
+price_ratio = 新价格 / 原价格
+</code></pre><h3 id="速查表">速查表</h3>
+<table>
+  <thead>
+      <tr>
+          <th>价格变化</th>
+          <th>无常损失</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>+10%</td>
+          <td>-0.23%</td>
+      </tr>
+      <tr>
+          <td>+25%</td>
+          <td>-1.4%</td>
+      </tr>
+      <tr>
+          <td>+50%</td>
+          <td>-5.7%</td>
+      </tr>
+      <tr>
+          <td>+100%</td>
+          <td>-21.5%</td>
+      </tr>
+      <tr>
+          <td>+200%</td>
+          <td>-42.3%</td>
+      </tr>
+      <tr>
+          <td>-50%</td>
+          <td>-21.5%</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>规律</strong>：</p>
+    </div>
+    <a href="/posts/08-impermanent-loss/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        </div>
+      
+    </section>
+    </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="http://localhost:1313/" >
+    &copy;  DEX 学习笔记 | 去中心化交易所实战指南 2026 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>
