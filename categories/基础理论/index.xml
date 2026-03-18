@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>基础理论 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/</link><description>Recent content in 基础理论 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 18 Mar 2026 21:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/index.xml" rel="self" type="application/rss+xml"/><item><title>AMM 原理详解 - 自动做市商核心机制</title><link>https://tiao0303.github.io/dex-bok/posts/01-amm-principles/</link><pubDate>Wed, 18 Mar 2026 21:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/01-amm-principles/</guid><description>&lt;h2 id="什么是-amm"&gt;什么是 AMM&lt;/h2&gt;
+&lt;p&gt;自动做市商（Automated Market Maker）是去中心化交易所（DEX）的核心机制，用数学公式代替传统订单簿来实现资产交易。&lt;/p&gt;
+&lt;h2 id="核心公式恒定乘积"&gt;核心公式：恒定乘积&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;x * y = k
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;x&lt;/strong&gt; = Token A 的数量&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;y&lt;/strong&gt; = Token B 的数量&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;k&lt;/strong&gt; = 常数（流动性总量保持不变）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="公式含义"&gt;公式含义&lt;/h3&gt;
+&lt;p&gt;无论交易如何进行，池中两种 token 的乘积始终保持不变。这导致：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;买入 Token A → A 减少，B 增加 → A 价格上涨&lt;/li&gt;
+&lt;li&gt;卖出 Token A → A 增加，B 减少 → A 价格下跌&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="amm-工作流程"&gt;AMM 工作流程&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-mermaid" data-lang="mermaid"&gt;graph LR
+ A[用户存入双币] --&amp;gt; B[成为 LP]
+ B --&amp;gt; C[获得 LP Token]
+ C --&amp;gt; D[交易产生手续费]
+ D --&amp;gt; E[LP 获得收益]
+&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;提供流动性&lt;/strong&gt;：用户存入等值的双币（如 1 ETH + 1800 USDC）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;获得凭证&lt;/strong&gt;：收到 LP Token，代表池子份额&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;交易发生&lt;/strong&gt;：其他用户 swap，支付手续费（通常 0.3%）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;收益分配&lt;/strong&gt;：手续费累积到池中，LP 按比例分享&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="关键概念"&gt;关键概念&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;术语&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;th&gt;重要性&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;流动性池&lt;/td&gt;
+ &lt;td&gt;存放交易对的智能合约&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;LP Token&lt;/td&gt;
+ &lt;td&gt;流动性凭证，可随时赎回&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;滑点&lt;/td&gt;
+ &lt;td&gt;大额交易导致的价格偏移&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;无常损失&lt;/td&gt;
+ &lt;td&gt;币价波动导致的相对损失&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="实战要点"&gt;实战要点&lt;/h2&gt;
+&lt;h3 id="小额交易1000-usd"&gt;小额交易（&amp;lt;1000 USD）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;滑点可忽略不计&lt;/li&gt;
+&lt;li&gt;直接用 Uniswap/Sushiswap&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="大额交易10000-usd"&gt;大额交易（&amp;gt;10000 USD）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;分多笔执行&lt;/li&gt;
+&lt;li&gt;使用聚合器（1inch、Matcha）&lt;/li&gt;
+&lt;li&gt;考虑使用 Flashbots 避免 MEV&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="选择池子"&gt;选择池子&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;看深度&lt;/strong&gt; &amp;gt; 看 APY&lt;/li&gt;
+&lt;li&gt;深度不足时，高 APY 可能是陷阱&lt;/li&gt;
+&lt;li&gt;检查历史 TVL 稳定性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="无常损失详解"&gt;无常损失详解&lt;/h2&gt;
+&lt;p&gt;无常损失（Impermanent Loss）是 LP 最常见的风险：&lt;/p&gt;</description></item></channel></rss>
