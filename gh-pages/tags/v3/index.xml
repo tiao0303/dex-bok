@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>V3 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/v3/</link><description>Recent content in V3 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 18 Mar 2026 21:20:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/v3/index.xml" rel="self" type="application/rss+xml"/><item><title>Uniswap V2 vs V3 深度对比 - 选哪个版本？</title><link>https://tiao0303.github.io/dex-bok/posts/03-uniswap-v2-v3/</link><pubDate>Wed, 18 Mar 2026 21:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/03-uniswap-v2-v3/</guid><description>&lt;h2 id="核心差异一览"&gt;核心差异一览&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;特性&lt;/th&gt;
+ &lt;th&gt;V2&lt;/th&gt;
+ &lt;th&gt;V3&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;流动性范围&lt;/td&gt;
+ &lt;td&gt;0 到 ∞&lt;/td&gt;
+ &lt;td&gt;自定义区间&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;资本效率&lt;/td&gt;
+ &lt;td&gt;1x&lt;/td&gt;
+ &lt;td&gt;10-100x&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;费率档位&lt;/td&gt;
+ &lt;td&gt;固定 0.3%&lt;/td&gt;
+ &lt;td&gt;4 档可选&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;LP 难度&lt;/td&gt;
+ &lt;td&gt;简单&lt;/td&gt;
+ &lt;td&gt;复杂&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;无常损失&lt;/td&gt;
+ &lt;td&gt;全范围&lt;/td&gt;
+ &lt;td&gt;区间内放大&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;推荐人群&lt;/td&gt;
+ &lt;td&gt;新手&lt;/td&gt;
+ &lt;td&gt;专业 LP&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="v2简单可靠"&gt;V2：简单可靠&lt;/h2&gt;
+&lt;h3 id="工作机制"&gt;工作机制&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;恒定乘积公式：&lt;code&gt;x * y = k&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;流动性覆盖全部价格范围&lt;/li&gt;
+&lt;li&gt;一次存入，坐等收益&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="优点"&gt;优点&lt;/h3&gt;
+&lt;p&gt;✅ 简单，无需管理
+✅ 不会被甩出区间
+✅ 适合长期持有&lt;/p&gt;
+&lt;h3 id="缺点"&gt;缺点&lt;/h3&gt;
+&lt;p&gt;❌ 资金效率低
+❌ APY 相对较低
+❌ 无法精细管理&lt;/p&gt;
+&lt;h3 id="适合场景"&gt;适合场景&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;新手第一次做 LP&lt;/li&gt;
+&lt;li&gt;稳定币对（USDC/DAI）&lt;/li&gt;
+&lt;li&gt;长期持有不操作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="v3专业利器"&gt;V3：专业利器&lt;/h2&gt;
+&lt;h3 id="革命性创新"&gt;革命性创新&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;集中流动性&lt;/strong&gt;：只在自己选择的价格区间内提供流动性。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;价格区间示例：
+当前 ETH = 1800 USDC
+
+保守区间：1500 - 2100 (±17%)
+激进区间：1700 - 1900 (±5%)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="费率档位"&gt;费率档位&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;档位&lt;/th&gt;
+ &lt;th&gt;适合交易对&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;0.01%&lt;/td&gt;
+ &lt;td&gt;稳定币（USDC/USDT）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;0.05%&lt;/td&gt;
+ &lt;td&gt;主流币（ETH/USDC）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;0.30%&lt;/td&gt;
+ &lt;td&gt;长尾资产&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;1.00%&lt;/td&gt;
+ &lt;td&gt;高波动/Meme&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="优点-1"&gt;优点&lt;/h3&gt;
+&lt;p&gt;✅ 资本效率提升 10-100 倍
+✅ 可自定义风险收益
+✅ 多费率档位选择&lt;/p&gt;</description></item></channel></rss>
