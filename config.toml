@@ -10,7 +10,7 @@ paginate = 10
   favicon = "/favicon.ico"
   custom_css = ["css/custom.css"]
   darkMode = true
-  author = "孙洋"
+  author = "QingHeart Qin"
   github = "https://github.com/yang"
   twitter = "https://twitter.com/yang"
 

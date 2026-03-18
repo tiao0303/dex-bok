@@ -25,7 +25,7 @@ draft: false
 
 ## 关于博主
 
-**孙洋** - DeFi 研究者，3 年 DEX 实战经验。
+**QingHeart Qin** - DeFi 研究者，3 年 DEX 实战经验。
 
 - 曾用资金规模：$500k+
 - 主要策略：流动性提供 + 套利
