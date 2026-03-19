@@ -1,19 +1,19 @@
 {{ define "main" }}
 <!-- Hero Section -->
 <section class="hero">
-  <div class="container">
-    <h1>🦞 DEX 学习笔记</h1>
-    <p class="hero-subtitle">从入门到大师的完整 DEX 知识体系</p>
-    <p class="hero-stats">
-      <span>📚 30 篇深度文章</span>
-      <span>•</span>
-      <span>📖 11 万 + 字</span>
-      <span>•</span>
-      <span>🎯 6 大阶段</span>
-    </p>
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <p class="hero-label">DeFi · DEX · 实战指南</p>
+    <h1 class="hero-title">DEX 学习笔记</h1>
+    <p class="hero-subtitle">从入门到大师的完整知识体系，30+ 篇深度文章</p>
+    <div class="hero-stats">
+      <span class="hero-stat"><strong>30+</strong> 文章</span>
+      <span class="hero-stat"><strong>6</strong> 阶段</span>
+      <span class="hero-stat"><strong>11 万+</strong> 字</span>
+    </div>
     <div class="hero-cta">
       <a href="#learning-path" class="btn btn-primary">开始学习</a>
-      <a href="/posts/" class="btn btn-secondary">浏览文章</a>
+      <a href="/posts/" class="btn btn-outline">浏览文章</a>
     </div>
   </div>
 </section>
@@ -21,8 +21,10 @@
 <!-- 学习路径 -->
 <section id="learning-path" class="learning-path">
   <div class="container">
-    <h2 class="section-title">📚 学习路径</h2>
-    <p class="section-desc">6 个阶段，从新手到专家</p>
+    <header class="section-head">
+      <h2 class="section-title">学习路径</h2>
+      <p class="section-desc">6 个阶段，从新手到专家</p>
+    </header>
     
     <div class="stages-grid">
       <!-- T1 -->
@@ -133,7 +135,10 @@
 <!-- 最新文章 -->
 <section class="latest-posts">
   <div class="container">
-    <h2 class="section-title">📝 最新文章</h2>
+    <header class="section-head">
+      <h2 class="section-title">最新文章</h2>
+      <p class="section-desc">近期更新与精选</p>
+    </header>
     <div class="posts-grid">
       {{ range first 6 .Site.RegularPages }}
       <article class="post-card">
@@ -149,7 +154,7 @@
       {{ end }}
     </div>
     <div class="view-all">
-      <a href="/posts/" class="btn btn-secondary">查看全部 30 篇 →</a>
+      <a href="/posts/" class="btn btn-outline">查看全部文章 →</a>
     </div>
   </div>
 </section>
@@ -157,7 +162,10 @@
 <!-- 工具资源 -->
 <section class="tools-section">
   <div class="container">
-    <h2 class="section-title">🛠️ 工具资源</h2>
+    <header class="section-head">
+      <h2 class="section-title">工具资源</h2>
+      <p class="section-desc">数据与实用工具</p>
+    </header>
     <div class="tools-grid">
       <div class="tool-card">
         <h3>📊 Top 50 池子排行</h3>
@@ -185,9 +193,9 @@
 
 <!-- 订阅 -->
 <section class="newsletter">
-  <div class="container">
-    <h2>📬 获取更新</h2>
-    <p>每周精选 DEX 内容，直达你的邮箱</p>
+  <div class="container newsletter-inner">
+    <h2 class="newsletter-title">获取更新</h2>
+    <p class="newsletter-desc">精选内容，直达邮箱</p>
     <form class="newsletter-form">
       <input type="email" placeholder="你的邮箱地址" required>
       <button type="submit" class="btn btn-primary">订阅</button>

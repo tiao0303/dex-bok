@@ -1,3 +1,5 @@
+# 线上部署用此 baseURL；本地预览请用：hugo server --baseURL http://localhost:1313/
+# 然后访问 http://localhost:1313/（不要用 /dex-bok/，否则静态资源 404、MIME 错、样式乱）
 baseURL = "https://tiao0303.github.io/dex-bok/"
 languageCode = "zh-cn"
 title = "DEX 学习笔记 | 去中心化交易所实战指南"
@@ -12,6 +14,8 @@ paginate = 10
   custom_css = ["css/custom.css"]
   darkMode = true
   author = "QingHeart Qin"
+  # 顶栏浅色，与 custom.css 清爽风格一致
+  background_color_class = "bg-white"
   github = "https://github.com/yang"
   twitter = "https://twitter.com/yang"
 
