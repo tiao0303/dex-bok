@@ -6,8 +6,9 @@ paginate = 10
 
 [params]
   description = "个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"
-  featured_image = "/images/og-image.png"
-  favicon = "/favicon.ico"
+  # 相对 baseURL，避免子路径部署（如 GitHub Pages /dex-bok/）下 404
+  featured_image = "images/og-image.png"
+  favicon = "favicon.ico"
   custom_css = ["css/custom.css"]
   darkMode = true
   author = "QingHeart Qin"
