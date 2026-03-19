@@ -1,0 +1,167 @@
+{{ define "main" }}
+<style>
+/* Monaco Editor CDN */
+.editor-container { max-width: 100%; height: calc(100vh - 120px); display: flex; flex-direction: column; padding: 1rem; margin: 0 auto; }
+.editor-toolbar { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; background: var(--color-background, #ffffff); border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+.editor-toolbar h2 { margin: 0; font-size: 1.25rem; font-weight: 600; color: #333; }
+.toolbar-actions { display: flex; gap: 0.5rem; margin-left: auto; }
+.save-status { font-size: 0.85rem; color: #666; min-width: 150px; text-align: right; opacity: 0.5; transition: opacity 0.3s ease; }
+.btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.4rem; }
+.btn-sm { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+.btn-primary { background: #2563eb; color: white; }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-outline { background: transparent; border: 1px solid #d0d0d0; color: #555; }
+.btn-outline:hover { background: #f5f5f5; border-color: #bbb; }
+.editor-main { display: flex; flex: 1; gap: 1rem; min-height: 0; height: 100%; }
+.editor-pane, .preview-pane { flex: 1; min-width: 0; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+#monaco-editor { height: 100%; width: 100%; }
+.preview-pane { background: #fafafa; padding: 1.5rem; overflow-y: auto; }
+.preview-content { max-width: 800px; margin: 0 auto; line-height: 1.7; }
+.frontmatter-form { display: flex; gap: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 8px; margin-top: 1rem; flex-wrap: wrap; align-items: center; }
+.frontmatter-form input, .frontmatter-form select { padding: 0.6rem 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
+#fm-title { flex: 2; min-width: 200px; }
+#fm-date { width: 140px; }
+#fm-tags { flex: 1; min-width: 150px; }
+#fm-category { width: 120px; }
+@media (max-width: 768px) { .editor-main { flex-direction: column; } .editor-pane, .preview-pane { flex: none; height: 40vh; } }
+</style>
+<div class="editor-container">
+  <div class="editor-toolbar">
+    <h2>✏️ Markdown 编辑器</h2>
+    <div class="toolbar-actions">
+      <button id="btn-save-draft" class="btn btn-sm">💾 保存草稿</button>
+      <button id="btn-clear" class="btn btn-sm btn-outline">🗑️ 清空</button>
+      <button id="btn-copy" class="btn btn-primary">📋 复制到 Content</button>
+    </div>
+    <span id="save-status" class="save-status"></span>
+  </div>
+  <div class="editor-main">
+    <div id="monaco-editor" class="editor-pane"></div>
+    <div id="preview-pane" class="preview-pane">
+      <div class="preview-content"></div>
+    </div>
+  </div>
+  <div class="frontmatter-form">
+    <input type="text" id="fm-title" placeholder="文章标题" required>
+    <input type="text" id="fm-date" placeholder="日期 (YYYY-MM-DD)">
+    <input type="text" id="fm-tags" placeholder="标签 (逗号分隔)">
+    <select id="fm-category">
+      <option value="posts">文章</option>
+      <option value="guides">教程</option>
+      <option value="tools">工具</option>
+    </select>
+  </div>
+</div>
+<!-- DOMPurify -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<!-- Marked -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- Monaco Editor -->
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+<script>
+// DEX Blog Monaco Editor - 核心逻辑
+const DRAFT_KEYS = { CONTENT: 'dex-blog-draft-content', TITLE: 'dex-blog-draft-title', TAGS: 'dex-blog-draft-tags', DATE: 'dex-blog-draft-date', CATEGORY: 'dex-blog-draft-category' };
+const DEFAULT_CONTENT = '# 新文章\n\n在此撰写...\n\n## 简介\n\n写下你的内容...';
+function generateHugoFile() {
+  const title = document.getElementById('fm-title').value || '未命名文章';
+  const date = document.getElementById('fm-date').value || new Date().toISOString().split('T')[0];
+  const tags = document.getElementById('fm-tags').value || '';
+  const category = document.getElementById('fm-category').value || 'posts';
+  const editor = document.getElementById('monaco-editor');
+  const content = editor && editor.monaco ? editor.monaco.getValue() : '';
+  const slug = title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+  const tagsArray = tags.split(',').map(t => t.trim()).filter(t => t.length > 0);
+  let tagsYaml = tagsArray.length > 0 ? '\ntags: [' + tagsArray.map(t => '"' + t + '"').join(', ') + ']' : '';
+  const frontMatter = '---\ntitle: "' + title + '"\ndate: ' + date + '\ndraft: true\ncategories: ["' + category + '"]' + tagsYaml + '\n---\n\n';
+  return { filename: slug ? slug + '.md' : 'article-' + Date.now() + '.md', category: category, content: frontMatter + content };
+}
+async function safeCopyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (err) { console.warn('Clipboard failed:', err); }
+  }
+  return new Promise((resolve, reject) => {
+    const textarea = document.createElement('textarea'); textarea.value = text;
+    textarea.style.position = 'fixed'; textarea.style.left = '-9999px'; document.body.appendChild(textarea);
+    textarea.focus(); textarea.select();
+    try { const success = document.execCommand('copy'); document.body.removeChild(textarea); success ? resolve(true) : reject(new Error('copy failed')); } catch (err) { document.body.removeChild(textarea); reject(err); }
+  });
+}
+function sanitizeHtml(html) { return typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(html, { USE_PROFILES: { html: true }, ADD_ATTR: ['target'] }) : html; }
+const DexEditor = {
+  editor: null, autoSaveTimer: null, isMonacoLoaded: false, fallbackTextarea: null,
+  init() { this.initPreview(); this.initMonaco(); this.initAutoSave(); this.initButtons(); this.loadDraft(); if (new URLSearchParams(window.location.search).get('new') === '1') { this.clearDraft(); } },
+  initMonaco() {
+    const self = this; require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+    require.onError = function(err) { console.error('Monaco加载失败:', err); self.initFallbackEditor(); };
+    require(['vs/editor/editor.main'], function() { self.isMonacoLoaded = true; self.initMonacoEditor(); });
+  },
+  initMonacoEditor() {
+    const self = this; const savedContent = localStorage.getItem(DRAFT_KEYS.CONTENT) || DEFAULT_CONTENT;
+    this.editor = monaco.editor.create(document.getElementById('monaco-editor'), { value: savedContent, language: 'markdown', theme: 'vs-dark', minimap: { enabled: false }, wordWrap: 'on', lineNumbers: 'on', fontSize: 14, automaticLayout: true, scrollBeyondLastLine: false, padding: { top: 16, bottom: 16 } });
+    document.getElementById('monaco-editor').monaco = this.editor;
+    this.editor.onDidChangeModelContent(() => { self.updatePreview(); self.scheduleAutoSave(); });
+    self.updatePreview();
+  },
+  initFallbackEditor() {
+    const self = this; const container = document.getElementById('monaco-editor'); const savedContent = localStorage.getItem(DRAFT_KEYS.CONTENT) || DEFAULT_CONTENT;
+    this.fallbackTextarea = document.createElement('textarea');
+    this.fallbackTextarea.id = 'fallback-editor'; this.fallbackTextarea.className = 'fallback-editor';
+    this.fallbackTextarea.value = savedContent; this.fallbackTextarea.style.cssText = 'width:100%;height:100%;min-height:500px;padding:16px;font-family:Menlo,Monaco,Courier New,monospace;font-size:14px;line-height:1.6;background:#1e1e1e;color:#d4d4d4;border:none;resize:none;outline:none;';
+    container.innerHTML = ''; container.appendChild(this.fallbackTextarea);
+    this.updateStatus('⚠️ Monaco加载失败，已使用文本编辑器', 8000);
+    this.fallbackTextarea.addEventListener('input', () => { self.updatePreview(); self.scheduleAutoSave(); });
+    self.updatePreview();
+  },
+  getEditorContent() { return this.editor ? this.editor.getValue() : (this.fallbackTextarea ? this.fallbackTextarea.value : ''); },
+  setEditorContent(content) { if (this.editor) this.editor.setValue(content); else if (this.fallbackTextarea) this.fallbackTextarea.value = content; },
+  initPreview() { this.updatePreview(); },
+  updatePreview() {
+    const content = this.getEditorContent(); let html = '';
+    try { html = marked.parse(content, { breaks: true, gfm: true }); } catch (err) { html = '<p>Markdown解析出错</p>'; }
+    const safeHtml = sanitizeHtml(html);
+    document.getElementById('preview-pane').querySelector('.preview-content').innerHTML = safeHtml;
+  },
+  initAutoSave() { this.autoSaveTimer = null; },
+  scheduleAutoSave() { clearTimeout(this.autoSaveTimer); this.autoSaveTimer = setTimeout(() => { this.saveToLocalStorage(); }, 1000); },
+  saveToLocalStorage() {
+    const content = this.getEditorContent(); if (!content) return;
+    localStorage.setItem(DRAFT_KEYS.CONTENT, content);
+    localStorage.setItem(DRAFT_KEYS.TITLE, document.getElementById('fm-title').value);
+    localStorage.setItem(DRAFT_KEYS.TAGS, document.getElementById('fm-tags').value);
+    localStorage.setItem(DRAFT_KEYS.DATE, document.getElementById('fm-date').value);
+    localStorage.setItem(DRAFT_KEYS.CATEGORY, document.getElementById('fm-category').value);
+    this.updateStatus('✅ 已自动保存 ' + new Date().toLocaleTimeString());
+  },
+  loadDraft() {
+    document.getElementById('fm-title').value = localStorage.getItem(DRAFT_KEYS.TITLE) || '';
+    document.getElementById('fm-tags').value = localStorage.getItem(DRAFT_KEYS.TAGS) || '';
+    document.getElementById('fm-date').value = localStorage.getItem(DRAFT_KEYS.DATE) || new Date().toISOString().split('T')[0];
+    const savedCategory = localStorage.getItem(DRAFT_KEYS.CATEGORY);
+    if (savedCategory) document.getElementById('fm-category').value = savedCategory;
+  },
+  initButtons() {
+    const self = this;
+    document.getElementById('btn-save-draft').addEventListener('click', () => { self.saveToLocalStorage(); self.updateStatus('💾 草稿已保存!', 3000); });
+    document.getElementById('btn-clear').addEventListener('click', () => { if (confirm('确定要清空所有内容吗？')) { self.clearDraft(); } });
+    document.getElementById('btn-copy').addEventListener('click', () => { self.copyToClipboard(); });
+    ['fm-title', 'fm-tags', 'fm-date', 'fm-category'].forEach(id => { document.getElementById(id).addEventListener('change', () => { self.scheduleAutoSave(); }); });
+  },
+  clearDraft() {
+    this.setEditorContent(DEFAULT_CONTENT);
+    document.getElementById('fm-title').value = '';
+    document.getElementById('fm-tags').value = '';
+    document.getElementById('fm-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('fm-category').value = 'posts';
+    Object.values(DRAFT_KEYS).forEach(key => { localStorage.removeItem(key); });
+    this.updateStatus('🗑️ 已清空', 3000); this.updatePreview();
+  },
+  copyToClipboard() {
+    const file = generateHugoFile(); const fullContent = file.content;
+    if (!document.getElementById('fm-title').value.trim()) { this.updateStatus('⚠️ 请先填写文章标题!', 3000); return; }
+    safeCopyToClipboard(fullContent).then(() => { this.updateStatus('✅ 已复制! 文件名: ' + file.filename, 5000); }).catch(err => { this.updateStatus('❌ 复制失败: ' + err.message, 5000); });
+  },
+  updateStatus(msg, duration) { const el = document.getElementById('save-status'); el.textContent = msg; el.style.opacity = 1; setTimeout(() => { el.style.opacity = 0.5; }, duration || 3000); }
+};
+document.addEventListener('DOMContentLoaded', () => { DexEditor.init(); });
+</script>
+{{ end }}

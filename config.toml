@@ -24,6 +24,10 @@ paginate = 10
 
 [menu]
   [[menu.main]]
+    name = "写文章"
+    url = "/editor/"
+    weight = 0
+  [[menu.main]]
     name = "首页"
     url = "/"
     weight = 1
