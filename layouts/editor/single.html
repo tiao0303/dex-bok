@@ -59,6 +59,15 @@
 <!-- Monaco Editor -->
 <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 <script>
+// 等待所有依赖加载完成
+function whenLoaded(callback) {
+  if (document.readyState === 'complete') {
+    callback();
+  } else {
+    window.addEventListener('load', callback);
+  }
+}
+
 // DEX Blog Monaco Editor - 核心逻辑
 const DRAFT_KEYS = { CONTENT: 'dex-blog-draft-content', TITLE: 'dex-blog-draft-title', TAGS: 'dex-blog-draft-tags', DATE: 'dex-blog-draft-date', CATEGORY: 'dex-blog-draft-category' };
 const DEFAULT_CONTENT = '# 新文章\n\n在此撰写...\n\n## 简介\n\n写下你的内容...';
@@ -89,7 +98,30 @@ async function safeCopyToClipboard(text) {
 function sanitizeHtml(html) { return typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(html, { USE_PROFILES: { html: true }, ADD_ATTR: ['target'] }) : html; }
 const DexEditor = {
   editor: null, autoSaveTimer: null, isMonacoLoaded: false, fallbackTextarea: null,
-  init() { this.initPreview(); this.initMonaco(); this.initAutoSave(); this.initButtons(); this.loadDraft(); if (new URLSearchParams(window.location.search).get('new') === '1') { this.clearDraft(); } },
+  init() {
+    // 等待依赖库加载
+    const checkDeps = setInterval(() => {
+      if (typeof marked !== 'undefined' && typeof require !== 'undefined') {
+        clearInterval(checkDeps);
+        this.initPreview();
+        this.initMonaco();
+        this.initAutoSave();
+        this.initButtons();
+        this.loadDraft();
+        if (new URLSearchParams(window.location.search).get('new') === '1') { this.clearDraft(); }
+      }
+    }, 100);
+    // 超时5秒后强制初始化
+    setTimeout(() => {
+      clearInterval(checkDeps);
+      if (typeof marked === 'undefined') { console.warn('marked未加载'); }
+      this.initPreview();
+      this.initMonaco();
+      this.initAutoSave();
+      this.initButtons();
+      this.loadDraft();
+    }, 5000);
+  },
   initMonaco() {
     const self = this; require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
     require.onError = function(err) { console.error('Monaco加载失败:', err); self.initFallbackEditor(); };
