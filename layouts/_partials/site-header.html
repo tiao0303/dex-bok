@@ -1,0 +1,21 @@
+<header class="geek-header">
+  <nav class="geek-nav container" role="navigation">
+    <div class="geek-nav-inner">
+      <a href="{{ .Site.Home.RelPermalink }}" class="geek-logo">
+        <span class="logo-icon">🦞</span>
+        <span class="logo-text">{{ .Site.Title }}</span>
+      </a>
+      <div class="geek-nav-links">
+        {{ if .Site.Menus.main }}
+          <ul class="geek-menu">
+            {{ range .Site.Menus.main }}
+            <li>
+              <a href="{{ .URL }}" title="{{ .Name }}">{{ .Name }}</a>
+            </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </div>
+    </div>
+  </nav>
+</header>

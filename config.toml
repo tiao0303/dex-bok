@@ -14,8 +14,8 @@ paginate = 10
   custom_css = ["css/custom.css"]
   darkMode = true
   author = "QingHeart Qin"
-  # 顶栏浅色，与 custom.css 清爽风格一致
-  background_color_class = "bg-white"
+  # 暗色主题配置
+  background_color_class = "bg-dark"
   github = "https://github.com/yang"
   twitter = "https://twitter.com/yang"
 

@@ -1,0 +1,93 @@
+{{ define "main" }}
+<div class="geek-list-layout">
+  <header class="geek-list-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.description }}
+    <p>{{ . }}</p>
+    {{ end }}
+  </header>
+
+  {{/* 获取所有标签用于过滤 */}}
+  {{ $tags := slice }}
+  {{ range .Site.RegularPages }}
+    {{ range .Params.tags }}
+      {{ $tags = $tags | append . }}
+    {{ end }}
+  {{ end }}
+  {{ $uniqueTags := $tags | uniq | sort }}
+
+  {{ if $uniqueTags }}
+  <div class="geek-tag-filter">
+    <button class="tag-btn active" data-tag="all">全部</button>
+    {{ range $uniqueTags }}
+    <button class="tag-btn" data-tag="{{ . }}">{{ . }}</button>
+    {{ end }}
+  </div>
+  {{ end }}
+
+  <div class="geek-posts-grid">
+    {{ range .Paginator.Pages }}
+    <article class="geek-post-card" data-tags="{{ range .Params.tags }}{{ . }} {{ end }}">
+      <div class="post-card-inner">
+        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+        <p class="post-meta">
+          <span>{{ .Date.Format "2006-01-02" }}</span>
+          <span class="meta-sep">•</span>
+          <span>{{ .WordCount }}字</span>
+        </p>
+        <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
+        <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
+      </div>
+    </article>
+    {{ end }}
+  </div>
+
+  {{ if gt .Paginator.TotalPages 1 }}
+  <nav class="geek-pagination">
+    {{ if .Paginator.HasPrev }}
+    <a href="{{ .Paginator.Prev.URL }}">上一页</a>
+    {{ end }}
+    {{ range .Paginator.Pagers }}
+      {{ if eq .PageNumber $.Paginator.PageNumber }}
+      <span class="active">{{ .PageNumber }}</span>
+      {{ else }}
+      <a href="{{ .URL }}">{{ .PageNumber }}</a>
+      {{ end }}
+    {{ end }}
+    {{ if .Paginator.HasNext }}
+    <a href="{{ .Paginator.Next.URL }}">下一页</a>
+    {{ end }}
+  </nav>
+  {{ end }}
+</div>
+
+<script>
+// 简单的标签过滤
+document.addEventListener('DOMContentLoaded', function() {
+  const buttons = document.querySelectorAll('.tag-btn');
+  const cards = document.querySelectorAll('.geek-post-card');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const tag = this.dataset.tag;
+
+      buttons.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+
+      cards.forEach(card => {
+        if (tag === 'all') {
+          card.style.display = '';
+        } else {
+          const cardTags = card.dataset.tags || '';
+          if (cardTags.includes(tag)) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+});
+</script>
+{{ end }}
