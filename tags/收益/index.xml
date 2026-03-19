@@ -1,4 +1,297 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>收益 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%94%B6%E7%9B%8A/</link><description>Recent content in 收益 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 18 Mar 2026 21:27:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%94%B6%E7%9B%8A/index.xml" rel="self" type="application/rss+xml"/><item><title>DeFi 收益 farming 完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/09-defi-yield/</link><pubDate>Wed, 18 Mar 2026 21:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/09-defi-yield/</guid><description>&lt;h2 id="defi-收益来源"&gt;DeFi 收益来源&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>收益 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%94%B6%E7%9B%8A/</link><description>Recent content in 收益 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:35:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%94%B6%E7%9B%8A/index.xml" rel="self" type="application/rss+xml"/><item><title>流动性挖矿收益优化 - 让 APY 翻倍技巧</title><link>https://tiao0303.github.io/dex-bok/posts/17-liquidity-mining-optimization/</link><pubDate>Thu, 19 Mar 2026 00:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/17-liquidity-mining-optimization/</guid><description>&lt;h2 id="收益构成分析"&gt;收益构成分析&lt;/h2&gt;
+&lt;h3 id="三大来源"&gt;三大来源&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;来源&lt;/th&gt;
+ &lt;th&gt;占比&lt;/th&gt;
+ &lt;th&gt;稳定性&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;交易手续费&lt;/td&gt;
+ &lt;td&gt;30-50%&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;流动性奖励&lt;/td&gt;
+ &lt;td&gt;40-60%&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;治理代币空投&lt;/td&gt;
+ &lt;td&gt;10-20%&lt;/td&gt;
+ &lt;td&gt;⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="真实-apy-计算"&gt;真实 APY 计算&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;名义 APY = 50%
+奖励代币跌幅 = -30%/年
+Gas 成本 = 5%/年
+真实 APY = 50% - 30% - 5% = 15%
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="优化策略一复投频率-"&gt;优化策略一：复投频率 ⭐⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="复投-vs-单利"&gt;复投 vs 单利&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;频率&lt;/th&gt;
+ &lt;th&gt;APY(名义 50%)&lt;/th&gt;
+ &lt;th&gt;Gas 成本&lt;/th&gt;
+ &lt;th&gt;净收益&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;每日&lt;/td&gt;
+ &lt;td&gt;64.8%&lt;/td&gt;
+ &lt;td&gt;18%&lt;/td&gt;
+ &lt;td&gt;46.8%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;每周&lt;/td&gt;
+ &lt;td&gt;56.4%&lt;/td&gt;
+ &lt;td&gt;4%&lt;/td&gt;
+ &lt;td&gt;52.4% ✅&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;每月&lt;/td&gt;
+ &lt;td&gt;51.2%&lt;/td&gt;
+ &lt;td&gt;1%&lt;/td&gt;
+ &lt;td&gt;50.2%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;不复投&lt;/td&gt;
+ &lt;td&gt;50.0%&lt;/td&gt;
+ &lt;td&gt;0%&lt;/td&gt;
+ &lt;td&gt;50.0%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="最佳复投公式"&gt;最佳复投公式&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;最佳频率 = sqrt(年 APY / Gas 成本比)
+
+示例：
+APY = 50%
+Gas 成本 = $50/次
+持仓 = $10,000
+→ 每周复投最优
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="自动复投工具"&gt;自动复投工具&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Beefy Finance&lt;/strong&gt;：自动复投&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Autofarm&lt;/strong&gt;：多链支持&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Harvest Finance&lt;/strong&gt;：策略优化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="优化策略二gas-费优化-"&gt;优化策略二：Gas 费优化 ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="layer2-对比"&gt;Layer2 对比&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;网络&lt;/th&gt;
+ &lt;th&gt;复投 Gas&lt;/th&gt;
+ &lt;th&gt;节省&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Ethereum&lt;/td&gt;
+ &lt;td&gt;$50-150&lt;/td&gt;
+ &lt;td&gt;-&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Arbitrum&lt;/td&gt;
+ &lt;td&gt;$0.5-2&lt;/td&gt;
+ &lt;td&gt;95%+ ✅&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Optimism&lt;/td&gt;
+ &lt;td&gt;$0.8-3&lt;/td&gt;
+ &lt;td&gt;94%+&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Polygon&lt;/td&gt;
+ &lt;td&gt;$0.02-0.1&lt;/td&gt;
+ &lt;td&gt;99%+ ✅&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="时段选择"&gt;时段选择&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;时段 (UTC+8)&lt;/th&gt;
+ &lt;th&gt;Gas 费&lt;/th&gt;
+ &lt;th&gt;推荐&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;02:00-06:00&lt;/td&gt;
+ &lt;td&gt;最低&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;06:00-10:00&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;14:00-18:00&lt;/td&gt;
+ &lt;td&gt;最高&lt;/td&gt;
+ &lt;td&gt;❌&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;20:00-24:00&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="gas-追踪工具"&gt;Gas 追踪工具&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Etherscan Gas Tracker&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gas Now&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ETH Gas Station&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="优化策略三奖励代币处理-"&gt;优化策略三：奖励代币处理 ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="三种策略对比"&gt;三种策略对比&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;策略&lt;/th&gt;
+ &lt;th&gt;优点&lt;/th&gt;
+ &lt;th&gt;缺点&lt;/th&gt;
+ &lt;th&gt;适合场景&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;全部卖出&lt;/td&gt;
+ &lt;td&gt;锁定收益&lt;/td&gt;
+ &lt;td&gt;错过增值&lt;/td&gt;
+ &lt;td&gt;熊市/震荡市 ✅&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;全部复投&lt;/td&gt;
+ &lt;td&gt;复利最大化&lt;/td&gt;
+ &lt;td&gt;风险集中&lt;/td&gt;
+ &lt;td&gt;牛市早期&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;50/50&lt;/td&gt;
+ &lt;td&gt;平衡&lt;/td&gt;
+ &lt;td&gt;收益中等&lt;/td&gt;
+ &lt;td&gt;不确定市场 ⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="我的处理方式"&gt;我的处理方式&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;奖励代币分配：
+- 50% 立即卖出 → 稳定币
+- 25% 复投 → 继续挖矿
+- 25% 持有 → 博代币增值
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="卖出时机"&gt;卖出时机&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;定时卖出&lt;/strong&gt;：每周/每月固定时间&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;阈值卖出&lt;/strong&gt;：收益&amp;gt;20% 就卖&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;技术卖出&lt;/strong&gt;：跌破关键支撑就卖&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="优化策略四多平台分散-"&gt;优化策略四：多平台分散 ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="风险分散"&gt;风险分散&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;资金分配：
+- 40% Curve 3pool (稳定)
+- 30% Uniswap V3 (主流币)
+- 20% Convex (优化收益)
+- 10% 新协议挖矿 (博高收益)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="收益对比"&gt;收益对比&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;平台&lt;/th&gt;
+ &lt;th&gt;APY&lt;/th&gt;
+ &lt;th&gt;风险&lt;/th&gt;
+ &lt;th&gt;推荐度&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Curve 3pool&lt;/td&gt;
+ &lt;td&gt;8%&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Convex&lt;/td&gt;
+ &lt;td&gt;12%&lt;/td&gt;
+ &lt;td&gt;中低&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Uniswap V3&lt;/td&gt;
+ &lt;td&gt;15%&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;新协议&lt;/td&gt;
+ &lt;td&gt;50%+&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;td&gt;⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="优化策略五杠杆挖矿-"&gt;优化策略五：杠杆挖矿 ⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="原理"&gt;原理&lt;/h3&gt;
+&lt;p&gt;借币→提供流动性→赚取利差&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;套利&lt;/strong&gt; = 利用价格差异，低买高卖，赚取无风险收益&lt;/p&gt;
+&lt;h3 id="套利特点"&gt;套利特点&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 理论上无风险&lt;/li&gt;
+&lt;li&gt;✅ 收益即时锁定&lt;/li&gt;
+&lt;li&gt;⚠️ 需要快速执行&lt;/li&gt;
+&lt;li&gt;⚠️ Gas 费可能吃掉利润&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="策略一三角套利-"&gt;策略一：三角套利 ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="原理"&gt;原理&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;USDC → ETH → WBTC → USDC
+ ↑ ↓
+ └──── 利润 ←───┘
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="案例演示"&gt;案例演示&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;假设价格&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;USDC/ETH = 1800&lt;/li&gt;
+&lt;li&gt;ETH/WBTC = 0.065&lt;/li&gt;
+&lt;li&gt;WBTC/USDC = 28500&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;计算&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 10000 USDC → 5.55 ETH
+2. 5.55 ETH → 0.36075 WBTC
+3. 0.36075 WBTC → 10281 USDC
+4. 利润：281 USDC (2.81%)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="执行要点"&gt;执行要点&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;速度第一&lt;/strong&gt;：用 Flashbots 避免抢跑&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gas 优化&lt;/strong&gt;：选择低峰时段&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;滑点控制&lt;/strong&gt;：设置合理上限&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;监控工具&lt;/strong&gt;：自建价格监控脚本&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="风险"&gt;风险&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;价格快速变化&lt;/li&gt;
+&lt;li&gt;交易失败损失 Gas&lt;/li&gt;
+&lt;li&gt;MEV 机器人竞争&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="策略二跨所套利-"&gt;策略二：跨所套利 ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="原理-1"&gt;原理&lt;/h3&gt;
+&lt;p&gt;同一资产在不同 DEX 价格不同&lt;/p&gt;</description></item><item><title>DeFi 收益 farming 完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/09-defi-yield/</link><pubDate>Wed, 18 Mar 2026 21:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/09-defi-yield/</guid><description>&lt;h2 id="defi-收益来源"&gt;DeFi 收益来源&lt;/h2&gt;
 &lt;h3 id="1-交易手续费-"&gt;1. 交易手续费 ⭐⭐⭐⭐⭐&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;来源&lt;/strong&gt;：用户 swap 支付的费用
 &lt;strong&gt;分配&lt;/strong&gt;：按 LP 份额比例分配

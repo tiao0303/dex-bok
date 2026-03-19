@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>对冲 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E5%AF%B9%E5%86%B2/</link><description>Recent content in 对冲 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:45:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E5%AF%B9%E5%86%B2/index.xml" rel="self" type="application/rss+xml"/><item><title>期权+DEX 组合策略 - 对冲风险增强收益</title><link>https://tiao0303.github.io/dex-bok/posts/19-options-dex-combo/</link><pubDate>Thu, 19 Mar 2026 00:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/19-options-dex-combo/</guid><description>&lt;h2 id="为什么需要期权对冲"&gt;为什么需要期权对冲&lt;/h2&gt;
+&lt;h3 id="lp-的痛点"&gt;LP 的痛点&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;问题&lt;/th&gt;
+ &lt;th&gt;影响&lt;/th&gt;
+ &lt;th&gt;期权解决方案&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;无常损失&lt;/td&gt;
+ &lt;td&gt;币价波动亏损&lt;/td&gt;
+ &lt;td&gt;Put 期权保护&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;踏空风险&lt;/td&gt;
+ &lt;td&gt;币价上涨少赚&lt;/td&gt;
+ &lt;td&gt;Call 期权参与&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;收益不稳定&lt;/td&gt;
+ &lt;td&gt;APY 波动大&lt;/td&gt;
+ &lt;td&gt;期权权利金收入&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="策略一lpput-期权保护-"&gt;策略一：LP+Put 期权保护 ⭐⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="原理"&gt;原理&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;持有：ETH + USDC 做 LP
+买入：ETH Put 期权（行权价低于当前价）
+
+效果：
+- ETH 下跌：Put 期权盈利，对冲 LP 损失
+- ETH 上涨：LP 收益增加，仅损失权利金
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实战案例"&gt;实战案例&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：ETH = $1800，做 LP $10,000&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;操作&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. $5,000 ETH + $5,000 USDC → Uniswap LP
+2. 买入 ETH Put 期权
+ - 行权价：$1600
+ - 到期：30 天
+ - 权利金：2% ($100)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;结果对比&lt;/strong&gt;：&lt;/p&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;ETH 价格&lt;/th&gt;
+ &lt;th&gt;无对冲 LP&lt;/th&gt;
+ &lt;th&gt;有对冲 LP&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;$1500 (-17%)&lt;/td&gt;
+ &lt;td&gt;$8,500&lt;/td&gt;
+ &lt;td&gt;$9,400 ✅&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;$1800 (0%)&lt;/td&gt;
+ &lt;td&gt;$10,000&lt;/td&gt;
+ &lt;td&gt;$9,900&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;$2100 (+17%)&lt;/td&gt;
+ &lt;td&gt;$11,200&lt;/td&gt;
+ &lt;td&gt;$11,100 ✅&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="推荐平台"&gt;推荐平台&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Ribbon Finance&lt;/strong&gt;：自动化对冲&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hegic&lt;/strong&gt;：自定义期权&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lyra&lt;/strong&gt;：低费用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="策略二covered-call-增强收益-"&gt;策略二：Covered Call 增强收益 ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="原理-1"&gt;原理&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;持有：ETH
+卖出：Call 期权（行权价高于当前价）
+收入：权利金
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实战案例-1"&gt;实战案例&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：持有 10 ETH，当前$1800&lt;/p&gt;</description></item></channel></rss>

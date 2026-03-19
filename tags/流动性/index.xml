@@ -1,4 +1,55 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>流动性 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%B5%81%E5%8A%A8%E6%80%A7/</link><description>Recent content in 流动性 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 18 Mar 2026 21:23:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%B5%81%E5%8A%A8%E6%80%A7/index.xml" rel="self" type="application/rss+xml"/><item><title>第一次提供流动性 - 完整 LP 指南</title><link>https://tiao0303.github.io/dex-bok/guides/first-lp/</link><pubDate>Wed, 18 Mar 2026 21:23:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/guides/first-lp/</guid><description>&lt;h2 id="什么是-lp"&gt;什么是 LP&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>流动性 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%B5%81%E5%8A%A8%E6%80%A7/</link><description>Recent content in 流动性 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%B5%81%E5%8A%A8%E6%80%A7/index.xml" rel="self" type="application/rss+xml"/><item><title>T2 进阶实战 06：流动性池深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/06-liquidity-pool-deep-dive/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/06-liquidity-pool-deep-dive/</guid><description>&lt;h1 id="流动性池深度分析"&gt;流动性池深度分析&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。&lt;/p&gt;
+&lt;h2 id="恒定乘积公式详解"&gt;恒定乘积公式详解&lt;/h2&gt;
+&lt;h3 id="基础公式"&gt;基础公式&lt;/h3&gt;
+&lt;p&gt;Uniswap V2 采用的恒定乘积公式：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;x &lt;span style="color:#f92672"&gt;*&lt;/span&gt; y &lt;span style="color:#f92672"&gt;=&lt;/span&gt; k
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;x&lt;/code&gt; = 代币 A 的数量&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;y&lt;/code&gt; = 代币 B 的数量&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;k&lt;/code&gt; = 恒定常数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="价格发现机制"&gt;价格发现机制&lt;/h3&gt;
+&lt;p&gt;边际价格由导数得出：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;P = dy/dx = -y/x
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这意味着价格完全由池中的代币比例决定。&lt;/p&gt;
+&lt;h3 id="代码实现"&gt;代码实现&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;swap&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountIn, &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isTokenA) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amountIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;Amount must be positive&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveA &lt;span style="color:#f92672"&gt;=&lt;/span&gt; IERC20(tokenA).balanceOf(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveB &lt;span style="color:#f92672"&gt;=&lt;/span&gt; IERC20(tokenB).balanceOf(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (isTokenA) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 计算输出量：amountOut = reserveB - k / (reserveA + amountIn)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; getAmountOut(amountIn, reserveA, reserveB);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenA).transferFrom(msg.sender, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this), amountIn);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenB).transfer(msg.sender, amountOut);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; getAmountOut(amountIn, reserveB, reserveA);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenB).transferFrom(msg.sender, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this), amountIn);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenA).transfer(msg.sender, amountOut);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 验证 k 值未减少
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; _updateReserves();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getAmountOut&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountIn, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveIn, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveOut) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;pure&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountOut) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amountIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; reserveIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; reserveOut &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;997&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// 0.3% 手续费
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;*&lt;/span&gt; reserveOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; denominator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (reserveIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;) &lt;span style="color:#f92672"&gt;+&lt;/span&gt; amountInWithFee;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;/&lt;/span&gt; denominator;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="资本效率问题"&gt;资本效率问题&lt;/h2&gt;
+&lt;h3 id="v2-的资本效率低下"&gt;V2 的资本效率低下&lt;/h3&gt;
+&lt;p&gt;在 V2 模型中，流动性分布在 &lt;code&gt;0&lt;/code&gt; 到 &lt;code&gt;∞&lt;/code&gt; 的价格范围内，但大部分资金实际上从未被使用。&lt;/p&gt;</description></item><item><title>第一次提供流动性 - 完整 LP 指南</title><link>https://tiao0303.github.io/dex-bok/guides/first-lp/</link><pubDate>Wed, 18 Mar 2026 21:23:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/guides/first-lp/</guid><description>&lt;h2 id="什么是-lp"&gt;什么是 LP&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;LP&lt;/strong&gt;（Liquidity Provider）= 流动性提供者&lt;/p&gt;
 &lt;p&gt;你存入双币到池子 → 别人交易时支付手续费 → 你获得收益&lt;/p&gt;
 &lt;hr&gt;

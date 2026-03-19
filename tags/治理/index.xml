@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>治理 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%B2%BB%E7%90%86/</link><description>Recent content in 治理 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:15:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%B2%BB%E7%90%86/index.xml" rel="self" type="application/rss+xml"/><item><title>治理攻击案例研究 - 投票操纵与贿赂市场</title><link>https://tiao0303.github.io/dex-bok/posts/24-governance-attack-cases/</link><pubDate>Thu, 19 Mar 2026 01:15:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/24-governance-attack-cases/</guid><description>&lt;h2 id="什么是治理攻击"&gt;什么是治理攻击&lt;/h2&gt;
+&lt;h3 id="定义"&gt;定义&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;治理攻击&lt;/strong&gt; = 通过操纵投票机制，获取不当利益或破坏协议&lt;/p&gt;
+&lt;h3 id="攻击类型"&gt;攻击类型&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;类型&lt;/th&gt;
+ &lt;th&gt;手段&lt;/th&gt;
+ &lt;th&gt;影响&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;投票操纵&lt;/td&gt;
+ &lt;td&gt;集中代币投票&lt;/td&gt;
+ &lt;td&gt;通过恶意提案&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;贿赂&lt;/td&gt;
+ &lt;td&gt;收买投票权&lt;/td&gt;
+ &lt;td&gt;扭曲治理结果&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;闪电贷攻击&lt;/td&gt;
+ &lt;td&gt;借用代币投票&lt;/td&gt;
+ &lt;td&gt;临时控制治理&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;提案攻击&lt;/td&gt;
+ &lt;td&gt;恶意提案&lt;/td&gt;
+ &lt;td&gt;盗取资金/破坏协议&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="经典案例复盘"&gt;经典案例复盘&lt;/h2&gt;
+&lt;h3 id="案例一beanstalk-闪电贷治理攻击-202204-"&gt;案例一：Beanstalk 闪电贷治理攻击 (2022.04) 🔴&lt;/h3&gt;
+&lt;h4 id="事件回顾"&gt;事件回顾&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;时间：2022.04.17
+损失：$1.8 亿
+攻击者：匿名
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="攻击步骤"&gt;攻击步骤&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 闪电贷借入 13,000 ETH（价值$3600 万）
+2. 用 ETH 购买 Beanstalk 治理代币
+3. 获得足够投票权（&amp;gt;50%）
+4. 提交恶意提案：将国库资金转给自己
+5. 投票通过（自己投自己）
+6. 执行提案，转走$1.8 亿
+7. 归还闪电贷
+8. 净利润：$1.4 亿
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="漏洞分析"&gt;漏洞分析&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 无投票锁定期
+ - 买入代币立即可投票
+ - 闪电贷可利用
+
+2. 提案无延迟
+ - 通过后立即执行
+ - 无反应时间
+
+3. 投票门槛低
+ - 只需简单多数
+ - 无最低参与度要求
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="教训"&gt;教训&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 必须设置投票锁定期（Timelock）&lt;/li&gt;
+&lt;li&gt;✅ 提案通过后延迟执行&lt;/li&gt;
+&lt;li&gt;✅ 设置最低投票率&lt;/li&gt;
+&lt;li&gt;✅ 闪电贷无法借入治理代币&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="案例二curve-贿赂战争-2022-2023-"&gt;案例二：Curve 贿赂战争 (2022-2023) 🟡&lt;/h3&gt;
+&lt;h4 id="背景"&gt;背景&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Curve 有 3pool（DAI/USDC/USDT）
+不同稳定币项目方希望自己的币获得更高权重
+→ 引发贿赂竞争
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="运作机制"&gt;运作机制&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. Curve 治理决定池子权重
+2. veCRV 持有者投票
+3. 项目方贿赂 veCRV 持有者
+4. 投票给自家池子
+5. 获得更高权重 → 更多流动性
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="贿赂平台"&gt;贿赂平台&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;平台&lt;/th&gt;
+ &lt;th&gt;总贿赂金额&lt;/th&gt;
+ &lt;th&gt;特点&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;VoteLocker&lt;/td&gt;
+ &lt;td&gt;$5000 万+&lt;/td&gt;
+ &lt;td&gt;Curve 官方&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Votium&lt;/td&gt;
+ &lt;td&gt;$3000 万+&lt;/td&gt;
+ &lt;td&gt;匿名&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Hidden Hand&lt;/td&gt;
+ &lt;td&gt;$2000 万+&lt;/td&gt;
+ &lt;td&gt;多链支持&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="案例分析"&gt;案例分析&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;正面：
+- 市场化分配权重
+- veCRV 持有者获得额外收益
+- 透明度较高
+
+负面：
+- 小 holder 被边缘化
+- 项目方成本转嫁用户
+- 可能形成垄断
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="教训-1"&gt;教训&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;⚠️ 贿赂是双刃剑&lt;/li&gt;
+&lt;li&gt;⚠️ 需要透明披露&lt;/li&gt;
+&lt;li&gt;⚠️ 防止单一项目垄断&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="案例三uniswap-治理冷漠-2021-2023-"&gt;案例三：Uniswap 治理冷漠 (2021-2023) 🟠&lt;/h3&gt;
+&lt;h4 id="问题"&gt;问题&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;UNI 代币持有者：30 万+
+实际投票率：&amp;lt;5%
+提案通过率：低
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="原因分析"&gt;原因分析&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 投票成本高
+ - 链上投票 Gas 贵
+ - 小 holder 不划算
+
+2. 信息不对称
+ - 提案太复杂
+ - 普通人看不懂
+
+3. 激励不足
+ - 投票无奖励
+ - 搭便车心理
+
+4. 鲸鱼控制
+ - 前 10 地址持币 60%
+ - 小户投票无影响
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="影响"&gt;影响&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;- 治理效率低
+- 重要提案难通过
+- 社区分裂
+- 竞争力下降（vs Sushi 等）
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="改进建议"&gt;改进建议&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 链下投票（Snapshot）&lt;/li&gt;
+&lt;li&gt;✅ 投票奖励&lt;/li&gt;
+&lt;li&gt;✅ 简化提案流程&lt;/li&gt;
+&lt;li&gt;✅ 委托投票机制&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="案例四optimism-空投猎人治理-2023-"&gt;案例四：Optimism 空投猎人治理 (2023) 🟢&lt;/h3&gt;
+&lt;h4 id="背景-1"&gt;背景&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;OP 空投后：
+- 大量空投猎人持币
+- 短期抛售压力大
+- 治理参与度低
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="解决方案"&gt;解决方案&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 公民屋（Citizens&amp;#39; House）
+ - 长期贡献者特殊投票权
+ - 对抗短期投机者
+
+2. 锁仓激励
+ - 锁仓获得额外投票权
+ - 鼓励长期参与
+
+3. 委托投票
+ - 可委托给活跃代表
+ - 降低参与门槛
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="效果"&gt;效果&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;- 投票率提升至 15%+
+- 提案质量提高
+- 社区更活跃
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="治理攻击防范"&gt;治理攻击防范&lt;/h2&gt;
+&lt;h3 id="1-技术防范-"&gt;1. 技术防范 ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="投票锁定期"&gt;投票锁定期&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;要求：
+- 投票前锁仓至少 3-7 天
+- 防止闪电贷攻击
+
+实现：
+function vote(uint256 proposalId, bool support) {
+ require(block.timestamp - lockTime &amp;gt;= 7 days, &amp;#34;Too new&amp;#34;);
+ ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="时间锁timelock"&gt;时间锁（Timelock）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;要求：
+- 提案通过后延迟执行
+- 给用户反应时间
+
+实现：
+- 延迟 2-7 天
+- 紧急情况下可暂停
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="投票门槛"&gt;投票门槛&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;建议设置：
+- 最低投票率：10-20%
+- 通过门槛：&amp;gt;50% 或&amp;gt;67%
+- 反对门槛：可触发二次投票
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="2-经济防范-"&gt;2. 经济防范 ⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="投票权设计"&gt;投票权设计&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;方案：
+- 锁仓时间越长，投票权越大
+- 防止短期操纵
+
+公式：
+投票权 = 代币数量 × 锁仓系数
+
+锁仓系数：
+1 天 = 1x
+30 天 = 2x
+90 天 = 3x
+365 天 = 4x
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="反贿赂机制"&gt;反贿赂机制&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;方案：
+- 投票保密（直到结束）
+- 增加贿赂难度
+- 披露大额投票
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="质押要求"&gt;质押要求&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;提案门槛：
+- 质押一定数量代币
+- 提案失败则没收
+- 防止垃圾提案
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="3-社区防范-"&gt;3. 社区防范 ⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="多签治理"&gt;多签治理&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;关键决策：
+- 需要多签钱包执行
+- 5/9 或 7/11 签名
+- 分散权力
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="社区监督"&gt;社区监督&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;机制：
+- 论坛充分讨论
+- 第三方审计提案
+- 媒体监督
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="紧急暂停"&gt;紧急暂停&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;权限：
+- 社区可投票暂停治理
+- 发现攻击时紧急响应
+- 多签也可触发
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="治理参与策略"&gt;治理参与策略&lt;/h2&gt;
+&lt;h3 id="个人参与者"&gt;个人参与者&lt;/h3&gt;
+&lt;h4 id="小-holder1-万代币"&gt;小 holder（&amp;lt;1 万代币）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;建议：
+1. 委托投票给信任的代表
+2. 关注核心提案
+3. 参与论坛讨论
+4. 不要盲目投票
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="中-holder1-10-万代币"&gt;中 holder（1-10 万代币）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;建议：
+1. 直接参与投票
+2. 加入治理委员会
+3. 提出改进建议
+4. 联合其他 holder
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="大-holder10-万代币"&gt;大 holder（&amp;gt;10 万代币）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;建议：
+1. 积极参与所有投票
+2. 提出高质量提案
+3. 承担社区责任
+4. 避免权力滥用
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="机构投资者"&gt;机构投资者&lt;/h3&gt;
+&lt;h4 id="治理策略"&gt;治理策略&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 专业团队分析提案
+2. 建立投票框架
+3. 与其他机构协调
+4. 长期参与治理
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="利益冲突管理"&gt;利益冲突管理&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;披露：
+- 持仓情况
+- 关联项目
+- 投票理由
+
+回避：
+- 利益相关提案回避投票
+- 保持独立性
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="我的治理参与"&gt;我的治理参与&lt;/h2&gt;
+&lt;h3 id="持仓协议治理"&gt;持仓协议治理&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;协议&lt;/th&gt;
+ &lt;th&gt;持仓&lt;/th&gt;
+ &lt;th&gt;参与度&lt;/th&gt;
+ &lt;th&gt;策略&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Aave&lt;/td&gt;
+ &lt;td&gt;$50k&lt;/td&gt;
+ &lt;td&gt;每案必投&lt;/td&gt;
+ &lt;td&gt;支持稳健提案&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Uniswap&lt;/td&gt;
+ &lt;td&gt;$30k&lt;/td&gt;
+ &lt;td&gt;选择性&lt;/td&gt;
+ &lt;td&gt;关注费用开关&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Curve&lt;/td&gt;
+ &lt;td&gt;$20k&lt;/td&gt;
+ &lt;td&gt;委托投票&lt;/td&gt;
+ &lt;td&gt;委托给活跃代表&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Optimism&lt;/td&gt;
+ &lt;td&gt;$10k&lt;/td&gt;
+ &lt;td&gt;观察&lt;/td&gt;
+ &lt;td&gt;学习为主&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="投票原则"&gt;投票原则&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 仔细阅读提案全文
+2. 查看论坛讨论
+3. 评估风险和收益
+4. 考虑长期影响
+5. 不盲目跟随大 V
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="时间分配"&gt;时间分配&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;每周：
+- 阅读提案：2 小时
+- 论坛讨论：1 小时
+- 投票决策：1 小时
+
+每月：
+- 深度研究：4 小时
+- 社区互动：2 小时
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="总结"&gt;总结&lt;/h2&gt;
+&lt;p&gt;治理攻击防范：&lt;/p&gt;</description></item><item><title>DAO 治理完全指南 - 参与协议决策</title><link>https://tiao0303.github.io/dex-bok/posts/14-governance-guide/</link><pubDate>Thu, 19 Mar 2026 00:15:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/14-governance-guide/</guid><description>&lt;h2 id="什么是-dao-治理"&gt;什么是 DAO 治理&lt;/h2&gt;
+&lt;p&gt;DAO（去中心化自治组织）让代币持有者参与协议决策：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;费用调整&lt;/li&gt;
+&lt;li&gt;资金分配&lt;/li&gt;
+&lt;li&gt;协议升级&lt;/li&gt;
+&lt;li&gt;合作伙伴关系&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="治理流程"&gt;治理流程&lt;/h2&gt;
+&lt;h3 id="1-提案阶段"&gt;1. 提案阶段&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;论坛讨论（Discourse）&lt;/li&gt;
+&lt;li&gt;温度检查投票&lt;/li&gt;
+&lt;li&gt;正式提案提交&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="2-投票阶段"&gt;2. 投票阶段&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;链上投票（Snapshot/链上合约）&lt;/li&gt;
+&lt;li&gt;投票权：代币数量 + 锁定时长&lt;/li&gt;
+&lt;li&gt;法定人数要求（通常 4-10%）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="3-执行阶段"&gt;3. 执行阶段&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Timelock 等待期（通常 2-7 天）&lt;/li&gt;
+&lt;li&gt;多签执行&lt;/li&gt;
+&lt;li&gt;链上生效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="主流治理平台"&gt;主流治理平台&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;平台&lt;/th&gt;
+ &lt;th&gt;特点&lt;/th&gt;
+ &lt;th&gt;代表项目&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Snapshot&lt;/td&gt;
+ &lt;td&gt;链下签名，无 Gas&lt;/td&gt;
+ &lt;td&gt;UNI、AAVE&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Tally&lt;/td&gt;
+ &lt;td&gt;链上投票&lt;/td&gt;
+ &lt;td&gt;MKR、COMP&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Boardroom&lt;/td&gt;
+ &lt;td&gt;多链支持&lt;/td&gt;
+ &lt;td&gt;ENS、LDO&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="治理策略"&gt;治理策略&lt;/h2&gt;
+&lt;h3 id="委托投票"&gt;委托投票&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;没时间研究？委托给活跃代表&lt;/li&gt;
+&lt;li&gt;选择与你有共同利益的 delegate&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="治理挖矿"&gt;治理挖矿&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;参与投票获得额外奖励&lt;/li&gt;
+&lt;li&gt;注意奖励代币的解锁和价格&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="提案技巧"&gt;提案技巧&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;先在论坛获得支持&lt;/li&gt;
+&lt;li&gt;明确执行细节&lt;/li&gt;
+&lt;li&gt;考虑实施成本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;作者&lt;/strong&gt;：QingHeart Qin
+&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item></channel></rss>

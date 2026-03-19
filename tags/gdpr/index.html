@@ -1,0 +1,667 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/gdpr/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/gdpr/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/gdpr/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/gdpr/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="GDPR"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="GDPR"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T00:27:00+08:00"><meta itemprop=dateModified content="2026-03-19T00:27:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="GDPR"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 avenir bg-near-white production is-term"><header><div class="pb3-m pb6-l bg-white"><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l center items-center justify-between"><a href=/dex-bok/ class="f3 fw2 hover-white white-90 dib no-underline">DEX 学习笔记 | 去中心化交易所实战指南</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/ title="首页 page">首页</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/posts/ title="文章 page">文章</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/guides/ title="教程 page">教程</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/tools/ title="工具 page">工具</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/about/ title="关于 page">关于</a></li></ul><div class=ananke-socials></div></div></div></nav><div class="tc-l pv3 ph3 ph4-ns"><h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">GDPR</h1></div></div></header><main class=pb7 role=main><article class="pa3 pa4-ns nested-copy-line-height"><section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section><section class="flex-ns mt5 flex-wrap justify-around"><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/t3-security-compliance-14/ class="link black dim">T3 安全合规系列 (14/15)：数据隐私与保护机制</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=引言>引言</h2><p>在去中心化金融时代，数据隐私保护既是用户权利，也是合规要求。本文详细介绍 T3 如何构建全面的数据隐私保护体系，在保障透明性的同时保护用户隐私，满足 GDPR、CCPA 等全球隐私法规要求。</p><h2 id=隐私保护原则>隐私保护原则</h2><h3 id=数据最小化>数据最小化</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// 仅收集必要数据
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>DATA_COLLECTION_POLICY</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 必须收集（核心功能）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>essential</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;wallet_address&#39;</span>,      <span style=color:#75715e>// 交易必需
+</span></span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;transaction_history&#39;</span>, <span style=color:#75715e>// 审计必需
+</span></span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;kyc_verification_status&#39;</span> <span style=color:#75715e>// 合规必需
+</span></span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 可选收集（增强体验）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>optional</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;email&#39;</span>,              <span style=color:#75715e>// 通知
+</span></span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;phone&#39;</span>,              <span style=color:#75715e>// 2FA
+</span></span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;trading_preferences&#39;</span> <span style=color:#75715e>// 个性化
+</span></span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 禁止收集
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>prohibited</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;private_keys&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;seed_phrases&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;browsing_history_outside_platform&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;biometric_data_unencrypted&#39;</span>
+</span></span><span style=display:flex><span>  ]
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>validateDataCollection</span>(<span style=color:#a6e22e>dataType</span>: <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>purpose</span>: <span style=color:#66d9ef>string</span>)<span style=color:#f92672>:</span> <span style=color:#66d9ef>boolean</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>DATA_COLLECTION_POLICY</span>.<span style=color:#a6e22e>prohibited</span>.<span style=color:#a6e22e>includes</span>(<span style=color:#a6e22e>dataType</span>)) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>DATA_COLLECTION_POLICY</span>.<span style=color:#a6e22e>optional</span>.<span style=color:#a6e22e>includes</span>(<span style=color:#a6e22e>dataType</span>)) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>hasUserConsent</span>(<span style=color:#a6e22e>dataType</span>, <span style=color:#a6e22e>purpose</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>DATA_COLLECTION_POLICY</span>.<span style=color:#a6e22e>essential</span>.<span style=color:#a6e22e>includes</span>(<span style=color:#a6e22e>dataType</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=目的限制>目的限制</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>DataUsagePurpose</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>dataType</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>allowedPurposes</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>requiresAdditionalConsent</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>retentionPeriod</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// days
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>DATA_USAGE_MATRIX</span>: <span style=color:#66d9ef>DataUsagePurpose</span>[] <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dataType</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;wallet_address&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>allowedPurposes</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;transaction_processing&#39;</span>, <span style=color:#e6db74>&#39;compliance_monitoring&#39;</span>, <span style=color:#e6db74>&#39;audit&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiresAdditionalConsent</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>retentionPeriod</span>: <span style=color:#66d9ef>365</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>10</span> <span style=color:#75715e>// 10 年
+</span></span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dataType</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;email&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>allowedPurposes</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;account_notifications&#39;</span>, <span style=color:#e6db74>&#39;security_alerts&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiresAdditionalConsent</span>: <span style=color:#66d9ef>true</span>, <span style=color:#75715e>// 营销需额外同意
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>retentionPeriod</span>: <span style=color:#66d9ef>365</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>2</span> <span style=color:#75715e>// 2 年
+</span></span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dataType</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;kyc_documents&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>allowedPurposes</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;identity_verification&#39;</span>, <span style=color:#e6db74>&#39;regulatory_compliance&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiresAdditionalConsent</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>retentionPeriod</span>: <span style=color:#66d9ef>365</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>5</span> <span style=color:#75715e>// 5 年（监管要求）
+</span></span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dataType</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;trading_history&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>allowedPurposes</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;portfolio_tracking&#39;</span>, <span style=color:#e6db74>&#39;tax_reporting&#39;</span>, <span style=color:#e6db74>&#39;analytics&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiresAdditionalConsent</span>: <span style=color:#66d9ef>true</span>, <span style=color:#75715e>// 分析需同意
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>retentionPeriod</span>: <span style=color:#66d9ef>365</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>7</span> <span style=color:#75715e>// 7 年
+</span></span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>];
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>canUseData</span>(<span style=color:#a6e22e>dataType</span>: <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>purpose</span>: <span style=color:#66d9ef>string</span>)<span style=color:#f92672>:</span> <span style=color:#66d9ef>boolean</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>policy</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>DATA_USAGE_MATRIX</span>.<span style=color:#a6e22e>find</span>(<span style=color:#a6e22e>d</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>dataType</span> <span style=color:#f92672>===</span> <span style=color:#a6e22e>dataType</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>policy</span>) <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>policy</span>.<span style=color:#a6e22e>allowedPurposes</span>.<span style=color:#a6e22e>includes</span>(<span style=color:#a6e22e>purpose</span>)) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>policy</span>.<span style=color:#a6e22e>requiresAdditionalConsent</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>hasSpecificConsent</span>(<span style=color:#a6e22e>dataType</span>, <span style=color:#a6e22e>purpose</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=加密体系>加密体系</h2><h3 id=数据传输加密>数据传输加密</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// TLS 1.3 强制
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>TLS_CONFIG</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>minVersion</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;TLSv1.3&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>ciphers</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;TLS_AES_256_GCM_SHA384&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;TLS_CHACHA20_POLY1305_SHA256&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;TLS_AES_128_GCM_SHA256&#39;</span>
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>hsts</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>maxAge</span>: <span style=color:#66d9ef>31536000</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>includeSubDomains</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>preload</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// API 请求加密
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>EncryptedRequest</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>ciphertext</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>iv</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>authTag</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>timestamp</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>nonce</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>encryptRequest</span>(<span style=color:#a6e22e>payload</span>: <span style=color:#66d9ef>object</span>, <span style=color:#a6e22e>recipientPublicKey</span>: <span style=color:#66d9ef>string</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>EncryptedRequest</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 生成临时密钥对
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>ephemeralKeyPair</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>crypto</span>.<span style=color:#a6e22e>generateKeyPair</span>(<span style=color:#e6db74>&#39;ECDH&#39;</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 派生共享密钥
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>sharedSecret</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>crypto</span>.<span style=color:#a6e22e>diffieHellman</span>({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>privateKey</span>: <span style=color:#66d9ef>ephemeralKeyPair.privateKey</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>publicKey</span>: <span style=color:#66d9ef>recipientPublicKey</span>
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 派生加密密钥
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>encryptionKey</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>deriveKey</span>(<span style=color:#a6e22e>sharedSecret</span>, <span style=color:#e6db74>&#39;encryption&#39;</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// AES-GCM 加密
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>iv</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>crypto</span>.<span style=color:#a6e22e>randomBytes</span>(<span style=color:#ae81ff>12</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>ciphertext</span>, <span style=color:#a6e22e>authTag</span> } <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>crypto</span>.<span style=color:#a6e22e>encrypt</span>({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>key</span>: <span style=color:#66d9ef>encryptionKey</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>iv</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>data</span>: <span style=color:#66d9ef>JSON.stringify</span>(<span style=color:#a6e22e>payload</span>)
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>ciphertext</span>: <span style=color:#66d9ef>ciphertext.toString</span>(<span style=color:#e6db74>&#39;base64&#39;</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>iv</span>: <span style=color:#66d9ef>iv.toString</span>(<span style=color:#e6db74>&#39;base64&#39;</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>authTag</span>: <span style=color:#66d9ef>authTag.toString</span>(<span style=color:#e6db74>&#39;base64&#39;</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>timestamp</span>: <span style=color:#66d9ef>Date.now</span>(),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>nonce</span>: <span style=color:#66d9ef>ephemeralKeyPair.publicKey.toString</span>(<span style=color:#e6db74>&#39;base64&#39;</span>)
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=数据存储加密>数据存储加密</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>HSMClient</span> } <span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#39;./hsm&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>EncryptedRecord</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>data</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>encryptionKeyId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>createdAt</span>: <span style=color:#66d9ef>Date</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>accessPolicy</span>: <span style=color:#66d9ef>AccessPolicy</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SecureStorage</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>private</span> <span style=color:#a6e22e>hsm</span>: <span style=color:#66d9ef>HSMClient</span>;
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>async</span> <span style=color:#a6e22e>store</span>(<span style=color:#a6e22e>userId</span>: <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>dataType</span>: <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>data</span>: <span style=color:#66d9ef>any</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 获取用户专属加密密钥
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>keyId</span>, <span style=color:#a6e22e>key</span> } <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>hsm</span>.<span style=color:#a6e22e>getUserKey</span>(<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 加密数据
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>encrypted</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>encrypt</span>(<span style=color:#a6e22e>data</span>, <span style=color:#a6e22e>key</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 存储
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>database</span>.<span style=color:#a6e22e>insert</span>(<span style=color:#e6db74>&#39;encrypted_data&#39;</span>, {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>userId</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>dataType</span>,
+</span></span><span style=display:flex><span>      ...<span style=color:#a6e22e>encrypted</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>encryptionKeyId</span>: <span style=color:#66d9ef>keyId</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>createdAt</span>: <span style=color:#66d9ef>new</span> Date()
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>async</span> <span style=color:#a6e22e>encrypt</span>(<span style=color:#a6e22e>data</span>: <span style=color:#66d9ef>any</span>, <span style=color:#a6e22e>key</span>: <span style=color:#66d9ef>Buffer</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span><span style=color:#f92672>&lt;</span>{ <span style=color:#a6e22e>data</span>: <span style=color:#66d9ef>string</span>; <span style=color:#a6e22e>iv</span>: <span style=color:#66d9ef>string</span> }<span style=color:#f92672>&gt;</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>iv</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>crypto</span>.<span style=color:#a6e22e>randomBytes</span>(<span style=color:#ae81ff>16</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>cipher</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>crypto</span>.<span style=color:#a6e22e>createCipheriv</span>(<span style=color:#e6db74>&#39;aes-256-gcm&#39;</span>, <span style=color:#a6e22e>key</span>, <span style=color:#a6e22e>iv</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>encrypted</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>cipher</span>.<span style=color:#a6e22e>update</span>(<span style=color:#a6e22e>JSON</span>.<span style=color:#a6e22e>stringify</span>(<span style=color:#a6e22e>data</span>), <span style=color:#e6db74>&#39;utf8&#39;</span>, <span style=color:#e6db74>&#39;hex&#39;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>encrypted</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>cipher</span>.<span style=color:#a6e22e>final</span>(<span style=color:#e6db74>&#39;hex&#39;</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>data</span>: <span style=color:#66d9ef>encrypted</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>iv</span>: <span style=color:#66d9ef>iv.toString</span>(<span style=color:#e6db74>&#39;hex&#39;</span>)
+</span></span><span style=display:flex><span>    };
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=密钥管理>密钥管理</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>KeyHierarchy</span> {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 根密钥（HSM 保护，离线存储）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>masterKey</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>location</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;HSM_OFFLINE&#39;</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>usage</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;key_encryption&#39;</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rotationPeriod</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;yearly&#39;</span>;
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 密钥加密密钥
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>keyEncryptionKey</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>location</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;HSM_ONLINE&#39;</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>usage</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;encrypt_data_keys&#39;</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rotationPeriod</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;quarterly&#39;</span>;
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 数据加密密钥
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>dataEncryptionKey</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>location</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ENCRYPTED_STORAGE&#39;</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>usage</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;encrypt_user_data&#39;</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rotationPeriod</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;per_user&#39;</span>;
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 密钥轮换
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>rotateKeys</span>(<span style=color:#a6e22e>userId</span>: <span style=color:#66d9ef>string</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 生成新密钥
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>newKey</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>generateDataKey</span>();
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 用新密钥重新加密数据
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>oldKey</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getDataKey</span>(<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>records</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getUserRecords</span>(<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>record</span> <span style=color:#66d9ef>of</span> <span style=color:#a6e22e>records</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>decrypted</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>decrypt</span>(<span style=color:#a6e22e>record</span>.<span style=color:#a6e22e>data</span>, <span style=color:#a6e22e>oldKey</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>reencrypted</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>encrypt</span>(<span style=color:#a6e22e>decrypted</span>, <span style=color:#a6e22e>newKey</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>updateRecord</span>(<span style=color:#a6e22e>record</span>.<span style=color:#a6e22e>id</span>, <span style=color:#a6e22e>reencrypted</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 安全删除旧密钥
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>securelyDeleteKey</span>(<span style=color:#a6e22e>oldKey</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 存储新密钥
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>storeDataKey</span>(<span style=color:#a6e22e>userId</span>, <span style=color:#a6e22e>newKey</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=隐私增强技术>隐私增强技术</h2><h3 id=零知识证明>零知识证明</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// 使用 zk-SNARKs 证明合规性而不泄露细节
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>ComplianceProof</span> {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 证明用户已通过 KYC，但不泄露身份信息
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>kycVerified</span>: <span style=color:#66d9ef>ZKProof</span>;
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 证明交易金额在限额内，但不泄露具体金额
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>withinLimits</span>: <span style=color:#66d9ef>ZKProof</span>;
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 证明非制裁地址，但不泄露地址
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>notSanctioned</span>: <span style=color:#66d9ef>ZKProof</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>generateKYCProof</span>(<span style=color:#a6e22e>userId</span>: <span style=color:#66d9ef>string</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>ZKProof</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 获取 KYC 状态
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>kycStatus</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getKYCStatus</span>(<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 生成零知识证明
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>proof</span>, <span style=color:#a6e22e>publicInputs</span> } <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>zkSNARK</span>.<span style=color:#a6e22e>prove</span>({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>circuit</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;kyc_verification&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>inputs</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>kycLevel</span>: <span style=color:#66d9ef>kycStatus.level</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>verificationDate</span>: <span style=color:#66d9ef>kycStatus.verifiedAt</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>secret</span>: <span style=color:#66d9ef>kycStatus.secret</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> { <span style=color:#a6e22e>proof</span>, <span style=color:#a6e22e>publicInputs</span> };
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 验证证明
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>verifyComplianceProof</span>(<span style=color:#a6e22e>proof</span>: <span style=color:#66d9ef>ZKProof</span>)<span style=color:#f92672>:</span> <span style=color:#66d9ef>boolean</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>zkSNARK</span>.<span style=color:#a6e22e>verify</span>({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>verificationKey</span>: <span style=color:#66d9ef>COMPLIANCE_VK</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>proof</span>: <span style=color:#66d9ef>proof.proof</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>publicInputs</span>: <span style=color:#66d9ef>proof.publicInputs</span>
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=差分隐私>差分隐私</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// 在统计分析中添加噪声保护个体隐私
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>DifferentialPrivacyConfig</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>epsilon</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// 隐私预算
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>delta</span>: <span style=color:#66d9ef>number</span>;   <span style=color:#75715e>// 失败概率
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>mechanism</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;LAPLACE&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;GAUSSIAN&#39;</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>DP_CONFIG</span>: <span style=color:#66d9ef>DifferentialPrivacyConfig</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>epsilon</span>: <span style=color:#66d9ef>1.0</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>delta</span>: <span style=color:#66d9ef>1e</span><span style=color:#f92672>-</span><span style=color:#ae81ff>5</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>mechanism</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;LAPLACE&#39;</span>
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>addLaplaceNoise</span>(<span style=color:#a6e22e>value</span>: <span style=color:#66d9ef>number</span>, <span style=color:#a6e22e>sensitivity</span>: <span style=color:#66d9ef>number</span>)<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>scale</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>sensitivity</span> <span style=color:#f92672>/</span> <span style=color:#a6e22e>DP_CONFIG</span>.<span style=color:#a6e22e>epsilon</span>;
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>u</span> <span style=color:#f92672>=</span> Math.<span style=color:#a6e22e>random</span>() <span style=color:#f92672>-</span> <span style=color:#ae81ff>0.5</span>;
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>value</span> <span style=color:#f92672>-</span> <span style=color:#a6e22e>scale</span> <span style=color:#f92672>*</span> Math.<span style=color:#a6e22e>sign</span>(<span style=color:#a6e22e>u</span>) <span style=color:#f92672>*</span> Math.<span style=color:#a6e22e>log</span>(<span style=color:#ae81ff>1</span> <span style=color:#f92672>-</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>*</span> Math.<span style=color:#a6e22e>abs</span>(<span style=color:#a6e22e>u</span>));
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 发布聚合统计数据
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>publishTradingStats</span>(<span style=color:#a6e22e>timeRange</span>: <span style=color:#66d9ef>TimeRange</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>AggregatedStats</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>rawStats</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>calculateStats</span>(<span style=color:#a6e22e>timeRange</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>totalVolume</span>: <span style=color:#66d9ef>addLaplaceNoise</span>(<span style=color:#a6e22e>rawStats</span>.<span style=color:#a6e22e>totalVolume</span>, <span style=color:#ae81ff>1000000</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>activeUsers</span>: <span style=color:#66d9ef>addLaplaceNoise</span>(<span style=color:#a6e22e>rawStats</span>.<span style=color:#a6e22e>activeUsers</span>, <span style=color:#ae81ff>100</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>averageTradeSize</span>: <span style=color:#66d9ef>addLaplaceNoise</span>(<span style=color:#a6e22e>rawStats</span>.<span style=color:#a6e22e>averageTradeSize</span>, <span style=color:#ae81ff>10000</span>),
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ... 其他指标
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>privacyBudget</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>epsilonUsed</span>: <span style=color:#66d9ef>DP_CONFIG.epsilon</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>remaining</span>: <span style=color:#66d9ef>getRemainingBudget</span>()
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=同态加密>同态加密</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// 在加密数据上进行计算
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> <span style=color:#f92672>*</span> <span style=color:#66d9ef>as</span> <span style=color:#a6e22e>HE</span> <span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#39;homomorphic-encryption&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>EncryptedBalance</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>ciphertext</span>: <span style=color:#66d9ef>Buffer</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>publicKeyId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>calculateTotalBalance</span>(<span style=color:#a6e22e>balances</span>: <span style=color:#66d9ef>EncryptedBalance</span>[])<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>EncryptedBalance</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 同态加法：无需解密即可计算总和
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>sumCiphertext</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>balances</span>[<span style=color:#ae81ff>0</span>].<span style=color:#a6e22e>ciphertext</span>;
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;</span> <span style=color:#a6e22e>balances</span>.<span style=color:#a6e22e>length</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>sumCiphertext</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>HE</span>.<span style=color:#a6e22e>add</span>(<span style=color:#a6e22e>sumCiphertext</span>, <span style=color:#a6e22e>balances</span>[<span style=color:#a6e22e>i</span>].<span style=color:#a6e22e>ciphertext</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>ciphertext</span>: <span style=color:#66d9ef>sumCiphertext</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>publicKeyId</span>: <span style=color:#66d9ef>balances</span>[<span style=color:#ae81ff>0</span>].<span style=color:#a6e22e>publicKeyId</span>
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 只有密钥持有者可以解密结果
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>decryptTotalBalance</span>(<span style=color:#a6e22e>encrypted</span>: <span style=color:#66d9ef>EncryptedBalance</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>number</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>privateKey</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getPrivateKey</span>(<span style=color:#a6e22e>encrypted</span>.<span style=color:#a6e22e>publicKeyId</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>HE</span>.<span style=color:#a6e22e>decrypt</span>(<span style=color:#a6e22e>encrypted</span>.<span style=color:#a6e22e>ciphertext</span>, <span style=color:#a6e22e>privateKey</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=用户隐私权利>用户隐私权利</h2><h3 id=gdpr-合规>GDPR 合规</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>GDPRRequest</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ACCESS&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;RECTIFICATION&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;ERASURE&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;PORTABILITY&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;RESTRICTION&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;OBJECTION&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>userId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>requestId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>submittedAt</span>: <span style=color:#66d9ef>Date</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>deadline</span>: <span style=color:#66d9ef>Date</span>; <span style=color:#75715e>// 30 天内响应
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 数据访问权
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>handleDataAccessRequest</span>(<span style=color:#a6e22e>request</span>: <span style=color:#66d9ef>GDPRRequest</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>DataExport</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>userData</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>collectAllUserData</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requestId</span>: <span style=color:#66d9ef>request.requestId</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>data</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>personalInfo</span>: <span style=color:#66d9ef>userData.profile</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>transactionHistory</span>: <span style=color:#66d9ef>userData.transactions</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>kycRecords</span>: <span style=color:#66d9ef>userData.kyc</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>consentRecords</span>: <span style=color:#66d9ef>userData.consents</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>logData</span>: <span style=color:#66d9ef>userData.logs</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>format</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;JSON&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>generatedAt</span>: <span style=color:#66d9ef>new</span> Date(),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>expiresAt</span>: <span style=color:#66d9ef>new</span> Date(Date.<span style=color:#a6e22e>now</span>() <span style=color:#f92672>+</span> <span style=color:#ae81ff>7</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>24</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>60</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>60</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>1000</span>) <span style=color:#75715e>// 7 天
+</span></span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 被遗忘权（删除权）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>handleErasureRequest</span>(<span style=color:#a6e22e>request</span>: <span style=color:#66d9ef>GDPRRequest</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 验证是否有合法保留理由
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>retentionCheck</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>checkRetentionRequirements</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>retentionCheck</span>.<span style=color:#a6e22e>mustRetain</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 部分数据因合规要求必须保留
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>partialErasure</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>, <span style=color:#a6e22e>retentionCheck</span>.<span style=color:#a6e22e>essentialData</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>notifyUser</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>, {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>message</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;部分数据因监管要求必须保留&#39;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>details</span>: <span style=color:#66d9ef>retentionCheck.legalBasis</span>
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 完全删除
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>completeErasure</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>logErasure</span>(<span style=color:#a6e22e>request</span>);
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 数据可携带权
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>handlePortabilityRequest</span>(<span style=color:#a6e22e>request</span>: <span style=color:#66d9ef>GDPRRequest</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>DataPackage</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>data</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>handleDataAccessRequest</span>(<span style=color:#a6e22e>request</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    ...<span style=color:#a6e22e>data</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>format</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;CSV&#39;</span>, <span style=color:#75715e>// 结构化、通用格式
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>schema</span>: <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>generateSchema</span>(<span style=color:#a6e22e>data</span>.<span style=color:#a6e22e>data</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>downloadUrl</span>: <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>generateSecureDownloadUrl</span>(<span style=color:#a6e22e>data</span>)
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=ccpa-合规>CCPA 合规</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>CCPARequest</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;KNOW&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;DELETE&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;OPT_OUT&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>userId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>verified</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 知情权
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>handleCCPAKnowRequest</span>(<span style=color:#a6e22e>request</span>: <span style=color:#66d9ef>CCPARequest</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>CCPADisclosure</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>categories</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getDataCategories</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>categoriesCollected</span>: <span style=color:#66d9ef>categories.map</span>(<span style=color:#a6e22e>c</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>c</span>.<span style=color:#a6e22e>name</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>purposes</span>: <span style=color:#66d9ef>categories.map</span>(<span style=color:#a6e22e>c</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>c</span>.<span style=color:#a6e22e>purposes</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>sources</span>: <span style=color:#66d9ef>categories.map</span>(<span style=color:#a6e22e>c</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>c</span>.<span style=color:#a6e22e>sources</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>thirdParties</span>: <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getThirdPartyShares</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>sales</span>: <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getDataSales</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>)
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 选择退出销售
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>handleOptOutRequest</span>(<span style=color:#a6e22e>request</span>: <span style=color:#66d9ef>CCPARequest</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>setDoNotSell</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>, <span style=color:#66d9ef>true</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>notifyDataPartners</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>, <span style=color:#e6db74>&#39;OPT_OUT&#39;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>updatePrivacyPreferences</span>(<span style=color:#a6e22e>request</span>.<span style=color:#a6e22e>userId</span>, { <span style=color:#a6e22e>sellData</span>: <span style=color:#66d9ef>false</span> });
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=匿名化与去标识化>匿名化与去标识化</h2><h3 id=数据脱敏>数据脱敏</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>AnonymizationRule</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>field</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;MASK&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;HASH&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;GENERALIZE&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;SUPPRESS&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;SYNTHESIZE&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>parameters</span>: <span style=color:#66d9ef>any</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>ANONYMIZATION_RULES</span>: <span style=color:#66d9ef>AnonymizationRule</span>[] <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>field</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;email&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;HASH&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>parameters</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>algorithm</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SHA256&#39;</span>, <span style=color:#a6e22e>salt</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;user_specific&#39;</span> }
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>field</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ip_address&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;GENERALIZE&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>parameters</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>precision</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/24&#39;</span> } <span style=color:#75715e>// 保留前 24 位
+</span></span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>field</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;wallet_address&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;HASH&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>parameters</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>algorithm</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;keccak256&#39;</span>, <span style=color:#a6e22e>truncate</span>: <span style=color:#66d9ef>8</span> }
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>field</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;transaction_amount&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;GENERALIZE&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>parameters</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>ranges</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;0-100&#39;</span>, <span style=color:#e6db74>&#39;100-1000&#39;</span>, <span style=color:#e6db74>&#39;1000-10000&#39;</span>, <span style=color:#e6db74>&#39;10000+&#39;</span>] }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>];
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>anonymizeRecord</span>(<span style=color:#a6e22e>record</span>: <span style=color:#66d9ef>Record</span>, <span style=color:#a6e22e>purpose</span>: <span style=color:#66d9ef>string</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Record</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>applicableRules</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>ANONYMIZATION_RULES</span>.<span style=color:#a6e22e>filter</span>(<span style=color:#a6e22e>r</span> <span style=color:#f92672>=&gt;</span> 
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>isRequiredForPurpose</span>(<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>field</span>, <span style=color:#a6e22e>purpose</span>)
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>anonymized</span> <span style=color:#f92672>=</span> { ...<span style=color:#a6e22e>record</span> };
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>rule</span> <span style=color:#66d9ef>of</span> <span style=color:#a6e22e>applicableRules</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>anonymized</span>[<span style=color:#a6e22e>rule</span>.<span style=color:#a6e22e>field</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>applyAnonymization</span>(<span style=color:#a6e22e>record</span>[<span style=color:#a6e22e>rule</span>.<span style=color:#a6e22e>field</span>], <span style=color:#a6e22e>rule</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>anonymized</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=k-匿名性>k-匿名性</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>KAnonymityConfig</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>k</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// 最小等价类大小
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>quasiIdentifiers</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>K_ANONYMITY_CONFIG</span>: <span style=color:#66d9ef>KAnonymityConfig</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>k</span>: <span style=color:#66d9ef>5</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>quasiIdentifiers</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;age_group&#39;</span>, <span style=color:#e6db74>&#39;location_region&#39;</span>, <span style=color:#e6db74>&#39;signup_date_month&#39;</span>]
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>ensureKAnonymity</span>(<span style=color:#a6e22e>dataset</span>: <span style=color:#66d9ef>Dataset</span>[])<span style=color:#f92672>:</span> <span style=color:#a6e22e>Dataset</span>[] {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 分组检查
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>groups</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>groupBy</span>(<span style=color:#a6e22e>dataset</span>, <span style=color:#a6e22e>K_ANONYMITY_CONFIG</span>.<span style=color:#a6e22e>quasiIdentifiers</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 处理小群组
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>key</span>, <span style=color:#a6e22e>records</span>] <span style=color:#66d9ef>of</span> Object.<span style=color:#a6e22e>entries</span>(<span style=color:#a6e22e>groups</span>)) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>records</span>.<span style=color:#a6e22e>length</span> <span style=color:#f92672>&lt;</span> <span style=color:#a6e22e>K_ANONYMITY_CONFIG</span>.<span style=color:#a6e22e>k</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// 泛化或抑制
+</span></span></span><span style=display:flex><span>      <span style=color:#a6e22e>dataset</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>generalizeRecords</span>(<span style=color:#a6e22e>dataset</span>, <span style=color:#a6e22e>records</span>, <span style=color:#a6e22e>K_ANONYMITY_CONFIG</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>dataset</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=访问控制与审计>访问控制与审计</h2><h3 id=基于角色的访问>基于角色的访问</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>enum</span> <span style=color:#a6e22e>DataAccessRole</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>USER</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;user&#39;</span>,              <span style=color:#75715e>// 只能访问自己的数据
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>SUPPORT</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;support&#39;</span>,        <span style=color:#75715e>// 有限的用户数据访问
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>COMPLIANCE</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;compliance&#39;</span>,  <span style=color:#75715e>// 合规相关数据
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>ANALYTICS</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;analytics&#39;</span>,    <span style=color:#75715e>// 匿名化数据
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>ADMIN</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;admin&#39;</span>             <span style=color:#75715e>// 完全访问（需审批）
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>AccessPolicy</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>role</span>: <span style=color:#66d9ef>DataAccessRole</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>allowedDataTypes</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>allowedOperations</span><span style=color:#f92672>:</span> (<span style=color:#e6db74>&#39;READ&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;WRITE&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;DELETE&#39;</span>)[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>requiresApproval</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>requiresJustification</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>maxAccessDuration</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// minutes
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>ACCESS_POLICIES</span>: <span style=color:#66d9ef>Record</span>&lt;<span style=color:#f92672>DataAccessRole</span>, <span style=color:#a6e22e>AccessPolicy</span>&gt; <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  [<span style=color:#a6e22e>DataAccessRole</span>.<span style=color:#a6e22e>USER</span>]<span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>role</span>: <span style=color:#66d9ef>DataAccessRole.USER</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>allowedDataTypes</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;own_profile&#39;</span>, <span style=color:#e6db74>&#39;own_transactions&#39;</span>, <span style=color:#e6db74>&#39;own_kyc&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>allowedOperations</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;READ&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiresApproval</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiresJustification</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>maxAccessDuration</span>: <span style=color:#66d9ef>0</span>
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  [<span style=color:#a6e22e>DataAccessRole</span>.<span style=color:#a6e22e>SUPPORT</span>]<span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>role</span>: <span style=color:#66d9ef>DataAccessRole.SUPPORT</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>allowedDataTypes</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;user_profile&#39;</span>, <span style=color:#e6db74>&#39;user_transactions&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>allowedOperations</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;READ&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiresApproval</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiresJustification</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>maxAccessDuration</span>: <span style=color:#66d9ef>60</span>
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// ... 其他角色
+</span></span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>checkAccessPermission</span>(
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>requester</span>: <span style=color:#66d9ef>string</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>targetUserId</span>: <span style=color:#66d9ef>string</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>dataType</span>: <span style=color:#66d9ef>string</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>operation</span>: <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>boolean</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>role</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getUserRole</span>(<span style=color:#a6e22e>requester</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>policy</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>ACCESS_POLICIES</span>[<span style=color:#a6e22e>role</span>];
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>policy</span>.<span style=color:#a6e22e>allowedDataTypes</span>.<span style=color:#a6e22e>includes</span>(<span style=color:#a6e22e>dataType</span>)) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>policy</span>.<span style=color:#a6e22e>allowedOperations</span>.<span style=color:#a6e22e>includes</span>(<span style=color:#a6e22e>operation</span> <span style=color:#66d9ef>as</span> <span style=color:#66d9ef>any</span>)) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>policy</span>.<span style=color:#a6e22e>requiresApproval</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>approval</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getActiveApproval</span>(<span style=color:#a6e22e>requester</span>, <span style=color:#a6e22e>targetUserId</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>approval</span>) <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>policy</span>.<span style=color:#a6e22e>requiresJustification</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>logAccess</span>(<span style=color:#a6e22e>requester</span>, <span style=color:#a6e22e>targetUserId</span>, <span style=color:#a6e22e>dataType</span>, <span style=color:#a6e22e>operation</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=访问审计日志>访问审计日志</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>AccessLog</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>timestamp</span>: <span style=color:#66d9ef>Date</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>requester</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>targetUserId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>dataType</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>operation</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>justification?</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>approvalId?</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>result</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SUCCESS&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;DENIED&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>ipAddress</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>userAgent</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>logAccess</span>(<span style=color:#a6e22e>log</span>: <span style=color:#66d9ef>AccessLog</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 写入不可篡改的审计日志
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>auditLog</span>.<span style=color:#a6e22e>append</span>({
+</span></span><span style=display:flex><span>    ...<span style=color:#a6e22e>log</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>hash</span>: <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>calculateHash</span>(<span style=color:#a6e22e>log</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>previousHash</span>: <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getLastHash</span>()
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 异常访问告警
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>isAnomalousAccess</span>(<span style=color:#a6e22e>log</span>)) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>alertSecurityTeam</span>(<span style=color:#a6e22e>log</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>isAnomalousAccess</span>(<span style=color:#a6e22e>log</span>: <span style=color:#66d9ef>AccessLog</span>)<span style=color:#f92672>:</span> <span style=color:#66d9ef>boolean</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>recentAccesses</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>getRecentAccesses</span>(<span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>requester</span>, <span style=color:#ae81ff>60</span>); <span style=color:#75715e>// 1 小时内
+</span></span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>recentAccesses</span>.<span style=color:#a6e22e>length</span> <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>50</span> <span style=color:#f92672>||</span>  <span style=color:#75715e>// 访问频率异常
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>targetUserId</span> <span style=color:#f92672>!==</span> <span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>requester</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>dataType</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#39;kyc_documents&#39;</span> <span style=color:#f92672>||</span> <span style=color:#75715e>// 敏感数据
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>isUnusualTime</span>(<span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>timestamp</span>) <span style=color:#f92672>||</span> <span style=color:#75715e>// 非工作时间
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>isUnusualLocation</span>(<span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>ipAddress</span>) <span style=color:#75715e>// 异常地理位置
+</span></span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=第三方数据共享>第三方数据共享</h2><h3 id=数据共享协议>数据共享协议</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>DataSharingAgreement</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>partnerId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>dataCategories</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>purposes</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>restrictions</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>securityRequirements</span>: <span style=color:#66d9ef>SecurityRequirement</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>auditRights</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>breachNotification</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// hours
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>termination</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dataReturn</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dataDestruction</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>certificationRequired</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>STANDARD_DSA</span>: <span style=color:#66d9ef>DataSharingAgreement</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>partnerId</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>dataCategories</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;anonymized_trading_data&#39;</span>],
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>purposes</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;market_analysis&#39;</span>, <span style=color:#e6db74>&#39;liquidity_optimization&#39;</span>],
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>restrictions</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;no_reidentification&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;no_further_sharing&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#39;no_marketing_use&#39;</span>
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>securityRequirements</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;encryption_at_rest&#39;</span>, <span style=color:#a6e22e>standard</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;AES-256&#39;</span> },
+</span></span><span style=display:flex><span>    { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;encryption_in_transit&#39;</span>, <span style=color:#a6e22e>standard</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;TLS-1.3&#39;</span> },
+</span></span><span style=display:flex><span>    { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;access_control&#39;</span>, <span style=color:#a6e22e>standard</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;RBAC&#39;</span> }
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>auditRights</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>breachNotification</span>: <span style=color:#66d9ef>24</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>termination</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dataReturn</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dataDestruction</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>certificationRequired</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><h3 id=跨境数据传输>跨境数据传输</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>CrossBorderTransfer</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>sourceCountry</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>destinationCountry</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>dataCategories</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>legalBasis</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SCC&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;BCR&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;ADEQUACY&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;CONSENT&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>safeguards</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>validateCrossBorderTransfer</span>(<span style=color:#a6e22e>transfer</span>: <span style=color:#66d9ef>CrossBorderTransfer</span>)<span style=color:#f92672>:</span> <span style=color:#66d9ef>boolean</span> {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 检查目的地充分性认定
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>isAdequacyCountry</span>(<span style=color:#a6e22e>transfer</span>.<span style=color:#a6e22e>destinationCountry</span>)) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 检查标准合同条款
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>transfer</span>.<span style=color:#a6e22e>legalBasis</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#39;SCC&#39;</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>hasValidSCC</span>(<span style=color:#a6e22e>transfer</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 检查约束性企业规则
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>transfer</span>.<span style=color:#a6e22e>legalBasis</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#39;BCR&#39;</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>hasValidBCR</span>(<span style=color:#a6e22e>transfer</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 用户同意
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>transfer</span>.<span style=color:#a6e22e>legalBasis</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#39;CONSENT&#39;</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>hasExplicitConsent</span>(<span style=color:#a6e22e>transfer</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=隐私影响评估>隐私影响评估</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>PrivacyImpactAssessment</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>projectId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>assessmentDate</span>: <span style=color:#66d9ef>Date</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>dataFlows</span>: <span style=color:#66d9ef>DataFlow</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>risks</span>: <span style=color:#66d9ef>PrivacyRisk</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>mitigations</span>: <span style=color:#66d9ef>Mitigation</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>residualRisk</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;LOW&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;MEDIUM&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;HIGH&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>conductPIA</span>(<span style=color:#a6e22e>project</span>: <span style=color:#66d9ef>Project</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>PrivacyImpactAssessment</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>dataFlows</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>mapDataFlows</span>(<span style=color:#a6e22e>project</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>risks</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>identifyRisks</span>(<span style=color:#a6e22e>dataFlows</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>mitigations</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>proposeMitigations</span>(<span style=color:#a6e22e>risks</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>residualRisk</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>calculateResidualRisk</span>(<span style=color:#a6e22e>risks</span>, <span style=color:#a6e22e>mitigations</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>projectId</span>: <span style=color:#66d9ef>project.id</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>assessmentDate</span>: <span style=color:#66d9ef>new</span> Date(),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dataFlows</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>risks</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>mitigations</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>residualRisk</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>residualRisk</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#39;HIGH&#39;</span>
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=最佳实践>最佳实践</h2><ol><li><strong>隐私设计</strong>：从系统设计阶段考虑隐私</li><li><strong>默认隐私</strong>：默认设置应为最保护隐私</li><li><strong>透明告知</strong>：清晰说明数据使用方式</li><li><strong>用户控制</strong>：赋予用户数据控制权</li><li><strong>最小收集</strong>：仅收集必要数据</li><li><strong>安全存储</strong>：加密存储，严格访问控制</li><li><strong>定期审计</strong>：持续监控隐私合规</li><li><strong>快速响应</strong>：建立隐私事件响应流程</li></ol><h2 id=小结>小结</h2><p>数据隐私保护是 T3 对用户的基本承诺。通过加密体系、隐私增强技术、用户权利保障和严格的访问控制，T3 在保障功能的同时最大程度保护用户隐私，满足全球隐私法规要求。</p></div><a href=/dex-bok/posts/t3-security-compliance-14/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div></section></article></main><footer class="bg-white bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href=https://tiao0303.github.io/dex-bok/>&copy; DEX 学习笔记 | 去中心化交易所实战指南 2026</a><div><div class=ananke-socials></div></div></div></footer></body></html>

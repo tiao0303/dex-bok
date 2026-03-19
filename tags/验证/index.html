@@ -1,0 +1,234 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/%E9%AA%8C%E8%AF%81/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/%E9%AA%8C%E8%AF%81/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/%E9%AA%8C%E8%AF%81/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/%E9%AA%8C%E8%AF%81/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="验证"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="验证"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T01:35:00+08:00"><meta itemprop=dateModified content="2026-03-19T01:35:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="验证"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 avenir bg-near-white production is-term"><header><div class="pb3-m pb6-l bg-white"><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l center items-center justify-between"><a href=/dex-bok/ class="f3 fw2 hover-white white-90 dib no-underline">DEX 学习笔记 | 去中心化交易所实战指南</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/ title="首页 page">首页</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/posts/ title="文章 page">文章</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/guides/ title="教程 page">教程</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/tools/ title="工具 page">工具</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/about/ title="关于 page">关于</a></li></ul><div class=ananke-socials></div></div></div></nav><div class="tc-l pv3 ph3 ph4-ns"><h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">验证</h1></div></div></header><main class=pb7 role=main><article class="pa3 pa4-ns nested-copy-line-height"><section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section><section class="flex-ns mt5 flex-wrap justify-around"><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/27-formal-verification/ class="link black dim">智能合约形式化验证 - Certora 与 Spec 语言</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=什么是形式化验证>什么是形式化验证</h2><h3 id=定义>定义</h3><p><strong>形式化验证</strong> = 用数学方法证明代码符合规范</p><h3 id=与传统测试对比>与传统测试对比</h3><table><thead><tr><th>方法</th><th>覆盖率</th><th>可靠性</th><th>成本</th></tr></thead><tbody><tr><td>单元测试</td><td>部分路径</td><td>中</td><td>低</td></tr><tr><td>模糊测试</td><td>大量路径</td><td>中高</td><td>中</td></tr><tr><td>形式化验证</td><td>所有路径</td><td>极高 ✅</td><td>高</td></tr></tbody></table><h3 id=为什么需要>为什么需要</h3><pre tabindex=0><code>智能合约特点：
+- 一旦部署无法修改
+- 管理大量资金
+- 攻击者动机强
+
+传统测试不足：
+- 无法覆盖所有情况
+- 边界条件易遗漏
+- 逻辑漏洞难发现
+</code></pre><hr><h2 id=形式化验证原理>形式化验证原理</h2><h3 id=核心概念>核心概念</h3><h4 id=1-规范specification>1. 规范（Specification）</h4><pre tabindex=0><code>用形式化语言描述合约应该满足的性质
+
+示例（代币合约）：
+- 总供应量恒定
+- 余额之和 = 总供应量
+- 无法凭空增发
+</code></pre><h4 id=2-不变量invariant>2. 不变量（Invariant）</h4><pre tabindex=0><code>在任何状态下都必须为真的条件
+
+示例（AMM）：
+- x * y &gt;= k（恒定乘积）
+- 余额非负
+- 手续费正确计算
+</code></pre><h4 id=3-断言assertion>3. 断言（Assertion）</h4><pre tabindex=0><code>在特定条件下必须成立的陈述
+
+示例：
+assert balance[user] &gt;= 0
+assert totalSupply == SUM(balance[all_users])
+</code></pre><hr><h2 id=certora-验证工具>Certora 验证工具</h2><h3 id=certora-架构>Certora 架构</h3><pre tabindex=0><code>组成：
+1. CVL（Certora Verification Language）
+   - 编写规范的语言
+   
+2. Prover
+   - 数学证明引擎
+   
+3. 报告生成器
+   - 输出验证结果
+</code></pre><h3 id=cvl-语言基础>CVL 语言基础</h3><h4 id=基本语法>基本语法</h4><pre tabindex=0><code class=language-cvl data-lang=cvl>// 定义规则
+rule balanceOfInvariant(address user) {
+    // 前置条件
+    require user != address(0);
+    
+    // 不变量
+    assert token.balanceOf(user) &gt;= 0;
+}
+
+// 定义属性
+property totalSupplyConstant() {
+    // 总供应量在转账前后不变
+    env e;
+    address from, to;
+    uint256 amount;
+    
+    require e.msg.sender == from;
+    require token.balanceOf(from) &gt;= amount;
+    
+    token.transfer(e, to, amount);
+    
+    assert token.totalSupply() == old(token.totalSupply());
+}
+</code></pre><h4 id=常用断言>常用断言</h4><pre tabindex=0><code class=language-cvl data-lang=cvl>// 余额非负
+assert token.balanceOf(user) &gt;= 0;
+
+// 总供应量不变
+assert token.totalSupply() == old(token.totalSupply());
+
+// 授权不被修改
+assert token.allowance(owner, spender) == old(token.allowance(owner, spender));
+
+// 事件正确发射
+emit Transfer(from, to, amount);
+</code></pre><hr><h3 id=实战验证-erc20>实战：验证 ERC20</h3><h4 id=完整-cvl-规范>完整 CVL 规范</h4><pre tabindex=0><code class=language-cvl data-lang=cvl>// SPDX-License-Identifier: MIT
+pragma cvl 0.1;
+
+import &#34;./IERC20.sol&#34;;
+
+contract ERC20Spec {
+    IERC20 token;
+    
+    // 不变量：总供应量恒定
+    invariant totalSupplyInvariant() {
+        token.totalSupply() == INITIAL_SUPPLY;
+    }
+    
+    // 不变量：余额之和等于总供应量
+    invariant balanceSumInvariant() {
+        uint256 sum = 0;
+        for (address user : all_users) {
+            sum += token.balanceOf(user);
+        }
+        sum == token.totalSupply();
+    }
+    
+    // 规则：转账后余额正确更新
+    rule transferUpdatesBalances(address from, address to, uint256 amount) {
+        require token.balanceOf(from) &gt;= amount;
+        require to != address(0);
+        
+        uint256 balanceFromBefore = token.balanceOf(from);
+        uint256 balanceToBefore = token.balanceOf(to);
+        
+        token.transfer(msg.sender, to, amount);
+        
+        assert token.balanceOf(from) == balanceFromBefore - amount;
+        assert token.balanceOf(to) == balanceToBefore + amount;
+    }
+    
+    // 规则：授权不能被滥用
+    rule allowanceNotAbused(address owner, address spender, uint256 amount) {
+        require token.allowance(owner, spender) == 0;
+        require msg.sender != spender;
+        
+        token.transferFrom(msg.sender, owner, amount);
+        
+        assert token.allowance(owner, spender) == 0;
+    }
+}
+</code></pre><hr><h2 id=常见验证模式>常见验证模式</h2><h3 id=模式一访问控制>模式一：访问控制</h3><pre tabindex=0><code class=language-cvl data-lang=cvl>rule onlyOwnerCanPause() {
+    require !contract.isPaused();
+    require msg.sender != contract.owner();
+    
+    contract.pause(msg.sender);
+    
+    assert contract.isPaused() == false;  // 应该失败
+}
+</code></pre><h3 id=模式二重入保护>模式二：重入保护</h3><pre tabindex=0><code class=language-cvl data-lang=cvl>rule noReentrancy() {
+    require contract.balanceOf(msg.sender) &gt; 0;
+    
+    // 模拟恶意合约
+    contract.withdraw(msg.sender);
+    
+    // 验证余额在调用期间未被修改
+    assert contract.balanceOf(msg.sender) == old(contract.balanceOf(msg.sender));
+}
+</code></pre><h3 id=模式三价格操纵防护>模式三：价格操纵防护</h3><pre tabindex=0><code class=language-cvl data-lang=cvl>rule priceNotManipulable() {
+    uint256 priceBefore = contract.getPrice();
+    
+    // 尝试大额交易操纵价格
+    contract.swap(hugeAmount);
+    
+    uint256 priceAfter = contract.getPrice();
+    
+    // 价格变化应在合理范围内
+    assert abs(priceAfter - priceBefore) / priceBefore &lt; 0.05;  // &lt;5%
+}
+</code></pre><hr><h2 id=验证流程>验证流程</h2><h3 id=步骤一编写规范>步骤一：编写规范</h3><pre tabindex=0><code>1. 阅读合约代码
+2. 识别关键不变量
+3. 编写 CVL 规范
+4. 同行评审规范
+</code></pre><h3 id=步骤二运行验证>步骤二：运行验证</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 安装 Certora CLI</span>
+</span></span><span style=display:flex><span>pip install certora-cli
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 运行验证</span>
+</span></span><span style=display:flex><span>certoraRun Token.sol:Token ERC20Spec.spec <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>    --rule balanceOfInvariant,totalSupplyInvariant <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>    --msg_sender attacker <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>    --verify Token:ERC20Spec
+</span></span></code></pre></div><h3 id=步骤三分析结果>步骤三：分析结果</h3><pre tabindex=0><code>验证结果：
+✅ PASS: balanceOfInvariant
+✅ PASS: totalSupplyInvariant
+❌ FAIL: transferUpdatesBalances
+
+失败分析：
+- 查看反例（Counterexample）
+- 定位代码问题
+- 修复后重新验证
+</code></pre><h3 id=步骤四修复与迭代>步骤四：修复与迭代</h3><pre tabindex=0><code>循环：
+1. 修复代码
+2. 重新验证
+3. 直到所有规则通过
+</code></pre><hr><h2 id=真实案例分析>真实案例分析</h2><h3 id=案例一compound-利率计算验证>案例一：Compound 利率计算验证</h3><h4 id=问题>问题</h4><pre tabindex=0><code>Compound 的利率计算涉及复杂数学：
+- 指数增长
+- 精度舍入
+- 边界条件
+
+传统测试难以覆盖所有情况
+</code></pre><h4 id=验证规范>验证规范</h4><pre tabindex=0><code class=language-cvl data-lang=cvl>rule interestAccruesCorrectly() {
+    uint256 balanceBefore = contract.balanceOf(user);
+    uint256 timeElapsed = 1 days;
+    
+    fastForward(timeElapsed);
+    
+    uint256 balanceAfter = contract.balanceOf(user);
+    
+    // 利息应按年利率正确计算
+    assert balanceAfter &gt;= balanceBefore * (1 + ANNUAL_RATE / 365);
+}
+</code></pre><h4 id=发现的问题>发现的问题</h4><pre tabindex=0><code>Bug：
+- 闰年处理错误
+- 精度损失累积
+- 极端利率下溢出
+
+修复后重新验证通过
+</code></pre><hr><h3 id=案例二uniswap-v3-流动性验证>案例二：Uniswap V3 流动性验证</h3><h4 id=挑战>挑战</h4><pre tabindex=0><code>Uniswap V3 集中流动性：
+- 价格区间复杂
+- 虚拟储备计算
+- 边界条件多
+</code></pre><h4 id=关键不变量>关键不变量</h4><pre tabindex=0><code class=language-cvl data-lang=cvl>invariant liquidityInRange() {
+    // 流动性只在价格区间内有效
+    if (price &lt; lowerTick || price &gt; upperTick) {
+        assert position.liquidity == 0;
+    }
+}
+
+invariant feesAccrueCorrectly() {
+    // 手续费正确累积
+    assert position.feesOwed == calculateFees(position, time);
+}
+</code></pre><hr><h2 id=验证最佳实践>验证最佳实践</h2><h3 id=1-从简单开始>1. 从简单开始</h3><pre tabindex=0><code>先验证基础属性：
+- 余额非负
+- 总供应量恒定
+- 访问控制
+
+再验证复杂逻辑：
+- 利率计算
+- 价格预言机
+- 治理机制
+</code></pre><h3 id=2-分层验证>2. 分层验证</h3><pre tabindex=0><code>Layer 1：基本不变量
+Layer 2：业务逻辑规则
+Layer 3：复杂场景组合
+</code></pre><h3 id=3-组合测试>3. 组合测试</h3><pre tabindex=0><code>形式化验证 + 单元测试 + 模糊测试
+
+覆盖率：
+- 形式化：100% 逻辑路径
+- 单元测试：关键路径
+- 模糊测试：边界情况
+</code></pre><hr><h2 id=工具对比>工具对比</h2><table><thead><tr><th>工具</th><th>语言</th><th>特点</th><th>价格</th></tr></thead><tbody><tr><td>Certora</td><td>CVL</td><td>易用，文档好</td><td>$10k+/年</td></tr><tr><td>K Framework</td><td>K</td><td>学术级，强大</td><td>开源</td></tr><tr><td>Isabelle/HOL</td><td>Isabelle</td><td>最严格</td><td>开源</td></tr><tr><td>Coq</td><td>Gallina</td><td>证明辅助</td><td>开源</td></tr></tbody></table><hr><h2 id=学习路线>学习路线</h2><h3 id=阶段一基础1-2-月>阶段一：基础（1-2 月）</h3><pre tabindex=0><code>1. 学习离散数学
+2. 理解逻辑与证明
+3. 阅读形式化验证论文
+</code></pre><h3 id=阶段二工具2-3-月>阶段二：工具（2-3 月）</h3><pre tabindex=0><code>1. 学习 CVL 语法
+2. 练习简单合约验证
+3. 阅读 Certora 文档
+</code></pre><h3 id=阶段三实战3-6-月>阶段三：实战（3-6 月）</h3><pre tabindex=0><code>1. 验证开源项目
+2. 参与审计
+3. 建立验证框架
+</code></pre><hr><h2 id=总结>总结</h2><p>形式化验证核心：</p></div><a href=/dex-bok/posts/27-formal-verification/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div></section></article></main><footer class="bg-white bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href=https://tiao0303.github.io/dex-bok/>&copy; DEX 学习笔记 | 去中心化交易所实战指南 2026</a><div><div class=ananke-socials></div></div></div></footer></body></html>

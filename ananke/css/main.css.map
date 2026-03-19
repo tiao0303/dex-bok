@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "main.css",
-	"sourceRoot": "/home/runner/work/dex-bok/dex-bok",
+	"sourceRoot": "/Users/yang/.openclaw/workspace/deliveries/dex-blog-2026-03-18/hugo-site",
 	"sources": [
 		"ananke/css/main.css"
 	],

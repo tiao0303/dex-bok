@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>异常检测 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/</link><description>Recent content in 异常检测 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:27:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/index.xml" rel="self" type="application/rss+xml"/><item><title>T3 安全合规系列 (11/15)：链上交易监控与异常检测</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-11/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-11/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;在去中心化交易所的运营中，实时监控链上交易并识别异常行为是安全合规的核心环节。本文介绍 T3 如何构建高效的链上监控体系，实现毫秒级异常检测与响应。&lt;/p&gt;
+&lt;h2 id="监控架构设计"&gt;监控架构设计&lt;/h2&gt;
+&lt;h3 id="三层监控体系"&gt;三层监控体系&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌─────────────────────────────────────────────────────────┐
+│ 应用层监控 │
+│ • 交易频率异常 • 大额转账 • 可疑地址交互 │
+├─────────────────────────────────────────────────────────┤
+│ 协议层监控 │
+│ • 智能合约调用 • 流动性变化 • 价格操纵检测 │
+├─────────────────────────────────────────────────────────┤
+│ 网络层监控 │
+│ • 节点健康状态 • 区块同步延迟 • Gas 价格异常 │
+└─────────────────────────────────────────────────────────┘
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实时数据流处理"&gt;实时数据流处理&lt;/h3&gt;
+&lt;p&gt;T3 采用流式处理架构，确保监控延迟控制在秒级：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;数据摄取&lt;/strong&gt;：通过 WebSocket 订阅新区块和待处理交易&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实时解析&lt;/strong&gt;：解码交易数据，提取关键指标&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;规则引擎&lt;/strong&gt;：应用预定义和机器学习模型进行检测&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;告警输出&lt;/strong&gt;：触发通知并记录审计日志&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="异常检测策略"&gt;异常检测策略&lt;/h2&gt;
+&lt;h3 id="1-交易频率异常"&gt;1. 交易频率异常&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 检测单个地址在短时间内的高频交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;detectFrequencyAnomaly&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;windowMs&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;threshold&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;boolean&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;recentTxs&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getTransactionsInWindow&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;windowMs&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;recentTxs&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;length&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;threshold&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 配置示例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;rules&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;highFrequency&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;windowMs&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;60000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;threshold&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;10&lt;/span&gt; }, &lt;span style="color:#75715e"&gt;// 1 分钟内超过 10 笔
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;burstTrading&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;windowMs&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;5000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;threshold&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;5&lt;/span&gt; } &lt;span style="color:#75715e"&gt;// 5 秒内超过 5 笔
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="2-大额转账监控"&gt;2. 大额转账监控&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;LargeTransferRule&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;boolean&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;largeTransferRules&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;LargeTransferRule&lt;/span&gt;[] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;USDT&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;100000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;USDC&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;50000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;ETH&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;50000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-可疑地址交互"&gt;3. 可疑地址交互&lt;/h3&gt;
+&lt;p&gt;T3 维护多层地址黑名单：&lt;/p&gt;</description></item></channel></rss>

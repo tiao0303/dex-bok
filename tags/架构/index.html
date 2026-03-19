@@ -1,0 +1,73 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/%E6%9E%B6%E6%9E%84/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/%E6%9E%B6%E6%9E%84/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/%E6%9E%B6%E6%9E%84/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/%E6%9E%B6%E6%9E%84/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="架构"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="架构"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T01:20:00+08:00"><meta itemprop=dateModified content="2026-03-19T01:20:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="架构"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 avenir bg-near-white production is-term"><header><div class="pb3-m pb6-l bg-white"><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l center items-center justify-between"><a href=/dex-bok/ class="f3 fw2 hover-white white-90 dib no-underline">DEX 学习笔记 | 去中心化交易所实战指南</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/ title="首页 page">首页</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/posts/ title="文章 page">文章</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/guides/ title="教程 page">教程</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/tools/ title="工具 page">工具</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/about/ title="关于 page">关于</a></li></ul><div class=ananke-socials></div></div></div></nav><div class="tc-l pv3 ph3 ph4-ns"><h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">架构</h1></div></div></header><main class=pb7 role=main><article class="pa3 pa4-ns nested-copy-line-height"><section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section><section class="flex-ns mt5 flex-wrap justify-around"><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/25-cross-chain-liquidity/ class="link black dim">跨链流动性网络 - LayerZero 与 CCIP 架构</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=为什么需要跨链>为什么需要跨链</h2><h3 id=多链现状>多链现状</h3><pre tabindex=0><code>2026 年主要公链：
+- Ethereum（TVL $500 亿）
+- Arbitrum（TVL $300 亿）
+- Optimism（TVL $150 亿）
+- Base（TVL $100 亿）
+- Solana（TVL $80 亿）
+- Polygon（TVL $50 亿）
+- 等 50+ 链
+</code></pre><h3 id=痛点>痛点</h3><table><thead><tr><th>问题</th><th>影响</th><th>跨链解决方案</th></tr></thead><tbody><tr><td>流动性分散</td><td>滑点高</td><td>跨链聚合流动性</td></tr><tr><td>资产孤岛</td><td>无法互通</td><td>跨链桥</td></tr><tr><td>重复部署</td><td>成本高</td><td>Omnichain 合约</td></tr><tr><td>用户体验差</td><td>多钱包切换</td><td>统一入口</td></tr></tbody></table><hr><h2 id=跨链技术架构>跨链技术架构</h2><h3 id=架构一锁定---铸造lock--mint>架构一：锁定 - 铸造（Lock & Mint）⭐⭐⭐⭐</h3><h4 id=原理>原理</h4><pre tabindex=0><code>链 A → 链 B：
+1. 在链 A 锁定资产
+2. 在链 B 铸造等值代币
+3. 使用跨链资产
+4. 可反向解锁
+
+示例：
+ETH (Ethereum) → 锁定 → wETH (Arbitrum)
+</code></pre><h4 id=代表项目>代表项目</h4><table><thead><tr><th>项目</th><th>支持链</th><th>TVL</th><th>特点</th></tr></thead><tbody><tr><td>Wormhole</td><td>20+</td><td>$50 亿</td><td>通用消息传递</td></tr></tbody></table><ul><li>Multichain | 50+ | $30 亿 | 多资产支持 |</li><li>Synapse | 15+ | $10 亿 | 稳定币专注 |</li></ul><h4 id=风险>风险</h4><ul><li>⚠️ 中心化管理（多签控制）</li><li>⚠️ 智能合约漏洞</li><li>⚠️ 脱钩风险</li></ul><hr><h3 id=架构二流动性网络liquidity-network>架构二：流动性网络（Liquidity Network）⭐⭐⭐⭐⭐</h3><h4 id=原理-1>原理</h4><pre tabindex=0><code>链 A → 链 B：
+1. 在链 A 存入流动性池
+2. 在链 B 从池子取出
+3. 无需锁定 - 铸造
+4. 流动性提供者赚手续费
+
+示例：
+USDC (Ethereum) → Hop Pool → USDC (Arbitrum)
+</code></pre><h4 id=代表项目-1>代表项目</h4><table><thead><tr><th>项目</th><th>模式</th><th>TVL</th><th>特点</th></tr></thead><tbody><tr><td>Hop Protocol</td><td>AMM</td><td>$5 亿</td><td>快速跨链</td></tr></tbody></table><ul><li>Stargate | 统一流动性 | $8 亿 | LayerZero 支持 |</li><li>Across | 优化器 | $3 亿 | 低费用 |</li></ul><h4 id=优势>优势</h4><ul><li>✅ 无需信任第三方</li><li>✅ 资产不离开原链</li><li>✅ 费用透明</li></ul><hr><h3 id=架构三轻客户端验证light-client>架构三：轻客户端验证（Light Client）⭐⭐⭐⭐⭐</h3><h4 id=原理-2>原理</h4><pre tabindex=0><code>1. 在目标链运行源链轻节点
+2. 验证区块头
+3. 验证交易证明
+4. 无需信任第三方
+
+示例：
+Ethereum 轻节点运行在 Arbitrum 上
+直接验证 Ethereum 交易
+</code></pre><h4 id=代表项目-2>代表项目</h4><table><thead><tr><th>项目</th><th>特点</th><th>进展</th></tr></thead><tbody></tbody></table><ul><li>Polygon zkEVM | ZK 证明验证 | 已上线 |</li><li>Optimism | 欺诈证明 | 已上线 |</li><li>LayerZero | 超轻节点 | 已上线 |</li></ul><h4 id=优势-1>优势</h4><ul><li>✅ 去中心化</li><li>✅ 安全性高</li><li>✅ 无需信任假设</li></ul><hr><h2 id=layerzero-深度解析>LayerZero 深度解析</h2><h3 id=架构组成>架构组成</h3><h4 id=1-ultra-light-node-uln>1. Ultra Light Node (ULN)</h4><pre tabindex=0><code>功能：
+- 轻客户端验证
+- 存储区块头
+- 验证交易证明
+
+成本：
+- Gas 优化（只存区块头）
+- 比完整节点便宜 99%
+</code></pre><h4 id=2-oracle>2. Oracle</h4><pre tabindex=0><code>作用：
+- 传递交易证明
+- 可替换（去中心化）
+
+当前实现：
+- LayerZero 官方 Oracle
+- 第三方 Oracle（逐步接入）
+</code></pre><h4 id=3-relayer>3. Relayer</h4><pre tabindex=0><code>作用：
+- 提交交易证明
+- 竞争机制（最低费用者胜）
+
+激励：
+- 用户支付 Gas
+- Relayer 赚取差价
+</code></pre><h3 id=工作流程>工作流程</h3><pre tabindex=0><code>用户跨链 USDC（Ethereum → Arbitrum）：
+
+1. 用户在 Ethereum 发送 USDC 到 LayerZero 合约
+2. ULN 验证交易
+3. Oracle 将证明发送到 Arbitrum
+4. Relayer 提交证明到 Arbitrum 合约
+5. Arbitrum 验证证明
+6. 释放 USDC 给用户
+
+总时间：2-10 分钟
+</code></pre><h3 id=安全模型>安全模型</h3><pre tabindex=0><code>安全假设：
+- Oracle 和 Relayer 不串通
+- 即使串通，只能延迟，无法盗取
+
+去中心化路线：
+- 阶段 1：官方 Oracle/Relayer
+- 阶段 2：多第三方
+- 阶段 3：完全去中心化
+</code></pre><hr><h2 id=chainlink-ccip-解析>Chainlink CCIP 解析</h2><h3 id=什么是-ccip>什么是 CCIP</h3><p><strong>Cross-Chain Interoperability Protocol</strong></p></div><a href=/dex-bok/posts/25-cross-chain-liquidity/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div></section></article></main><footer class="bg-white bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href=https://tiao0303.github.io/dex-bok/>&copy; DEX 学习笔记 | 去中心化交易所实战指南 2026</a><div><div class=ananke-socials></div></div></div></footer></body></html>

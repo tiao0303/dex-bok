@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>DEX on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/dex/</link><description>Recent content in DEX on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:27:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/dex/index.xml" rel="self" type="application/rss+xml"/><item><title>T2 进阶实战 06：流动性池深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/06-liquidity-pool-deep-dive/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/06-liquidity-pool-deep-dive/</guid><description>&lt;h1 id="流动性池深度分析"&gt;流动性池深度分析&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。&lt;/p&gt;
+&lt;h2 id="恒定乘积公式详解"&gt;恒定乘积公式详解&lt;/h2&gt;
+&lt;h3 id="基础公式"&gt;基础公式&lt;/h3&gt;
+&lt;p&gt;Uniswap V2 采用的恒定乘积公式：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;x &lt;span style="color:#f92672"&gt;*&lt;/span&gt; y &lt;span style="color:#f92672"&gt;=&lt;/span&gt; k
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;x&lt;/code&gt; = 代币 A 的数量&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;y&lt;/code&gt; = 代币 B 的数量&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;k&lt;/code&gt; = 恒定常数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="价格发现机制"&gt;价格发现机制&lt;/h3&gt;
+&lt;p&gt;边际价格由导数得出：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;P = dy/dx = -y/x
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这意味着价格完全由池中的代币比例决定。&lt;/p&gt;
+&lt;h3 id="代码实现"&gt;代码实现&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;swap&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountIn, &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isTokenA) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amountIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;Amount must be positive&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveA &lt;span style="color:#f92672"&gt;=&lt;/span&gt; IERC20(tokenA).balanceOf(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveB &lt;span style="color:#f92672"&gt;=&lt;/span&gt; IERC20(tokenB).balanceOf(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (isTokenA) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 计算输出量：amountOut = reserveB - k / (reserveA + amountIn)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; getAmountOut(amountIn, reserveA, reserveB);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenA).transferFrom(msg.sender, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this), amountIn);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenB).transfer(msg.sender, amountOut);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; getAmountOut(amountIn, reserveB, reserveA);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenB).transferFrom(msg.sender, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this), amountIn);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenA).transfer(msg.sender, amountOut);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 验证 k 值未减少
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; _updateReserves();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getAmountOut&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountIn, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveIn, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveOut) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;pure&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountOut) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amountIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; reserveIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; reserveOut &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;997&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// 0.3% 手续费
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;*&lt;/span&gt; reserveOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; denominator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (reserveIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;) &lt;span style="color:#f92672"&gt;+&lt;/span&gt; amountInWithFee;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;/&lt;/span&gt; denominator;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="资本效率问题"&gt;资本效率问题&lt;/h2&gt;
+&lt;h3 id="v2-的资本效率低下"&gt;V2 的资本效率低下&lt;/h3&gt;
+&lt;p&gt;在 V2 模型中，流动性分布在 &lt;code&gt;0&lt;/code&gt; 到 &lt;code&gt;∞&lt;/code&gt; 的价格范围内，但大部分资金实际上从未被使用。&lt;/p&gt;</description></item><item><title>T2 进阶实战 07：滑点与价格影响</title><link>https://tiao0303.github.io/dex-bok/posts/07-slippage-price-impact/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/07-slippage-price-impact/</guid><description>&lt;h1 id="滑点与价格影响"&gt;滑点与价格影响&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;滑点（Slippage）是 DEX 交易中最重要的概念之一。理解滑点的来源、计算方法和优化策略，对于构建高效的交易执行系统至关重要。&lt;/p&gt;
+&lt;h2 id="滑点的定义"&gt;滑点的定义&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;滑点&lt;/strong&gt; = 预期价格与实际成交价格的差异&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;滑点百分比 = (预期价格 - 实际价格) / 预期价格 × 100%
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="滑点的来源"&gt;滑点的来源&lt;/h2&gt;
+&lt;h3 id="1-价格影响price-impact"&gt;1. 价格影响（Price Impact）&lt;/h3&gt;
+&lt;p&gt;由于 AMM 的定价机制，大额交易会改变池子的价格。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;恒定乘积模型下的价格影响：&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;给定：x * y = k
+买入 Δx 的代币 A：
+- 新价格 P&amp;#39; = (y - Δy) / (x + Δx)
+- 原价格 P = y / x
+- 价格影响 = (P - P&amp;#39;) / P
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="2-外部市场波动"&gt;2. 外部市场波动&lt;/h3&gt;
+&lt;p&gt;在交易确认期间，外部市场价格可能发生变化。&lt;/p&gt;
+&lt;h3 id="3-mev-攻击"&gt;3. MEV 攻击&lt;/h3&gt;
+&lt;p&gt;前端运行（Front-running）和三明治攻击会加剧滑点。&lt;/p&gt;
+&lt;h2 id="价格影响计算"&gt;价格影响计算&lt;/h2&gt;
+&lt;h3 id="精确公式"&gt;精确公式&lt;/h3&gt;
+&lt;p&gt;对于恒定乘积 AMM，买入 &lt;code&gt;Δx&lt;/code&gt; 数量的代币 A：&lt;/p&gt;</description></item><item><title>T2 进阶实战 08：MEV 与前端运行防御</title><link>https://tiao0303.github.io/dex-bok/posts/08-mev-front-running/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/08-mev-front-running/</guid><description>&lt;h1 id="mev-与前端运行防御"&gt;MEV 与前端运行防御&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;MEV（Maximal Extractable Value，最大可提取价值）是区块链生态中的重要概念。理解 MEV 的运作机制和防御策略，对于保护 DEX 用户资金安全至关重要。&lt;/p&gt;
+&lt;h2 id="mev-概述"&gt;MEV 概述&lt;/h2&gt;
+&lt;h3 id="定义"&gt;定义&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;MEV&lt;/strong&gt; = 矿工/验证者通过重新排序、插入或审查交易可提取的额外价值&lt;/p&gt;
+&lt;h3 id="mev-类型"&gt;MEV 类型&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;类型&lt;/th&gt;
+ &lt;th&gt;描述&lt;/th&gt;
+ &lt;th&gt;影响&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;套利&lt;/td&gt;
+ &lt;td&gt;利用不同 DEX 间的价格差异&lt;/td&gt;
+ &lt;td&gt;中性/正面&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;清算&lt;/td&gt;
+ &lt;td&gt;清算不足的抵押头寸&lt;/td&gt;
+ &lt;td&gt;正面&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;前端运行&lt;/td&gt;
+ &lt;td&gt;在目标交易前插入交易&lt;/td&gt;
+ &lt;td&gt;负面&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;三明治攻击&lt;/td&gt;
+ &lt;td&gt;前后夹击目标交易&lt;/td&gt;
+ &lt;td&gt;负面&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;时间带宽套利&lt;/td&gt;
+ &lt;td&gt;利用信息传播延迟&lt;/td&gt;
+ &lt;td&gt;负面&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="前端运行front-running"&gt;前端运行（Front-running）&lt;/h2&gt;
+&lt;h3 id="攻击原理"&gt;攻击原理&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;攻击流程：
+1. 监控待处理交易池（mempool）
+2. 发现有利可图的大额交易
+3. 以更高 Gas 价格提交相同交易
+4. 矿工优先打包攻击者交易
+5. 攻击者获利，受害者承受滑点
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="代码示例被前端运行的交易"&gt;代码示例：被前端运行的交易&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ❌ 容易被前端运行的交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;buyToken&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 任何人都可以看到这笔交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 攻击者可以复制并以更高 Gas 发送
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(token).transferFrom(msg.sender, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this), amount);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; tokens &lt;span style="color:#f92672"&gt;=&lt;/span&gt; calculateTokens(amount);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(token).transfer(msg.sender, tokens);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 攻击者合约
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;FrontRunner&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;frontRun&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; victim, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;payable&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 以更高 Gas 发送相同交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; targetContract.buyToken{gas&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;500000&lt;/span&gt;, gasPrice&lt;span style="color:#f92672"&gt;:&lt;/span&gt; tx.gasPrice &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;150&lt;/span&gt;&lt;span style="color:#f92672"&gt;%&lt;/span&gt;}(amount);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="三明治攻击sandwich-attack"&gt;三明治攻击（Sandwich Attack）&lt;/h2&gt;
+&lt;h3 id="攻击流程"&gt;攻击流程&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;步骤：
+1. 受害者提交大额买入交易（待处理）
+2. 攻击者发现并分析交易
+3. 攻击者发送买入交易（更高 Gas）→ 前置
+4. 受害者交易执行，推高价格
+5. 攻击者发送卖出交易 → 后置
+6. 攻击者获利，受害者承受额外滑点
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="可视化示例"&gt;可视化示例&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;初始状态：
+- 池子：1000 ETH / 2,000,000 USDC
+- 价格：2000 USDC/ETH
+
+攻击过程：
+1. 攻击者买入 50 ETH（花费 95,238 USDC）
+ 新价格：2095 USDC/ETH
+
+2. 受害者买入 100 ETH（花费 218,750 USDC）
+ 新价格：2381 USDC/ETH
+ 受害者预期价格：2000 USDC/ETH
+ 受害者实际价格：2187.5 USDC/ETH
+ 受害者损失：18.75% 额外滑点
+
+3. 攻击者卖出 50 ETH（获得 107,143 USDC）
+ 新价格：2095 USDC/ETH
+
+攻击者利润：107,143 - 95,238 = 11,905 USDC
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="检测三明治攻击"&gt;检测三明治攻击&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;SandwichAttackDetected&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; attacker,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; victim,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; frontRunAmount,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; backRunAmount,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; victimLoss
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;detectSandwichAttack&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; trader,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountIn,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; expectedOut,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; actualOut
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;) &lt;span style="color:#66d9ef"&gt;internal&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; slippage &lt;span style="color:#f92672"&gt;=&lt;/span&gt; ((expectedOut &lt;span style="color:#f92672"&gt;-&lt;/span&gt; actualOut) &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt;) &lt;span style="color:#f92672"&gt;/&lt;/span&gt; expectedOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 异常高滑点可能表示三明治攻击
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (slippage &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;500&lt;/span&gt;) { &lt;span style="color:#75715e"&gt;// 超过 5%
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 检查前后是否有可疑交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;[] &lt;span style="color:#66d9ef"&gt;memory&lt;/span&gt; recentTraders &lt;span style="color:#f92672"&gt;=&lt;/span&gt; getRecentTraders(&lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; recentTraders.length; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (recentTraders[i] &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; trader) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 分析交易模式
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (isSuspiciousPattern(recentTraders[i], trader)) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; emit SandwichAttackDetected(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; recentTraders[i],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; trader,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, slippage
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="防御策略"&gt;防御策略&lt;/h2&gt;
+&lt;h3 id="1-提交隐藏交易private-transactions"&gt;1. 提交隐藏交易（Private Transactions）&lt;/h3&gt;
+&lt;p&gt;使用 Flashbots 等私有交易服务：&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (11/15)：链上交易监控与异常检测</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-11/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-11/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;在去中心化交易所的运营中，实时监控链上交易并识别异常行为是安全合规的核心环节。本文介绍 T3 如何构建高效的链上监控体系，实现毫秒级异常检测与响应。&lt;/p&gt;
+&lt;h2 id="监控架构设计"&gt;监控架构设计&lt;/h2&gt;
+&lt;h3 id="三层监控体系"&gt;三层监控体系&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌─────────────────────────────────────────────────────────┐
+│ 应用层监控 │
+│ • 交易频率异常 • 大额转账 • 可疑地址交互 │
+├─────────────────────────────────────────────────────────┤
+│ 协议层监控 │
+│ • 智能合约调用 • 流动性变化 • 价格操纵检测 │
+├─────────────────────────────────────────────────────────┤
+│ 网络层监控 │
+│ • 节点健康状态 • 区块同步延迟 • Gas 价格异常 │
+└─────────────────────────────────────────────────────────┘
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实时数据流处理"&gt;实时数据流处理&lt;/h3&gt;
+&lt;p&gt;T3 采用流式处理架构，确保监控延迟控制在秒级：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;数据摄取&lt;/strong&gt;：通过 WebSocket 订阅新区块和待处理交易&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实时解析&lt;/strong&gt;：解码交易数据，提取关键指标&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;规则引擎&lt;/strong&gt;：应用预定义和机器学习模型进行检测&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;告警输出&lt;/strong&gt;：触发通知并记录审计日志&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="异常检测策略"&gt;异常检测策略&lt;/h2&gt;
+&lt;h3 id="1-交易频率异常"&gt;1. 交易频率异常&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 检测单个地址在短时间内的高频交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;detectFrequencyAnomaly&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;windowMs&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;threshold&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;boolean&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;recentTxs&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getTransactionsInWindow&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;windowMs&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;recentTxs&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;length&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;threshold&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 配置示例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;rules&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;highFrequency&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;windowMs&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;60000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;threshold&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;10&lt;/span&gt; }, &lt;span style="color:#75715e"&gt;// 1 分钟内超过 10 笔
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;burstTrading&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;windowMs&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;5000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;threshold&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;5&lt;/span&gt; } &lt;span style="color:#75715e"&gt;// 5 秒内超过 5 笔
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="2-大额转账监控"&gt;2. 大额转账监控&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;LargeTransferRule&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;boolean&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;largeTransferRules&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;LargeTransferRule&lt;/span&gt;[] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;USDT&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;100000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;USDC&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;50000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;ETH&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;50000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-可疑地址交互"&gt;3. 可疑地址交互&lt;/h3&gt;
+&lt;p&gt;T3 维护多层地址黑名单：&lt;/p&gt;</description></item><item><title>T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念</title><link>https://tiao0303.github.io/dex-bok/posts/t1-01-dex-basics/</link><pubDate>Wed, 18 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-01-dex-basics/</guid><description>&lt;h1 id="t1-新手入门-01---什么是-dex去中心化交易所基础概念"&gt;T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念&lt;/h1&gt;
+&lt;p&gt;欢迎来到 T1 新手入门系列！这是专为刚接触 DeFi 和去中心化交易所的新手准备的入门指南。&lt;/p&gt;
+&lt;h2 id="什么是-dex"&gt;什么是 DEX？&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;DEX&lt;/strong&gt;（Decentralized Exchange，去中心化交易所）是一种不需要中介机构、基于智能合约运行的加密货币交易平台。&lt;/p&gt;
+&lt;h3 id="核心特点"&gt;核心特点&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;无需许可&lt;/strong&gt;：任何人都可以使用，无需注册或 KYC&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;非托管&lt;/strong&gt;：资产始终在你自己的钱包中，平台无法挪用&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;透明可验证&lt;/strong&gt;：所有交易记录在链上，公开可查&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;抗审查&lt;/strong&gt;：没有中心化实体可以冻结你的账户或交易&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="dex-vs-cex有什么区别"&gt;DEX vs CEX：有什么区别？&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;特性&lt;/th&gt;
+ &lt;th&gt;DEX（去中心化）&lt;/th&gt;
+ &lt;th&gt;CEX（中心化）&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;资产托管&lt;/td&gt;
+ &lt;td&gt;用户自己保管&lt;/td&gt;
+ &lt;td&gt;交易所保管&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;注册要求&lt;/td&gt;
+ &lt;td&gt;无需注册&lt;/td&gt;
+ &lt;td&gt;需要 KYC/实名认证&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;交易透明度&lt;/td&gt;
+ &lt;td&gt;链上公开可查&lt;/td&gt;
+ &lt;td&gt;黑箱操作&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;安全性&lt;/td&gt;
+ &lt;td&gt;智能合约风险&lt;/td&gt;
+ &lt;td&gt;交易所被黑风险&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;流动性&lt;/td&gt;
+ &lt;td&gt;依赖流动性池&lt;/td&gt;
+ &lt;td&gt;订单簿撮合&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;交易费用&lt;/td&gt;
+ &lt;td&gt;Gas 费 + 手续费&lt;/td&gt;
+ &lt;td&gt;交易手续费&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="dex-的工作原理"&gt;DEX 的工作原理&lt;/h2&gt;
+&lt;h3 id="1-流动性池liquidity-pool"&gt;1. 流动性池（Liquidity Pool）&lt;/h3&gt;
+&lt;p&gt;DEX 不依赖传统订单簿，而是使用&lt;strong&gt;流动性池&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户 A 存入 10 ETH + 20000 USDC → 流动性池
+用户 B 用 2000 USDC 购买 0.1 ETH ← 从池中兑换
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="2-自动做市商amm"&gt;2. 自动做市商（AMM）&lt;/h3&gt;
+&lt;p&gt;价格由算法自动决定，最常用的是&lt;strong&gt;恒定乘积公式&lt;/strong&gt;：&lt;/p&gt;</description></item></channel></rss>

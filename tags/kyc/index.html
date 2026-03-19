@@ -1,0 +1,425 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/kyc/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/kyc/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/kyc/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/kyc/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="KYC"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="KYC"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T00:27:00+08:00"><meta itemprop=dateModified content="2026-03-19T00:27:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="KYC"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 avenir bg-near-white production is-term"><header><div class="pb3-m pb6-l bg-white"><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l center items-center justify-between"><a href=/dex-bok/ class="f3 fw2 hover-white white-90 dib no-underline">DEX 学习笔记 | 去中心化交易所实战指南</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/ title="首页 page">首页</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/posts/ title="文章 page">文章</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/guides/ title="教程 page">教程</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/tools/ title="工具 page">工具</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/about/ title="关于 page">关于</a></li></ul><div class=ananke-socials></div></div></div></nav><div class="tc-l pv3 ph3 ph4-ns"><h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">KYC</h1></div></div></header><main class=pb7 role=main><article class="pa3 pa4-ns nested-copy-line-height"><section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section><section class="flex-ns mt5 flex-wrap justify-around"><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/t3-security-compliance-12/ class="link black dim">T3 安全合规系列 (12/15)：KYC/AML 合规流程实现</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=引言>引言</h2><p>KYC（了解你的客户）和 AML（反洗钱）是加密货币交易所合规运营的基础要求。本文详细介绍 T3 如何设计和实现符合全球监管标准的 KYC/AML 流程，在保障合规的同时优化用户体验。</p><h2 id=监管框架概览>监管框架概览</h2><h3 id=主要司法管辖区要求>主要司法管辖区要求</h3><table><thead><tr><th>地区</th><th>监管机构</th><th>核心要求</th><th>处罚力度</th></tr></thead><tbody><tr><td>美国</td><td>FinCEN, SEC</td><td>BSAR 报告、交易监控</td><td>最高$1M/次</td></tr><tr><td>欧盟</td><td>各成员国 FIU</td><td>5AMLD/6AMLD 合规</td><td>最高€5M 或 10% 营收</td></tr><tr><td>新加坡</td><td>MAS</td><td>PS Act 牌照要求</td><td>吊销牌照 + 罚款</td></tr><tr><td>香港</td><td>SFC, HKMA</td><td>VASP 牌照、客户资产隔离</td><td>最高$10M HKD</td></tr></tbody></table><h3 id=t3-合规策略>T3 合规策略</h3><p>T3 采用「最高标准」策略，满足最严格司法管辖区要求，实现全球合规：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>enum</span> <span style=color:#a6e22e>ComplianceLevel</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>BASIC</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;basic&#39;</span>,           <span style=color:#75715e>// 基础验证（邮箱 + 2FA）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>VERIFIED</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;verified&#39;</span>,     <span style=color:#75715e>// 身份验证（KYC L1）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>ENHANCED</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;enhanced&#39;</span>,     <span style=color:#75715e>// 增强验证（KYC L2 + 资金来源）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>INSTITUTIONAL</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;institutional&#39;</span>  <span style=color:#75715e>// 机构验证（KYB）
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>UserTier</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>level</span>: <span style=color:#66d9ef>ComplianceLevel</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>dailyWithdrawLimit</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>monthlyVolumeLimit</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>requiredVerifications</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>reviewPeriod</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// days
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=kyc-流程设计>KYC 流程设计</h2><h3 id=三级验证体系>三级验证体系</h3><pre tabindex=0><code>┌─────────────────────────────────────────────────────────────┐
+│  Level 1: 基础验证                                           │
+│  • 邮箱验证                                                  │
+│  • 手机号验证                                                │
+│  • 2FA 启用                                                   │
+│  • 限额：$1,000/日                                           │
+├─────────────────────────────────────────────────────────────┤
+│  Level 2: 身份验证                                           │
+│  • 政府 ID 上传（护照/驾照/身份证）                            │
+│  • 人脸识别                                                  │
+│  • 地址证明（可选）                                           │
+│  • 限额：$50,000/日                                          │
+├─────────────────────────────────────────────────────────────┤
+│  Level 3: 增强验证                                           │
+│  • 资金来源证明                                              │
+│  • 职业信息                                                  │
+│  • 财富证明                                                  │
+│  • 限额：无限制                                              │
+└─────────────────────────────────────────────────────────────┘
+</code></pre><h3 id=身份验证技术实现>身份验证技术实现</h3><h4 id=1-文档验证>1. 文档验证</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>DocumentVerification</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>documentType</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;PASSPORT&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;ID_CARD&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;DRIVERS_LICENSE&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>issuingCountry</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>documentNumber</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>expiryDate</span>: <span style=color:#66d9ef>Date</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>images</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>front</span>: <span style=color:#66d9ef>string</span>; <span style=color:#75715e>// base64 or URL
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>back?</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>verifyDocument</span>(<span style=color:#a6e22e>doc</span>: <span style=color:#66d9ef>DocumentVerification</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>VerificationResult</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 1. OCR 提取信息
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>ocrResult</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ocrService</span>.<span style=color:#a6e22e>extract</span>(<span style=color:#a6e22e>doc</span>.<span style=color:#a6e22e>images</span>.<span style=color:#a6e22e>front</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 2. 防伪检测
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>securityCheck</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>detectForgery</span>(<span style=color:#a6e22e>doc</span>.<span style=color:#a6e22e>images</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 3. 信息一致性校验
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>consistencyCheck</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>validateConsistency</span>(<span style=color:#a6e22e>ocrResult</span>, <span style=color:#a6e22e>doc</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 4. 黑名单检查
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>blacklistCheck</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>checkDocumentBlacklist</span>(<span style=color:#a6e22e>doc</span>.<span style=color:#a6e22e>documentNumber</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>passed</span>: <span style=color:#66d9ef>securityCheck.passed</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>consistencyCheck</span>.<span style=color:#a6e22e>passed</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#f92672>!</span><span style=color:#a6e22e>blacklistCheck</span>.<span style=color:#a6e22e>match</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>confidence</span>: <span style=color:#66d9ef>calculateConfidence</span>(<span style=color:#a6e22e>ocrResult</span>, <span style=color:#a6e22e>securityCheck</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>extractedData</span>: <span style=color:#66d9ef>ocrResult</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>risks</span>: <span style=color:#66d9ef>identifyRisks</span>(<span style=color:#a6e22e>securityCheck</span>, <span style=color:#a6e22e>blacklistCheck</span>)
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h4 id=2-人脸识别>2. 人脸识别</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>FaceVerification</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>selfieImage</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>livenessCheck</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>faceMatchThreshold</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>verifyFace</span>(<span style=color:#a6e22e>selfie</span>: <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>idPhoto</span>: <span style=color:#66d9ef>string</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>FaceMatchResult</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 1. 活体检测
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>liveness</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>performLivenessCheck</span>(<span style=color:#a6e22e>selfie</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>liveness</span>.<span style=color:#a6e22e>isLive</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> { <span style=color:#a6e22e>matched</span>: <span style=color:#66d9ef>false</span>, <span style=color:#a6e22e>reason</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;LIVENESS_FAILED&#39;</span> };
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 2. 人脸提取与比对
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>faceEmbedding1</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>extractFaceEmbedding</span>(<span style=color:#a6e22e>selfie</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>faceEmbedding2</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>extractFaceEmbedding</span>(<span style=color:#a6e22e>idPhoto</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>similarity</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>calculateSimilarity</span>(<span style=color:#a6e22e>faceEmbedding1</span>, <span style=color:#a6e22e>faceEmbedding2</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 3. 阈值判断
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>matched</span>: <span style=color:#66d9ef>similarity</span> <span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>FACE_MATCH_THRESHOLD</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>confidence</span>: <span style=color:#66d9ef>similarity</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>FACE_MATCH_THRESHOLD</span>
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h4 id=3-地址验证>3. 地址验证</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>AddressVerification</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>documentType</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;UTILITY_BILL&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;BANK_STATEMENT&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;GOVERNMENT_LETTER&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>documentDate</span>: <span style=color:#66d9ef>Date</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>address</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>street</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>city</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>state</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>postalCode</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>country</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>validateAddressProof</span>(<span style=color:#a6e22e>doc</span>: <span style=color:#66d9ef>AddressVerification</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>ValidationResult</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>checks</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 文档必须在 3 个月内
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>isRecent</span>: <span style=color:#66d9ef>isWithinMonths</span>(<span style=color:#a6e22e>doc</span>.<span style=color:#a6e22e>documentDate</span>, <span style=color:#ae81ff>3</span>),
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 地址格式有效
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>isValidFormat</span>: <span style=color:#66d9ef>validateAddressFormat</span>(<span style=color:#a6e22e>doc</span>.<span style=color:#a6e22e>address</span>),
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 与国家一致
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>isCountryConsistent</span>: <span style=color:#66d9ef>doc.address.country</span> <span style=color:#f92672>===</span> <span style=color:#a6e22e>doc</span>.<span style=color:#a6e22e>issuingCountry</span>,
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 文档类型可接受
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>isAcceptedType</span>: <span style=color:#66d9ef>ACCEPTED_ADDRESS_DOCS.includes</span>(<span style=color:#a6e22e>doc</span>.<span style=color:#a6e22e>documentType</span>)
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>passed</span>: <span style=color:#66d9ef>Object.values</span>(<span style=color:#a6e22e>checks</span>).<span style=color:#a6e22e>every</span>(<span style=color:#a6e22e>c</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>c</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>details</span>: <span style=color:#66d9ef>checks</span>
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=aml-监控体系>AML 监控体系</h2><h3 id=风险评分模型>风险评分模型</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>RiskScore</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>overall</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// 0-100
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>factors</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>geographic</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>transactional</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>behavioral</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>counterparties</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>level</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;LOW&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;MEDIUM&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;HIGH&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;CRITICAL&#39;</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>calculateRiskScore</span>(<span style=color:#a6e22e>user</span>: <span style=color:#66d9ef>User</span>, <span style=color:#a6e22e>transactions</span>: <span style=color:#66d9ef>Transaction</span>[])<span style=color:#f92672>:</span> <span style=color:#a6e22e>RiskScore</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>factors</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>geographic</span>: <span style=color:#66d9ef>calculateGeographicRisk</span>(<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>country</span>, <span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>ipHistory</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>transactional</span>: <span style=color:#66d9ef>calculateTransactionRisk</span>(<span style=color:#a6e22e>transactions</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>behavioral</span>: <span style=color:#66d9ef>calculateBehavioralRisk</span>(<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>activityPattern</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>counterparties</span>: <span style=color:#66d9ef>calculateCounterpartyRisk</span>(<span style=color:#a6e22e>transactions</span>)
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>weights</span> <span style=color:#f92672>=</span> { <span style=color:#a6e22e>geographic</span>: <span style=color:#66d9ef>0.2</span>, <span style=color:#a6e22e>transactional</span>: <span style=color:#66d9ef>0.3</span>, <span style=color:#a6e22e>behavioral</span>: <span style=color:#66d9ef>0.25</span>, <span style=color:#a6e22e>counterparties</span>: <span style=color:#66d9ef>0.25</span> };
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>overall</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>weightedSum</span>(<span style=color:#a6e22e>factors</span>, <span style=color:#a6e22e>weights</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>overall</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>factors</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>level</span>: <span style=color:#66d9ef>scoreToLevel</span>(<span style=color:#a6e22e>overall</span>)
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=可疑活动指标>可疑活动指标</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>SUSPICIOUS_ACTIVITY_INDICATORS</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 结构化交易（Structuring）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>structuring</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>description</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;拆分交易以规避报告阈值&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>pattern</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;multiple transactions just below reporting threshold&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>3</span>, <span style=color:#75715e>// 30 天内次数
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>timeWindow</span>: <span style=color:#66d9ef>30</span> <span style=color:#75715e>// days
+</span></span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 快速进出（Rapid Movement）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>rapidMovement</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>description</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;资金快速转入转出&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>pattern</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;deposit followed by immediate withdrawal&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>maxHoldTime</span>: <span style=color:#66d9ef>24</span>, <span style=color:#75715e>// hours
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>minFrequency</span>: <span style=color:#66d9ef>5</span> <span style=color:#75715e>// times per month
+</span></span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 混币器使用
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>mixerUsage</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>description</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;与已知混币器交互&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>pattern</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;transactions to/from mixer addresses&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>blacklist</span>: <span style=color:#66d9ef>MIXER_ADDRESS_LIST</span>
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 异常时间交易
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>unusualTiming</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>description</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;在非活跃时段大额交易&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>pattern</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;large transactions outside normal hours&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>deviation</span>: <span style=color:#66d9ef>3</span> <span style=color:#75715e>// standard deviations
+</span></span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><h3 id=交易监控规则引擎>交易监控规则引擎</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>MonitoringRule</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>id</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>condition</span><span style=color:#f92672>:</span> (<span style=color:#a6e22e>tx</span>: <span style=color:#66d9ef>Transaction</span>, <span style=color:#a6e22e>user</span>: <span style=color:#66d9ef>User</span>) <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;LOW&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;MEDIUM&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;HIGH&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;CRITICAL&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> (<span style=color:#a6e22e>tx</span>: <span style=color:#66d9ef>Transaction</span>, <span style=color:#a6e22e>alert</span>: <span style=color:#66d9ef>Alert</span>) <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt;;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>rules</span>: <span style=color:#66d9ef>MonitoringRule</span>[] <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>id</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;LARGE_CASH_OUT&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;大额提现&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>condition</span><span style=color:#f92672>:</span> (<span style=color:#a6e22e>tx</span>) <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>tx</span>.<span style=color:#66d9ef>type</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#39;WITHDRAWAL&#39;</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>amountUSD</span> <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>10000</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;MEDIUM&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>action</span>: <span style=color:#66d9ef>async</span> (<span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>alert</span>) <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>requireManualReview</span>(<span style=color:#a6e22e>tx</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>notifyCompliance</span>(<span style=color:#a6e22e>alert</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>id</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SANCTIONED_ADDRESS&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;制裁地址交易&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>condition</span><span style=color:#f92672>:</span> (<span style=color:#a6e22e>tx</span>) <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>isSanctionedAddress</span>(<span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>counterparty</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;CRITICAL&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>action</span>: <span style=color:#66d9ef>async</span> (<span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>alert</span>) <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>freezeTransaction</span>(<span style=color:#a6e22e>tx</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>blockUser</span>(<span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>fileSAR</span>(<span style=color:#a6e22e>tx</span>); <span style=color:#75715e>// Suspicious Activity Report
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>id</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;RAPID_TURNOVER&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;快速周转&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>condition</span><span style=color:#f92672>:</span> (<span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>user</span>) <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>recentDeposits</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>getUserDeposits</span>(<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>id</span>, <span style=color:#ae81ff>24</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>withdrawalRatio</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>amount</span> <span style=color:#f92672>/</span> <span style=color:#a6e22e>sum</span>(<span style=color:#a6e22e>recentDeposits</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>withdrawalRatio</span> <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0.9</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>recentDeposits</span>.<span style=color:#a6e22e>length</span> <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;HIGH&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>action</span>: <span style=color:#66d9ef>async</span> (<span style=color:#a6e22e>tx</span>, <span style=color:#a6e22e>alert</span>) <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>holdTransaction</span>(<span style=color:#a6e22e>tx</span>, <span style=color:#ae81ff>48</span>); <span style=color:#75715e>// 48 小时冻结
+</span></span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>requestSourceOfFunds</span>(<span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>];
+</span></span></code></pre></div><h2 id=报告与备案>报告与备案</h2><h3 id=sar可疑活动报告>SAR（可疑活动报告）</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>SuspiciousActivityReport</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>reportId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>filingDate</span>: <span style=color:#66d9ef>Date</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>reportingEntity</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>subject</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>address</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>idNumber</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>accounts</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>suspiciousActivity</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>startDate</span>: <span style=color:#66d9ef>Date</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>endDate</span>: <span style=color:#66d9ef>Date</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>totalAmount</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>description</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>involvedAddresses</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>narrative</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>supportingDocuments</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>fileSAR</span>(<span style=color:#a6e22e>transaction</span>: <span style=color:#66d9ef>Transaction</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>string</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>report</span>: <span style=color:#66d9ef>SuspiciousActivityReport</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>reportId</span>: <span style=color:#66d9ef>generateReportId</span>(),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>filingDate</span>: <span style=color:#66d9ef>new</span> Date(),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>reportingEntity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;T3 Exchange&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>subject</span>: <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getUserDetails</span>(<span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>userId</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suspiciousActivity</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>determineActivityType</span>(<span style=color:#a6e22e>transaction</span>),
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>startDate</span>: <span style=color:#66d9ef>transaction.timestamp</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>endDate</span>: <span style=color:#66d9ef>transaction.timestamp</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>totalAmount</span>: <span style=color:#66d9ef>transaction.amountUSD</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>description</span>: <span style=color:#66d9ef>buildNarrative</span>(<span style=color:#a6e22e>transaction</span>),
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>involvedAddresses</span><span style=color:#f92672>:</span> [<span style=color:#a6e22e>transaction</span>.<span style=color:#66d9ef>from</span>, <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>to</span>]
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>narrative</span>: <span style=color:#66d9ef>buildDetailedNarrative</span>(<span style=color:#a6e22e>transaction</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>supportingDocuments</span>: <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>gatherEvidence</span>(<span style=color:#a6e22e>transaction</span>)
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 提交至监管机构
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>submitToFinCEN</span>(<span style=color:#a6e22e>report</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 内部记录
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>saveToComplianceDatabase</span>(<span style=color:#a6e22e>report</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>report</span>.<span style=color:#a6e22e>reportId</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=ctr货币交易报告>CTR（货币交易报告）</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>CurrencyTransactionReport</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>transactionId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>amount</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>currency</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>transactionType</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;DEPOSIT&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;WITHDRAWAL&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;EXCHANGE&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>parties</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>initiator</span>: <span style=color:#66d9ef>PartyInfo</span>;
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>recipient?</span>: <span style=color:#66d9ef>PartyInfo</span>;
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>filingRequired</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 美国：超过$10,000 需报告
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>US_CTR_THRESHOLD</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>10000</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>requiresCTR</span>(<span style=color:#a6e22e>transaction</span>: <span style=color:#66d9ef>Transaction</span>, <span style=color:#a6e22e>user</span>: <span style=color:#66d9ef>User</span>)<span style=color:#f92672>:</span> <span style=color:#66d9ef>boolean</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>country</span> <span style=color:#f92672>!==</span> <span style=color:#e6db74>&#39;US&#39;</span>) <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>transaction</span>.<span style=color:#a6e22e>amountUSD</span> <span style=color:#f92672>&gt;=</span> <span style=color:#a6e22e>US_CTR_THRESHOLD</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=隐私与数据保护>隐私与数据保护</h2><h3 id=数据最小化原则>数据最小化原则</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// 仅收集必要信息
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>KYC_DATA_REQUIREMENTS</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>level1</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;email&#39;</span>, <span style=color:#e6db74>&#39;phone&#39;</span>],
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>level2</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;fullName&#39;</span>, <span style=color:#e6db74>&#39;dateOfBirth&#39;</span>, <span style=color:#e6db74>&#39;nationality&#39;</span>, <span style=color:#e6db74>&#39;idDocument&#39;</span>],
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>level3</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;address&#39;</span>, <span style=color:#e6db74>&#39;occupation&#39;</span>, <span style=color:#e6db74>&#39;sourceOfFunds&#39;</span>, <span style=color:#e6db74>&#39;wealthProof&#39;</span>]
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>collectOnlyNecessaryData</span>(<span style=color:#a6e22e>level</span>: <span style=color:#66d9ef>ComplianceLevel</span>, <span style=color:#a6e22e>data</span>: <span style=color:#66d9ef>UserData</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>UserData</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>required</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>KYC_DATA_REQUIREMENTS</span>[<span style=color:#a6e22e>level</span>];
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> Object.<span style=color:#a6e22e>fromEntries</span>(
+</span></span><span style=display:flex><span>    Object.<span style=color:#a6e22e>entries</span>(<span style=color:#a6e22e>data</span>).<span style=color:#a6e22e>filter</span>(([<span style=color:#a6e22e>key</span>]) <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>required</span>.<span style=color:#a6e22e>includes</span>(<span style=color:#a6e22e>key</span>))
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=加密存储>加密存储</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>encrypt</span>, <span style=color:#a6e22e>decrypt</span> } <span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#39;./crypto&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>EncryptedUserData</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>encryptedData</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>iv</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>keyId</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>storeSensitiveData</span>(<span style=color:#a6e22e>userId</span>: <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>data</span>: <span style=color:#66d9ef>SensitiveData</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 使用 HSM 管理的密钥加密
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>keyId</span>, <span style=color:#a6e22e>encryptionKey</span> } <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getEncryptionKey</span>(<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>encrypted</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>encrypt</span>(<span style=color:#a6e22e>data</span>, <span style=color:#a6e22e>encryptionKey</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>database</span>.<span style=color:#a6e22e>store</span>(<span style=color:#e6db74>&#39;kyc_encrypted&#39;</span>, {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>userId</span>,
+</span></span><span style=display:flex><span>    ...<span style=color:#a6e22e>encrypted</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>keyId</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>createdAt</span>: <span style=color:#66d9ef>new</span> Date()
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=数据保留策略>数据保留策略</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>DATA_RETENTION_POLICY</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// KYC 数据：账户关闭后 5 年
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>kycData</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>retentionYears</span>: <span style=color:#66d9ef>5</span>, <span style=color:#a6e22e>startFrom</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;account_closure&#39;</span> },
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 交易记录：永久（监管要求）
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>transactionRecords</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>retentionYears</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;permanent&#39;</span>, <span style=color:#a6e22e>startFrom</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;transaction_date&#39;</span> },
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 日志数据：2 年
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>auditLogs</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>retentionYears</span>: <span style=color:#66d9ef>2</span>, <span style=color:#a6e22e>startFrom</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;log_date&#39;</span> },
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 临时数据：30 天
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>temporaryData</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>retentionYears</span>: <span style=color:#66d9ef>0</span>, <span style=color:#a6e22e>retentionDays</span>: <span style=color:#66d9ef>30</span>, <span style=color:#a6e22e>startFrom</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;creation_date&#39;</span> }
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>enforceRetentionPolicy</span>()<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>dataType</span>, <span style=color:#a6e22e>policy</span>] <span style=color:#66d9ef>of</span> Object.<span style=color:#a6e22e>entries</span>(<span style=color:#a6e22e>DATA_RETENTION_POLICY</span>)) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>cutoffDate</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>calculateCutoffDate</span>(<span style=color:#a6e22e>policy</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>deleteExpiredRecords</span>(<span style=color:#a6e22e>dataType</span>, <span style=color:#a6e22e>cutoffDate</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=第三方服务集成>第三方服务集成</h2><h3 id=合规服务商>合规服务商</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>ComplianceProvider</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>services</span><span style=color:#f92672>:</span> (<span style=color:#e6db74>&#39;KYC&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;AML&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;SANCTIONS&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;PEP&#39;</span>)[];
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>coverage</span>: <span style=color:#66d9ef>string</span>[]; <span style=color:#75715e>// countries
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>apiEndpoint</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>COMPLIANCE_PROVIDERS</span>: <span style=color:#66d9ef>ComplianceProvider</span>[] <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Sumsub&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>services</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;KYC&#39;</span>, <span style=color:#e6db74>&#39;AML&#39;</span>, <span style=color:#e6db74>&#39;SANCTIONS&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>coverage</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;GLOBAL&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>apiEndpoint</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://api.sumsub.com&#39;</span>
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Chainalysis&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>services</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;AML&#39;</span>, <span style=color:#e6db74>&#39;SANCTIONS&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>coverage</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;GLOBAL&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>apiEndpoint</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://api.chainalysis.com&#39;</span>
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Elliptic&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>services</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;AML&#39;</span>, <span style=color:#e6db74>&#39;SANCTIONS&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>coverage</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;GLOBAL&#39;</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>apiEndpoint</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://api.elliptic.co&#39;</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>];
+</span></span></code></pre></div><h3 id=多提供商策略>多提供商策略</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>performKYCCheck</span>(<span style=color:#a6e22e>user</span>: <span style=color:#66d9ef>User</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>KYCResult</span>&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 主提供商
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>try</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>result</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>sumsub</span>.<span style=color:#a6e22e>verify</span>(<span style=color:#a6e22e>user</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>result</span>.<span style=color:#a6e22e>confidence</span> <span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>HIGH_CONFIDENCE_THRESHOLD</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>result</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>catch</span> (<span style=color:#a6e22e>error</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>logger</span>.<span style=color:#a6e22e>warn</span>(<span style=color:#e6db74>&#39;Primary KYC provider failed&#39;</span>, <span style=color:#a6e22e>error</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 备用提供商
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>try</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>alternativeProvider</span>.<span style=color:#a6e22e>verify</span>(<span style=color:#a6e22e>user</span>);
+</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>catch</span> (<span style=color:#a6e22e>error</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>logger</span>.<span style=color:#a6e22e>error</span>(<span style=color:#e6db74>&#39;All KYC providers failed&#39;</span>, <span style=color:#a6e22e>error</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>throw</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>KYCServiceUnavailableError</span>();
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=用户体验优化>用户体验优化</h2><h3 id=渐进式验证>渐进式验证</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// 不要一次性要求所有信息
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>PROGRESSIVE_KYC_FLOW</span> <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>  { <span style=color:#a6e22e>step</span>: <span style=color:#66d9ef>1</span>, <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;email_verification&#39;</span>, <span style=color:#a6e22e>friction</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;low&#39;</span> },
+</span></span><span style=display:flex><span>  { <span style=color:#a6e22e>step</span>: <span style=color:#66d9ef>2</span>, <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;phone_verification&#39;</span>, <span style=color:#a6e22e>friction</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;low&#39;</span> },
+</span></span><span style=display:flex><span>  { <span style=color:#a6e22e>step</span>: <span style=color:#66d9ef>3</span>, <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;basic_info&#39;</span>, <span style=color:#a6e22e>friction</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;medium&#39;</span> },
+</span></span><span style=display:flex><span>  { <span style=color:#a6e22e>step</span>: <span style=color:#66d9ef>4</span>, <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;id_upload&#39;</span>, <span style=color:#a6e22e>friction</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;high&#39;</span> },
+</span></span><span style=display:flex><span>  { <span style=color:#a6e22e>step</span>: <span style=color:#66d9ef>5</span>, <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;face_scan&#39;</span>, <span style=color:#a6e22e>friction</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;high&#39;</span> }
+</span></span><span style=display:flex><span>];
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 根据用户行为动态调整
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>adjustKYCFlow</span>(<span style=color:#a6e22e>user</span>: <span style=color:#66d9ef>User</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>KYCStep</span>[] {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>trustScore</span> <span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>HIGH_TRUST_THRESHOLD</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>PROGRESSIVE_KYC_FLOW</span>.<span style=color:#a6e22e>filter</span>(<span style=color:#a6e22e>s</span> <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>friction</span> <span style=color:#f92672>!==</span> <span style=color:#e6db74>&#39;high&#39;</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>PROGRESSIVE_KYC_FLOW</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=实时反馈>实时反馈</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>KYCStatus</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>step</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>status</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;PENDING&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;IN_PROGRESS&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;COMPLETED&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;REJECTED&#39;</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>estimatedTime</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// seconds
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>requiredActions</span>: <span style=color:#66d9ef>string</span>[];
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>provideRealTimeFeedback</span>(<span style=color:#a6e22e>userId</span>: <span style=color:#66d9ef>string</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>KYCStatus</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>application</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>getKYCApplication</span>(<span style=color:#a6e22e>userId</span>);
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>step</span>: <span style=color:#66d9ef>application.currentStep</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>status</span>: <span style=color:#66d9ef>application.status</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>estimatedTime</span>: <span style=color:#66d9ef>estimateCompletionTime</span>(<span style=color:#a6e22e>application</span>),
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiredActions</span>: <span style=color:#66d9ef>getRequiredActions</span>(<span style=color:#a6e22e>application</span>)
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=最佳实践>最佳实践</h2><ol><li><strong>自动化优先</strong>：尽可能自动化验证流程</li><li><strong>人工复核兜底</strong>：边缘情况转人工</li><li><strong>持续监控</strong>：KYC 不是一次性的</li><li><strong>全球合规</strong>：满足最严格标准</li><li><strong>用户友好</strong>：减少摩擦，提供清晰指引</li><li><strong>数据安全</strong>：加密存储，最小化收集</li><li><strong>审计追踪</strong>：所有决策可追溯</li></ol><h2 id=小结>小结</h2><p>KYC/AML 合规是 T3 全球运营的基础。通过三级验证体系、智能风险评分、自动化监控和完善的报告机制，T3 在满足监管要求的同时，为用户提供流畅的验证体验。</p></div><a href=/dex-bok/posts/t3-security-compliance-12/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div></section></article></main><footer class="bg-white bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href=https://tiao0303.github.io/dex-bok/>&copy; DEX 学习笔记 | 去中心化交易所实战指南 2026</a><div><div class=ananke-socials></div></div></div></footer></body></html>

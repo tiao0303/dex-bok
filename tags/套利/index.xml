@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>套利 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E5%A5%97%E5%88%A9/</link><description>Recent content in 套利 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:30:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E5%A5%97%E5%88%A9/index.xml" rel="self" type="application/rss+xml"/><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;套利&lt;/strong&gt; = 利用价格差异，低买高卖，赚取无风险收益&lt;/p&gt;
+&lt;h3 id="套利特点"&gt;套利特点&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 理论上无风险&lt;/li&gt;
+&lt;li&gt;✅ 收益即时锁定&lt;/li&gt;
+&lt;li&gt;⚠️ 需要快速执行&lt;/li&gt;
+&lt;li&gt;⚠️ Gas 费可能吃掉利润&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="策略一三角套利-"&gt;策略一：三角套利 ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="原理"&gt;原理&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;USDC → ETH → WBTC → USDC
+ ↑ ↓
+ └──── 利润 ←───┘
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="案例演示"&gt;案例演示&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;假设价格&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;USDC/ETH = 1800&lt;/li&gt;
+&lt;li&gt;ETH/WBTC = 0.065&lt;/li&gt;
+&lt;li&gt;WBTC/USDC = 28500&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;计算&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 10000 USDC → 5.55 ETH
+2. 5.55 ETH → 0.36075 WBTC
+3. 0.36075 WBTC → 10281 USDC
+4. 利润：281 USDC (2.81%)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="执行要点"&gt;执行要点&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;速度第一&lt;/strong&gt;：用 Flashbots 避免抢跑&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gas 优化&lt;/strong&gt;：选择低峰时段&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;滑点控制&lt;/strong&gt;：设置合理上限&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;监控工具&lt;/strong&gt;：自建价格监控脚本&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="风险"&gt;风险&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;价格快速变化&lt;/li&gt;
+&lt;li&gt;交易失败损失 Gas&lt;/li&gt;
+&lt;li&gt;MEV 机器人竞争&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="策略二跨所套利-"&gt;策略二：跨所套利 ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="原理-1"&gt;原理&lt;/h3&gt;
+&lt;p&gt;同一资产在不同 DEX 价格不同&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,114 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/%E6%90%9C%E7%B4%A2%E8%80%85/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/%E6%90%9C%E7%B4%A2%E8%80%85/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/%E6%90%9C%E7%B4%A2%E8%80%85/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/%E6%90%9C%E7%B4%A2%E8%80%85/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="搜索者"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="搜索者"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T01:05:00+08:00"><meta itemprop=dateModified content="2026-03-19T01:05:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="搜索者"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 avenir bg-near-white production is-term"><header><div class="pb3-m pb6-l bg-white"><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l center items-center justify-between"><a href=/dex-bok/ class="f3 fw2 hover-white white-90 dib no-underline">DEX 学习笔记 | 去中心化交易所实战指南</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/ title="首页 page">首页</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/posts/ title="文章 page">文章</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/guides/ title="教程 page">教程</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/tools/ title="工具 page">工具</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/about/ title="关于 page">关于</a></li></ul><div class=ananke-socials></div></div></div></nav><div class="tc-l pv3 ph3 ph4-ns"><h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">搜索者</h1></div></div></header><main class=pb7 role=main><article class="pa3 pa4-ns nested-copy-line-height"><section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section><section class="flex-ns mt5 flex-wrap justify-around"><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/22-mev-searcher-guide/ class="link black dim">MEV 搜索者实战手册 - Flashbots 与私有节点</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=什么是-mev-搜索者>什么是 MEV 搜索者</h2><h3 id=定义>定义</h3><p><strong>MEV 搜索者</strong> = 专门寻找和提取链上可提取价值的交易者</p><h3 id=收益规模>收益规模</h3><table><thead><tr><th>年份</th><th>总 MEV 收益</th><th>顶级搜索者收入</th></tr></thead><tbody><tr><td>2021</td><td>$6.8 亿</td><td>$5000 万+</td></tr><tr><td>2022</td><td>$3.2 亿</td><td>$2000 万+</td></tr><tr><td>2023</td><td>$4.5 亿</td><td>$3000 万+</td></tr><tr><td>2024</td><td>$8.1 亿</td><td>$8000 万+</td></tr></tbody></table><h3 id=主要策略>主要策略</h3><table><thead><tr><th>策略</th><th>难度</th><th>收益</th><th>竞争度</th></tr></thead><tbody><tr><td>套利</td><td>⭐⭐⭐</td><td>中</td><td>高</td></tr><tr><td>清算</td><td>⭐⭐⭐⭐</td><td>高</td><td>中</td></tr><tr><td>三明治</td><td>⭐⭐⭐⭐⭐</td><td>极高</td><td>极高</td></tr><tr><td>NFT 抢跑</td><td>⭐⭐</td><td>低</td><td>低</td></tr></tbody></table><hr><h2 id=技术基础设施>技术基础设施</h2><h3 id=1-私有节点->1. 私有节点 ⭐⭐⭐⭐⭐</h3><h4 id=为什么需要>为什么需要</h4><ul><li>公开 mempool 会被抢跑</li><li>需要快速广播交易</li><li>避免被其他搜索者发现</li></ul><h4 id=搭建方案>搭建方案</h4><pre tabindex=0><code>方案一：自建 Geth 节点
+成本：$500/月（服务器）
+延迟：50-100ms
+难度：中等
+
+方案二：租用节点
+提供商：Alchemy、Infura、QuickNode
+成本：$200-1000/月
+延迟：20-50ms
+难度：低
+
+方案三：Flashbots Protect
+成本：免费
+延迟：100-200ms
+难度：低
+</code></pre><h4 id=配置示例geth>配置示例（Geth）</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 启动命令</span>
+</span></span><span style=display:flex><span>geth --http --http.api eth,net,txpool <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>     --ws --ws.api eth,net <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>     --txpool.pricelimit <span style=color:#ae81ff>1</span> <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>     --miner.etherbase 0xYOUR_ADDRESS
+</span></span></code></pre></div><hr><h3 id=2-flashbots-bundle->2. Flashbots Bundle ⭐⭐⭐⭐⭐</h3><h4 id=什么是-bundle>什么是 Bundle</h4><ul><li>一组打包的交易</li><li>直接发送给验证者</li><li>不经过公开 mempool</li><li>避免被抢跑</li></ul><h4 id=发送流程>发送流程</h4><pre tabindex=0><code>1. 构建交易（包含套利逻辑）
+2. 签名
+3. 打包成 Bundle
+4. 发送到 Flashbots Relay
+5. 等待区块包含
+6. 成功则执行，失败则回滚
+</code></pre><h4 id=代码示例python>代码示例（Python）</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> flashbots <span style=color:#f92672>import</span> Flashbots
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 初始化</span>
+</span></span><span style=display:flex><span>flashbots <span style=color:#f92672>=</span> Flashbots(provider, signer)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 构建 Bundle</span>
+</span></span><span style=display:flex><span>bundle <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;from&#34;</span>: <span style=color:#e6db74>&#34;0x...&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;to&#34;</span>: <span style=color:#e6db74>&#34;0x...&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;value&#34;</span>: <span style=color:#ae81ff>0</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;data&#34;</span>: <span style=color:#e6db74>&#34;0x...&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;gasPrice&#34;</span>: <span style=color:#ae81ff>1000000000</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 发送</span>
+</span></span><span style=display:flex><span>result <span style=color:#f92672>=</span> flashbots<span style=color:#f92672>.</span>send_bundle(bundle, target_block_number)
+</span></span></code></pre></div><hr><h3 id=3-智能合约->3. 智能合约 ⭐⭐⭐⭐</h3><h4 id=为什么需要合约>为什么需要合约</h4><ul><li>原子性执行（多步操作）</li><li>Gas 优化</li><li>逻辑复杂度高</li></ul><h4 id=套利合约模板>套利合约模板</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// SPDX-License-Identifier: MIT
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>pragma solidity</span> <span style=color:#f92672>^</span><span style=color:#ae81ff>0</span>.<span style=color:#ae81ff>8</span>.<span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>IUniswapV2Router</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>swapExactTokensForTokens</span>(...) <span style=color:#66d9ef>external</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Arbitrage</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>public</span> owner;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>constructor</span>() {
+</span></span><span style=display:flex><span>        owner <span style=color:#f92672>=</span> msg.sender;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>executeArbitrage</span>(
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span> tokenA,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span> tokenB,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> amount
+</span></span><span style=display:flex><span>    ) <span style=color:#66d9ef>external</span> onlyOwner {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 步骤 1: 在 Uniswap 买入
+</span></span></span><span style=display:flex><span>        IUniswapV2Router(uniswapRouter).swapExactTokensForTokens(...);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 步骤 2: 在 Sushiswap 卖出
+</span></span></span><span style=display:flex><span>        IUniswapV2Router(sushiRouter).swapExactTokensForTokens(...);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 步骤 3: 利润转回 owner
+</span></span></span><span style=display:flex><span>        IERC20(tokenA).transfer(owner, profit);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>modifier</span> <span style=color:#a6e22e>onlyOwner</span>() {
+</span></span><span style=display:flex><span>        require(msg.sender <span style=color:#f92672>==</span> owner, <span style=color:#e6db74>&#34;Not owner&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>_</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=策略详解>策略详解</h2><h3 id=策略一dex-套利->策略一：DEX 套利 ⭐⭐⭐⭐</h3><h4 id=原理>原理</h4><pre tabindex=0><code>发现价格差异：
+Uniswap: ETH = $1800
+Sushiswap: ETH = $1810
+
+执行：
+1. Uniswap 买入 ETH
+2. Sushiswap 卖出 ETH
+3. 利润 = $10/ETH - Gas - 手续费
+</code></pre><h4 id=监控脚本>监控脚本</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>monitor_prices</span>():
+</span></span><span style=display:flex><span>    uniswap_price <span style=color:#f92672>=</span> get_price(<span style=color:#e6db74>&#39;Uniswap&#39;</span>, <span style=color:#e6db74>&#39;ETH/USDC&#39;</span>)
+</span></span><span style=display:flex><span>    sushi_price <span style=color:#f92672>=</span> get_price(<span style=color:#e6db74>&#39;Sushi&#39;</span>, <span style=color:#e6db74>&#39;ETH/USDC&#39;</span>)
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    spread <span style=color:#f92672>=</span> (sushi_price <span style=color:#f92672>-</span> uniswap_price) <span style=color:#f92672>/</span> uniswap_price
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> spread <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0.005</span>:  <span style=color:#75715e># 0.5% 价差</span>
+</span></span><span style=display:flex><span>        profit <span style=color:#f92672>=</span> calculate_profit(spread, amount)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> profit <span style=color:#f92672>&gt;</span> gas_cost:
+</span></span><span style=display:flex><span>            execute_arbitrage()
+</span></span></code></pre></div><h4 id=关键参数>关键参数</h4><table><thead><tr><th>参数</th><th>值</th><th>说明</th></tr></thead><tbody><tr><td>最小价差</td><td>0.3-0.5%</td><td>覆盖成本</td></tr><tr><td>单笔金额</td><td>$10k-100k</td><td>平衡滑点</td></tr><tr><td>Gas 上限</td><td>100-300 Gwei</td><td>确保打包</td></tr><tr><td>滑点容忍</td><td>0.5-1%</td><td>避免失败</td></tr></tbody></table><hr><h3 id=策略二清算套利->策略二：清算套利 ⭐⭐⭐⭐⭐</h3><h4 id=原理-1>原理</h4><pre tabindex=0><code>监控借贷协议：
+- Aave 健康因子&lt;1
+- Compound 抵押率&gt;阈值
+
+执行清算：
+1. 调用清算函数
+2. 偿还部分债务
+3. 获得抵押品 + 清算奖励
+4. 卖出抵押品获利
+</code></pre><h4 id=清算奖励>清算奖励</h4><table><thead><tr><th>协议</th><th>奖励比例</th><th>最低门槛</th></tr></thead><tbody><tr><td>Aave</td><td>5-10%</td><td>$1</td></tr><tr><td>Compound</td><td>8%</td><td>$50</td></tr><tr><td>MakerDAO</td><td>13%</td><td>$5000</td></tr></tbody></table><h4 id=监控条件>监控条件</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>check_liquidation</span>():
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> position <span style=color:#f92672>in</span> all_positions:
+</span></span><span style=display:flex><span>        health_factor <span style=color:#f92672>=</span> get_health_factor(position)
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> health_factor <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>1.0</span>:
+</span></span><span style=display:flex><span>            profit <span style=color:#f92672>=</span> calculate_liquidation_profit(position)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> profit <span style=color:#f92672>&gt;</span> gas_cost:
+</span></span><span style=display:flex><span>                liquidate(position)
+</span></span></code></pre></div><h4 id=竞争要点>竞争要点</h4><ul><li><strong>速度第一</strong>：毫秒级响应</li><li>Gas 价格战：愿意出更高 Gas</li><li>提前计算：预执行验证</li></ul><hr><h3 id=策略三三明治攻击->策略三：三明治攻击 ⭐⭐⭐⭐⭐</h3><h4 id=-道德警示>⚠️ 道德警示</h4><p>三明治攻击是有争议的策略，可能被视为对普通用户的剥削。本文仅作技术说明，不鼓励使用。</p></div><a href=/dex-bok/posts/22-mev-searcher-guide/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div></section></article></main><footer class="bg-white bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href=https://tiao0303.github.io/dex-bok/>&copy; DEX 学习笔记 | 去中心化交易所实战指南 2026</a><div><div class=ananke-socials></div></div></div></footer></body></html>

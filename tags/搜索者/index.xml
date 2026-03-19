@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>搜索者 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%90%9C%E7%B4%A2%E8%80%85/</link><description>Recent content in 搜索者 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:05:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%90%9C%E7%B4%A2%E8%80%85/index.xml" rel="self" type="application/rss+xml"/><item><title>MEV 搜索者实战手册 - Flashbots 与私有节点</title><link>https://tiao0303.github.io/dex-bok/posts/22-mev-searcher-guide/</link><pubDate>Thu, 19 Mar 2026 01:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/22-mev-searcher-guide/</guid><description>&lt;h2 id="什么是-mev-搜索者"&gt;什么是 MEV 搜索者&lt;/h2&gt;
+&lt;h3 id="定义"&gt;定义&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;MEV 搜索者&lt;/strong&gt; = 专门寻找和提取链上可提取价值的交易者&lt;/p&gt;
+&lt;h3 id="收益规模"&gt;收益规模&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;年份&lt;/th&gt;
+ &lt;th&gt;总 MEV 收益&lt;/th&gt;
+ &lt;th&gt;顶级搜索者收入&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;2021&lt;/td&gt;
+ &lt;td&gt;$6.8 亿&lt;/td&gt;
+ &lt;td&gt;$5000 万+&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;2022&lt;/td&gt;
+ &lt;td&gt;$3.2 亿&lt;/td&gt;
+ &lt;td&gt;$2000 万+&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;2023&lt;/td&gt;
+ &lt;td&gt;$4.5 亿&lt;/td&gt;
+ &lt;td&gt;$3000 万+&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;2024&lt;/td&gt;
+ &lt;td&gt;$8.1 亿&lt;/td&gt;
+ &lt;td&gt;$8000 万+&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="主要策略"&gt;主要策略&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;策略&lt;/th&gt;
+ &lt;th&gt;难度&lt;/th&gt;
+ &lt;th&gt;收益&lt;/th&gt;
+ &lt;th&gt;竞争度&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;套利&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;清算&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;三明治&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;极高&lt;/td&gt;
+ &lt;td&gt;极高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;NFT 抢跑&lt;/td&gt;
+ &lt;td&gt;⭐⭐&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="技术基础设施"&gt;技术基础设施&lt;/h2&gt;
+&lt;h3 id="1-私有节点-"&gt;1. 私有节点 ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="为什么需要"&gt;为什么需要&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;公开 mempool 会被抢跑&lt;/li&gt;
+&lt;li&gt;需要快速广播交易&lt;/li&gt;
+&lt;li&gt;避免被其他搜索者发现&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="搭建方案"&gt;搭建方案&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;方案一：自建 Geth 节点
+成本：$500/月（服务器）
+延迟：50-100ms
+难度：中等
+
+方案二：租用节点
+提供商：Alchemy、Infura、QuickNode
+成本：$200-1000/月
+延迟：20-50ms
+难度：低
+
+方案三：Flashbots Protect
+成本：免费
+延迟：100-200ms
+难度：低
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="配置示例geth"&gt;配置示例（Geth）&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 启动命令&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;geth --http --http.api eth,net,txpool &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; --ws --ws.api eth,net &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; --txpool.pricelimit &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; --miner.etherbase 0xYOUR_ADDRESS
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id="2-flashbots-bundle-"&gt;2. Flashbots Bundle ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="什么是-bundle"&gt;什么是 Bundle&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;一组打包的交易&lt;/li&gt;
+&lt;li&gt;直接发送给验证者&lt;/li&gt;
+&lt;li&gt;不经过公开 mempool&lt;/li&gt;
+&lt;li&gt;避免被抢跑&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="发送流程"&gt;发送流程&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 构建交易（包含套利逻辑）
+2. 签名
+3. 打包成 Bundle
+4. 发送到 Flashbots Relay
+5. 等待区块包含
+6. 成功则执行，失败则回滚
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="代码示例python"&gt;代码示例（Python）&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;from&lt;/span&gt; flashbots &lt;span style="color:#f92672"&gt;import&lt;/span&gt; Flashbots
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 初始化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;flashbots &lt;span style="color:#f92672"&gt;=&lt;/span&gt; Flashbots(provider, signer)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 构建 Bundle&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;bundle &lt;span style="color:#f92672"&gt;=&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;from&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;0x...&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;to&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;0x...&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;value&amp;#34;&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;data&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;0x...&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;gasPrice&amp;#34;&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;1000000000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 发送&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;result &lt;span style="color:#f92672"&gt;=&lt;/span&gt; flashbots&lt;span style="color:#f92672"&gt;.&lt;/span&gt;send_bundle(bundle, target_block_number)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id="3-智能合约-"&gt;3. 智能合约 ⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="为什么需要合约"&gt;为什么需要合约&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;原子性执行（多步操作）&lt;/li&gt;
+&lt;li&gt;Gas 优化&lt;/li&gt;
+&lt;li&gt;逻辑复杂度高&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="套利合约模板"&gt;套利合约模板&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// SPDX-License-Identifier: MIT
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;pragma solidity&lt;/span&gt; &lt;span style="color:#f92672"&gt;^&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;.&lt;span style="color:#ae81ff"&gt;8&lt;/span&gt;.&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;IUniswapV2Router&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;swapExactTokensForTokens&lt;/span&gt;(...) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Arbitrage&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; owner;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;constructor&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; owner &lt;span style="color:#f92672"&gt;=&lt;/span&gt; msg.sender;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;executeArbitrage&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; tokenA,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; tokenB,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; onlyOwner {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 步骤 1: 在 Uniswap 买入
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IUniswapV2Router(uniswapRouter).swapExactTokensForTokens(...);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 步骤 2: 在 Sushiswap 卖出
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IUniswapV2Router(sushiRouter).swapExactTokensForTokens(...);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 步骤 3: 利润转回 owner
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenA).transfer(owner, profit);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;modifier&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;onlyOwner&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(msg.sender &lt;span style="color:#f92672"&gt;==&lt;/span&gt; owner, &lt;span style="color:#e6db74"&gt;&amp;#34;Not owner&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;_&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="策略详解"&gt;策略详解&lt;/h2&gt;
+&lt;h3 id="策略一dex-套利-"&gt;策略一：DEX 套利 ⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="原理"&gt;原理&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;发现价格差异：
+Uniswap: ETH = $1800
+Sushiswap: ETH = $1810
+
+执行：
+1. Uniswap 买入 ETH
+2. Sushiswap 卖出 ETH
+3. 利润 = $10/ETH - Gas - 手续费
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="监控脚本"&gt;监控脚本&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;monitor_prices&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; uniswap_price &lt;span style="color:#f92672"&gt;=&lt;/span&gt; get_price(&lt;span style="color:#e6db74"&gt;&amp;#39;Uniswap&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;ETH/USDC&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; sushi_price &lt;span style="color:#f92672"&gt;=&lt;/span&gt; get_price(&lt;span style="color:#e6db74"&gt;&amp;#39;Sushi&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;ETH/USDC&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; spread &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (sushi_price &lt;span style="color:#f92672"&gt;-&lt;/span&gt; uniswap_price) &lt;span style="color:#f92672"&gt;/&lt;/span&gt; uniswap_price
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; spread &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0.005&lt;/span&gt;: &lt;span style="color:#75715e"&gt;# 0.5% 价差&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; profit &lt;span style="color:#f92672"&gt;=&lt;/span&gt; calculate_profit(spread, amount)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; profit &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; gas_cost:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; execute_arbitrage()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="关键参数"&gt;关键参数&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;参数&lt;/th&gt;
+ &lt;th&gt;值&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;最小价差&lt;/td&gt;
+ &lt;td&gt;0.3-0.5%&lt;/td&gt;
+ &lt;td&gt;覆盖成本&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;单笔金额&lt;/td&gt;
+ &lt;td&gt;$10k-100k&lt;/td&gt;
+ &lt;td&gt;平衡滑点&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Gas 上限&lt;/td&gt;
+ &lt;td&gt;100-300 Gwei&lt;/td&gt;
+ &lt;td&gt;确保打包&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;滑点容忍&lt;/td&gt;
+ &lt;td&gt;0.5-1%&lt;/td&gt;
+ &lt;td&gt;避免失败&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="策略二清算套利-"&gt;策略二：清算套利 ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="原理-1"&gt;原理&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;监控借贷协议：
+- Aave 健康因子&amp;lt;1
+- Compound 抵押率&amp;gt;阈值
+
+执行清算：
+1. 调用清算函数
+2. 偿还部分债务
+3. 获得抵押品 + 清算奖励
+4. 卖出抵押品获利
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="清算奖励"&gt;清算奖励&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;协议&lt;/th&gt;
+ &lt;th&gt;奖励比例&lt;/th&gt;
+ &lt;th&gt;最低门槛&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Aave&lt;/td&gt;
+ &lt;td&gt;5-10%&lt;/td&gt;
+ &lt;td&gt;$1&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Compound&lt;/td&gt;
+ &lt;td&gt;8%&lt;/td&gt;
+ &lt;td&gt;$50&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;MakerDAO&lt;/td&gt;
+ &lt;td&gt;13%&lt;/td&gt;
+ &lt;td&gt;$5000&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="监控条件"&gt;监控条件&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;check_liquidation&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; position &lt;span style="color:#f92672"&gt;in&lt;/span&gt; all_positions:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; health_factor &lt;span style="color:#f92672"&gt;=&lt;/span&gt; get_health_factor(position)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; health_factor &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1.0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; profit &lt;span style="color:#f92672"&gt;=&lt;/span&gt; calculate_liquidation_profit(position)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; profit &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; gas_cost:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; liquidate(position)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="竞争要点"&gt;竞争要点&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;速度第一&lt;/strong&gt;：毫秒级响应&lt;/li&gt;
+&lt;li&gt;Gas 价格战：愿意出更高 Gas&lt;/li&gt;
+&lt;li&gt;提前计算：预执行验证&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="策略三三明治攻击-"&gt;策略三：三明治攻击 ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="-道德警示"&gt;⚠️ 道德警示&lt;/h4&gt;
+&lt;p&gt;三明治攻击是有争议的策略，可能被视为对普通用户的剥削。本文仅作技术说明，不鼓励使用。&lt;/p&gt;</description></item></channel></rss>

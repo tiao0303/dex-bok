@@ -1,0 +1,156 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/dex/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/dex/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/dex/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/dex/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="DEX"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T00:27:00+08:00"><meta itemprop=dateModified content="2026-03-19T00:27:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 avenir bg-near-white production is-term"><header><div class="pb3-m pb6-l bg-white"><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l center items-center justify-between"><a href=/dex-bok/ class="f3 fw2 hover-white white-90 dib no-underline">DEX 学习笔记 | 去中心化交易所实战指南</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/ title="首页 page">首页</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/posts/ title="文章 page">文章</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/guides/ title="教程 page">教程</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/tools/ title="工具 page">工具</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/about/ title="关于 page">关于</a></li></ul><div class=ananke-socials></div></div></div></nav><div class="tc-l pv3 ph3 ph4-ns"><h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">DEX</h1></div></div></header><main class=pb7 role=main><article class="pa3 pa4-ns nested-copy-line-height"><section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section><section class="flex-ns mt5 flex-wrap justify-around"><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/06-liquidity-pool-deep-dive/ class="link black dim">T2 进阶实战 06：流动性池深度分析</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h1 id=流动性池深度分析>流动性池深度分析</h1><h2 id=引言>引言</h2><p>流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。</p><h2 id=恒定乘积公式详解>恒定乘积公式详解</h2><h3 id=基础公式>基础公式</h3><p>Uniswap V2 采用的恒定乘积公式：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span>x <span style=color:#f92672>*</span> y <span style=color:#f92672>=</span> k
+</span></span></code></pre></div><p>其中：</p><ul><li><code>x</code> = 代币 A 的数量</li><li><code>y</code> = 代币 B 的数量</li><li><code>k</code> = 恒定常数</li></ul><h3 id=价格发现机制>价格发现机制</h3><p>边际价格由导数得出：</p><pre tabindex=0><code>P = dy/dx = -y/x
+</code></pre><p>这意味着价格完全由池中的代币比例决定。</p><h3 id=代码实现>代码实现</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>swap</span>(<span style=color:#66d9ef>uint</span> amountIn, <span style=color:#66d9ef>bool</span> isTokenA) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    require(amountIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>, <span style=color:#e6db74>&#34;Amount must be positive&#34;</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> reserveA <span style=color:#f92672>=</span> IERC20(tokenA).balanceOf(<span style=color:#66d9ef>address</span>(this));
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> reserveB <span style=color:#f92672>=</span> IERC20(tokenB).balanceOf(<span style=color:#66d9ef>address</span>(this));
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> amountOut;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (isTokenA) {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 计算输出量：amountOut = reserveB - k / (reserveA + amountIn)
+</span></span></span><span style=display:flex><span>        amountOut <span style=color:#f92672>=</span> getAmountOut(amountIn, reserveA, reserveB);
+</span></span><span style=display:flex><span>        IERC20(tokenA).transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amountIn);
+</span></span><span style=display:flex><span>        IERC20(tokenB).transfer(msg.sender, amountOut);
+</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>        amountOut <span style=color:#f92672>=</span> getAmountOut(amountIn, reserveB, reserveA);
+</span></span><span style=display:flex><span>        IERC20(tokenB).transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amountIn);
+</span></span><span style=display:flex><span>        IERC20(tokenA).transfer(msg.sender, amountOut);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 验证 k 值未减少
+</span></span></span><span style=display:flex><span>    _updateReserves();
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getAmountOut</span>(<span style=color:#66d9ef>uint</span> amountIn, <span style=color:#66d9ef>uint</span> reserveIn, <span style=color:#66d9ef>uint</span> reserveOut) 
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>pure</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint</span> amountOut) 
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    require(amountIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>&amp;&amp;</span> reserveIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>&amp;&amp;</span> reserveOut <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> amountInWithFee <span style=color:#f92672>=</span> amountIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>997</span>; <span style=color:#75715e>// 0.3% 手续费
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> numerator <span style=color:#f92672>=</span> amountInWithFee <span style=color:#f92672>*</span> reserveOut;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> denominator <span style=color:#f92672>=</span> (reserveIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>1000</span>) <span style=color:#f92672>+</span> amountInWithFee;
+</span></span><span style=display:flex><span>    amountOut <span style=color:#f92672>=</span> numerator <span style=color:#f92672>/</span> denominator;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=资本效率问题>资本效率问题</h2><h3 id=v2-的资本效率低下>V2 的资本效率低下</h3><p>在 V2 模型中，流动性分布在 <code>0</code> 到 <code>∞</code> 的价格范围内，但大部分资金实际上从未被使用。</p></div><a href=/dex-bok/posts/06-liquidity-pool-deep-dive/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/07-slippage-price-impact/ class="link black dim">T2 进阶实战 07：滑点与价格影响</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h1 id=滑点与价格影响>滑点与价格影响</h1><h2 id=引言>引言</h2><p>滑点（Slippage）是 DEX 交易中最重要的概念之一。理解滑点的来源、计算方法和优化策略，对于构建高效的交易执行系统至关重要。</p><h2 id=滑点的定义>滑点的定义</h2><p><strong>滑点</strong> = 预期价格与实际成交价格的差异</p><pre tabindex=0><code>滑点百分比 = (预期价格 - 实际价格) / 预期价格 × 100%
+</code></pre><h2 id=滑点的来源>滑点的来源</h2><h3 id=1-价格影响price-impact>1. 价格影响（Price Impact）</h3><p>由于 AMM 的定价机制，大额交易会改变池子的价格。</p><p><strong>恒定乘积模型下的价格影响：</strong></p><pre tabindex=0><code>给定：x * y = k
+买入 Δx 的代币 A：
+- 新价格 P&#39; = (y - Δy) / (x + Δx)
+- 原价格 P = y / x
+- 价格影响 = (P - P&#39;) / P
+</code></pre><h3 id=2-外部市场波动>2. 外部市场波动</h3><p>在交易确认期间，外部市场价格可能发生变化。</p><h3 id=3-mev-攻击>3. MEV 攻击</h3><p>前端运行（Front-running）和三明治攻击会加剧滑点。</p><h2 id=价格影响计算>价格影响计算</h2><h3 id=精确公式>精确公式</h3><p>对于恒定乘积 AMM，买入 <code>Δx</code> 数量的代币 A：</p></div><a href=/dex-bok/posts/07-slippage-price-impact/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/08-mev-front-running/ class="link black dim">T2 进阶实战 08：MEV 与前端运行防御</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h1 id=mev-与前端运行防御>MEV 与前端运行防御</h1><h2 id=引言>引言</h2><p>MEV（Maximal Extractable Value，最大可提取价值）是区块链生态中的重要概念。理解 MEV 的运作机制和防御策略，对于保护 DEX 用户资金安全至关重要。</p><h2 id=mev-概述>MEV 概述</h2><h3 id=定义>定义</h3><p><strong>MEV</strong> = 矿工/验证者通过重新排序、插入或审查交易可提取的额外价值</p><h3 id=mev-类型>MEV 类型</h3><table><thead><tr><th>类型</th><th>描述</th><th>影响</th></tr></thead><tbody><tr><td>套利</td><td>利用不同 DEX 间的价格差异</td><td>中性/正面</td></tr><tr><td>清算</td><td>清算不足的抵押头寸</td><td>正面</td></tr><tr><td>前端运行</td><td>在目标交易前插入交易</td><td>负面</td></tr><tr><td>三明治攻击</td><td>前后夹击目标交易</td><td>负面</td></tr><tr><td>时间带宽套利</td><td>利用信息传播延迟</td><td>负面</td></tr></tbody></table><h2 id=前端运行front-running>前端运行（Front-running）</h2><h3 id=攻击原理>攻击原理</h3><pre tabindex=0><code>攻击流程：
+1. 监控待处理交易池（mempool）
+2. 发现有利可图的大额交易
+3. 以更高 Gas 价格提交相同交易
+4. 矿工优先打包攻击者交易
+5. 攻击者获利，受害者承受滑点
+</code></pre><h3 id=代码示例被前端运行的交易>代码示例：被前端运行的交易</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ 容易被前端运行的交易
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>buyToken</span>(<span style=color:#66d9ef>uint</span> amount) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 任何人都可以看到这笔交易
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>// 攻击者可以复制并以更高 Gas 发送
+</span></span></span><span style=display:flex><span>    IERC20(token).transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amount);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> tokens <span style=color:#f92672>=</span> calculateTokens(amount);
+</span></span><span style=display:flex><span>    IERC20(token).transfer(msg.sender, tokens);
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 攻击者合约
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>FrontRunner</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>frontRun</span>(<span style=color:#66d9ef>address</span> victim, <span style=color:#66d9ef>uint</span> amount) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>payable</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 以更高 Gas 发送相同交易
+</span></span></span><span style=display:flex><span>        targetContract.buyToken{gas<span style=color:#f92672>:</span> <span style=color:#ae81ff>500000</span>, gasPrice<span style=color:#f92672>:</span> tx.gasPrice <span style=color:#f92672>*</span> <span style=color:#ae81ff>150</span><span style=color:#f92672>%</span>}(amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=三明治攻击sandwich-attack>三明治攻击（Sandwich Attack）</h2><h3 id=攻击流程>攻击流程</h3><pre tabindex=0><code>步骤：
+1. 受害者提交大额买入交易（待处理）
+2. 攻击者发现并分析交易
+3. 攻击者发送买入交易（更高 Gas）→ 前置
+4. 受害者交易执行，推高价格
+5. 攻击者发送卖出交易 → 后置
+6. 攻击者获利，受害者承受额外滑点
+</code></pre><h3 id=可视化示例>可视化示例</h3><pre tabindex=0><code>初始状态：
+- 池子：1000 ETH / 2,000,000 USDC
+- 价格：2000 USDC/ETH
+
+攻击过程：
+1. 攻击者买入 50 ETH（花费 95,238 USDC）
+   新价格：2095 USDC/ETH
+
+2. 受害者买入 100 ETH（花费 218,750 USDC）
+   新价格：2381 USDC/ETH
+   受害者预期价格：2000 USDC/ETH
+   受害者实际价格：2187.5 USDC/ETH
+   受害者损失：18.75% 额外滑点
+
+3. 攻击者卖出 50 ETH（获得 107,143 USDC）
+   新价格：2095 USDC/ETH
+
+攻击者利润：107,143 - 95,238 = 11,905 USDC
+</code></pre><h3 id=检测三明治攻击>检测三明治攻击</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>event</span> <span style=color:#a6e22e>SandwichAttackDetected</span>(
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> attacker,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> victim,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> frontRunAmount,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> backRunAmount,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> victimLoss
+</span></span><span style=display:flex><span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>detectSandwichAttack</span>(
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> trader,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> amountIn,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> expectedOut,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> actualOut
+</span></span><span style=display:flex><span>) <span style=color:#66d9ef>internal</span> <span style=color:#66d9ef>view</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> slippage <span style=color:#f92672>=</span> ((expectedOut <span style=color:#f92672>-</span> actualOut) <span style=color:#f92672>*</span> <span style=color:#ae81ff>10000</span>) <span style=color:#f92672>/</span> expectedOut;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 异常高滑点可能表示三明治攻击
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (slippage <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>500</span>) { <span style=color:#75715e>// 超过 5%
+</span></span></span><span style=display:flex><span>        <span style=color:#75715e>// 检查前后是否有可疑交易
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span>[] <span style=color:#66d9ef>memory</span> recentTraders <span style=color:#f92672>=</span> getRecentTraders(<span style=color:#ae81ff>10</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>uint</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> recentTraders.length; i<span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> (recentTraders[i] <span style=color:#f92672>!=</span> trader) {
+</span></span><span style=display:flex><span>                <span style=color:#75715e>// 分析交易模式
+</span></span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> (isSuspiciousPattern(recentTraders[i], trader)) {
+</span></span><span style=display:flex><span>                    emit SandwichAttackDetected(
+</span></span><span style=display:flex><span>                        recentTraders[i],
+</span></span><span style=display:flex><span>                        trader,
+</span></span><span style=display:flex><span>                        <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>0</span>, slippage
+</span></span><span style=display:flex><span>                    );
+</span></span><span style=display:flex><span>                }
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=防御策略>防御策略</h2><h3 id=1-提交隐藏交易private-transactions>1. 提交隐藏交易（Private Transactions）</h3><p>使用 Flashbots 等私有交易服务：</p></div><a href=/dex-bok/posts/08-mev-front-running/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/t3-security-compliance-11/ class="link black dim">T3 安全合规系列 (11/15)：链上交易监控与异常检测</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=引言>引言</h2><p>在去中心化交易所的运营中，实时监控链上交易并识别异常行为是安全合规的核心环节。本文介绍 T3 如何构建高效的链上监控体系，实现毫秒级异常检测与响应。</p><h2 id=监控架构设计>监控架构设计</h2><h3 id=三层监控体系>三层监控体系</h3><pre tabindex=0><code>┌─────────────────────────────────────────────────────────┐
+│                    应用层监控                            │
+│  • 交易频率异常    • 大额转账     • 可疑地址交互          │
+├─────────────────────────────────────────────────────────┤
+│                    协议层监控                            │
+│  • 智能合约调用    • 流动性变化   • 价格操纵检测          │
+├─────────────────────────────────────────────────────────┤
+│                    网络层监控                            │
+│  • 节点健康状态    • 区块同步延迟   • Gas 价格异常         │
+└─────────────────────────────────────────────────────────┘
+</code></pre><h3 id=实时数据流处理>实时数据流处理</h3><p>T3 采用流式处理架构，确保监控延迟控制在秒级：</p><ol><li><strong>数据摄取</strong>：通过 WebSocket 订阅新区块和待处理交易</li><li><strong>实时解析</strong>：解码交易数据，提取关键指标</li><li><strong>规则引擎</strong>：应用预定义和机器学习模型进行检测</li><li><strong>告警输出</strong>：触发通知并记录审计日志</li></ol><h2 id=异常检测策略>异常检测策略</h2><h3 id=1-交易频率异常>1. 交易频率异常</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// 检测单个地址在短时间内的高频交易
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>detectFrequencyAnomaly</span>(<span style=color:#a6e22e>address</span>: <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>windowMs</span>: <span style=color:#66d9ef>number</span>, <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>)<span style=color:#f92672>:</span> <span style=color:#66d9ef>boolean</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>recentTxs</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>getTransactionsInWindow</span>(<span style=color:#a6e22e>address</span>, <span style=color:#a6e22e>windowMs</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>recentTxs</span>.<span style=color:#a6e22e>length</span> <span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>threshold</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 配置示例
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>rules</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>highFrequency</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>windowMs</span>: <span style=color:#66d9ef>60000</span>, <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>10</span> },  <span style=color:#75715e>// 1 分钟内超过 10 笔
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>burstTrading</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>windowMs</span>: <span style=color:#66d9ef>5000</span>, <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>5</span> }      <span style=color:#75715e>// 5 秒内超过 5 笔
+</span></span></span><span style=display:flex><span>};
+</span></span></code></pre></div><h3 id=2-大额转账监控>2. 大额转账监控</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>LargeTransferRule</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>tokenAddress</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>minAmountUSD</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>requireAdditionalVerification</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>largeTransferRules</span>: <span style=color:#66d9ef>LargeTransferRule</span>[] <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>  { <span style=color:#a6e22e>tokenAddress</span>: <span style=color:#66d9ef>USDT</span>, <span style=color:#a6e22e>minAmountUSD</span>: <span style=color:#66d9ef>100000</span>, <span style=color:#a6e22e>requireAdditionalVerification</span>: <span style=color:#66d9ef>true</span> },
+</span></span><span style=display:flex><span>  { <span style=color:#a6e22e>tokenAddress</span>: <span style=color:#66d9ef>USDC</span>, <span style=color:#a6e22e>minAmountUSD</span>: <span style=color:#66d9ef>50000</span>, <span style=color:#a6e22e>requireAdditionalVerification</span>: <span style=color:#66d9ef>true</span> },
+</span></span><span style=display:flex><span>  { <span style=color:#a6e22e>tokenAddress</span>: <span style=color:#66d9ef>ETH</span>, <span style=color:#a6e22e>minAmountUSD</span>: <span style=color:#66d9ef>50000</span>, <span style=color:#a6e22e>requireAdditionalVerification</span>: <span style=color:#66d9ef>true</span> }
+</span></span><span style=display:flex><span>];
+</span></span></code></pre></div><h3 id=3-可疑地址交互>3. 可疑地址交互</h3><p>T3 维护多层地址黑名单：</p></div><a href=/dex-bok/posts/t3-security-compliance-11/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/t1-01-dex-basics/ class="link black dim">T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h1 id=t1-新手入门-01---什么是-dex去中心化交易所基础概念>T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念</h1><p>欢迎来到 T1 新手入门系列！这是专为刚接触 DeFi 和去中心化交易所的新手准备的入门指南。</p><h2 id=什么是-dex>什么是 DEX？</h2><p><strong>DEX</strong>（Decentralized Exchange，去中心化交易所）是一种不需要中介机构、基于智能合约运行的加密货币交易平台。</p><h3 id=核心特点>核心特点</h3><ul><li><strong>无需许可</strong>：任何人都可以使用，无需注册或 KYC</li><li><strong>非托管</strong>：资产始终在你自己的钱包中，平台无法挪用</li><li><strong>透明可验证</strong>：所有交易记录在链上，公开可查</li><li><strong>抗审查</strong>：没有中心化实体可以冻结你的账户或交易</li></ul><h2 id=dex-vs-cex有什么区别>DEX vs CEX：有什么区别？</h2><table><thead><tr><th>特性</th><th>DEX（去中心化）</th><th>CEX（中心化）</th></tr></thead><tbody><tr><td>资产托管</td><td>用户自己保管</td><td>交易所保管</td></tr><tr><td>注册要求</td><td>无需注册</td><td>需要 KYC/实名认证</td></tr><tr><td>交易透明度</td><td>链上公开可查</td><td>黑箱操作</td></tr><tr><td>安全性</td><td>智能合约风险</td><td>交易所被黑风险</td></tr><tr><td>流动性</td><td>依赖流动性池</td><td>订单簿撮合</td></tr><tr><td>交易费用</td><td>Gas 费 + 手续费</td><td>交易手续费</td></tr></tbody></table><h2 id=dex-的工作原理>DEX 的工作原理</h2><h3 id=1-流动性池liquidity-pool>1. 流动性池（Liquidity Pool）</h3><p>DEX 不依赖传统订单簿，而是使用<strong>流动性池</strong>：</p><pre tabindex=0><code>用户 A 存入 10 ETH + 20000 USDC → 流动性池
+用户 B 用 2000 USDC 购买 0.1 ETH ← 从池中兑换
+</code></pre><h3 id=2-自动做市商amm>2. 自动做市商（AMM）</h3><p>价格由算法自动决定，最常用的是<strong>恒定乘积公式</strong>：</p></div><a href=/dex-bok/posts/t1-01-dex-basics/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div></section></article></main><footer class="bg-white bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href=https://tiao0303.github.io/dex-bok/>&copy; DEX 学习笔记 | 去中心化交易所实战指南 2026</a><div><div class=ananke-socials></div></div></div></footer></body></html>

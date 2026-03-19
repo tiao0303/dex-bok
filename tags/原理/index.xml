@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>原理 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E5%8E%9F%E7%90%86/</link><description>Recent content in 原理 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:30:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E5%8E%9F%E7%90%86/index.xml" rel="self" type="application/rss+xml"/><item><title>AMM 数学原理深究 - 曲线设计与资本效率</title><link>https://tiao0303.github.io/dex-bok/posts/26-amm-math-deep-dive/</link><pubDate>Thu, 19 Mar 2026 01:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/26-amm-math-deep-dive/</guid><description>&lt;h2 id="amm-核心公式推导"&gt;AMM 核心公式推导&lt;/h2&gt;
+&lt;h3 id="恒定乘积公式uniswap-v2"&gt;恒定乘积公式（Uniswap V2）&lt;/h3&gt;
+&lt;h4 id="基本公式"&gt;基本公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;x * y = k
+
+其中：
+x = Token A 数量
+y = Token B 数量
+k = 常数
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="价格推导"&gt;价格推导&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;边际价格 = dy/dx
+
+对 x * y = k 求导：
+y + x * dy/dx = 0
+dy/dx = -y/x
+
+所以：价格 P = y/x
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="滑点公式"&gt;滑点公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;买入 Δx 的 Token A：
+新价格 P&amp;#39; = (y - Δy) / (x + Δx)
+
+滑点 = (P&amp;#39; - P) / P
+ = Δx / (x + Δx)
+
+结论：
+- 池子越小，滑点越大
+- 交易越大，滑点越大
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="恒定和公式curve-stableswap"&gt;恒定和公式（Curve StableSwap）&lt;/h3&gt;
+&lt;h4 id="基本公式-1"&gt;基本公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;x + y = k
+
+价格恒定为 1:1
+适合稳定币交易
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="stableswap-混合公式"&gt;StableSwap 混合公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;A * n^n * Σx_i + D = A * D * n^n + D^(n+1) / (n^n * Πx_i)
+
+其中：
+A = 放大系数
+n = 资产数量
+D = 不变量
+x_i = 各资产数量
+
+A → ∞ 时：趋近恒定和
+A → 0 时：趋近恒定积
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="放大系数-a-的作用"&gt;放大系数 A 的作用&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;A 值&lt;/th&gt;
+ &lt;th&gt;曲线形状&lt;/th&gt;
+ &lt;th&gt;适用场景&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;1&lt;/td&gt;
+ &lt;td&gt;标准恒定积&lt;/td&gt;
+ &lt;td&gt;波动资产&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;100&lt;/td&gt;
+ &lt;td&gt;中间态&lt;/td&gt;
+ &lt;td&gt;弱相关资产&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;10000&lt;/td&gt;
+ &lt;td&gt;接近恒定和&lt;/td&gt;
+ &lt;td&gt;稳定币&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="集中流动性公式uniswap-v3"&gt;集中流动性公式（Uniswap V3）&lt;/h3&gt;
+&lt;h4 id="核心创新"&gt;核心创新&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;只在价格区间 [P_a, P_b] 内提供流动性
+
+公式：
+L = √(x * y) （在价格范围内）
+
+实际流动性 = L * (√P_b - √P_a)
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="资本效率提升"&gt;资本效率提升&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;效率提升倍数 = P_b / (P_b - P_a)
+
+示例：
+当前价格 P = $1800
+区间 [1600, 2000]
+效率提升 = 2000 / (2000-1600) = 5 倍
+
+区间 [1700, 1900]
+效率提升 = 1900 / (1900-1700) = 9.5 倍
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="虚拟储备推导"&gt;虚拟储备推导&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;在区间 [P_a, P_b] 内：
+x_real = L * (1/√P - 1/√P_b)
+y_real = L * (√P - √P_a)
+
+当 P 超出区间：
+- P &amp;lt; P_a：全部为 x（Token A）
+- P &amp;gt; P_b：全部为 y（Token B）
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="无常损失数学分析"&gt;无常损失数学分析&lt;/h2&gt;
+&lt;h3 id="无常损失公式推导"&gt;无常损失公式推导&lt;/h3&gt;
+&lt;h4 id="基础推导"&gt;基础推导&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;初始状态：
+- 价格 P0
+- 存入 x0 个 Token A，y0 个 Token B
+- 总价值 V0 = x0 * P0 + y0
+
+价格变化后：
+- 新价格 P1 = r * P0（r 为价格变化倍数）
+- 池子自动调整：x1 * y1 = k
+
+LP 价值：
+V_lp = x1 * P1 + y1
+
+持有价值：
+V_hold = x0 * P1 + y0
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="无常损失公式"&gt;无常损失公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;IL = V_lp / V_hold - 1
+
+简化后：
+IL = 2√r / (1+r) - 1
+
+其中 r = P1/P0（价格变化倍数）
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="数值验证"&gt;数值验证&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;价格变化&lt;/th&gt;
+ &lt;th&gt;r&lt;/th&gt;
+ &lt;th&gt;IL 计算&lt;/th&gt;
+ &lt;th&gt;IL 结果&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;+10%&lt;/td&gt;
+ &lt;td&gt;1.1&lt;/td&gt;
+ &lt;td&gt;2√1.1/2.1 - 1&lt;/td&gt;
+ &lt;td&gt;-0.23%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;+25%&lt;/td&gt;
+ &lt;td&gt;1.25&lt;/td&gt;
+ &lt;td&gt;2√1.25/2.25 - 1&lt;/td&gt;
+ &lt;td&gt;-1.4%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;+50%&lt;/td&gt;
+ &lt;td&gt;1.5&lt;/td&gt;
+ &lt;td&gt;2√1.5/2.5 - 1&lt;/td&gt;
+ &lt;td&gt;-5.7%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;+100%&lt;/td&gt;
+ &lt;td&gt;2.0&lt;/td&gt;
+ &lt;td&gt;2√2/3 - 1&lt;/td&gt;
+ &lt;td&gt;-21.5%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;-50%&lt;/td&gt;
+ &lt;td&gt;0.5&lt;/td&gt;
+ &lt;td&gt;2√0.5/1.5 - 1&lt;/td&gt;
+ &lt;td&gt;-21.5%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="v3-无常损失分析"&gt;V3 无常损失分析&lt;/h3&gt;
+&lt;h4 id="区间内-il"&gt;区间内 IL&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;IL_v3 = IL_v2 * (P_b - P_a) / (√P_b - √P_a)²
+
+结论：
+- 区间越窄，IL 越大
+- 但收益也越高
+- 需要权衡
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="被甩出损失"&gt;被甩出损失&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;当价格超出区间 [P_a, P_b]：
+
+P &amp;lt; P_a：
+- 全部变为 Token A
+- 损失 = (P0 - P) / P0
+
+P &amp;gt; P_b：
+- 全部变为 Token B
+- 踏空收益 = (P - P0) / P0
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="最优费用率设计"&gt;最优费用率设计&lt;/h2&gt;
+&lt;h3 id="费用率对-lp-收益影响"&gt;费用率对 LP 收益影响&lt;/h3&gt;
+&lt;h4 id="收益公式"&gt;收益公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;LP 收益 = 交易量 × 费用率 × LP 份额
+
+年化 APY = (日交易量 × 365 × 费用率) / TVL
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="费用率与交易量关系"&gt;费用率与交易量关系&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;交易量 = f(费用率)
+
+费用率↑ → 单笔收益↑ → 交易量↓
+费用率↓ → 单笔收益↓ → 交易量↑
+
+最优费用率 = argmax(费用率 × 交易量)
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="v3-多档位设计"&gt;V3 多档位设计&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;档位&lt;/th&gt;
+ &lt;th&gt;适合资产&lt;/th&gt;
+ &lt;th&gt;理论依据&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;0.01%&lt;/td&gt;
+ &lt;td&gt;稳定币&lt;/td&gt;
+ &lt;td&gt;低波动，高频率&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;0.05%&lt;/td&gt;
+ &lt;td&gt;主流币&lt;/td&gt;
+ &lt;td&gt;中等波动&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;0.30%&lt;/td&gt;
+ &lt;td&gt;长尾资产&lt;/td&gt;
+ &lt;td&gt;高波动，低频率&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;1.00%&lt;/td&gt;
+ &lt;td&gt;Meme 币&lt;/td&gt;
+ &lt;td&gt;极高波动&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="资本效率优化"&gt;资本效率优化&lt;/h2&gt;
+&lt;h3 id="效率定义"&gt;效率定义&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;资本效率 = 相同交易量所需资金 / 实际所需资金
+
+V2 效率 = 1x
+V3 效率 = P_b / (P_b - P_a)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="最优区间选择"&gt;最优区间选择&lt;/h3&gt;
+&lt;h4 id="基于波动率"&gt;基于波动率&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;最优区间宽度 = 2 × 日波动率 × √T
+
+示例：
+ETH 日波动率 = 5%
+预期持有期 T = 7 天
+最优宽度 = 2 × 5% × √7 = 26.5%
+
+区间：[P×0.87, P×1.13]
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="基于历史数据"&gt;基于历史数据&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;步骤：
+1. 统计过去 30 天价格范围
+2. 计算 95% 置信区间
+3. 设置略宽于该区间的 LP 区间
+4. 平衡被甩风险与效率
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="动态再平衡策略"&gt;动态再平衡策略&lt;/h3&gt;
+&lt;h4 id="再平衡触发条件"&gt;再平衡触发条件&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;条件 1：价格接近区间边界
+if P &amp;lt; P_a × 1.1 or P &amp;gt; P_b × 0.9:
+ rebalance()
+
+条件 2：效率下降过多
+if 当前效率 &amp;lt; 初始效率 × 0.5:
+ rebalance()
+
+条件 3：固定时间间隔
+if days_since_last_rebalance &amp;gt; 7:
+ rebalance()
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="再平衡成本"&gt;再平衡成本&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;成本 = Gas 费 + 滑点损失 + 手续费
+
+收益 = 效率提升带来的额外收益
+
+决策：
+if 收益 &amp;gt; 成本：
+ 执行再平衡
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="高级-amm-设计"&gt;高级 AMM 设计&lt;/h2&gt;
+&lt;h3 id="曲线参数优化"&gt;曲线参数优化&lt;/h3&gt;
+&lt;h4 id="动态-a-值curve"&gt;动态 A 值（Curve）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;A = f(池子不平衡度)
+
+池子平衡时：A 值高（低滑点）
+池子不平衡时：A 值低（保护流动性）
+
+公式：
+A = A_base × (1 + imbalance_factor)
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="动态费用uniswap-v3-改进"&gt;动态费用（Uniswap V3 改进）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;费用率 = f(波动率，交易量)
+
+高波动时：费用率↑（保护 LP）
+低波动时：费用率↓（吸引交易）
+
+实现：
+fee = base_fee × (1 + volatility_multiplier)
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="预言机集成"&gt;预言机集成&lt;/h3&gt;
+&lt;h4 id="twap-预言机"&gt;TWAP 预言机&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;时间加权平均价格（TWAP）
+
+计算：
+TWAP = Σ(price_i × time_i) / Σtime_i
+
+用途：
+- 防止价格操纵
+- 衍生品结算
+- 跨链价格参考
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="预言机操纵攻击"&gt;预言机操纵攻击&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;攻击方式：
+1. 闪电贷大额交易
+2. 瞬间改变池子价格
+3. 利用被操纵价格借贷/清算
+
+防御：
+- 使用 TWAP（多区块平均）
+- 增加操纵成本
+- 多预言机聚合
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="数学工具与代码"&gt;数学工具与代码&lt;/h2&gt;
+&lt;h3 id="python-实现-il-计算器"&gt;Python 实现 IL 计算器&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; math
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;impermanent_loss&lt;/span&gt;(price_ratio):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&amp;#34;计算无常损失&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; math&lt;span style="color:#f92672"&gt;.&lt;/span&gt;sqrt(price_ratio) &lt;span style="color:#f92672"&gt;/&lt;/span&gt; (&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; price_ratio) &lt;span style="color:#f92672"&gt;-&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;v3_capital_efficiency&lt;/span&gt;(price_lower, price_upper, price_current):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&amp;#34;计算 V3 资本效率&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; price_lower &lt;span style="color:#f92672"&gt;&amp;gt;=&lt;/span&gt; price_upper:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; price_upper &lt;span style="color:#f92672"&gt;/&lt;/span&gt; (price_upper &lt;span style="color:#f92672"&gt;-&lt;/span&gt; price_lower)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;optimal_fee_rate&lt;/span&gt;(volume_elasticity, base_volume):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&amp;#34;计算最优费用率&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# volume = base_volume * (1 - elasticity * fee_rate)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# revenue = fee_rate * volume&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# 求导得最优解&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#f92672"&gt;/&lt;/span&gt; (&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; volume_elasticity)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="总结"&gt;总结&lt;/h2&gt;
+&lt;p&gt;AMM 数学核心：&lt;/p&gt;</description></item></channel></rss>
