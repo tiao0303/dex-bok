@@ -394,39 +394,20 @@ body.geek-dark {
 
 /* ---------- 学习路径阶段卡片 ---------- */
 .geek-stages-scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-  margin: 0 calc(var(--space-lg) * -1);
-  padding: 0 var(--space-lg);
-}
-
-.geek-stages-scroll::-webkit-scrollbar {
-  height: 6px;
-}
-
-.geek-stages-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.geek-stages-scroll::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
+  overflow-x: visible;
 }
 
 .geek-stages-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg);
-  min-width: max-content;
 }
 
 .geek-stage-card {
-  flex: 0 0 200px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: var(--space-md);
+  padding: var(--space-lg);
   position: relative;
   overflow: hidden;
   transition: all 0.3s var(--ease-out);
@@ -465,38 +446,38 @@ body.geek-dark {
 .stage-badge {
   background: linear-gradient(135deg, var(--primary-muted), rgba(16, 185, 129, 0.15));
   color: var(--primary);
-  padding: 2px 6px;
+  padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 700;
   border: 1px solid rgba(88, 166, 255, 0.3);
 }
 
 .geek-stage-card h3 {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .stage-desc {
   color: var(--text-secondary);
-  font-size: 0.7rem;
-  margin-bottom: var(--space-xs);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-sm);
 }
 
 .stage-list {
-  margin: 0 0 var(--space-xs);
-  padding-left: 0.8rem;
+  margin: 0 0 var(--space-md);
+  padding-left: 1.2rem;
   color: var(--text-muted);
-  font-size: 0.7rem;
-  line-height: 1.5;
+  font-size: 0.85rem;
+  line-height: 1.7;
 }
 
 .stage-link {
   color: var(--primary);
   font-weight: 500;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   text-decoration: none;
 }
 
