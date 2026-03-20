@@ -12,24 +12,23 @@
         <div class="geek-footer-col">
           <h4>导航</h4>
           <ul>
-            <li><a href="/">首页</a></li>
-            <li><a href="/posts/">文章</a></li>
-            <li><a href="/guides/">教程</a></li>
-            <li><a href="/tools/">工具</a></li>
+            <li><a href="{{ "/" | relLangURL }}">首页</a></li>
+            <li><a href="{{ "posts/" | relLangURL }}">文章</a></li>
+            <li><a href="{{ "guides/" | relLangURL }}">教程</a></li>
+            <li><a href="{{ "tools/" | relLangURL }}">工具</a></li>
           </ul>
         </div>
         <div class="geek-footer-col">
           <h4>关于</h4>
           <ul>
-            <li><a href="/about/">关于本站</a></li>
-            <li><a href="/editor/">写文章</a></li>
+            <li><a href="{{ "about/" | relLangURL }}">关于本站</a></li>
           </ul>
         </div>
         <div class="geek-footer-col">
           <h4>关注</h4>
           <ul>
             <li><a href="{{ .Site.Params.github }}" target="_blank" rel="noopener">GitHub</a></li>
-            <li><a href="{{ .Site.Params.twitter }}" target="_blank" rel="noopener">Twitter</a></li>
+            <li><a href="{{ .Site.Params.twitter }}" target="_blank" rel="noopener">X (Twitter)</a></li>
           </ul>
         </div>
       </div>
