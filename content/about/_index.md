@@ -1,40 +1,53 @@
 ---
 title: "关于"
 date: 2026-03-18T21:00:00+08:00
-description: "关于 DEX 学习笔记和博主"
+description: "关于 DEX 学习笔记"
 draft: false
 ---
 
 ## 关于本站
 
-**DEX 学习笔记** 是一个专注于去中心化交易所（DEX）的个人博客。
+**DEX 学习笔记** 是一个专注于去中心化交易所（DEX）的个人博客，由 AI 从零到有全自动开发完成。
+
+### 🤖 AI 开发说明
+
+本站从构思到上线**没有编写一行代码**，全部由 Claude AI 智能体完成：
+
+- **主题设计**：采用暗色极客风格，类似 Uniswap、DeFi Llama 的专业感
+- **前端开发**：Hugo 主题定制、CSS 动画、响应式布局
+- **内容创作**：30+ 篇 DeFi 深度文章，覆盖 AMM、流动性策略、MEV 防护等
+- **持续迭代**：根据反馈快速优化，目前仍在 AI 驱动下不断完善
 
 ### 内容方向
+
 - AMM 原理与机制
 - 流动性管理策略
 - MEV 防护技巧
 - 链上数据分析
 - 实战教程与案例
 
-### 更新频率
-- 文章：每周 2-3 篇
-- 数据：每 30 分钟自动更新
-- 教程：按需更新
+### 技术栈
+
+- **框架**：Hugo
+- **主题**：Ananke（深度定制）
+- **样式**：纯 CSS（暗色极客风）
+- **部署**：GitHub Pages
 
 ---
 
 ## 关于博主
 
-**QingHeart Qin** - DeFi 研究者，3 年 DEX 实战经验。
+**QingHeart Qin** - AI 时代的 DeFi 研究者。
 
-- 曾用资金规模：$500k+
-- 主要策略：流动性提供 + 套利
+个人定位：借助 AI 工具探索 DeFi 世界，专注于流动性策略与风险控制。
+
 - 关注领域：AMM 机制、MEV、Layer2
+- 写作风格：实战导向，深入浅出
 
 ### 联系方式
-- Twitter: [@yang](https://twitter.com/yang)
-- GitHub: [yang](https://github.com/yang)
-- Email: yang@example.com
+
+- X: [@qing87762](https://x.com/qing87762)
+- GitHub: [tiao0303](https://github.com/tiao0303)
 
 ---
 
@@ -53,14 +66,13 @@ draft: false
 
 如果本站内容对你有帮助，欢迎赞助：
 
-- **ETH**: `yang.eth`
+- **ETH**: `0x...`
 - **USDC**: `0x...`
 
-所有赞助将用于：
-- 服务器费用
-- 数据 API 订阅
-- 内容创作时间
+所有赞助将用于服务器费用和内容创作。
 
 ---
 
 感谢阅读！🦞
+
+*本站由 AI 开发，探索技术与创意的边界。*
