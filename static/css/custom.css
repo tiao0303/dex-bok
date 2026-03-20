@@ -89,14 +89,15 @@ body.geek-dark {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(13, 17, 23, 0.85);
+  background: rgba(13, 17, 23, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-muted);
+  min-height: 48px;
 }
 
 .geek-nav {
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-sm) var(--space-lg);
 }
 
 .geek-nav-inner {
@@ -421,11 +422,11 @@ body.geek-dark {
 }
 
 .geek-stage-card {
-  flex: 0 0 280px;
+  flex: 0 0 200px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: var(--space-lg);
+  padding: var(--space-md);
   position: relative;
   overflow: hidden;
   transition: all 0.3s var(--ease-out);
@@ -464,38 +465,38 @@ body.geek-dark {
 .stage-badge {
   background: linear-gradient(135deg, var(--primary-muted), rgba(16, 185, 129, 0.15));
   color: var(--primary);
-  padding: var(--space-xs) var(--space-sm);
+  padding: 2px 6px;
   border-radius: var(--radius-sm);
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 700;
   border: 1px solid rgba(88, 166, 255, 0.3);
 }
 
 .geek-stage-card h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .stage-desc {
   color: var(--text-secondary);
-  font-size: 0.85rem;
-  margin-bottom: var(--space-md);
+  font-size: 0.7rem;
+  margin-bottom: var(--space-xs);
 }
 
 .stage-list {
-  margin: 0 0 var(--space-md);
-  padding-left: 1.2rem;
+  margin: 0 0 var(--space-xs);
+  padding-left: 0.8rem;
   color: var(--text-muted);
-  font-size: 0.85rem;
-  line-height: 1.8;
+  font-size: 0.7rem;
+  line-height: 1.5;
 }
 
 .stage-link {
   color: var(--primary);
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   text-decoration: none;
 }
 
@@ -835,29 +836,19 @@ body.geek-dark {
 
 /* ---------- 文章页模板 ---------- */
 .geek-article-layout {
-  display: grid;
-  grid-template-columns: 1fr 220px;
-  gap: var(--space-2xl);
-  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
   margin: 0 auto;
-  padding: var(--space-2xl) var(--space-lg);
+  padding: var(--space-xl) var(--space-lg);
 }
 
 .geek-article-main {
-  min-width: 0;
-  max-width: 800px;
+  width: 100%;
 }
 
 .geek-article-toc {
-  position: sticky;
-  top: 80px;
-  height: fit-content;
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
-  padding: var(--space-md);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  display: none;
 }
 
 .geek-article-toc h4 {
@@ -1152,19 +1143,6 @@ body.geek-dark {
 
 /* ---------- 响应式 ---------- */
 @media (max-width: 1024px) {
-  .geek-article-layout {
-    grid-template-columns: 1fr;
-    max-width: 800px;
-  }
-
-  .geek-article-toc {
-    display: none;
-  }
-
-  .geek-article-main {
-    max-width: 100%;
-  }
-
   .geek-footer-inner {
     grid-template-columns: 1fr 1fr;
   }
