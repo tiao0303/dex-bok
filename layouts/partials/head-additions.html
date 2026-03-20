@@ -1,16 +1,2 @@
-{{/* DEX Editor - 资源引入 */}}
-
-{{/* Monaco Editor CDN */}}
-<link rel="stylesheet" data-name="vs/editor/editor.main" 
-      href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.min.css">
-<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
-
-{{/* Marked.js for Markdown parsing */}}
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-{{/* DOMPurify for XSS protection */}}
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
-
-{{/* 自定义样式和脚本 */}}
-<link rel="stylesheet" href="{{ "css/editor.css" | relURL }}">
-<script src="{{ "js/dex-editor.js" | relURL }}"></script>
+{{/* 确保自定义样式最后加载，覆盖主题 */}}
+<link rel="stylesheet" href="{{ "css/custom.css" | relURL }}">

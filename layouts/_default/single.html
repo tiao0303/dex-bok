@@ -1,6 +1,6 @@
 {{ define "main" }}
 <div class="geek-article-layout">
-  <!-- 左侧文章目录 -->
+  <!-- 左侧文章目录 (仅在大屏幕显示) -->
   <aside class="geek-article-toc">
     <h4>目录</h4>
     {{ if .TableOfContents }}
@@ -9,7 +9,7 @@
   </aside>
 
   <!-- 主内容区 -->
-  <article class="geek-article-content">
+  <article class="geek-article-content geek-article-main">
     <header class="geek-article-header">
       <h1>{{ .Title }}</h1>
       <div class="article-meta">

@@ -836,11 +836,16 @@ body.geek-dark {
 /* ---------- 文章页模板 ---------- */
 .geek-article-layout {
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-columns: 1fr 220px;
   gap: var(--space-2xl);
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: var(--space-2xl) var(--space-lg);
+}
+
+.geek-article-main {
+  min-width: 0;
+  max-width: 800px;
 }
 
 .geek-article-toc {
@@ -849,7 +854,7 @@ body.geek-dark {
   height: fit-content;
   max-height: calc(100vh - 100px);
   overflow-y: auto;
-  padding: var(--space-lg);
+  padding: var(--space-md);
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -1149,11 +1154,15 @@ body.geek-dark {
 @media (max-width: 1024px) {
   .geek-article-layout {
     grid-template-columns: 1fr;
+    max-width: 800px;
   }
 
   .geek-article-toc {
-    position: static;
-    max-height: none;
+    display: none;
+  }
+
+  .geek-article-main {
+    max-width: 100%;
   }
 
   .geek-footer-inner {

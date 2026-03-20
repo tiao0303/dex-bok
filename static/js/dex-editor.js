@@ -109,11 +109,14 @@ function sanitizeHtml(html) {
   if (typeof DOMPurify !== 'undefined') {
     return DOMPurify.sanitize(html, {
       USE_PROFILES: { html: true },
-      ADD_ATTR: ['target'] // 允许 target 属性
+      ADD_ATTR: ['target'], // 允许 target 属性
+      // 安全：禁止在预览中注入资源加载类标签，避免触发多余请求/潜在风险
+      FORBID_TAGS: ['link', 'script', 'style', 'iframe', 'object', 'embed'],
+      FORBID_ATTR: ['srcset', 'integrity', 'nonce']
     });
   }
-  
-  // 否则使用 marked 的安全配置作为后备
+
+  // 否则原样返回（无 DOMPurify 时不做额外处理）
   return html;
 }
 
