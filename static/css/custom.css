@@ -920,6 +920,42 @@ body.geek-dark {
   background: rgba(88, 166, 255, 0.25);
 }
 
+/* ---------- 文章上下篇导航 ---------- */
+.article-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-lg);
+  margin-top: var(--space-2xl);
+  border-top: 1px solid var(--border);
+}
+
+.article-nav-prev {
+  align-items: flex-start;
+}
+
+.article-nav-next {
+  align-items: flex-end;
+}
+
+.nav-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.article-nav a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.article-nav a:hover {
+  text-decoration: underline;
+}
+
 /* 文章正文排版 */
 .geek-article-content article {
   color: var(--text-primary);
