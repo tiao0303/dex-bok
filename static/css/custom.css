@@ -392,97 +392,78 @@ body.geek-dark {
   margin: 0;
 }
 
-/* ---------- 学习路径阶段卡片 ---------- */
-.geek-stages-scroll {
-  overflow-x: visible;
-}
-
-.geek-stages-grid {
+/* ---------- 角色卡片 ---------- */
+.geek-roles-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg);
 }
 
-.geek-stage-card {
+.geek-role-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: var(--space-lg);
-  position: relative;
-  overflow: hidden;
+  text-decoration: none;
   transition: all 0.3s var(--ease-out);
   animation: cardFadeInUp 0.5s var(--ease-out) backwards;
 }
 
-.geek-stage-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary), var(--accent-mint));
-  opacity: 0;
-  transition: opacity 0.3s var(--ease-out);
-}
+.geek-role-card:nth-child(1) { animation-delay: 0.05s; }
+.geek-role-card:nth-child(2) { animation-delay: 0.1s; }
+.geek-role-card:nth-child(3) { animation-delay: 0.15s; }
+.geek-role-card:nth-child(4) { animation-delay: 0.2s; }
+.geek-role-card:nth-child(5) { animation-delay: 0.25s; }
+.geek-role-card:nth-child(6) { animation-delay: 0.3s; }
 
-.geek-stage-card:hover {
+.geek-role-card:hover {
   border-color: var(--primary);
   box-shadow: var(--glow-blue);
   transform: translateY(-4px);
 }
 
-.geek-stage-card:hover::before {
-  opacity: 1;
+.role-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
 }
 
-.stage-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-sm);
+.role-info {
+  flex: 1;
+  min-width: 0;
 }
 
-.stage-badge {
-  background: linear-gradient(135deg, var(--primary-muted), rgba(16, 185, 129, 0.15));
-  color: var(--primary);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  font-weight: 700;
-  border: 1px solid rgba(88, 166, 255, 0.3);
-}
-
-.geek-stage-card h3 {
-  margin: 0;
+.role-info h3 {
+  margin: 0 0 var(--space-xs);
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-primary);
 }
 
-.stage-desc {
+.role-info p {
+  margin: 0 0 var(--space-xs);
+  font-size: 0.85rem;
   color: var(--text-secondary);
-  font-size: 0.85rem;
-  margin-bottom: var(--space-sm);
+  line-height: 1.4;
 }
 
-.stage-list {
-  margin: 0 0 var(--space-md);
-  padding-left: 1.2rem;
+.role-count {
+  font-size: 0.75rem;
   color: var(--text-muted);
-  font-size: 0.85rem;
-  line-height: 1.7;
 }
 
-.stage-link {
+.role-arrow {
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.geek-role-card:hover .role-arrow {
+  transform: translateX(4px);
   color: var(--primary);
-  font-weight: 500;
-  font-size: 0.85rem;
-  text-decoration: none;
-}
-
-.stage-link:hover {
-  text-decoration: underline;
 }
 
 /* ---------- 文章卡片 ---------- */
