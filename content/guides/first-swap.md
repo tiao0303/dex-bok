@@ -94,4 +94,4 @@ draft: false
 
 ---
 
-**下一步**：[第一次提供流动性](/guides/first-lp/)
+**下一步**：[第一次提供流动性](/dex-bok/guides/first-lp/)

@@ -274,8 +274,8 @@ DeFi 风险管理的核心：
 ---
 
 **其他风控文章**：
-- [无常损失详解](/posts/08-impermanent-loss/)
-- [MEV 防护指南](/posts/05-mev-protection/)
+- [无常损失详解](/dex-bok/posts/08-impermanent-loss/)
+- [MEV 防护指南](/dex-bok/posts/05-mev-protection/)
 
 **工具汇总**：
 - revoke.cash（撤销授权）

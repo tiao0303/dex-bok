@@ -928,8 +928,8 @@ const TRAINING_REQUIREMENTS: TrainingRequirement[] = [
 
 **系列完结**
 
-**上一篇**：[T3 安全合规系列 (14/15)：数据隐私与保护机制](/posts/t3-security-compliance-14/)
+**上一篇**：[T3 安全合规系列 (14/15)：数据隐私与保护机制](/dex-bok/posts/t3-security-compliance-14/)
 
-**系列回顾**：[T3 安全合规系列 (01/15)：去中心化交易所安全架构总览](/posts/t3-security-compliance-01/)
+**系列回顾**：[T3 安全合规系列 (01/15)：去中心化交易所安全架构总览](/dex-bok/posts/t3-security-compliance-01/)
 
 **系列汇总**：T3 安全合规系列 15 篇文章已全部发布，涵盖 DEX 安全的方方面面，从架构设计到应急响应，形成完整的安全合规体系。

@@ -237,4 +237,4 @@ USDC/USDT/DAI 之间：
 
 ---
 
-**下一步阅读**：[流动性管理策略](/posts/02-liquidity-strategies/)
+**下一步阅读**：[流动性管理策略](/dex-bok/posts/02-liquidity-strategies/)

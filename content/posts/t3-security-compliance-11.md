@@ -249,4 +249,4 @@ function generateMonthlyReport(period: Period): ComplianceReport {
 
 ---
 
-**下一篇**：[T3 安全合规系列 (12/15)：KYC/AML 合规流程实现](/posts/t3-security-compliance-12/)
+**下一篇**：[T3 安全合规系列 (12/15)：KYC/AML 合规流程实现](/dex-bok/posts/t3-security-compliance-12/)

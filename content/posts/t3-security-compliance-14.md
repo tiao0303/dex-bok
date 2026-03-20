@@ -795,6 +795,6 @@ function conductPIA(project: Project): PrivacyImpactAssessment {
 
 ---
 
-**上一篇**：[T3 安全合规系列 (13/15)：智能合约安全审计流程](/posts/t3-security-compliance-13/)
+**上一篇**：[T3 安全合规系列 (13/15)：智能合约安全审计流程](/dex-bok/posts/t3-security-compliance-13/)
 
-**下一篇**：[T3 安全合规系列 (15/15)：应急响应与事件管理](/posts/t3-security-compliance-15/)
+**下一篇**：[T3 安全合规系列 (15/15)：应急响应与事件管理](/dex-bok/posts/t3-security-compliance-15/)

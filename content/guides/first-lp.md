@@ -151,7 +151,7 @@ $100,000,000 × 0.05% × 0.01% = $50/天
 ## 常见问题
 
 ### Q: 无常损失是什么？
-A: 币价波动导致的相对损失，详见 [AMM 原理](/posts/01-amm-principles/)
+A: 币价波动导致的相对损失，详见 [AMM 原理](/dex-bok/posts/01-amm-principles/)
 
 ### Q: 被甩出区间怎么办？
 A: 
@@ -179,9 +179,9 @@ A: 根据所在国家/地区法律，建议咨询税务师
 
 ## 下一步
 
-- [学习流动性管理策略](/posts/02-liquidity-strategies/)
-- [了解 MEV 防护](/posts/05-mev-protection/)
-- [查看 Top 池子排行](/tools/pool-rankings/)
+- [学习流动性管理策略](/dex-bok/posts/02-liquidity-strategies/)
+- [了解 MEV 防护](/dex-bok/posts/05-mev-protection/)
+- [查看 Top 池子排行](/dex-bok/tools/pool-rankings/)
 
 ---
 

@@ -156,4 +156,4 @@ A 越小 → 越接近恒定积 → 流动性越安全
 
 ---
 
-**下一步阅读**：[MEV 防护指南](/posts/05-mev-protection/)
+**下一步阅读**：[MEV 防护指南](/dex-bok/posts/05-mev-protection/)

@@ -127,4 +127,4 @@ V3 允许自定义价格区间，资金效率提升 10-100 倍。
 
 ---
 
-**下一步阅读**：[Uniswap V2 vs V3 深度对比](/posts/03-uniswap-v2-v3/)
+**下一步阅读**：[Uniswap V2 vs V3 深度对比](/dex-bok/posts/03-uniswap-v2-v3/)

@@ -683,6 +683,6 @@ const MONITORING_CONFIG: PostDeploymentMonitoring = {
 
 ---
 
-**上一篇**：[T3 安全合规系列 (12/15)：KYC/AML 合规流程实现](/posts/t3-security-compliance-12/)
+**上一篇**：[T3 安全合规系列 (12/15)：KYC/AML 合规流程实现](/dex-bok/posts/t3-security-compliance-12/)
 
-**下一篇**：[T3 安全合规系列 (14/15)：数据隐私与保护机制](/posts/t3-security-compliance-14/)
+**下一篇**：[T3 安全合规系列 (14/15)：数据隐私与保护机制](/dex-bok/posts/t3-security-compliance-14/)

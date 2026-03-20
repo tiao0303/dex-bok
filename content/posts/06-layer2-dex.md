@@ -191,4 +191,4 @@ draft: false
 
 ---
 
-**下一步阅读**：[DEX 聚合器对比](/posts/07-dex-aggregators/)
+**下一步阅读**：[DEX 聚合器对比](/dex-bok/posts/07-dex-aggregators/)

@@ -134,4 +134,4 @@ draft: false
 
 ---
 
-**下一步阅读**：[Curve StableSwap 解析](/posts/04-curve-stableswap/)
+**下一步阅读**：[Curve StableSwap 解析](/dex-bok/posts/04-curve-stableswap/)

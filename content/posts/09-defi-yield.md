@@ -178,7 +178,7 @@ draft: false
 
 ### 4. 无常损失 ⭐⭐⭐
 
-**详见**：[无常损失详解](/posts/08-impermanent-loss/)
+**详见**：[无常损失详解](/dex-bok/posts/08-impermanent-loss/)
 
 ---
 
@@ -253,4 +253,4 @@ DeFi 收益 farming 核心原则：
 
 ---
 
-**下一步阅读**：[Layer2 DEX 指南](/posts/06-layer2-dex/)
+**下一步阅读**：[Layer2 DEX 指南](/dex-bok/posts/06-layer2-dex/)
