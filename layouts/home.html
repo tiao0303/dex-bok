@@ -223,8 +223,32 @@
       <h2 class="geek-section-title">最新文章</h2>
       <p class="geek-section-desc">近期更新与精选</p>
     </header>
+    
+    {{/* 最新3篇特别展示 */}}
+    {{ $latest3 := first 3 (sort .Site.RegularPages "Date" "desc") }}
+    <div class="geek-posts-grid geek-posts-featured">
+      {{ range $latest3 }}
+      <article class="geek-post-card geek-post-featured">
+        <div class="post-card-inner">
+          <div class="featured-badge">最新</div>
+          <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+          <p class="post-meta">
+            <span>{{ .Date.Format "2006-01-02" }}</span>
+            <span class="meta-sep">•</span>
+            <span>{{ .WordCount }}字</span>
+          </p>
+          <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
+          <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+      {{ end }}
+    </div>
+    
+    {{/* 其他文章 */}}
+    {{ $remaining := after 3 (sort .Site.RegularPages "Date" "desc") }}
+    {{ if $remaining }}
     <div class="geek-posts-grid">
-      {{ range first 6 (sort .Site.RegularPages "Date" "desc") }}
+      {{ range first 3 $remaining }}
       <article class="geek-post-card">
         <div class="post-card-inner">
           <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
@@ -239,6 +263,8 @@
       </article>
       {{ end }}
     </div>
+    {{ end }}
+    
     <div class="geek-view-all">
       <a href="{{ "posts/" | relLangURL }}" class="btn btn-outline">查看全部文章 →</a>
     </div>
