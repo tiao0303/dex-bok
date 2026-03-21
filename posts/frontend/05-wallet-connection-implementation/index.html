@@ -1,0 +1,254 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="连接钱包功能实现：从 MetaMask 到多链钱包
+
+难度：🌱🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟
+
+前言
+&ldquo;连接钱包&#34;是每个 DApp 的入口功能。表面看只是一个按钮，背后却涉及钱包检测、账户获取、网络切换、断开重连等一系列交互逻辑。本文将手把手实现一个健壮的钱包连接模块。
+
+一、核心逻辑概览
+检查钱包是否安装
+  ├─ 未安装 → 提示安装 MetaMask
+  └─ 已安装 → 请求连接
+                ├─ 用户授权 → 获取账户地址 + 渲染 DApp 内容
+                └─ 用户拒绝 → 显示错误提示
+
+二、基础实现：原生 ethers.js
+2.1 检测钱包安装
+const isMetaMaskInstalled = () => {
+  return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask;
+};
+
+if (!isMetaMaskInstalled()) {
+  console.warn('MetaMask 未安装，请前往 https://metamask.io 下载');
+}
+2.2 连接钱包
+import { BrowserProvider } from 'ethers';
+
+async function connectWallet() {
+  try {
+    if (!isMetaMaskInstalled()) {
+      throw new Error('MetaMask wallet is not installed');
+    }
+
+    const provider = new BrowserProvider(window.ethereum);
+    const accounts = await provider.send('eth_requestAccounts', []);
+
+    if (accounts.length === 0) {
+      throw new Error('No authorized accounts found');
+    }
+
+    const address = accounts[0];
+    const network = await provider.getNetwork();
+    const balance = await provider.getBalance(address);
+
+    return {
+      address,
+      network,
+      balance,
+      provider,
+    };
+  } catch (error) {
+    console.error('连接钱包失败:', error.message);
+    throw error;
+  }
+}
+2.3 断开钱包
+MetaMask 本身不提供程序化断开的 API（出于安全考虑），但你可以清除本地状态："><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/frontend/05-wallet-connection-implementation/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/frontend/05-wallet-connection-implementation/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="连接钱包功能实现：从 MetaMask 到多链钱包 难度：🌱🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟
+前言 “连接钱包&#34;是每个 DApp 的入口功能。表面看只是一个按钮，背后却涉及钱包检测、账户获取、网络切换、断开重连等一系列交互逻辑。本文将手把手实现一个健壮的钱包连接模块。
+一、核心逻辑概览 检查钱包是否安装 ├─ 未安装 → 提示安装 MetaMask └─ 已安装 → 请求连接 ├─ 用户授权 → 获取账户地址 + 渲染 DApp 内容 └─ 用户拒绝 → 显示错误提示 二、基础实现：原生 ethers.js 2.1 检测钱包安装 const isMetaMaskInstalled = () => { return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask; }; if (!isMetaMaskInstalled()) { console.warn('MetaMask 未安装，请前往 https://metamask.io 下载'); } 2.2 连接钱包 import { BrowserProvider } from 'ethers'; async function connectWallet() { try { if (!isMetaMaskInstalled()) { throw new Error('MetaMask wallet is not installed'); } const provider = new BrowserProvider(window.ethereum); const accounts = await provider.send('eth_requestAccounts', []); if (accounts.length === 0) { throw new Error('No authorized accounts found'); } const address = accounts[0]; const network = await provider.getNetwork(); const balance = await provider.getBalance(address); return { address, network, balance, provider, }; } catch (error) { console.error('连接钱包失败:', error.message); throw error; } } 2.3 断开钱包 MetaMask 本身不提供程序化断开的 API（出于安全考虑），但你可以清除本地状态："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="连接钱包功能实现：从 MetaMask 到多链钱包 难度：🌱🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟
+前言 “连接钱包&#34;是每个 DApp 的入口功能。表面看只是一个按钮，背后却涉及钱包检测、账户获取、网络切换、断开重连等一系列交互逻辑。本文将手把手实现一个健壮的钱包连接模块。
+一、核心逻辑概览 检查钱包是否安装 ├─ 未安装 → 提示安装 MetaMask └─ 已安装 → 请求连接 ├─ 用户授权 → 获取账户地址 + 渲染 DApp 内容 └─ 用户拒绝 → 显示错误提示 二、基础实现：原生 ethers.js 2.1 检测钱包安装 const isMetaMaskInstalled = () => { return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask; }; if (!isMetaMaskInstalled()) { console.warn('MetaMask 未安装，请前往 https://metamask.io 下载'); } 2.2 连接钱包 import { BrowserProvider } from 'ethers'; async function connectWallet() { try { if (!isMetaMaskInstalled()) { throw new Error('MetaMask wallet is not installed'); } const provider = new BrowserProvider(window.ethereum); const accounts = await provider.send('eth_requestAccounts', []); if (accounts.length === 0) { throw new Error('No authorized accounts found'); } const address = accounts[0]; const network = await provider.getNetwork(); const balance = await provider.getBalance(address); return { address, network, balance, provider, }; } catch (error) { console.error('连接钱包失败:', error.message); throw error; } } 2.3 断开钱包 MetaMask 本身不提供程序化断开的 API（出于安全考虑），但你可以清除本地状态："><meta itemprop=wordCount content="557"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="连接钱包功能实现：从 MetaMask 到多链钱包 难度：🌱🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟
+前言 “连接钱包&#34;是每个 DApp 的入口功能。表面看只是一个按钮，背后却涉及钱包检测、账户获取、网络切换、断开重连等一系列交互逻辑。本文将手把手实现一个健壮的钱包连接模块。
+一、核心逻辑概览 检查钱包是否安装 ├─ 未安装 → 提示安装 MetaMask └─ 已安装 → 请求连接 ├─ 用户授权 → 获取账户地址 + 渲染 DApp 内容 └─ 用户拒绝 → 显示错误提示 二、基础实现：原生 ethers.js 2.1 检测钱包安装 const isMetaMaskInstalled = () => { return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask; }; if (!isMetaMaskInstalled()) { console.warn('MetaMask 未安装，请前往 https://metamask.io 下载'); } 2.2 连接钱包 import { BrowserProvider } from 'ethers'; async function connectWallet() { try { if (!isMetaMaskInstalled()) { throw new Error('MetaMask wallet is not installed'); } const provider = new BrowserProvider(window.ethereum); const accounts = await provider.send('eth_requestAccounts', []); if (accounts.length === 0) { throw new Error('No authorized accounts found'); } const address = accounts[0]; const network = await provider.getNetwork(); const balance = await provider.getBalance(address); return { address, network, balance, provider, }; } catch (error) { console.error('连接钱包失败:', error.message); throw error; } } 2.3 断开钱包 MetaMask 本身不提供程序化断开的 API（出于安全考虑），但你可以清除本地状态："><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-05-wallet-connection-implementation"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#一核心逻辑概览>一、核心逻辑概览</a></li><li><a href=#二基础实现原生-ethersjs>二、基础实现：原生 ethers.js</a><ul><li><a href=#21-检测钱包安装>2.1 检测钱包安装</a></li><li><a href=#22-连接钱包>2.2 连接钱包</a></li><li><a href=#23-断开钱包>2.3 断开钱包</a></li></ul></li><li><a href=#三网络切换与-chain-id-检测>三、网络切换与 Chain ID 检测</a></li><li><a href=#四react-hooks-封装usewallet>四、React Hooks 封装：useWallet</a><ul><li><a href=#使用方式>使用方式</a></li></ul></li><li><a href=#五wagmi更优雅的解决方案>五、wagmi：更优雅的解决方案</a></li><li><a href=#六安全提醒>六、安全提醒</a></li><li><a href=#小结>小结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>557 字</span></div></header><h1 id=连接钱包功能实现从-metamask-到多链钱包>连接钱包功能实现：从 MetaMask 到多链钱包</h1><blockquote><p>难度：🌱🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟</p></blockquote><h2 id=前言>前言</h2><p>&ldquo;连接钱包"是每个 DApp 的入口功能。表面看只是一个按钮，背后却涉及钱包检测、账户获取、网络切换、断开重连等一系列交互逻辑。本文将手把手实现一个健壮的钱包连接模块。</p><hr><h2 id=一核心逻辑概览>一、核心逻辑概览</h2><pre tabindex=0><code>检查钱包是否安装
+  ├─ 未安装 → 提示安装 MetaMask
+  └─ 已安装 → 请求连接
+                ├─ 用户授权 → 获取账户地址 + 渲染 DApp 内容
+                └─ 用户拒绝 → 显示错误提示
+</code></pre><hr><h2 id=二基础实现原生-ethersjs>二、基础实现：原生 ethers.js</h2><h3 id=21-检测钱包安装>2.1 检测钱包安装</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>isMetaMaskInstalled</span> <span style=color:#f92672>=</span> () =&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>typeof</span> window.<span style=color:#a6e22e>ethereum</span> <span style=color:#f92672>!==</span> <span style=color:#e6db74>&#39;undefined&#39;</span> <span style=color:#f92672>&amp;&amp;</span> window.<span style=color:#a6e22e>ethereum</span>.<span style=color:#a6e22e>isMetaMask</span>;
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>isMetaMaskInstalled</span>()) {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>warn</span>(<span style=color:#e6db74>&#39;MetaMask 未安装，请前往 https://metamask.io 下载&#39;</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=22-连接钱包>2.2 连接钱包</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>BrowserProvider</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>connectWallet</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>try</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>isMetaMaskInstalled</span>()) {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>throw</span> <span style=color:#66d9ef>new</span> Error(<span style=color:#e6db74>&#39;MetaMask wallet is not installed&#39;</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>provider</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>BrowserProvider</span>(window.<span style=color:#a6e22e>ethereum</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>accounts</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>send</span>(<span style=color:#e6db74>&#39;eth_requestAccounts&#39;</span>, []);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>accounts</span>.<span style=color:#a6e22e>length</span> <span style=color:#f92672>===</span> <span style=color:#ae81ff>0</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>throw</span> <span style=color:#66d9ef>new</span> Error(<span style=color:#e6db74>&#39;No authorized accounts found&#39;</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>address</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>accounts</span>[<span style=color:#ae81ff>0</span>];
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>network</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getNetwork</span>();
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>balance</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getBalance</span>(<span style=color:#a6e22e>address</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>address</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>network</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>balance</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>provider</span>,
+</span></span><span style=display:flex><span>    };
+</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>catch</span> (<span style=color:#a6e22e>error</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>error</span>(<span style=color:#e6db74>&#39;连接钱包失败:&#39;</span>, <span style=color:#a6e22e>error</span>.<span style=color:#a6e22e>message</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>throw</span> <span style=color:#a6e22e>error</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=23-断开钱包>2.3 断开钱包</h3><p>MetaMask 本身不提供程序化断开的 API（出于安全考虑），但你可以清除本地状态：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>disconnectWallet</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 清除本地存储的账户信息
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>localStorage</span>.<span style=color:#a6e22e>removeItem</span>(<span style=color:#e6db74>&#39;connectedWallet&#39;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 重置 UI 状态
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>setAccount</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>setBalance</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=三网络切换与-chain-id-检测>三、网络切换与 Chain ID 检测</h2><p>DApp 通常需要运行在特定网络中（如 BSC、Polygon）。连接后应主动检测当前网络，不匹配时提示切换：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>SUPPORTED_CHAINS</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>1</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Ethereum Mainnet&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>56</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;BSC Mainnet&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>137</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Polygon Mainnet&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>11155111</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Sepolia Testnet&#39;</span>,
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>checkNetwork</span>(<span style=color:#a6e22e>provider</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>network</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getNetwork</span>();
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>chainId</span> <span style=color:#f92672>=</span> Number(<span style=color:#a6e22e>network</span>.<span style=color:#a6e22e>chainId</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>SUPPORTED_CHAINS</span>[<span style=color:#a6e22e>chainId</span>]) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>switchTo</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>prompt</span>(
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>`当前网络 (ChainID: </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>chainId</span><span style=color:#e6db74>}</span><span style=color:#e6db74>) 不支持，请切换到支持的网络`</span>
+</span></span><span style=display:flex><span>    );
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>switchNetwork</span>(<span style=color:#a6e22e>targetChainId</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>hexChainId</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>`0x</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>targetChainId</span>.<span style=color:#a6e22e>toString</span>(<span style=color:#ae81ff>16</span>)<span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>try</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> window.<span style=color:#a6e22e>ethereum</span>.<span style=color:#a6e22e>request</span>({
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;wallet_switchEthereumChain&#39;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>params</span><span style=color:#f92672>:</span> [{ <span style=color:#a6e22e>chainId</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>hexChainId</span> }],
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>catch</span> (<span style=color:#a6e22e>switchError</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 如果目标网络未添加，尝试添加
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>switchError</span>.<span style=color:#a6e22e>code</span> <span style=color:#f92672>===</span> <span style=color:#ae81ff>4902</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>addNetwork</span>(<span style=color:#a6e22e>targetChainId</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=四react-hooks-封装usewallet>四、React Hooks 封装：useWallet</h2><p>为了在 React 项目中优雅地复用钱包状态，建议封装为自定义 Hook：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>useState</span>, <span style=color:#a6e22e>useEffect</span>, <span style=color:#a6e22e>useCallback</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;react&#39;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>BrowserProvider</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>useWallet</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>account</span>, <span style=color:#a6e22e>setAccount</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>provider</span>, <span style=color:#a6e22e>setProvider</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>isConnecting</span>, <span style=color:#a6e22e>setIsConnecting</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>(<span style=color:#66d9ef>false</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>error</span>, <span style=color:#a6e22e>setError</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 连接钱包
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>connect</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>useCallback</span>(<span style=color:#66d9ef>async</span> () =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span>window.<span style=color:#a6e22e>ethereum</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>setError</span>(<span style=color:#e6db74>&#39;请安装 MetaMask 钱包&#39;</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>setIsConnecting</span>(<span style=color:#66d9ef>true</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>setError</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>try</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>browserProvider</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>BrowserProvider</span>(window.<span style=color:#a6e22e>ethereum</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>accounts</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>browserProvider</span>.<span style=color:#a6e22e>send</span>(<span style=color:#e6db74>&#39;eth_requestAccounts&#39;</span>, []);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>setAccount</span>(<span style=color:#a6e22e>accounts</span>[<span style=color:#ae81ff>0</span>]);
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>setProvider</span>(<span style=color:#a6e22e>browserProvider</span>);
+</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>catch</span> (<span style=color:#a6e22e>err</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>setError</span>(<span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>message</span>);
+</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>finally</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>setIsConnecting</span>(<span style=color:#66d9ef>false</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }, []);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 监听事件
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>useEffect</span>(() =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span>window.<span style=color:#a6e22e>ethereum</span>) <span style=color:#66d9ef>return</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>handleAccountsChanged</span> <span style=color:#f92672>=</span> (<span style=color:#a6e22e>accounts</span>) =&gt; {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>accounts</span>.<span style=color:#a6e22e>length</span> <span style=color:#f92672>===</span> <span style=color:#ae81ff>0</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>disconnect</span>();
+</span></span><span style=display:flex><span>      } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>setAccount</span>(<span style=color:#a6e22e>accounts</span>[<span style=color:#ae81ff>0</span>]);
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    };
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>handleChainChanged</span> <span style=color:#f92672>=</span> () =&gt; {
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// 建议网络变化时刷新页面以重置状态
+</span></span></span><span style=display:flex><span>      window.<span style=color:#a6e22e>location</span>.<span style=color:#a6e22e>reload</span>();
+</span></span><span style=display:flex><span>    };
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    window.<span style=color:#a6e22e>ethereum</span>.<span style=color:#a6e22e>on</span>(<span style=color:#e6db74>&#39;accountsChanged&#39;</span>, <span style=color:#a6e22e>handleAccountsChanged</span>);
+</span></span><span style=display:flex><span>    window.<span style=color:#a6e22e>ethereum</span>.<span style=color:#a6e22e>on</span>(<span style=color:#e6db74>&#39;chainChanged&#39;</span>, <span style=color:#a6e22e>handleChainChanged</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> () =&gt; {
+</span></span><span style=display:flex><span>      window.<span style=color:#a6e22e>ethereum</span>.<span style=color:#a6e22e>removeListener</span>(<span style=color:#e6db74>&#39;accountsChanged&#39;</span>, <span style=color:#a6e22e>handleAccountsChanged</span>);
+</span></span><span style=display:flex><span>      window.<span style=color:#a6e22e>ethereum</span>.<span style=color:#a6e22e>removeListener</span>(<span style=color:#e6db74>&#39;chainChanged&#39;</span>, <span style=color:#a6e22e>handleChainChanged</span>);
+</span></span><span style=display:flex><span>    };
+</span></span><span style=display:flex><span>  }, []);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>disconnect</span> <span style=color:#f92672>=</span> () =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>setAccount</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>setProvider</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> { <span style=color:#a6e22e>account</span>, <span style=color:#a6e22e>provider</span>, <span style=color:#a6e22e>connect</span>, <span style=color:#a6e22e>disconnect</span>, <span style=color:#a6e22e>isConnecting</span>, <span style=color:#a6e22e>error</span> };
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=使用方式>使用方式</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>App</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>account</span>, <span style=color:#a6e22e>connect</span>, <span style=color:#a6e22e>disconnect</span>, <span style=color:#a6e22e>isConnecting</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>useWallet</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>      {<span style=color:#a6e22e>account</span> <span style=color:#f92672>?</span> (
+</span></span><span style=display:flex><span>        &lt;&gt;
+</span></span><span style=display:flex><span>          &lt;<span style=color:#f92672>p</span>&gt;<span style=color:#a6e22e>已连接</span><span style=color:#f92672>:</span> {<span style=color:#a6e22e>account</span>}&lt;/<span style=color:#f92672>p</span>&gt;
+</span></span><span style=display:flex><span>          &lt;<span style=color:#f92672>button</span> <span style=color:#a6e22e>onClick</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>disconnect</span>}&gt;<span style=color:#a6e22e>断开</span>&lt;/<span style=color:#f92672>button</span>&gt;
+</span></span><span style=display:flex><span>        &lt;/&gt;
+</span></span><span style=display:flex><span>      ) <span style=color:#f92672>:</span> (
+</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>button</span> <span style=color:#a6e22e>onClick</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>connect</span>} <span style=color:#a6e22e>disabled</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>isConnecting</span>}&gt;
+</span></span><span style=display:flex><span>          {<span style=color:#a6e22e>isConnecting</span> <span style=color:#f92672>?</span> <span style=color:#e6db74>&#39;连接中...&#39;</span> <span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;连接 MetaMask&#39;</span>}
+</span></span><span style=display:flex><span>        &lt;/<span style=color:#f92672>button</span>&gt;
+</span></span><span style=display:flex><span>      )}
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=五wagmi更优雅的解决方案>五、wagmi：更优雅的解决方案</h2><p>如果你的项目使用 React + ethers.js，强烈推荐 <strong>wagmi</strong> —— 一个为 React 设计的 Web3 Hooks 库，它帮你处理了大量边界情况：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm install wagmi viem @tanstack/react-query
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>useAccount</span>, <span style=color:#a6e22e>useConnect</span>, <span style=color:#a6e22e>useDisconnect</span>, <span style=color:#a6e22e>useChainId</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;wagmi&#39;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>injected</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;wagmi/connectors&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>WalletButton</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>address</span>, <span style=color:#a6e22e>isConnected</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>useAccount</span>();
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>connect</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>useConnect</span>();
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>disconnect</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>useDisconnect</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>isConnected</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>      &lt;<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>p</span>&gt;<span style=color:#a6e22e>地址</span><span style=color:#f92672>:</span> {<span style=color:#a6e22e>address</span>}&lt;/<span style=color:#f92672>p</span>&gt;
+</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>button</span> <span style=color:#a6e22e>onClick</span><span style=color:#f92672>=</span>{() =&gt; <span style=color:#a6e22e>disconnect</span>()}&gt;<span style=color:#a6e22e>断开</span>&lt;/<span style=color:#f92672>button</span>&gt;
+</span></span><span style=display:flex><span>      &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>    );
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> &lt;<span style=color:#f92672>button</span> <span style=color:#a6e22e>onClick</span><span style=color:#f92672>=</span>{() =&gt; <span style=color:#a6e22e>connect</span>({ <span style=color:#a6e22e>connector</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>injected</span>() })}&gt;<span style=color:#a6e22e>连接钱包</span>&lt;/<span style=color:#f92672>button</span>&gt;;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>wagmi 还内置了多钱包支持（MetaMask、WalletConnect、Coinbase Wallet）、链切换、消息签名等完整能力，是生产级 DApp 的推荐选择。</p><hr><h2 id=六安全提醒>六、安全提醒</h2><ol><li><strong>不要在每次渲染时都调用 <code>eth_requestAccounts</code></strong>——这会每次都弹出授权窗口，应在用户点击按钮后才触发</li><li><strong>敏感操作前再次确认账户</strong>：多标签页场景下，用户可能切换账户</li><li><strong>不要将私钥或助记词存放在前端代码或 localStorage 中</strong></li></ol><hr><h2 id=小结>小结</h2><p>钱包连接是 Web3 前端的入口功能，涉及钱包检测、账户授权、网络切换、事件监听等多个环节。建议从原生 ethers.js 实现入手理解原理，后续使用 wagmi 提升开发效率。下篇文章我们将讨论 DApp 的前端架构设计。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/06-dapp-frontend-architecture/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/04-web3-ethers-getting-started/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

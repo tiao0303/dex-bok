@@ -1,0 +1,237 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="前端性能优化：让 DApp 跑得更快更轻
+
+难度：🌿🌿🌿 高级 | 字数：约 1100 字 | 预计阅读：7 分钟
+
+前言
+区块链交互天然存在网络延迟（区块确认时间、RPC 响应），如果前端再慢，用户体验将非常糟糕。性能优化不仅是用户体验问题，更直接影响 DeFi 协议的交易执行成功率（滑点、时效性）。本篇文章从加载性能、渲染性能、链上交互优化三个维度全面展开。
+
+一、加载性能：首屏秒开
+1.1 代码分割与懒加载
+DApp 通常不需要一次性加载所有路由和组件。使用 React 的 lazy 和 Suspense 实现按需加载：
+import { lazy, Suspense } from 'react';
+
+const SwapPage = lazy(() => import('./pages/SwapPage'));
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage'));
+
+function App() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <Routes>
+        <Route path=&#34;/swap&#34; element={<SwapPage />} />
+        <Route path=&#34;/portfolio&#34; element={<PortfolioPage />} />
+      </Routes>
+    </Suspense>
+  );
+}
+1.2 依赖体积优化
+Web3 库体积普遍较大，需要精打细算：
+# 使用 bundlephobia 检查每个包的体积
+npx bundlephobia-cli ethers
+
+# 替换重型库
+# ❌ 使用 web3.js (~500KB)
+# ✅ 使用 ethers.js v6 (~80KB) 或 viem (~30KB)
+// 按需导入，而非全量导入
+// ❌
+import { ethers } from 'ethers';
+
+// ✅ 只导入需要的部分
+import { Contract, BrowserProvider } from 'ethers';
+1.3 Tree Shaking 与构建配置
+确保 Vite/Webpack 配置支持 Tree Shaking："><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/frontend/09-frontend-performance-optimization/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/frontend/09-frontend-performance-optimization/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="前端性能优化：让 DApp 跑得更快更轻 难度：🌿🌿🌿 高级 | 字数：约 1100 字 | 预计阅读：7 分钟
+前言 区块链交互天然存在网络延迟（区块确认时间、RPC 响应），如果前端再慢，用户体验将非常糟糕。性能优化不仅是用户体验问题，更直接影响 DeFi 协议的交易执行成功率（滑点、时效性）。本篇文章从加载性能、渲染性能、链上交互优化三个维度全面展开。
+一、加载性能：首屏秒开 1.1 代码分割与懒加载 DApp 通常不需要一次性加载所有路由和组件。使用 React 的 lazy 和 Suspense 实现按需加载：
+import { lazy, Suspense } from 'react'; const SwapPage = lazy(() => import('./pages/SwapPage')); const PortfolioPage = lazy(() => import('./pages/PortfolioPage')); function App() { return ( <Suspense fallback={<LoadingSpinner />}> <Routes> <Route path=&#34;/swap&#34; element={<SwapPage />} /> <Route path=&#34;/portfolio&#34; element={<PortfolioPage />} /> </Routes> </Suspense> ); } 1.2 依赖体积优化 Web3 库体积普遍较大，需要精打细算：
+# 使用 bundlephobia 检查每个包的体积 npx bundlephobia-cli ethers # 替换重型库 # ❌ 使用 web3.js (~500KB) # ✅ 使用 ethers.js v6 (~80KB) 或 viem (~30KB) // 按需导入，而非全量导入 // ❌ import { ethers } from 'ethers'; // ✅ 只导入需要的部分 import { Contract, BrowserProvider } from 'ethers'; 1.3 Tree Shaking 与构建配置 确保 Vite/Webpack 配置支持 Tree Shaking："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="前端性能优化：让 DApp 跑得更快更轻 难度：🌿🌿🌿 高级 | 字数：约 1100 字 | 预计阅读：7 分钟
+前言 区块链交互天然存在网络延迟（区块确认时间、RPC 响应），如果前端再慢，用户体验将非常糟糕。性能优化不仅是用户体验问题，更直接影响 DeFi 协议的交易执行成功率（滑点、时效性）。本篇文章从加载性能、渲染性能、链上交互优化三个维度全面展开。
+一、加载性能：首屏秒开 1.1 代码分割与懒加载 DApp 通常不需要一次性加载所有路由和组件。使用 React 的 lazy 和 Suspense 实现按需加载：
+import { lazy, Suspense } from 'react'; const SwapPage = lazy(() => import('./pages/SwapPage')); const PortfolioPage = lazy(() => import('./pages/PortfolioPage')); function App() { return ( <Suspense fallback={<LoadingSpinner />}> <Routes> <Route path=&#34;/swap&#34; element={<SwapPage />} /> <Route path=&#34;/portfolio&#34; element={<PortfolioPage />} /> </Routes> </Suspense> ); } 1.2 依赖体积优化 Web3 库体积普遍较大，需要精打细算：
+# 使用 bundlephobia 检查每个包的体积 npx bundlephobia-cli ethers # 替换重型库 # ❌ 使用 web3.js (~500KB) # ✅ 使用 ethers.js v6 (~80KB) 或 viem (~30KB) // 按需导入，而非全量导入 // ❌ import { ethers } from 'ethers'; // ✅ 只导入需要的部分 import { Contract, BrowserProvider } from 'ethers'; 1.3 Tree Shaking 与构建配置 确保 Vite/Webpack 配置支持 Tree Shaking："><meta itemprop=wordCount content="575"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="前端性能优化：让 DApp 跑得更快更轻 难度：🌿🌿🌿 高级 | 字数：约 1100 字 | 预计阅读：7 分钟
+前言 区块链交互天然存在网络延迟（区块确认时间、RPC 响应），如果前端再慢，用户体验将非常糟糕。性能优化不仅是用户体验问题，更直接影响 DeFi 协议的交易执行成功率（滑点、时效性）。本篇文章从加载性能、渲染性能、链上交互优化三个维度全面展开。
+一、加载性能：首屏秒开 1.1 代码分割与懒加载 DApp 通常不需要一次性加载所有路由和组件。使用 React 的 lazy 和 Suspense 实现按需加载：
+import { lazy, Suspense } from 'react'; const SwapPage = lazy(() => import('./pages/SwapPage')); const PortfolioPage = lazy(() => import('./pages/PortfolioPage')); function App() { return ( <Suspense fallback={<LoadingSpinner />}> <Routes> <Route path=&#34;/swap&#34; element={<SwapPage />} /> <Route path=&#34;/portfolio&#34; element={<PortfolioPage />} /> </Routes> </Suspense> ); } 1.2 依赖体积优化 Web3 库体积普遍较大，需要精打细算：
+# 使用 bundlephobia 检查每个包的体积 npx bundlephobia-cli ethers # 替换重型库 # ❌ 使用 web3.js (~500KB) # ✅ 使用 ethers.js v6 (~80KB) 或 viem (~30KB) // 按需导入，而非全量导入 // ❌ import { ethers } from 'ethers'; // ✅ 只导入需要的部分 import { Contract, BrowserProvider } from 'ethers'; 1.3 Tree Shaking 与构建配置 确保 Vite/Webpack 配置支持 Tree Shaking："><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-09-frontend-performance-optimization"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#一加载性能首屏秒开>一、加载性能：首屏秒开</a><ul><li><a href=#11-代码分割与懒加载>1.1 代码分割与懒加载</a></li><li><a href=#12-依赖体积优化>1.2 依赖体积优化</a></li><li><a href=#13-tree-shaking-与构建配置>1.3 Tree Shaking 与构建配置</a></li></ul></li><li><a href=#二渲染性能减少不必要的重绘>二、渲染性能：减少不必要的重绘</a><ul><li><a href=#21-reactmemo-与-usememo>2.1 React.memo 与 useMemo</a></li><li><a href=#22-虚拟列表海量交易记录>2.2 虚拟列表：海量交易记录</a></li></ul></li><li><a href=#三链上交互优化减少等待感>三、链上交互优化：减少等待感</a><ul><li><a href=#31-乐观更新optimistic-ui>3.1 乐观更新（Optimistic UI）</a></li><li><a href=#32-交易状态追踪>3.2 交易状态追踪</a></li></ul></li><li><a href=#四网络请求优化>四、网络请求优化</a><ul><li><a href=#41-批量请求>4.1 批量请求</a></li><li><a href=#42-缓存策略>4.2 缓存策略</a></li></ul></li><li><a href=#五性能监控>五、性能监控</a></li><li><a href=#小结>小结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>575 字</span></div></header><h1 id=前端性能优化让-dapp-跑得更快更轻>前端性能优化：让 DApp 跑得更快更轻</h1><blockquote><p>难度：🌿🌿🌿 高级 | 字数：约 1100 字 | 预计阅读：7 分钟</p></blockquote><h2 id=前言>前言</h2><p>区块链交互天然存在网络延迟（区块确认时间、RPC 响应），如果前端再慢，用户体验将非常糟糕。性能优化不仅是用户体验问题，更直接影响 DeFi 协议的交易执行成功率（滑点、时效性）。本篇文章从加载性能、渲染性能、链上交互优化三个维度全面展开。</p><hr><h2 id=一加载性能首屏秒开>一、加载性能：首屏秒开</h2><h3 id=11-代码分割与懒加载>1.1 代码分割与懒加载</h3><p>DApp 通常不需要一次性加载所有路由和组件。使用 React 的 <code>lazy</code> 和 <code>Suspense</code> 实现按需加载：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>lazy</span>, <span style=color:#a6e22e>Suspense</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;react&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>SwapPage</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>lazy</span>(() =&gt; <span style=color:#66d9ef>import</span>(<span style=color:#e6db74>&#39;./pages/SwapPage&#39;</span>));
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>PortfolioPage</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>lazy</span>(() =&gt; <span style=color:#66d9ef>import</span>(<span style=color:#e6db74>&#39;./pages/PortfolioPage&#39;</span>));
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>App</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>Suspense</span> <span style=color:#a6e22e>fallback</span><span style=color:#f92672>=</span>{&lt;<span style=color:#f92672>LoadingSpinner</span> /&gt;}&gt;
+</span></span><span style=display:flex><span>      &lt;<span style=color:#f92672>Routes</span>&gt;
+</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>Route</span> <span style=color:#a6e22e>path</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/swap&#34;</span> <span style=color:#a6e22e>element</span><span style=color:#f92672>=</span>{&lt;<span style=color:#f92672>SwapPage</span> /&gt;} /&gt;
+</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>Route</span> <span style=color:#a6e22e>path</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/portfolio&#34;</span> <span style=color:#a6e22e>element</span><span style=color:#f92672>=</span>{&lt;<span style=color:#f92672>PortfolioPage</span> /&gt;} /&gt;
+</span></span><span style=display:flex><span>      &lt;/<span style=color:#f92672>Routes</span>&gt;
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>Suspense</span>&gt;
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=12-依赖体积优化>1.2 依赖体积优化</h3><p>Web3 库体积普遍较大，需要精打细算：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 使用 bundlephobia 检查每个包的体积</span>
+</span></span><span style=display:flex><span>npx bundlephobia-cli ethers
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 替换重型库</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># ❌ 使用 web3.js (~500KB)</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># ✅ 使用 ethers.js v6 (~80KB) 或 viem (~30KB)</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// 按需导入，而非全量导入
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// ❌
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>ethers</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// ✅ 只导入需要的部分
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>Contract</span>, <span style=color:#a6e22e>BrowserProvider</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span></code></pre></div><h3 id=13-tree-shaking-与构建配置>1.3 Tree Shaking 与构建配置</h3><p>确保 Vite/Webpack 配置支持 Tree Shaking：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// vite.config.js
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>default</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>build</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rollupOptions</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>manualChunks</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>&#39;ethers&#39;</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;ethers&#39;</span>],
+</span></span><span style=display:flex><span>          <span style=color:#e6db74>&#39;react-vendor&#39;</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;react&#39;</span>, <span style=color:#e6db74>&#39;react-dom&#39;</span>],
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><hr><h2 id=二渲染性能减少不必要的重绘>二、渲染性能：减少不必要的重绘</h2><h3 id=21-reactmemo-与-usememo>2.1 React.memo 与 useMemo</h3><p>链上数据变化频繁，如果每次变化都触发全组件重渲染，性能会急剧下降：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>memo</span>, <span style=color:#a6e22e>useMemo</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;react&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// memo 防止父组件更新导致子组件不必要的重渲染
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>TokenBalanceCard</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>memo</span>(<span style=color:#66d9ef>function</span> <span style=color:#a6e22e>TokenBalanceCard</span>({ <span style=color:#a6e22e>balance</span>, <span style=color:#a6e22e>symbol</span> }) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>className</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;card&#34;</span>&gt;
+</span></span><span style=display:flex><span>      &lt;<span style=color:#f92672>span</span>&gt;{<span style=color:#a6e22e>symbol</span>}&lt;/<span style=color:#f92672>span</span>&gt;
+</span></span><span style=display:flex><span>      &lt;<span style=color:#f92672>span</span>&gt;{<span style=color:#a6e22e>balance</span>}&lt;/<span style=color:#f92672>span</span>&gt;
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// useMemo 缓存计算结果，只在依赖变化时重新计算
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>Portfolio</span>({ <span style=color:#a6e22e>tokens</span> }) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>totalValue</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>useMemo</span>(
+</span></span><span style=display:flex><span>    () =&gt; <span style=color:#a6e22e>tokens</span>.<span style=color:#a6e22e>reduce</span>((<span style=color:#a6e22e>sum</span>, <span style=color:#a6e22e>t</span>) =&gt; <span style=color:#a6e22e>sum</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>balance</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>price</span>, <span style=color:#ae81ff>0</span>),
+</span></span><span style=display:flex><span>    [<span style=color:#a6e22e>tokens</span>]
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>      &lt;<span style=color:#f92672>p</span>&gt;<span style=color:#a6e22e>总价值</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>$</span>{<span style=color:#a6e22e>totalValue</span>.<span style=color:#a6e22e>toFixed</span>(<span style=color:#ae81ff>2</span>)}&lt;/<span style=color:#f92672>p</span>&gt;
+</span></span><span style=display:flex><span>      {<span style=color:#a6e22e>tokens</span>.<span style=color:#a6e22e>map</span>(<span style=color:#a6e22e>token</span> =&gt; (
+</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>TokenBalanceCard</span> <span style=color:#a6e22e>key</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>address</span>} <span style=color:#a6e22e>balance</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>balance</span>} <span style=color:#a6e22e>symbol</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>symbol</span>} /&gt;
+</span></span><span style=display:flex><span>      ))}
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=22-虚拟列表海量交易记录>2.2 虚拟列表：海量交易记录</h3><p>当用户交易历史有数千条时，一次性渲染所有 DOM 节点会导致页面卡顿。使用虚拟列表只渲染可视区域的内容：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm install @tanstack/react-virtual
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>useVirtualizer</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;@tanstack/react-virtual&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>TransactionList</span>({ <span style=color:#a6e22e>transactions</span> }) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>parentRef</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>useRef</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>virtualizer</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>useVirtualizer</span>({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>count</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>transactions</span>.<span style=color:#a6e22e>length</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>getScrollElement</span><span style=color:#f92672>:</span> () =&gt; <span style=color:#a6e22e>parentRef</span>.<span style=color:#a6e22e>current</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>estimateSize</span><span style=color:#f92672>:</span> () =&gt; <span style=color:#ae81ff>64</span>, <span style=color:#75715e>// 每行高度
+</span></span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>ref</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>parentRef</span>} <span style=color:#a6e22e>style</span><span style=color:#f92672>=</span>{{ <span style=color:#a6e22e>height</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;400px&#39;</span>, <span style=color:#a6e22e>overflow</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;auto&#39;</span> }}&gt;
+</span></span><span style=display:flex><span>      &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>style</span><span style=color:#f92672>=</span>{{ <span style=color:#a6e22e>height</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>virtualizer</span>.<span style=color:#a6e22e>getTotalSize</span>() }}&gt;
+</span></span><span style=display:flex><span>        {<span style=color:#a6e22e>virtualizer</span>.<span style=color:#a6e22e>getVirtualItems</span>().<span style=color:#a6e22e>map</span>(({ <span style=color:#a6e22e>index</span>, <span style=color:#a6e22e>start</span>, <span style=color:#a6e22e>size</span> }) =&gt; (
+</span></span><span style=display:flex><span>          &lt;<span style=color:#f92672>div</span>
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>key</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>transactions</span>[<span style=color:#a6e22e>index</span>].<span style=color:#a6e22e>hash</span>}
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>style</span><span style=color:#f92672>=</span>{{
+</span></span><span style=display:flex><span>              <span style=color:#a6e22e>position</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;absolute&#39;</span>,
+</span></span><span style=display:flex><span>              <span style=color:#a6e22e>top</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>start</span>,
+</span></span><span style=display:flex><span>              <span style=color:#a6e22e>height</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>size</span>,
+</span></span><span style=display:flex><span>            }}
+</span></span><span style=display:flex><span>          &gt;
+</span></span><span style=display:flex><span>            &lt;<span style=color:#f92672>TxRow</span> <span style=color:#a6e22e>tx</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>transactions</span>[<span style=color:#a6e22e>index</span>]} /&gt;
+</span></span><span style=display:flex><span>          &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>        ))}
+</span></span><span style=display:flex><span>      &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=三链上交互优化减少等待感>三、链上交互优化：减少等待感</h2><h3 id=31-乐观更新optimistic-ui>3.1 乐观更新（Optimistic UI）</h3><p>区块链交易需要等待区块确认，通常需要 12-30 秒。乐观更新允许在交易发送后立即更新 UI，让用户感觉"秒响应"：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>queryClient</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>useQueryClient</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>swapMutation</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>useMutation</span>({
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>mutationFn</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>executeSwap</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>onMutate</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>async</span> (<span style=color:#a6e22e>variables</span>) =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 立即更新缓存，乐观预估结果
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>queryClient</span>.<span style=color:#a6e22e>cancelQueries</span>({ <span style=color:#a6e22e>queryKey</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;balance&#39;</span>] });
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>previousBalance</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>queryClient</span>.<span style=color:#a6e22e>getQueryData</span>([<span style=color:#e6db74>&#39;balance&#39;</span>]);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>queryClient</span>.<span style=color:#a6e22e>setQueryData</span>([<span style=color:#e6db74>&#39;balance&#39;</span>], (<span style=color:#a6e22e>old</span>) =&gt;
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>old</span> <span style=color:#f92672>-</span> <span style=color:#a6e22e>variables</span>.<span style=color:#a6e22e>amount</span>
+</span></span><span style=display:flex><span>    );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> { <span style=color:#a6e22e>previousBalance</span> };
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>onError</span><span style=color:#f92672>:</span> (<span style=color:#a6e22e>err</span>, <span style=color:#a6e22e>variables</span>, <span style=color:#a6e22e>context</span>) =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 出错时回滚
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>queryClient</span>.<span style=color:#a6e22e>setQueryData</span>([<span style=color:#e6db74>&#39;balance&#39;</span>], <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>previousBalance</span>);
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>onSuccess</span><span style=color:#f92672>:</span> () =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 交易确认后，再从链上拉取真实数据覆盖
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>queryClient</span>.<span style=color:#a6e22e>invalidateQueries</span>({ <span style=color:#a6e22e>queryKey</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;balance&#39;</span>] });
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><h3 id=32-交易状态追踪>3.2 交易状态追踪</h3><p>即使使用了乐观更新，也需要准确追踪链上真实状态：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>sendTransactionWithTracking</span>(<span style=color:#a6e22e>txRequest</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>signer</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getSigner</span>();
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>tx</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>signer</span>.<span style=color:#a6e22e>sendTransaction</span>(<span style=color:#a6e22e>txRequest</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 立即显示_pending 状态
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>setTxStatus</span>(<span style=color:#e6db74>&#39;pending&#39;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>setTxHash</span>(<span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>hash</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>try</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 等待 1 个区块确认（适用于低风险操作）
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>receipt</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>wait</span>(<span style=color:#ae81ff>1</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>setTxStatus</span>(<span style=color:#e6db74>&#39;confirmed&#39;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 或等待 12 个区块确认（适用于大额交易）
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>deepReceipt</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>wait</span>(<span style=color:#ae81ff>12</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>setTxStatus</span>(<span style=color:#e6db74>&#39;finalized&#39;</span>);
+</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>catch</span> (<span style=color:#a6e22e>err</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>setTxStatus</span>(<span style=color:#e6db74>&#39;failed&#39;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>setError</span>(<span style=color:#a6e22e>err</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>tx</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=四网络请求优化>四、网络请求优化</h2><h3 id=41-批量请求>4.1 批量请求</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// ❌ 串行请求：5 个 token 余额需要 5 次 RTT
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>balances</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> Promise.<span style=color:#a6e22e>all</span>(
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>tokens</span>.<span style=color:#a6e22e>map</span>(<span style=color:#a6e22e>token</span> =&gt; <span style=color:#a6e22e>contract</span>.<span style=color:#a6e22e>balanceOf</span>(<span style=color:#a6e22e>account</span>))
+</span></span><span style=display:flex><span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// ✅ Multicall：1 次请求获取所有余额（部分 RPC 支持）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>MultiCallService</span> } <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#66d9ef>import</span>(<span style=color:#e6db74>&#39;@/services/multicall&#39;</span>);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>results</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>multiCallService</span>.<span style=color:#a6e22e>aggregate</span>(
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>tokens</span>.<span style=color:#a6e22e>map</span>(<span style=color:#a6e22e>token</span> =&gt; ({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>address</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>address</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;balanceOf&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>params</span><span style=color:#f92672>:</span> [<span style=color:#a6e22e>account</span>],
+</span></span><span style=display:flex><span>  }))
+</span></span><span style=display:flex><span>);
+</span></span></code></pre></div><h3 id=42-缓存策略>4.2 缓存策略</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// react-query 的智能缓存
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>data</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>price</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>useQuery</span>({
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>queryKey</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;tokenPrice&#39;</span>, <span style=color:#a6e22e>tokenAddress</span>],
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>queryFn</span><span style=color:#f92672>:</span> () =&gt; <span style=color:#a6e22e>fetchPrice</span>(<span style=color:#a6e22e>tokenAddress</span>),
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>staleTime</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>10_000</span>,    <span style=color:#75715e>// 10 秒内不重新请求
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>cacheTime</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>300_000</span>,   <span style=color:#75715e>// 5 分钟后从缓存清除
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>refetchInterval</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>60_000</span>, <span style=color:#75715e>// 后台每 60 秒刷新
+</span></span></span><span style=display:flex><span>});
+</span></span></code></pre></div><hr><h2 id=五性能监控>五、性能监控</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm install web-vitals
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>getLCP</span>, <span style=color:#a6e22e>getFID</span>, <span style=color:#a6e22e>getCLS</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;web-vitals&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>sendToAnalytics</span>({ <span style=color:#a6e22e>name</span>, <span style=color:#a6e22e>value</span> }) {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 上报到数据分析服务
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>`</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>name</span><span style=color:#e6db74>}</span><span style=color:#e6db74>: </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>value</span><span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>);
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>getLCP</span>(<span style=color:#a6e22e>sendToAnalytics</span>);
+</span></span><span style=display:flex><span><span style=color:#a6e22e>getFID</span>(<span style=color:#a6e22e>sendToAnalytics</span>);
+</span></span><span style=display:flex><span><span style=color:#a6e22e>getCLS</span>(<span style=color:#a6e22e>sendToAnalytics</span>);
+</span></span></code></pre></div><p><strong>DApp 性能目标参考：</strong></p><table><thead><tr><th>指标</th><th>目标值</th></tr></thead><tbody><tr><td>LCP (Largest Contentful Paint)</td><td>&lt; 2.5s</td></tr><tr><td>FID (First Input Delay)</td><td>&lt; 100ms</td></tr><tr><td>CLS (Cumulative Layout Shift)</td><td>&lt; 0.1</td></tr><tr><td>Time to Interactive</td><td>&lt; 3s</td></tr></tbody></table><hr><h2 id=小结>小结</h2><p>Web3 前端性能优化需要从加载、渲染、链上交互三个维度综合施策。乐观更新、虚拟列表、Multicall 批量请求是三个最高效的手段。下一篇文章是本系列的最后一篇，我们将讨论跨链前端集成——让 DApp 在多链生态中自如穿梭。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/10-cross-chain-frontend-integration/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/08-decentralized-frontend-security/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

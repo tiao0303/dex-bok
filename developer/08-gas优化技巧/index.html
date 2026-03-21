@@ -1,0 +1,71 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="Gas 优化技巧：写出省油的智能合约
+什么是 Gas
+Gas 是以太坊网络上执行操作的成本单位。每个 EVM 操作码都有对应的 Gas 消耗：简单的存储读写约 20,000 Gas，复杂的椭圆曲线签名验证可能需要数百万 Gas。
+Gas 优化的目标：在保持功能正确性和安全性的前提下，最小化 Gas 消耗，降低用户成本并提高合约吞吐量。
+存储优化
+存储是 Gas 消耗最高的部分，一次存储写入约 20,000 Gas，读取约 200-800 Gas。
+使用 events 代替 storage 存储
+如果你只需要记录历史数据而不需要合约后续读取，用 events 更省 Gas：
+// 高 Gas：存储每笔历史记录
+mapping(address => uint256[]) public depositHistory;
+
+// 低 Gas：仅记录事件
+event Deposit(address indexed user, uint256 amount, uint256 timestamp);
+packing 结构体成员
+EVM 以 32 字节（256 bits）为单位存储变量。将大小不同的变量紧凑排列可以减少存储槽数：
+// 优化：紧密排列
+struct GoodConfig {
+    uint128 a; // 槽1
+    uint128 c; // 槽1的后16字节（和a pack在一起）
+    uint256 b; // 槽2
+}
+批量读写
+批量操作比分次操作省 Gas。"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/developer/08-gas%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/developer/08-gas%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="Gas 优化技巧：写出省油的智能合约 什么是 Gas Gas 是以太坊网络上执行操作的成本单位。每个 EVM 操作码都有对应的 Gas 消耗：简单的存储读写约 20,000 Gas，复杂的椭圆曲线签名验证可能需要数百万 Gas。
+Gas 优化的目标：在保持功能正确性和安全性的前提下，最小化 Gas 消耗，降低用户成本并提高合约吞吐量。
+存储优化 存储是 Gas 消耗最高的部分，一次存储写入约 20,000 Gas，读取约 200-800 Gas。
+使用 events 代替 storage 存储 如果你只需要记录历史数据而不需要合约后续读取，用 events 更省 Gas：
+// 高 Gas：存储每笔历史记录 mapping(address => uint256[]) public depositHistory; // 低 Gas：仅记录事件 event Deposit(address indexed user, uint256 amount, uint256 timestamp); packing 结构体成员 EVM 以 32 字节（256 bits）为单位存储变量。将大小不同的变量紧凑排列可以减少存储槽数：
+// 优化：紧密排列 struct GoodConfig { uint128 a; // 槽1 uint128 c; // 槽1的后16字节（和a pack在一起） uint256 b; // 槽2 } 批量读写 批量操作比分次操作省 Gas。"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="developer"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="Gas 优化技巧：写出省油的智能合约 什么是 Gas Gas 是以太坊网络上执行操作的成本单位。每个 EVM 操作码都有对应的 Gas 消耗：简单的存储读写约 20,000 Gas，复杂的椭圆曲线签名验证可能需要数百万 Gas。
+Gas 优化的目标：在保持功能正确性和安全性的前提下，最小化 Gas 消耗，降低用户成本并提高合约吞吐量。
+存储优化 存储是 Gas 消耗最高的部分，一次存储写入约 20,000 Gas，读取约 200-800 Gas。
+使用 events 代替 storage 存储 如果你只需要记录历史数据而不需要合约后续读取，用 events 更省 Gas：
+// 高 Gas：存储每笔历史记录 mapping(address => uint256[]) public depositHistory; // 低 Gas：仅记录事件 event Deposit(address indexed user, uint256 amount, uint256 timestamp); packing 结构体成员 EVM 以 32 字节（256 bits）为单位存储变量。将大小不同的变量紧凑排列可以减少存储槽数：
+// 优化：紧密排列 struct GoodConfig { uint128 a; // 槽1 uint128 c; // 槽1的后16字节（和a pack在一起） uint256 b; // 槽2 } 批量读写 批量操作比分次操作省 Gas。"><meta itemprop=wordCount content="204"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="Gas 优化技巧：写出省油的智能合约 什么是 Gas Gas 是以太坊网络上执行操作的成本单位。每个 EVM 操作码都有对应的 Gas 消耗：简单的存储读写约 20,000 Gas，复杂的椭圆曲线签名验证可能需要数百万 Gas。
+Gas 优化的目标：在保持功能正确性和安全性的前提下，最小化 Gas 消耗，降低用户成本并提高合约吞吐量。
+存储优化 存储是 Gas 消耗最高的部分，一次存储写入约 20,000 Gas，读取约 200-800 Gas。
+使用 events 代替 storage 存储 如果你只需要记录历史数据而不需要合约后续读取，用 events 更省 Gas：
+// 高 Gas：存储每笔历史记录 mapping(address => uint256[]) public depositHistory; // 低 Gas：仅记录事件 event Deposit(address indexed user, uint256 amount, uint256 timestamp); packing 结构体成员 EVM 以 32 字节（256 bits）为单位存储变量。将大小不同的变量紧凑排列可以减少存储槽数：
+// 优化：紧密排列 struct GoodConfig { uint128 a; // 槽1 uint128 c; // 槽1的后16字节（和a pack在一起） uint256 b; // 槽2 } 批量读写 批量操作比分次操作省 Gas。"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-08-Gas优化技巧"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#什么是-gas>什么是 Gas</a></li><li><a href=#存储优化>存储优化</a><ul><li><a href=#使用-events-代替-storage-存储>使用 events 代替 storage 存储</a></li><li><a href=#packing-结构体成员>packing 结构体成员</a></li><li><a href=#批量读写>批量读写</a></li></ul></li><li><a href=#循环优化>循环优化</a><ul><li><a href=#避免在循环中读取-storage>避免在循环中读取 storage</a></li><li><a href=#缓存数组长度>缓存数组长度</a></li></ul></li><li><a href=#函数可见性与修饰器>函数可见性与修饰器</a><ul><li><a href=#external-vs-public>external vs public</a></li></ul></li><li><a href=#常量与不可变量>常量与不可变量</a><ul><li><a href=#使用-constant-和-immutable>使用 constant 和 immutable</a></li></ul></li><li><a href=#优化建议分级>优化建议分级</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>204 字</span></div></header><h1 id=gas-优化技巧写出省油的智能合约>Gas 优化技巧：写出省油的智能合约</h1><h2 id=什么是-gas>什么是 Gas</h2><p>Gas 是以太坊网络上执行操作的成本单位。每个 EVM 操作码都有对应的 Gas 消耗：简单的存储读写约 20,000 Gas，复杂的椭圆曲线签名验证可能需要数百万 Gas。</p><p><strong>Gas 优化的目标</strong>：在保持功能正确性和安全性的前提下，最小化 Gas 消耗，降低用户成本并提高合约吞吐量。</p><h2 id=存储优化>存储优化</h2><p>存储是 Gas 消耗最高的部分，一次存储写入约 20,000 Gas，读取约 200-800 Gas。</p><h3 id=使用-events-代替-storage-存储>使用 events 代替 storage 存储</h3><p>如果你只需要记录历史数据而不需要合约后续读取，用 events 更省 Gas：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 高 Gas：存储每笔历史记录
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>[]) <span style=color:#66d9ef>public</span> depositHistory;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 低 Gas：仅记录事件
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>event</span> <span style=color:#a6e22e>Deposit</span>(<span style=color:#66d9ef>address</span> <span style=color:#66d9ef>indexed</span> user, <span style=color:#66d9ef>uint256</span> amount, <span style=color:#66d9ef>uint256</span> timestamp);
+</span></span></code></pre></div><h3 id=packing-结构体成员>packing 结构体成员</h3><p>EVM 以 32 字节（256 bits）为单位存储变量。将大小不同的变量紧凑排列可以减少存储槽数：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 优化：紧密排列
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>GoodConfig</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint128</span> a; <span style=color:#75715e>// 槽1
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint128</span> c; <span style=color:#75715e>// 槽1的后16字节（和a pack在一起）
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> b; <span style=color:#75715e>// 槽2
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=批量读写>批量读写</h3><p>批量操作比分次操作省 Gas。</p><h2 id=循环优化>循环优化</h2><h3 id=避免在循环中读取-storage>避免在循环中读取 storage</h3><h3 id=缓存数组长度>缓存数组长度</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 糟糕：每次检查 length
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>uint</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> users.length; i<span style=color:#f92672>++</span>) { }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 优化：缓存长度
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>uint256</span> length <span style=color:#f92672>=</span> users.length;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>uint</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> length; i<span style=color:#f92672>++</span>) { }
+</span></span></code></pre></div><h2 id=函数可见性与修饰器>函数可见性与修饰器</h2><h3 id=external-vs-public>external vs public</h3><p><code>external</code> 函数参数在 <code>calldata</code> 中，<code>public</code> 函数参数在 <code>memory</code> 中。对于外部调用者，<code>external</code> 更省 Gas：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 优化
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>process</span>(<span style=color:#66d9ef>uint256</span>[] calldata data) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=常量与不可变量>常量与不可变量</h2><h3 id=使用-constant-和-immutable>使用 constant 和 immutable</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Example</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 常量：不占用存储槽，编译时内联
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>constant</span> DECIMALS <span style=color:#f92672>=</span> <span style=color:#ae81ff>18</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 不可变量：在构造函数时赋值，之后只读
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>immutable</span> MAX_SUPPLY;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=优化建议分级>优化建议分级</h2><table><thead><tr><th>优先级</th><th>优化类型</th><th>预期收益</th></tr></thead><tbody><tr><td>🔴 高</td><td>存储结构packing、减少storage读写</td><td>数千~数万 Gas</td></tr><tr><td>🟡 中</td><td>使用 events、使用 calldata</td><td>数百~数千 Gas</td></tr><tr><td>🟢 低</td><td>constant/immutable、短路优化</td><td>数十 Gas</td></tr></tbody></table><blockquote><p>⚠️ <strong>重要提示</strong>：不要为了 Gas 优化牺牲代码可读性和安全性。过早优化是万恶之源，先保证正确和安全，再在性能瓶颈处优化。</p></blockquote><h2 id=总结>总结</h2><p>Gas 优化的核心原则：</p><ol><li><strong>存储是最贵的</strong>——最小化 storage 读写</li><li><strong>批量操作比分次操作省 Gas</strong>——减少交易 overhead</li><li><strong>合理使用 calldata、memory、storage</strong>——选择正确的数据位置</li><li><strong>优先正确性，其次优化</strong>——不要为了省 Gas 引入 bug</li></ol><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/developer/09-%E5%8D%87%E7%BA%A7%E5%9E%8B%E5%90%88%E7%BA%A6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/developer/07-%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E4%B8%8E%E9%98%B2%E8%8C%83/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

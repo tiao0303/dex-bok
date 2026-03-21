@@ -1,0 +1,101 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='闪电贷攻击解析：DeFi 的无本生意如何成为黑客提款机
+什么是闪电贷？
+闪电贷（Flash Loan）是 DeFi 最强大的创新之一，也是最容易被滥用的工具。它的原理基于以太坊交易的原子性：
+你可以在单笔交易中借出任意数量的资产，条件是：必须在同一个区块结束前归还本金和利息，否则整笔交易回滚。
+这意味着：
+
+零抵押：不需要预先存入任何资产
+无上限借款：理论上可以借到池子里所有资产
+原子性保证：如果无法归还，整个交易撤销，借贷不成立
+
+// 闪电贷基本模式（Aave V2）
+function executeOperation(
+    address[] calldata assets,
+    uint256[] calldata amounts,
+    uint256[] calldata premiums,
+    address initiator,
+    bytes calldata params
+) external override {
+    // 在这里对借来的资产做任何操作
+    // ...
+    
+    // 最后必须偿还：本金 + 费用
+    uint256 amountToRepay = amounts[0] + premiums[0];
+    IERC20(assets[0]).transferFrom(msg.sender, address(this), amountToRepay);
+}
+闪电贷的初衷是好的：为 DeFi 提供流动性，让任何人在无需抵押的情况下执行套利、清算等操作。
+攻击原理：利用"无本金"撬动市场
+闪电贷攻击的本质是在单笔交易中操纵市场条件。由于借款金额巨大，攻击者可以在一个 DEX 上大量买入某种资产，推高价格，然后在另一个平台以高价卖出——整个过程不需要自己的本金。
+攻击步骤分解
+第1步：借出 1000 万 USDC（闪电贷）
+第2步：在 DEX A 上用 USDC 大量买入 Token X → Token X 价格从 $1 涨到 $100
+第3步：在 DEX B 上以 $100 高价卖出 Token X → 获得 100 倍利润
+第4步：归还 1000 万 USDC + 手续费
+第5步：攻击者净赚数百万美元
+关键在于：所有这些操作都在同一个交易内完成，因此无需真实的资金来源。'><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/security/05-flash-loan-attacks/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/security/05-flash-loan-attacks/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='闪电贷攻击解析：DeFi 的无本生意如何成为黑客提款机 什么是闪电贷？ 闪电贷（Flash Loan）是 DeFi 最强大的创新之一，也是最容易被滥用的工具。它的原理基于以太坊交易的原子性：
+你可以在单笔交易中借出任意数量的资产，条件是：必须在同一个区块结束前归还本金和利息，否则整笔交易回滚。
+这意味着：
+零抵押：不需要预先存入任何资产 无上限借款：理论上可以借到池子里所有资产 原子性保证：如果无法归还，整个交易撤销，借贷不成立 // 闪电贷基本模式（Aave V2） function executeOperation( address[] calldata assets, uint256[] calldata amounts, uint256[] calldata premiums, address initiator, bytes calldata params ) external override { // 在这里对借来的资产做任何操作 // ... // 最后必须偿还：本金 + 费用 uint256 amountToRepay = amounts[0] + premiums[0]; IERC20(assets[0]).transferFrom(msg.sender, address(this), amountToRepay); } 闪电贷的初衷是好的：为 DeFi 提供流动性，让任何人在无需抵押的情况下执行套利、清算等操作。
+攻击原理：利用"无本金"撬动市场 闪电贷攻击的本质是在单笔交易中操纵市场条件。由于借款金额巨大，攻击者可以在一个 DEX 上大量买入某种资产，推高价格，然后在另一个平台以高价卖出——整个过程不需要自己的本金。
+攻击步骤分解 第1步：借出 1000 万 USDC（闪电贷） 第2步：在 DEX A 上用 USDC 大量买入 Token X → Token X 价格从 $1 涨到 $100 第3步：在 DEX B 上以 $100 高价卖出 Token X → 获得 100 倍利润 第4步：归还 1000 万 USDC + 手续费 第5步：攻击者净赚数百万美元 关键在于：所有这些操作都在同一个交易内完成，因此无需真实的资金来源。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='闪电贷攻击解析：DeFi 的无本生意如何成为黑客提款机 什么是闪电贷？ 闪电贷（Flash Loan）是 DeFi 最强大的创新之一，也是最容易被滥用的工具。它的原理基于以太坊交易的原子性：
+你可以在单笔交易中借出任意数量的资产，条件是：必须在同一个区块结束前归还本金和利息，否则整笔交易回滚。
+这意味着：
+零抵押：不需要预先存入任何资产 无上限借款：理论上可以借到池子里所有资产 原子性保证：如果无法归还，整个交易撤销，借贷不成立 // 闪电贷基本模式（Aave V2） function executeOperation( address[] calldata assets, uint256[] calldata amounts, uint256[] calldata premiums, address initiator, bytes calldata params ) external override { // 在这里对借来的资产做任何操作 // ... // 最后必须偿还：本金 + 费用 uint256 amountToRepay = amounts[0] + premiums[0]; IERC20(assets[0]).transferFrom(msg.sender, address(this), amountToRepay); } 闪电贷的初衷是好的：为 DeFi 提供流动性，让任何人在无需抵押的情况下执行套利、清算等操作。
+攻击原理：利用"无本金"撬动市场 闪电贷攻击的本质是在单笔交易中操纵市场条件。由于借款金额巨大，攻击者可以在一个 DEX 上大量买入某种资产，推高价格，然后在另一个平台以高价卖出——整个过程不需要自己的本金。
+攻击步骤分解 第1步：借出 1000 万 USDC（闪电贷） 第2步：在 DEX A 上用 USDC 大量买入 Token X → Token X 价格从 $1 涨到 $100 第3步：在 DEX B 上以 $100 高价卖出 Token X → 获得 100 倍利润 第4步：归还 1000 万 USDC + 手续费 第5步：攻击者净赚数百万美元 关键在于：所有这些操作都在同一个交易内完成，因此无需真实的资金来源。'><meta itemprop=wordCount content="303"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='闪电贷攻击解析：DeFi 的无本生意如何成为黑客提款机 什么是闪电贷？ 闪电贷（Flash Loan）是 DeFi 最强大的创新之一，也是最容易被滥用的工具。它的原理基于以太坊交易的原子性：
+你可以在单笔交易中借出任意数量的资产，条件是：必须在同一个区块结束前归还本金和利息，否则整笔交易回滚。
+这意味着：
+零抵押：不需要预先存入任何资产 无上限借款：理论上可以借到池子里所有资产 原子性保证：如果无法归还，整个交易撤销，借贷不成立 // 闪电贷基本模式（Aave V2） function executeOperation( address[] calldata assets, uint256[] calldata amounts, uint256[] calldata premiums, address initiator, bytes calldata params ) external override { // 在这里对借来的资产做任何操作 // ... // 最后必须偿还：本金 + 费用 uint256 amountToRepay = amounts[0] + premiums[0]; IERC20(assets[0]).transferFrom(msg.sender, address(this), amountToRepay); } 闪电贷的初衷是好的：为 DeFi 提供流动性，让任何人在无需抵押的情况下执行套利、清算等操作。
+攻击原理：利用"无本金"撬动市场 闪电贷攻击的本质是在单笔交易中操纵市场条件。由于借款金额巨大，攻击者可以在一个 DEX 上大量买入某种资产，推高价格，然后在另一个平台以高价卖出——整个过程不需要自己的本金。
+攻击步骤分解 第1步：借出 1000 万 USDC（闪电贷） 第2步：在 DEX A 上用 USDC 大量买入 Token X → Token X 价格从 $1 涨到 $100 第3步：在 DEX B 上以 $100 高价卖出 Token X → 获得 100 倍利润 第4步：归还 1000 万 USDC + 手续费 第5步：攻击者净赚数百万美元 关键在于：所有这些操作都在同一个交易内完成，因此无需真实的资金来源。'><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-05-flash-loan-attacks"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#什么是闪电贷>什么是闪电贷？</a></li><li><a href=#攻击原理利用无本金撬动市场>攻击原理：利用"无本金"撬动市场</a><ul><li><a href=#攻击步骤分解>攻击步骤分解</a></li></ul></li><li><a href=#经典案例一pancakebunny2021>经典案例一：PancakeBunny（2021）</a></li><li><a href=#经典案例二alpha-finance2021>经典案例二：Alpha Finance（2021）</a></li><li><a href=#经典案例三beanstalk-farms2022>经典案例三：Beanstalk Farms（2022）</a></li><li><a href=#攻击的核心原因>攻击的核心原因</a><ul><li><a href=#1-预言机价格可操纵>1. 预言机价格可操纵</a></li><li><a href=#2-借款额度基于当前价格>2. 借款额度基于当前价格</a></li><li><a href=#3-缺乏时间加权平均价格twap>3. 缺乏时间加权平均价格（TWAP）</a></li></ul></li><li><a href=#防御策略>防御策略</a><ul><li><a href=#策略一使用-twap时间加权平均价格>策略一：使用 TWAP（时间加权平均价格）</a></li><li><a href=#策略二多数据源聚合>策略二：多数据源聚合</a></li><li><a href=#策略三借款额度限制>策略三：借款额度限制</a></li><li><a href=#策略四最小借款间隔>策略四：最小借款间隔</a></li></ul></li><li><a href=#闪电贷是好是坏>闪电贷是好是坏？</a></li><li><a href=#结语>结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>303 字</span></div></header><h1 id=闪电贷攻击解析defi-的无本生意如何成为黑客提款机>闪电贷攻击解析：DeFi 的无本生意如何成为黑客提款机</h1><h2 id=什么是闪电贷>什么是闪电贷？</h2><p>闪电贷（Flash Loan）是 DeFi 最强大的创新之一，也是最容易被滥用的工具。它的原理基于以太坊交易的原子性：</p><p><strong>你可以在单笔交易中借出任意数量的资产，条件是：必须在同一个区块结束前归还本金和利息，否则整笔交易回滚。</strong></p><p>这意味着：</p><ul><li><strong>零抵押</strong>：不需要预先存入任何资产</li><li><strong>无上限借款</strong>：理论上可以借到池子里所有资产</li><li><strong>原子性保证</strong>：如果无法归还，整个交易撤销，借贷不成立</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 闪电贷基本模式（Aave V2）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>executeOperation</span>(
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span>[] calldata assets,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span>[] calldata amounts,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span>[] calldata premiums,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> initiator,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes</span> calldata params
+</span></span><span style=display:flex><span>) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>override</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 在这里对借来的资产做任何操作
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 最后必须偿还：本金 + 费用
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> amountToRepay <span style=color:#f92672>=</span> amounts[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>+</span> premiums[<span style=color:#ae81ff>0</span>];
+</span></span><span style=display:flex><span>    IERC20(assets[<span style=color:#ae81ff>0</span>]).transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amountToRepay);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>闪电贷的初衷是好的：为 DeFi 提供流动性，让任何人在无需抵押的情况下执行套利、清算等操作。</p><h2 id=攻击原理利用无本金撬动市场>攻击原理：利用"无本金"撬动市场</h2><p>闪电贷攻击的本质是<strong>在单笔交易中操纵市场条件</strong>。由于借款金额巨大，攻击者可以在一个 DEX 上大量买入某种资产，推高价格，然后在另一个平台以高价卖出——整个过程不需要自己的本金。</p><h3 id=攻击步骤分解>攻击步骤分解</h3><pre tabindex=0><code>第1步：借出 1000 万 USDC（闪电贷）
+第2步：在 DEX A 上用 USDC 大量买入 Token X → Token X 价格从 $1 涨到 $100
+第3步：在 DEX B 上以 $100 高价卖出 Token X → 获得 100 倍利润
+第4步：归还 1000 万 USDC + 手续费
+第5步：攻击者净赚数百万美元
+</code></pre><p>关键在于：<strong>所有这些操作都在同一个交易内完成</strong>，因此无需真实的资金来源。</p><h2 id=经典案例一pancakebunny2021>经典案例一：PancakeBunny（2021）</h2><p>PancakeBunny 是 BSC 链上的收益聚合器。攻击者通过闪电贷操纵 BNB/CAKE 价格，骗过了合约的定价逻辑：</p><ol><li>闪电贷借入大量 BNB</li><li>在 PancakeSwap 中大量兑换 CAKE，推高 CAKE 价格</li><li>Bunny 合约使用 PancakeSwap 预言机喂价，误以为 CAKE 价格大涨</li><li>攻击者 mint 大量 Bunny 代币（基于虚高的 CAKE 价格）</li><li>出售 Bunny，获利约 4500 万美元</li></ol><h2 id=经典案例二alpha-finance2021>经典案例二：Alpha Finance（2021）</h2><p>Alpha Finance 的 Homora Bank 攻击中，攻击者：</p><ol><li>闪电贷借出 ETH 和 USDC</li><li>利用合约的 <code>borrow()</code> 函数的整数舍入漏洞</li><li>在一个区块内反复借款，每次都从舍入误差中赚取微利</li><li>累积获得额外约 3700 万美元的资产</li></ol><h2 id=经典案例三beanstalk-farms2022>经典案例三：Beanstalk Farms（2022）</h2><p>攻击者通过闪电贷借出 10 亿美元（！），单方面通过治理提案：</p><ol><li>闪电贷借入大量 BEAN 代币</li><li>获得提案投票权的 78%</li><li>通过恶意治理提案直接将约 1.82 亿美元的稳定币转入攻击者控制的地址</li><li>归还闪电贷后，攻击者净赚约 7600 万美元</li></ol><h2 id=攻击的核心原因>攻击的核心原因</h2><h3 id=1-预言机价格可操纵>1. 预言机价格可操纵</h3><p>这是最常见的原因。AMM 的价格由供需决定，闪电贷可以在瞬间制造巨大供需差：</p><pre tabindex=0><code>正常情况：预言机价格 ≈ 市场价格（小幅波动）
+攻击情况：攻击者瞬间买光一侧流动性 → 预言机价格被人为拉高
+</code></pre><h3 id=2-借款额度基于当前价格>2. 借款额度基于当前价格</h3><p>如果借款时的抵押率计算使用了可被操纵的价格，攻击者就能借出超过其真实抵押价值允许的金额。</p><h3 id=3-缺乏时间加权平均价格twap>3. 缺乏时间加权平均价格（TWAP）</h3><p>使用单点价格而非时间加权的平均值，使攻击者只需在一个区块内操控价格即可成功。</p><h2 id=防御策略>防御策略</h2><h3 id=策略一使用-twap时间加权平均价格>策略一：使用 TWAP（时间加权平均价格）</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// Uniswap V2 TWAP 预言机
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getTWAPPrice</span>(<span style=color:#66d9ef>address</span> token, <span style=color:#66d9ef>uint256</span> period) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>    (<span style=color:#66d9ef>uint256</span> price0Cumulative, <span style=color:#66d9ef>uint256</span> price1Cumulative, <span style=color:#66d9ef>uint256</span> blockTimestamp) <span style=color:#f92672>=</span> 
+</span></span><span style=display:flex><span>        IUniswapV2Pair(pair).getReserves();
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> timeElapsed <span style=color:#f92672>=</span> block.timestamp <span style=color:#f92672>-</span> blockTimestamp;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> price <span style=color:#f92672>=</span> (price0Cumulative <span style=color:#f92672>-</span> lastPriceCumulative) <span style=color:#f92672>/</span> timeElapsed;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> price;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>TWAP 需要一段时间的累积数据才能生效，攻击者无法在单笔交易内操控。</p><h3 id=策略二多数据源聚合>策略二：多数据源聚合</h3><p>不依赖单一预言机，而是取多个来源（如 Chainlink、Band Protocol、Uniswap TWAP）的中位数：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getPrice</span>(<span style=color:#66d9ef>address</span> token) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span>[] <span style=color:#66d9ef>memory</span> prices <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#66d9ef>uint256</span>[](<span style=color:#ae81ff>3</span>);
+</span></span><span style=display:flex><span>    prices[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>=</span> chainlinkPrice(token);
+</span></span><span style=display:flex><span>    prices[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>=</span> uniswapTWAP(token);
+</span></span><span style=display:flex><span>    prices[<span style=color:#ae81ff>2</span>] <span style=color:#f92672>=</span> bandPrice(token);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 取中位数
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> median(prices);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=策略三借款额度限制>策略三：借款额度限制</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>borrow</span>(<span style=color:#66d9ef>address</span> asset, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> borrowedValue <span style=color:#f92672>=</span> getAssetValue(borrowedAssets[msg.sender]) <span style=color:#f92672>+</span> amount;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> maxBorrowValue <span style=color:#f92672>=</span> getCollateralValue(collateralAssets[msg.sender]) 
+</span></span><span style=display:flex><span>        <span style=color:#f92672>*</span> MAX_BORROW_RATIO;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    require(borrowedValue <span style=color:#f92672>&lt;=</span> maxBorrowValue, <span style=color:#e6db74>&#34;Exceeds borrow limit&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=策略四最小借款间隔>策略四：最小借款间隔</h3><p>要求同一地址在借款后必须等待一段时间（如 1 个区块）才能再次借款，增加操纵难度。</p><h2 id=闪电贷是好是坏>闪电贷是好是坏？</h2><p>闪电贷本身是中性的技术。它的存在让 DeFi 变得更高效（套利使价格趋于一致、清算维持偿付能力），但同时也是一面"照妖镜"——暴露了协议设计中忽视边界条件的问题。</p><p><strong>没有闪电贷，市场操纵仍然会发生。</strong> 闪电贷只是降低了发动这类攻击的门槛，使得"小角色"也能制造大冲击。</p><h2 id=结语>结语</h2><p>闪电贷攻击的本质是<strong>协议对市场假设的过于简化</strong>——假设价格不会被单笔交易大幅操纵。防御的关键不是禁用闪电贷（这不可行），而是让协议对市场状态变化的敏感度降低。下一篇文章我们将讨论代币标准中的安全考量。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/security/06-token-standard-security/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/security/04-access-control-issues/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

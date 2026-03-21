@@ -1,4 +1,93 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>安全实战 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/%E5%AE%89%E5%85%A8%E5%AE%9E%E6%88%98/</link><description>Recent content in 安全实战 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:05:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/%E5%AE%89%E5%85%A8%E5%AE%9E%E6%88%98/index.xml" rel="self" type="application/rss+xml"/><item><title>跨链桥安全指南 - 如何安全转移资产</title><link>https://tiao0303.github.io/dex-bok/posts/12-cross-chain-bridge/</link><pubDate>Thu, 19 Mar 2026 00:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/12-cross-chain-bridge/</guid><description>&lt;h2 id="跨链桥风险"&gt;跨链桥风险&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>安全实战 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/%E5%AE%89%E5%85%A8%E5%AE%9E%E6%88%98/</link><description>Recent content in 安全实战 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 13:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/%E5%AE%89%E5%85%A8%E5%AE%9E%E6%88%98/index.xml" rel="self" type="application/rss+xml"/><item><title>DeFi 安全实战 - 智能合约攻击与防护完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/defi-security-attack-defense/</link><pubDate>Thu, 19 Mar 2026 13:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/defi-security-attack-defense/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;DeFi 协议累计遭受攻击损失已超过 &lt;strong&gt;60 亿美元&lt;/strong&gt;。本文将从实战角度分析常见攻击手段，并提供可落地的防护方案。&lt;/p&gt;
+&lt;h2 id="一2024-2025-年重大攻击事件"&gt;一、2024-2025 年重大攻击事件&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;协议&lt;/th&gt;
+ &lt;th&gt;损失金额&lt;/th&gt;
+ &lt;th&gt;攻击类型&lt;/th&gt;
+ &lt;th&gt;时间&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Euler Finance&lt;/td&gt;
+ &lt;td&gt;$197M&lt;/td&gt;
+ &lt;td&gt;闪电贷 + 薄授权&lt;/td&gt;
+ &lt;td&gt;2023.03&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Curve Finance&lt;/td&gt;
+ &lt;td&gt;$73M&lt;/td&gt;
+ &lt;td&gt;重入攻击&lt;/td&gt;
+ &lt;td&gt;2023.07&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Mixin Network&lt;/td&gt;
+ &lt;td&gt;$200M&lt;/td&gt;
+ &lt;td&gt;预言机攻击&lt;/td&gt;
+ &lt;td&gt;2023.09&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;BonqDAO&lt;/td&gt;
+ &lt;td&gt;$89M&lt;/td&gt;
+ &lt;td&gt;预言机操纵&lt;/td&gt;
+ &lt;td&gt;2023.02&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="二flash-loan-闪电贷攻击"&gt;二、Flash Loan 闪电贷攻击&lt;/h2&gt;
+&lt;h3 id="21-攻击原理"&gt;2.1 攻击原理&lt;/h3&gt;
+&lt;p&gt;闪电贷允许在单笔交易内借出并归还任意数量的资产，无需抵押。攻击者利用这一特性：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;借款 → 操纵价格/触发漏洞 → 归还 → 获利&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 典型 Flash Loan 攻击流程
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;IFlashLoanReceiver&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;executeOperation&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;[] calldata tokens,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[] calldata amounts,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[] calldata premiums,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; initiator,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bytes&lt;/span&gt; calldata params
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Attacker&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;attack&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; pool, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; target) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 1. 从闪电贷池借款
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(usdt).flashLoan(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ae81ff"&gt;1000000&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;e6, &lt;span style="color:#75715e"&gt;// 借 100万 USDT
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;executeOperation&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;[] calldata tokens,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[] calldata amounts,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[] calldata premiums,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; initiator,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bytes&lt;/span&gt; calldata params
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;override&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 2. 在目标协议执行攻击操作
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// - 操纵预言机价格
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// - 触发漏洞合约逻辑
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// - 清算抵押不足头寸
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 3. 归还借款 + 手续费
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amounts[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; premium &lt;span style="color:#f92672"&gt;=&lt;/span&gt; premiums[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokens[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]).approve(msg.sender, amount &lt;span style="color:#f92672"&gt;+&lt;/span&gt; premium);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 4. 获利转出
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// profit = attack_revenue - (amount + premium)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="22-euler-finance-攻击详解2023"&gt;2.2 Euler Finance 攻击详解（2023）&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;漏洞原理&lt;/strong&gt;：薄授权（Bent Authorization）允许存款人直接提取协议外的资产：&lt;/p&gt;</description></item><item><title>跨链桥安全指南 - 如何安全转移资产</title><link>https://tiao0303.github.io/dex-bok/posts/12-cross-chain-bridge/</link><pubDate>Thu, 19 Mar 2026 00:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/12-cross-chain-bridge/</guid><description>&lt;h2 id="跨链桥风险"&gt;跨链桥风险&lt;/h2&gt;
 &lt;h3 id="历史大案"&gt;历史大案&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;

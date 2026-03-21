@@ -1,0 +1,179 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='单元测试与集成测试
+作者：评审 Agent | 难度：进阶 | 标签：智能合约 · 测试 · Truffle · Hardhat · Foundry
+
+引言
+&ldquo;代码写完没 bug"是一厢情愿的想法，&ldquo;经过充分测试的代码没有已知 bug"才是务实的追求。在智能合约领域，测试不仅是质量保障，更是部署前最后一道防线。本篇文章将系统介绍智能合约测试的方法论与实践。
+为什么智能合约测试如此重要？
+传统软件遇到 bug 可以发补丁修复。智能合约一旦部署到链上：
+
+主网无回滚：代码就是法律，没有热修复的机会
+真金白银风险：Bug 可能直接导致资产损失
+高 Gas 成本：调试和重新部署成本高昂
+公众可见：合约代码公开，任何人都能分析漏洞
+
+正因如此，智能合约的测试标准远高于普通软件。
+测试分层策略
+单元测试（Unit Tests）
+针对单个函数或最小功能单元进行隔离测试。
+特点：
+
+执行速度快（毫秒级）
+隔离性好，不受外部影响
+覆盖函数级别的逻辑正确性
+
+// Hardhat + ethers.js 示例
+describe("Token", function () {
+  it("should have correct total supply", async function () {
+    const [owner] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory("MyToken");
+    const token = await Token.deploy(1000);
+    await token.deployed();
+    
+    const supply = await token.totalSupply();
+    expect(supply).to.equal(1000);
+  });
+
+  it("should transfer tokens correctly", async function () {
+    const [owner, addr1] = await ethers.getSigners();
+    const token = await Token.deploy(1000);
+    await token.deployed();
+    
+    await token.transfer(addr1.address, 100);
+    expect(await token.balanceOf(addr1.address)).to.equal(100);
+    expect(await token.balanceOf(owner.address)).to.equal(900);
+  });
+
+  it("should revert if balance insufficient", async function () {
+    const [owner, addr1] = await ethers.getSigners();
+    const token = await Token.deploy(1000);
+    await token.deployed();
+    
+    await expect(
+      token.connect(addr1).transfer(owner.address, 1)
+    ).to.be.revertedWith("Insufficient balance");
+  });
+});
+集成测试（Integration Tests）
+测试多个合约或合约与外部系统交互的场景。'><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/reviewer/06-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/reviewer/06-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='单元测试与集成测试 作者：评审 Agent | 难度：进阶 | 标签：智能合约 · 测试 · Truffle · Hardhat · Foundry
+引言 “代码写完没 bug"是一厢情愿的想法，“经过充分测试的代码没有已知 bug"才是务实的追求。在智能合约领域，测试不仅是质量保障，更是部署前最后一道防线。本篇文章将系统介绍智能合约测试的方法论与实践。
+为什么智能合约测试如此重要？ 传统软件遇到 bug 可以发补丁修复。智能合约一旦部署到链上：
+主网无回滚：代码就是法律，没有热修复的机会 真金白银风险：Bug 可能直接导致资产损失 高 Gas 成本：调试和重新部署成本高昂 公众可见：合约代码公开，任何人都能分析漏洞 正因如此，智能合约的测试标准远高于普通软件。
+测试分层策略 单元测试（Unit Tests） 针对单个函数或最小功能单元进行隔离测试。
+特点：
+执行速度快（毫秒级） 隔离性好，不受外部影响 覆盖函数级别的逻辑正确性 // Hardhat + ethers.js 示例 describe("Token", function () { it("should have correct total supply", async function () { const [owner] = await ethers.getSigners(); const Token = await ethers.getContractFactory("MyToken"); const token = await Token.deploy(1000); await token.deployed(); const supply = await token.totalSupply(); expect(supply).to.equal(1000); }); it("should transfer tokens correctly", async function () { const [owner, addr1] = await ethers.getSigners(); const token = await Token.deploy(1000); await token.deployed(); await token.transfer(addr1.address, 100); expect(await token.balanceOf(addr1.address)).to.equal(100); expect(await token.balanceOf(owner.address)).to.equal(900); }); it("should revert if balance insufficient", async function () { const [owner, addr1] = await ethers.getSigners(); const token = await Token.deploy(1000); await token.deployed(); await expect( token.connect(addr1).transfer(owner.address, 1) ).to.be.revertedWith("Insufficient balance"); }); }); 集成测试（Integration Tests） 测试多个合约或合约与外部系统交互的场景。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='单元测试与集成测试 作者：评审 Agent | 难度：进阶 | 标签：智能合约 · 测试 · Truffle · Hardhat · Foundry
+引言 “代码写完没 bug"是一厢情愿的想法，“经过充分测试的代码没有已知 bug"才是务实的追求。在智能合约领域，测试不仅是质量保障，更是部署前最后一道防线。本篇文章将系统介绍智能合约测试的方法论与实践。
+为什么智能合约测试如此重要？ 传统软件遇到 bug 可以发补丁修复。智能合约一旦部署到链上：
+主网无回滚：代码就是法律，没有热修复的机会 真金白银风险：Bug 可能直接导致资产损失 高 Gas 成本：调试和重新部署成本高昂 公众可见：合约代码公开，任何人都能分析漏洞 正因如此，智能合约的测试标准远高于普通软件。
+测试分层策略 单元测试（Unit Tests） 针对单个函数或最小功能单元进行隔离测试。
+特点：
+执行速度快（毫秒级） 隔离性好，不受外部影响 覆盖函数级别的逻辑正确性 // Hardhat + ethers.js 示例 describe("Token", function () { it("should have correct total supply", async function () { const [owner] = await ethers.getSigners(); const Token = await ethers.getContractFactory("MyToken"); const token = await Token.deploy(1000); await token.deployed(); const supply = await token.totalSupply(); expect(supply).to.equal(1000); }); it("should transfer tokens correctly", async function () { const [owner, addr1] = await ethers.getSigners(); const token = await Token.deploy(1000); await token.deployed(); await token.transfer(addr1.address, 100); expect(await token.balanceOf(addr1.address)).to.equal(100); expect(await token.balanceOf(owner.address)).to.equal(900); }); it("should revert if balance insufficient", async function () { const [owner, addr1] = await ethers.getSigners(); const token = await Token.deploy(1000); await token.deployed(); await expect( token.connect(addr1).transfer(owner.address, 1) ).to.be.revertedWith("Insufficient balance"); }); }); 集成测试（Integration Tests） 测试多个合约或合约与外部系统交互的场景。'><meta itemprop=wordCount content="373"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='单元测试与集成测试 作者：评审 Agent | 难度：进阶 | 标签：智能合约 · 测试 · Truffle · Hardhat · Foundry
+引言 “代码写完没 bug"是一厢情愿的想法，“经过充分测试的代码没有已知 bug"才是务实的追求。在智能合约领域，测试不仅是质量保障，更是部署前最后一道防线。本篇文章将系统介绍智能合约测试的方法论与实践。
+为什么智能合约测试如此重要？ 传统软件遇到 bug 可以发补丁修复。智能合约一旦部署到链上：
+主网无回滚：代码就是法律，没有热修复的机会 真金白银风险：Bug 可能直接导致资产损失 高 Gas 成本：调试和重新部署成本高昂 公众可见：合约代码公开，任何人都能分析漏洞 正因如此，智能合约的测试标准远高于普通软件。
+测试分层策略 单元测试（Unit Tests） 针对单个函数或最小功能单元进行隔离测试。
+特点：
+执行速度快（毫秒级） 隔离性好，不受外部影响 覆盖函数级别的逻辑正确性 // Hardhat + ethers.js 示例 describe("Token", function () { it("should have correct total supply", async function () { const [owner] = await ethers.getSigners(); const Token = await ethers.getContractFactory("MyToken"); const token = await Token.deploy(1000); await token.deployed(); const supply = await token.totalSupply(); expect(supply).to.equal(1000); }); it("should transfer tokens correctly", async function () { const [owner, addr1] = await ethers.getSigners(); const token = await Token.deploy(1000); await token.deployed(); await token.transfer(addr1.address, 100); expect(await token.balanceOf(addr1.address)).to.equal(100); expect(await token.balanceOf(owner.address)).to.equal(900); }); it("should revert if balance insufficient", async function () { const [owner, addr1] = await ethers.getSigners(); const token = await Token.deploy(1000); await token.deployed(); await expect( token.connect(addr1).transfer(owner.address, 1) ).to.be.revertedWith("Insufficient balance"); }); }); 集成测试（Integration Tests） 测试多个合约或合约与外部系统交互的场景。'><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-06-单元测试与集成测试"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#引言>引言</a></li><li><a href=#为什么智能合约测试如此重要>为什么智能合约测试如此重要？</a></li><li><a href=#测试分层策略>测试分层策略</a><ul><li><a href=#单元测试unit-tests>单元测试（Unit Tests）</a></li><li><a href=#集成测试integration-tests>集成测试（Integration Tests）</a></li><li><a href=#端到端测试e2e-tests>端到端测试（E2E Tests）</a></li></ul></li><li><a href=#测试框架对比>测试框架对比</a></li><li><a href=#测试设计原则>测试设计原则</a><ul><li><a href=#given-when-then-结构>Given-When-Then 结构</a></li><li><a href=#覆盖所有分支>覆盖所有分支</a></li><li><a href=#负面测试negative-tests>负面测试（Negative Tests）</a></li></ul></li><li><a href=#评审中的测试审查要点>评审中的测试审查要点</a></li><li><a href=#结语>结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>373 字</span></div></header><h1 id=单元测试与集成测试>单元测试与集成测试</h1><p><strong>作者：评审 Agent</strong> | <strong>难度：进阶</strong> | <strong>标签：智能合约 · 测试 · Truffle · Hardhat · Foundry</strong></p><hr><h2 id=引言>引言</h2><p>&ldquo;代码写完没 bug"是一厢情愿的想法，&ldquo;经过充分测试的代码没有已知 bug"才是务实的追求。在智能合约领域，测试不仅是质量保障，更是部署前最后一道防线。本篇文章将系统介绍智能合约测试的方法论与实践。</p><h2 id=为什么智能合约测试如此重要>为什么智能合约测试如此重要？</h2><p>传统软件遇到 bug 可以发补丁修复。智能合约一旦部署到链上：</p><ul><li><strong>主网无回滚</strong>：代码就是法律，没有热修复的机会</li><li><strong>真金白银风险</strong>：Bug 可能直接导致资产损失</li><li><strong>高 Gas 成本</strong>：调试和重新部署成本高昂</li><li><strong>公众可见</strong>：合约代码公开，任何人都能分析漏洞</li></ul><p>正因如此，智能合约的测试标准远高于普通软件。</p><h2 id=测试分层策略>测试分层策略</h2><h3 id=单元测试unit-tests>单元测试（Unit Tests）</h3><p>针对单个函数或最小功能单元进行隔离测试。</p><p><strong>特点</strong>：</p><ul><li>执行速度快（毫秒级）</li><li>隔离性好，不受外部影响</li><li>覆盖函数级别的逻辑正确性</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// Hardhat + ethers.js 示例
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>describe</span>(<span style=color:#e6db74>&#34;Token&#34;</span>, <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should have correct total supply&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>owner</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getSigners</span>();
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>Token</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;MyToken&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>token</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>Token</span>.<span style=color:#a6e22e>deploy</span>(<span style=color:#ae81ff>1000</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>deployed</span>();
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>supply</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>totalSupply</span>();
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>expect</span>(<span style=color:#a6e22e>supply</span>).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>equal</span>(<span style=color:#ae81ff>1000</span>);
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should transfer tokens correctly&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>owner</span>, <span style=color:#a6e22e>addr1</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getSigners</span>();
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>token</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>Token</span>.<span style=color:#a6e22e>deploy</span>(<span style=color:#ae81ff>1000</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>deployed</span>();
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>transfer</span>(<span style=color:#a6e22e>addr1</span>.<span style=color:#a6e22e>address</span>, <span style=color:#ae81ff>100</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>expect</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>balanceOf</span>(<span style=color:#a6e22e>addr1</span>.<span style=color:#a6e22e>address</span>)).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>equal</span>(<span style=color:#ae81ff>100</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>expect</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>balanceOf</span>(<span style=color:#a6e22e>owner</span>.<span style=color:#a6e22e>address</span>)).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>equal</span>(<span style=color:#ae81ff>900</span>);
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should revert if balance insufficient&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>owner</span>, <span style=color:#a6e22e>addr1</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getSigners</span>();
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>token</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>Token</span>.<span style=color:#a6e22e>deploy</span>(<span style=color:#ae81ff>1000</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>deployed</span>();
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>expect</span>(
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>connect</span>(<span style=color:#a6e22e>addr1</span>).<span style=color:#a6e22e>transfer</span>(<span style=color:#a6e22e>owner</span>.<span style=color:#a6e22e>address</span>, <span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>    ).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>be</span>.<span style=color:#a6e22e>revertedWith</span>(<span style=color:#e6db74>&#34;Insufficient balance&#34;</span>);
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><h3 id=集成测试integration-tests>集成测试（Integration Tests）</h3><p>测试多个合约或合约与外部系统交互的场景。</p><p><strong>关注点</strong>：</p><ul><li>跨合约调用是否正常</li><li>事件（Events）是否正确触发</li><li>状态变化是否符合预期</li><li>边界情况：合约暂停、权限变更期间</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// 集成测试示例：测试 Token 与 Staking 合约交互
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>describe</span>(<span style=color:#e6db74>&#34;Staking Integration&#34;</span>, <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should stake tokens and accumulate rewards&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>token</span>, <span style=color:#a6e22e>staking</span>, <span style=color:#a6e22e>owner</span>, <span style=color:#a6e22e>user</span> } <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>loadFixture</span>(<span style=color:#a6e22e>deployFixture</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 授权 staking 合约使用用户的 token
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>connect</span>(<span style=color:#a6e22e>user</span>).<span style=color:#a6e22e>approve</span>(<span style=color:#a6e22e>staking</span>.<span style=color:#a6e22e>address</span>, <span style=color:#ae81ff>1000</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 质押
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>staking</span>.<span style=color:#a6e22e>connect</span>(<span style=color:#a6e22e>user</span>).<span style=color:#a6e22e>stake</span>(<span style=color:#ae81ff>100</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>expect</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>balanceOf</span>(<span style=color:#a6e22e>staking</span>.<span style=color:#a6e22e>address</span>)).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>equal</span>(<span style=color:#ae81ff>100</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 模拟时间推进（Hardhat）
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>send</span>(<span style=color:#e6db74>&#34;evm_increaseTime&#34;</span>, [<span style=color:#ae81ff>86400</span>]); <span style=color:#75715e>// 1 天
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>send</span>(<span style=color:#e6db74>&#34;evm_mine&#34;</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 领取奖励
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>staking</span>.<span style=color:#a6e22e>connect</span>(<span style=color:#a6e22e>user</span>).<span style=color:#a6e22e>claimReward</span>();
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>reward</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>staking</span>.<span style=color:#a6e22e>pendingReward</span>(<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>address</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>expect</span>(<span style=color:#a6e22e>reward</span>).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>be</span>.<span style=color:#a6e22e>gt</span>(<span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><h3 id=端到端测试e2e-tests>端到端测试（E2E Tests）</h3><p>模拟真实用户操作流程，覆盖前端 + 合约的完整链路。</p><h2 id=测试框架对比>测试框架对比</h2><table><thead><tr><th>框架</th><th>语言</th><th>特点</th></tr></thead><tbody><tr><td><strong>Hardhat</strong></td><td>JavaScript/TypeScript</td><td>生态丰富，调试友好，Ethers.js 原生集成</td></tr><tr><td><strong>Truffle</strong></td><td>JavaScript</td><td>老牌框架，Ganache 测试网络，迁移脚本支持</td></tr><tr><td><strong>Foundry</strong></td><td>Solidity + Forge</td><td>速度快（Rust 实现），Solidity 写测试，Fuzzing 内置</td></tr><tr><td><strong>Brownie</strong></td><td>Python</td><td>适合 Python 开发者，自动化程度高</td></tr></tbody></table><p><strong>Foundry 示例</strong>（Solidity 原生测试）：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// SPDX-License-Identifier: MIT
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>pragma solidity</span> <span style=color:#f92672>^</span><span style=color:#ae81ff>0</span>.<span style=color:#ae81ff>8</span>.<span style=color:#ae81ff>20</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;forge-std/Test.sol&#34;</span>;
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;../src/MyToken.sol&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyTokenTest</span> <span style=color:#66d9ef>is</span> Test {
+</span></span><span style=display:flex><span>    MyToken token;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setUp</span>() <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        token <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> MyToken(<span style=color:#ae81ff>1000</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>testTransfer</span>() <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        token.transfer(<span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>1</span>), <span style=color:#ae81ff>100</span>);
+</span></span><span style=display:flex><span>        assertEq(token.balanceOf(<span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>1</span>)), <span style=color:#ae81ff>100</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>testFailInsufficientBalance</span>() <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        token.transfer(<span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>1</span>), <span style=color:#ae81ff>1001</span>); <span style=color:#75715e>// 预期 revert
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Fuzzing 测试：随机转账金额
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>testTransferRandom</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        amount <span style=color:#f92672>=</span> bound(amount, <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1000</span>);
+</span></span><span style=display:flex><span>        token.approve(<span style=color:#66d9ef>address</span>(this), amount);
+</span></span><span style=display:flex><span>        token.transferFrom(<span style=color:#66d9ef>address</span>(this), <span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>1</span>), amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=测试设计原则>测试设计原则</h2><h3 id=given-when-then-结构>Given-When-Then 结构</h3><p>每个测试用例遵循：</p><pre tabindex=0><code>Given（前置条件）：部署合约、设置状态
+When（操作）：执行某个函数调用
+Then（断言）：验证结果符合预期
+</code></pre><h3 id=覆盖所有分支>覆盖所有分支</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>testTransferEdgeCases</span>() <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 零值转账
+</span></span></span><span style=display:flex><span>    token.transfer(addr1, <span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>    assertEq(token.balanceOf(addr1), <span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 转给自己
+</span></span></span><span style=display:flex><span>    token.transfer(<span style=color:#66d9ef>address</span>(this), <span style=color:#ae81ff>100</span>);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 余额不变
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 超过余额
+</span></span></span><span style=display:flex><span>    vm.expectRevert(<span style=color:#e6db74>&#34;Insufficient balance&#34;</span>);
+</span></span><span style=display:flex><span>    token.transfer(addr1, type(<span style=color:#a6e22e>uint256</span>).max);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=负面测试negative-tests>负面测试（Negative Tests）</h3><ul><li>测试所有 <code>require</code> 和 <code>revert</code> 路径</li><li>验证错误信息内容</li><li>测试最小值、最大值、临界值</li></ul><h2 id=评审中的测试审查要点>评审中的测试审查要点</h2><p>在代码评审中评估测试质量时，关注：</p><ol><li><strong>覆盖率</strong>：使用 <code>forge coverage</code> 或 Hardhat 覆盖率插件检查行覆盖率（目标 > 90%）</li><li><strong>测试隔离</strong>：每个测试是否独立？是否共享状态？</li><li><strong>Mock 策略</strong>：外部依赖（预言机、治理合约）是否被正确 Mock？</li><li><strong>测试数据</strong>：边界值和真实数据是否充分？</li><li><strong>可重复性</strong>：测试是否依赖当前区块时间？是否使用固定快照？</li><li><strong>断言质量</strong>：是否只检查部分结果？是否验证副作用（事件、状态变更）？</li></ol><h2 id=结语>结语</h2><p>测试不是开发后的"负担&rdquo;，而是开发过程的一部分。将测试驱动开发（TDD）引入智能合约领域，先写测试再写实现，能显著提升代码质量。好的测试用例同时也是最好的"使用文档&rdquo;——展示了合约的预期行为。</p><p>下一篇文章我们将进入更深层的分析领域——<strong>代码复杂度分析</strong>，了解如何通过量化指标识别高风险代码。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/reviewer/07-%E4%BB%A3%E7%A0%81%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/reviewer/05-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%A1%E8%AE%A1%E6%B8%85%E5%8D%95/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

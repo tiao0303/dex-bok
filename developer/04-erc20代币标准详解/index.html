@@ -1,0 +1,225 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="ERC-20 代币标准详解：理解 DeFi 的基石
+什么是 ERC-20
+ERC-20 是以太坊上**同质化代币（ Fungible Token ）**的标准接口规范。2017 年通过 EIP-20 正式确立，成为以太坊生态中发行代币的统一协议。
+同质化意味着每一枚代币都是等价的——我的 1 ETH 和你的 1 ETH 完全等价，可以互换。ERC-20 代币正是这种特性的代币。
+ERC-20 之前，每个代币项目都需要自己定义转账逻辑，导致钱包、交易所需要为每个代币单独适配。ERC-20 的出现彻底改变了这一局面——只要遵循这个接口标准，就能无缝兼容所有钱包和交易所。
+接口规范
+ERC-20 标准定义了 6 个必须实现的核心函数和 2 个可选函数，以及 3 个事件。
+必需函数
+interface IERC20 {
+    // 代币总供应量
+    function totalSupply() external view returns (uint256);
+    
+    // 查询指定地址的代币余额
+    function balanceOf(address account) external view returns (uint256);
+    
+    // 从调用者地址向目标地址转账
+    function transfer(address to, uint256 amount) external returns (bool);
+    
+    // 查询授权额度（owner 授权给 spender 的代币数量）
+    function allowance(address owner, address spender) external view returns (uint256);
+    
+    // 授权第三方使用自己的代币（典型场景：DEX 挂单需要授权）
+    function approve(address spender, uint256 amount) external returns (bool);
+    
+    // 执行授权转账（从 from 向 to 转账，需先 approve）
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+}
+事件
+// 转账事件
+event Transfer(address indexed from, address indexed to, uint256 value);
+
+// 授权事件
+event Approval(address indexed owner, address indexed spender, uint256 value);
+indexed 关键字允许对事件参数进行过滤，这在构建前端应用时非常有用。"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/developer/04-erc20%E4%BB%A3%E5%B8%81%E6%A0%87%E5%87%86%E8%AF%A6%E8%A7%A3/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/developer/04-erc20%E4%BB%A3%E5%B8%81%E6%A0%87%E5%87%86%E8%AF%A6%E8%A7%A3/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="ERC-20 代币标准详解：理解 DeFi 的基石 什么是 ERC-20 ERC-20 是以太坊上**同质化代币（ Fungible Token ）**的标准接口规范。2017 年通过 EIP-20 正式确立，成为以太坊生态中发行代币的统一协议。
+同质化意味着每一枚代币都是等价的——我的 1 ETH 和你的 1 ETH 完全等价，可以互换。ERC-20 代币正是这种特性的代币。
+ERC-20 之前，每个代币项目都需要自己定义转账逻辑，导致钱包、交易所需要为每个代币单独适配。ERC-20 的出现彻底改变了这一局面——只要遵循这个接口标准，就能无缝兼容所有钱包和交易所。
+接口规范 ERC-20 标准定义了 6 个必须实现的核心函数和 2 个可选函数，以及 3 个事件。
+必需函数 interface IERC20 { // 代币总供应量 function totalSupply() external view returns (uint256); // 查询指定地址的代币余额 function balanceOf(address account) external view returns (uint256); // 从调用者地址向目标地址转账 function transfer(address to, uint256 amount) external returns (bool); // 查询授权额度（owner 授权给 spender 的代币数量） function allowance(address owner, address spender) external view returns (uint256); // 授权第三方使用自己的代币（典型场景：DEX 挂单需要授权） function approve(address spender, uint256 amount) external returns (bool); // 执行授权转账（从 from 向 to 转账，需先 approve） function transferFrom(address from, address to, uint256 amount) external returns (bool); } 事件 // 转账事件 event Transfer(address indexed from, address indexed to, uint256 value); // 授权事件 event Approval(address indexed owner, address indexed spender, uint256 value); indexed 关键字允许对事件参数进行过滤，这在构建前端应用时非常有用。"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="developer"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="ERC-20 代币标准详解：理解 DeFi 的基石 什么是 ERC-20 ERC-20 是以太坊上**同质化代币（ Fungible Token ）**的标准接口规范。2017 年通过 EIP-20 正式确立，成为以太坊生态中发行代币的统一协议。
+同质化意味着每一枚代币都是等价的——我的 1 ETH 和你的 1 ETH 完全等价，可以互换。ERC-20 代币正是这种特性的代币。
+ERC-20 之前，每个代币项目都需要自己定义转账逻辑，导致钱包、交易所需要为每个代币单独适配。ERC-20 的出现彻底改变了这一局面——只要遵循这个接口标准，就能无缝兼容所有钱包和交易所。
+接口规范 ERC-20 标准定义了 6 个必须实现的核心函数和 2 个可选函数，以及 3 个事件。
+必需函数 interface IERC20 { // 代币总供应量 function totalSupply() external view returns (uint256); // 查询指定地址的代币余额 function balanceOf(address account) external view returns (uint256); // 从调用者地址向目标地址转账 function transfer(address to, uint256 amount) external returns (bool); // 查询授权额度（owner 授权给 spender 的代币数量） function allowance(address owner, address spender) external view returns (uint256); // 授权第三方使用自己的代币（典型场景：DEX 挂单需要授权） function approve(address spender, uint256 amount) external returns (bool); // 执行授权转账（从 from 向 to 转账，需先 approve） function transferFrom(address from, address to, uint256 amount) external returns (bool); } 事件 // 转账事件 event Transfer(address indexed from, address indexed to, uint256 value); // 授权事件 event Approval(address indexed owner, address indexed spender, uint256 value); indexed 关键字允许对事件参数进行过滤，这在构建前端应用时非常有用。"><meta itemprop=wordCount content="700"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="ERC-20 代币标准详解：理解 DeFi 的基石 什么是 ERC-20 ERC-20 是以太坊上**同质化代币（ Fungible Token ）**的标准接口规范。2017 年通过 EIP-20 正式确立，成为以太坊生态中发行代币的统一协议。
+同质化意味着每一枚代币都是等价的——我的 1 ETH 和你的 1 ETH 完全等价，可以互换。ERC-20 代币正是这种特性的代币。
+ERC-20 之前，每个代币项目都需要自己定义转账逻辑，导致钱包、交易所需要为每个代币单独适配。ERC-20 的出现彻底改变了这一局面——只要遵循这个接口标准，就能无缝兼容所有钱包和交易所。
+接口规范 ERC-20 标准定义了 6 个必须实现的核心函数和 2 个可选函数，以及 3 个事件。
+必需函数 interface IERC20 { // 代币总供应量 function totalSupply() external view returns (uint256); // 查询指定地址的代币余额 function balanceOf(address account) external view returns (uint256); // 从调用者地址向目标地址转账 function transfer(address to, uint256 amount) external returns (bool); // 查询授权额度（owner 授权给 spender 的代币数量） function allowance(address owner, address spender) external view returns (uint256); // 授权第三方使用自己的代币（典型场景：DEX 挂单需要授权） function approve(address spender, uint256 amount) external returns (bool); // 执行授权转账（从 from 向 to 转账，需先 approve） function transferFrom(address from, address to, uint256 amount) external returns (bool); } 事件 // 转账事件 event Transfer(address indexed from, address indexed to, uint256 value); // 授权事件 event Approval(address indexed owner, address indexed spender, uint256 value); indexed 关键字允许对事件参数进行过滤，这在构建前端应用时非常有用。"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-04-ERC20代币标准详解"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#什么是-erc-20>什么是 ERC-20</a></li><li><a href=#接口规范>接口规范</a><ul><li><a href=#必需函数>必需函数</a></li><li><a href=#事件>事件</a></li><li><a href=#可选函数>可选函数</a></li></ul></li><li><a href=#完整实现示例>完整实现示例</a></li><li><a href=#approve--transferfrom-模式>approve + transferFrom 模式</a><ul><li><a href=#approve-的问题approve-陷阱>approve 的问题：approve 陷阱</a></li></ul></li><li><a href=#erc-20-扩展标准>ERC-20 扩展标准</a><ul><li><a href=#erc-20-snapshot>ERC-20 Snapshot</a></li><li><a href=#erc-20-capped上限代币>ERC-20 Capped（上限代币）</a></li><li><a href=#erc-20-burnable可燃烧>ERC-20 Burnable（可燃烧）</a></li></ul></li><li><a href=#使用-openzeppelin-库>使用 OpenZeppelin 库</a></li><li><a href=#部署与验证>部署与验证</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>700 字</span></div></header><h1 id=erc-20-代币标准详解理解-defi-的基石>ERC-20 代币标准详解：理解 DeFi 的基石</h1><h2 id=什么是-erc-20>什么是 ERC-20</h2><p>ERC-20 是以太坊上**同质化代币（ Fungible Token ）**的标准接口规范。2017 年通过 EIP-20 正式确立，成为以太坊生态中发行代币的统一协议。</p><p><strong>同质化</strong>意味着每一枚代币都是等价的——我的 1 ETH 和你的 1 ETH 完全等价，可以互换。ERC-20 代币正是这种特性的代币。</p><p>ERC-20 之前，每个代币项目都需要自己定义转账逻辑，导致钱包、交易所需要为每个代币单独适配。ERC-20 的出现彻底改变了这一局面——只要遵循这个接口标准，就能无缝兼容所有钱包和交易所。</p><h2 id=接口规范>接口规范</h2><p>ERC-20 标准定义了 6 个必须实现的核心函数和 2 个可选函数，以及 3 个事件。</p><h3 id=必需函数>必需函数</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>IERC20</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 代币总供应量
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>totalSupply</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 查询指定地址的代币余额
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>balanceOf</span>(<span style=color:#66d9ef>address</span> account) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 从调用者地址向目标地址转账
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>transfer</span>(<span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 查询授权额度（owner 授权给 spender 的代币数量）
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>allowance</span>(<span style=color:#66d9ef>address</span> owner, <span style=color:#66d9ef>address</span> spender) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 授权第三方使用自己的代币（典型场景：DEX 挂单需要授权）
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>approve</span>(<span style=color:#66d9ef>address</span> spender, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 执行授权转账（从 from 向 to 转账，需先 approve）
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>transferFrom</span>(<span style=color:#66d9ef>address</span> <span style=color:#66d9ef>from</span>, <span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=事件>事件</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 转账事件
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>event</span> <span style=color:#a6e22e>Transfer</span>(<span style=color:#66d9ef>address</span> <span style=color:#66d9ef>indexed</span> <span style=color:#66d9ef>from</span>, <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>indexed</span> to, <span style=color:#66d9ef>uint256</span> value);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 授权事件
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>event</span> <span style=color:#a6e22e>Approval</span>(<span style=color:#66d9ef>address</span> <span style=color:#66d9ef>indexed</span> owner, <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>indexed</span> spender, <span style=color:#66d9ef>uint256</span> value);
+</span></span></code></pre></div><p><code>indexed</code> 关键字允许对事件参数进行过滤，这在构建前端应用时非常有用。</p><h3 id=可选函数>可选函数</h3><p>ERC-20 标准还定义了两个可选函数，用于展示代币的元信息：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 代币名称（可选）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>name</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>string</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 代币符号（可选）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>symbol</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>string</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 代币小数位数（可选，默认18）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>decimals</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint8</span>);
+</span></span></code></pre></div><h2 id=完整实现示例>完整实现示例</h2><p>以下是一个完整的 ERC-20 代币实现：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// SPDX-License-Identifier: MIT
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>pragma solidity</span> <span style=color:#f92672>^</span><span style=color:#ae81ff>0</span>.<span style=color:#ae81ff>8</span>.<span style=color:#ae81ff>24</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>ERC20</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>) <span style=color:#66d9ef>private</span> _balances;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>)) <span style=color:#66d9ef>private</span> _allowances;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>private</span> _totalSupply;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>string</span> <span style=color:#66d9ef>private</span> _name;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>string</span> <span style=color:#66d9ef>private</span> _symbol;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint8</span> <span style=color:#66d9ef>private</span> _decimals;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>constructor</span>(<span style=color:#66d9ef>string</span> <span style=color:#66d9ef>memory</span> name_, <span style=color:#66d9ef>string</span> <span style=color:#66d9ef>memory</span> symbol_) {
+</span></span><span style=display:flex><span>        _name <span style=color:#f92672>=</span> name_;
+</span></span><span style=display:flex><span>        _symbol <span style=color:#f92672>=</span> symbol_;
+</span></span><span style=display:flex><span>        _decimals <span style=color:#f92672>=</span> <span style=color:#ae81ff>18</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// --- 实现 IERC20 接口 ---
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>name</span>() <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>string</span> <span style=color:#66d9ef>memory</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> _name;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>symbol</span>() <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>string</span> <span style=color:#66d9ef>memory</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> _symbol;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>decimals</span>() <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint8</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> _decimals;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>totalSupply</span>() <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> _totalSupply;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>balanceOf</span>(<span style=color:#66d9ef>address</span> account) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> _balances[account];
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>transfer</span>(<span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>) {
+</span></span><span style=display:flex><span>        _transfer(msg.sender, to, amount);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>allowance</span>(<span style=color:#66d9ef>address</span> owner, <span style=color:#66d9ef>address</span> spender) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> _allowances[owner][spender];
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>approve</span>(<span style=color:#66d9ef>address</span> spender, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>) {
+</span></span><span style=display:flex><span>        _approve(msg.sender, spender, amount);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>transferFrom</span>(<span style=color:#66d9ef>address</span> <span style=color:#66d9ef>from</span>, <span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>) {
+</span></span><span style=display:flex><span>        _spendAllowance(<span style=color:#66d9ef>from</span>, msg.sender, amount);
+</span></span><span style=display:flex><span>        _transfer(<span style=color:#66d9ef>from</span>, to, amount);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// --- 内部函数 ---
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>_transfer</span>(<span style=color:#66d9ef>address</span> <span style=color:#66d9ef>from</span>, <span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>internal</span> {
+</span></span><span style=display:flex><span>        require(<span style=color:#66d9ef>from</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>0</span>), <span style=color:#e6db74>&#34;Transfer from zero address&#34;</span>);
+</span></span><span style=display:flex><span>        require(to <span style=color:#f92672>!=</span> <span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>0</span>), <span style=color:#e6db74>&#34;Transfer to zero address&#34;</span>);
+</span></span><span style=display:flex><span>        require(_balances[<span style=color:#66d9ef>from</span>] <span style=color:#f92672>&gt;=</span> amount, <span style=color:#e6db74>&#34;Insufficient balance&#34;</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        _balances[<span style=color:#66d9ef>from</span>] <span style=color:#f92672>-=</span> amount;
+</span></span><span style=display:flex><span>        _balances[to] <span style=color:#f92672>+=</span> amount;
+</span></span><span style=display:flex><span>        emit Transfer(<span style=color:#66d9ef>from</span>, to, amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>_mint</span>(<span style=color:#66d9ef>address</span> account, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>internal</span> {
+</span></span><span style=display:flex><span>        require(account <span style=color:#f92672>!=</span> <span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>0</span>), <span style=color:#e6db74>&#34;Mint to zero address&#34;</span>);
+</span></span><span style=display:flex><span>        _totalSupply <span style=color:#f92672>+=</span> amount;
+</span></span><span style=display:flex><span>        _balances[account] <span style=color:#f92672>+=</span> amount;
+</span></span><span style=display:flex><span>        emit Transfer(<span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>0</span>), account, amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>_burn</span>(<span style=color:#66d9ef>address</span> account, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>internal</span> {
+</span></span><span style=display:flex><span>        require(account <span style=color:#f92672>!=</span> <span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>0</span>), <span style=color:#e6db74>&#34;Burn from zero address&#34;</span>);
+</span></span><span style=display:flex><span>        require(_balances[account] <span style=color:#f92672>&gt;=</span> amount, <span style=color:#e6db74>&#34;Insufficient balance&#34;</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        _balances[account] <span style=color:#f92672>-=</span> amount;
+</span></span><span style=display:flex><span>        _totalSupply <span style=color:#f92672>-=</span> amount;
+</span></span><span style=display:flex><span>        emit Transfer(account, <span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>0</span>), amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>_approve</span>(<span style=color:#66d9ef>address</span> owner, <span style=color:#66d9ef>address</span> spender, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>internal</span> {
+</span></span><span style=display:flex><span>        require(owner <span style=color:#f92672>!=</span> <span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>0</span>), <span style=color:#e6db74>&#34;Approve from zero address&#34;</span>);
+</span></span><span style=display:flex><span>        require(spender <span style=color:#f92672>!=</span> <span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>0</span>), <span style=color:#e6db74>&#34;Approve to zero address&#34;</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        _allowances[owner][spender] <span style=color:#f92672>=</span> amount;
+</span></span><span style=display:flex><span>        emit Approval(owner, spender, amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>_spendAllowance</span>(<span style=color:#66d9ef>address</span> owner, <span style=color:#66d9ef>address</span> spender, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>internal</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> currentAllowance <span style=color:#f92672>=</span> _allowances[owner][spender];
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (currentAllowance <span style=color:#f92672>!=</span> type(<span style=color:#a6e22e>uint256</span>).max) {
+</span></span><span style=display:flex><span>            require(currentAllowance <span style=color:#f92672>&gt;=</span> amount, <span style=color:#e6db74>&#34;Insufficient allowance&#34;</span>);
+</span></span><span style=display:flex><span>            _approve(owner, spender, currentAllowance <span style=color:#f92672>-</span> amount);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=approve--transferfrom-模式>approve + transferFrom 模式</h2><p>ERC-20 的授权机制是 DeFi 生态的核心基础。典型使用场景：</p><pre tabindex=0><code>用户想通过 DEX 交易代币 A 获取代币 B：
+1. 用户先调用 A.approve(DEX地址, amount) 授权 DEX 可以使用自己的 A 代币
+2. DEX 调用 A.transferFrom(用户, DEX, amount) 划走用户的 A 代币
+3. DEX 将 B 代币转给用户
+</code></pre><h3 id=approve-的问题approve-陷阱>approve 的问题：approve 陷阱</h3><p><code>approve</code> 存在一个历史遗留问题：无法将授权额度从非零值修改为零。如果用户想减少授权额度，必须先调用 <code>approve(0)</code> 清零，等待交易确认，再调用 <code>approve(newAmount)</code>。</p><p><strong>现代解决方案：permit 扩展（EIP-2612）</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>permit</span>(
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> owner,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> spender,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> value,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> deadline,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint8</span> v,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes32</span> r,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes32</span> s
+</span></span><span style=display:flex><span>) <span style=color:#66d9ef>external</span>;
+</span></span></code></pre></div><p>通过离线签名，用户可以一次性完成授权+转账，避免了 approve 陷阱。</p><h2 id=erc-20-扩展标准>ERC-20 扩展标准</h2><h3 id=erc-20-snapshot>ERC-20 Snapshot</h3><p>在特定区块记录每个地址的代币余额快照，常用于 DAO 治理投票：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>snapshot</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>balanceOfAt</span>(<span style=color:#66d9ef>address</span> account, <span style=color:#66d9ef>uint256</span> snapshotId) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>totalSupplyAt</span>(<span style=color:#66d9ef>uint256</span> snapshotId) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span></code></pre></div><h3 id=erc-20-capped上限代币>ERC-20 Capped（上限代币）</h3><p>限制代币最大供应量：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>cap</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span>require(totalSupply() <span style=color:#f92672>&lt;=</span> cap(), <span style=color:#e6db74>&#34;Cap exceeded&#34;</span>);
+</span></span></code></pre></div><h3 id=erc-20-burnable可燃烧>ERC-20 Burnable（可燃烧）</h3><p>允许持有者销毁自己的代币：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>burn</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>burnFrom</span>(<span style=color:#66d9ef>address</span> account, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span>;
+</span></span></code></pre></div><h2 id=使用-openzeppelin-库>使用 OpenZeppelin 库</h2><p>生产环境推荐使用 OpenZeppelin 的审计通过的标准实现：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// SPDX-License-Identifier: MIT
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>pragma solidity</span> <span style=color:#f92672>^</span><span style=color:#ae81ff>0</span>.<span style=color:#ae81ff>8</span>.<span style=color:#ae81ff>24</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts/token/ERC20/ERC20.sol&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyToken</span> <span style=color:#66d9ef>is</span> ERC20 {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>constant</span> MAX_SUPPLY <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>_000_000 <span style=color:#f92672>*</span> <span style=color:#ae81ff>10</span><span style=color:#f92672>**</span><span style=color:#ae81ff>18</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>constructor</span>() ERC20(<span style=color:#e6db74>&#34;MyToken&#34;</span>, <span style=color:#e6db74>&#34;MTK&#34;</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 部署时铸造代币
+</span></span></span><span style=display:flex><span>        _mint(msg.sender, MAX_SUPPLY);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 可选：添加燃烧功能
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>burn</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>override</span> {
+</span></span><span style=display:flex><span>        super.burn(amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>OpenZeppelin 的实现经过严格审计、安全性高，且提供 Upgradeable 版本支持代理模式升级。</p><h2 id=部署与验证>部署与验证</h2><p>部署到测试网络后，在 Etherscan 上验证源码：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npx hardhat verify --network sepolia &lt;合约地址&gt; &lt;构造函数参数&gt;
+</span></span></code></pre></div><p>验证通过后，Etherscan 会显示 &ldquo;Contract Source Code Verified&rdquo;，用户可以直接在 Etherscan 界面与合约交互。</p><h2 id=总结>总结</h2><p>ERC-20 是 DeFi 世界的通用语言。理解其接口设计理念、授权机制和扩展标准，是深入学习 DeFi 协议的基础。下一篇文章我们将解析 Uniswap 等主流 DeFi 协议的核心合约设计。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/developer/05-defi%E6%A0%B8%E5%BF%83%E5%90%88%E7%BA%A6%E8%A7%A3%E6%9E%90/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/developer/03-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

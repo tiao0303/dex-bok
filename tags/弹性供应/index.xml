@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>弹性供应 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E5%BC%B9%E6%80%A7%E4%BE%9B%E5%BA%94/</link><description>Recent content in 弹性供应 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sat, 21 Mar 2026 11:30:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E5%BC%B9%E6%80%A7%E4%BE%9B%E5%BA%94/index.xml" rel="self" type="application/rss+xml"/><item><title>Rebasing 池子是什么？弹性供应代币的 AMM 挑战</title><link>https://tiao0303.github.io/dex-bok/posts/29-rebasing-pools/</link><pubDate>Sat, 21 Mar 2026 11:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/29-rebasing-pools/</guid><description>&lt;h2 id="什么是-rebasing-代币"&gt;什么是 Rebasing 代币&lt;/h2&gt;
+&lt;p&gt;Rebasing（弹性供应）代币是一种&lt;strong&gt;供应量会自动调整&lt;/strong&gt;的加密货币机制。通过算法定期调整总流通量，以达到目标价格或分配奖励。&lt;/p&gt;
+&lt;h3 id="核心机制"&gt;核心机制&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;场景&lt;/th&gt;
+ &lt;th&gt;操作&lt;/th&gt;
+ &lt;th&gt;效果&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;价格高于目标&lt;/td&gt;
+ &lt;td&gt;正向 Rebase（+supply）&lt;/td&gt;
+ &lt;td&gt;代币数量增加，单价下降&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;价格低于目标&lt;/td&gt;
+ &lt;td&gt;负向 Rebase（-supply）&lt;/td&gt;
+ &lt;td&gt;代币数量减少，单价上升&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;关键点&lt;/strong&gt;：用户的持币比例保持不变，但绝对数量会变化。&lt;/p&gt;
+&lt;h3 id="代表项目"&gt;代表项目&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AMPL&lt;/strong&gt;：最早的弹性供应稳定币，目标是 $1&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;aToken&lt;/strong&gt;（Aave）：存款产生利息时数量增加&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;stETH&lt;/strong&gt;：质押收益体现为代币数量增长&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="rebasing-池子的特殊挑战"&gt;Rebasing 池子的特殊挑战&lt;/h2&gt;
+&lt;h3 id="传统-amm-的问题"&gt;传统 AMM 的问题&lt;/h3&gt;
+&lt;p&gt;标准 AMM（如 Uniswap V2/V3）假设代币供应是&lt;strong&gt;固定或可预测变化&lt;/strong&gt;的。当 Rebasing 代币的供应突然变化时：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;案例：池中有 1000 AMPL + 1000 USDC
+
+正向 Rebase 后：AMPL 供应变为 1100（+10%）
+ 
+传统 AMM 认知：
+→ 误判为需求减少 → AMPL 价值被低估
+→ LP 遭受&amp;#34; divergence loss&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="问题本质"&gt;问题本质&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;价值泄露&lt;/strong&gt;：AMM 无法识别&amp;quot;供应增加&amp;quot;还是&amp;quot;需求减少&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;无常损失加剧&lt;/strong&gt;：供应调整带来的额外波动&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;池子偿付风险&lt;/strong&gt;：极端负向 Rebase 可能导致池子资不抵债&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="解决方案专用-amm"&gt;解决方案：专用 AMM&lt;/h2&gt;
+&lt;h3 id="1-elasticswap"&gt;1. ElasticSwap&lt;/h3&gt;
+&lt;p&gt;专为弹性供应代币设计的 AMM，能正确感知 Rebase 事件：&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,305 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='智能合约测试与部署：从测试网到主网
+为什么测试至关重要
+智能合约一旦部署就无法修改（除非使用代理模式），任何漏洞都可能导致不可逆的资产损失。2021 年 Poly Network 被盗 6.11 亿美元，2022 年 Ronin Network 被盗 6.2 亿美元——这些事故几乎都与合约漏洞有关。
+智能合约测试是守门员，不是可选项。
+测试框架概述
+Hardhat 测试
+Hardhat 原生支持使用 Waffle 库进行智能合约测试，基于 Mocha 测试框架：
+const { expect } = require("chai");
+const { ethers } = require("hardhat");
+const { time } = require("@nomicfoundation/hardhat-network-helpers");
+
+describe("Token Contract", function () {
+  let token;
+  let owner;
+  let user;
+  let anotherUser;
+
+  beforeEach(async function () {
+    [owner, user, anotherUser] = await ethers.getSigners();
+    
+    const Token = await ethers.getContractFactory("MyToken");
+    token = await Token.deploy(ethers.parseEther("1000000"));
+    await token.waitForDeployment();
+  });
+
+  describe("Deployment", function () {
+    it("should set the correct name and symbol", async function () {
+      expect(await token.name()).to.equal("MyToken");
+      expect(await token.symbol()).to.equal("MTK");
+    });
+
+    it("should assign total supply to owner", async function () {
+      const ownerBalance = await token.balanceOf(owner.address);
+      expect(ownerBalance).to.equal(ethers.parseEther("1000000"));
+    });
+  });
+
+  describe("Transfers", function () {
+    it("should transfer tokens between accounts", async function () {
+      await token.transfer(user.address, ethers.parseEther("100"));
+      expect(await token.balanceOf(user.address))
+        .to.equal(ethers.parseEther("100"));
+    });
+
+    it("should fail if sender doesn&#39;t have enough tokens", async function () {
+      await expect(
+        token.connect(user).transfer(anotherUser.address, ethers.parseEther("1000"))
+      ).to.be.revertedWith("Insufficient balance");
+    });
+  });
+});
+Foundry 测试
+Foundry 的测试用 Solidity 编写，执行速度极快：'><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/developer/06-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%83%A8%E7%BD%B2/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/developer/06-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%83%A8%E7%BD%B2/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='智能合约测试与部署：从测试网到主网 为什么测试至关重要 智能合约一旦部署就无法修改（除非使用代理模式），任何漏洞都可能导致不可逆的资产损失。2021 年 Poly Network 被盗 6.11 亿美元，2022 年 Ronin Network 被盗 6.2 亿美元——这些事故几乎都与合约漏洞有关。
+智能合约测试是守门员，不是可选项。
+测试框架概述 Hardhat 测试 Hardhat 原生支持使用 Waffle 库进行智能合约测试，基于 Mocha 测试框架：
+const { expect } = require("chai"); const { ethers } = require("hardhat"); const { time } = require("@nomicfoundation/hardhat-network-helpers"); describe("Token Contract", function () { let token; let owner; let user; let anotherUser; beforeEach(async function () { [owner, user, anotherUser] = await ethers.getSigners(); const Token = await ethers.getContractFactory("MyToken"); token = await Token.deploy(ethers.parseEther("1000000")); await token.waitForDeployment(); }); describe("Deployment", function () { it("should set the correct name and symbol", async function () { expect(await token.name()).to.equal("MyToken"); expect(await token.symbol()).to.equal("MTK"); }); it("should assign total supply to owner", async function () { const ownerBalance = await token.balanceOf(owner.address); expect(ownerBalance).to.equal(ethers.parseEther("1000000")); }); }); describe("Transfers", function () { it("should transfer tokens between accounts", async function () { await token.transfer(user.address, ethers.parseEther("100")); expect(await token.balanceOf(user.address)) .to.equal(ethers.parseEther("100")); }); it("should fail if sender doesn&#39;t have enough tokens", async function () { await expect( token.connect(user).transfer(anotherUser.address, ethers.parseEther("1000")) ).to.be.revertedWith("Insufficient balance"); }); }); }); Foundry 测试 Foundry 的测试用 Solidity 编写，执行速度极快：'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='智能合约测试与部署：从测试网到主网 为什么测试至关重要 智能合约一旦部署就无法修改（除非使用代理模式），任何漏洞都可能导致不可逆的资产损失。2021 年 Poly Network 被盗 6.11 亿美元，2022 年 Ronin Network 被盗 6.2 亿美元——这些事故几乎都与合约漏洞有关。
+智能合约测试是守门员，不是可选项。
+测试框架概述 Hardhat 测试 Hardhat 原生支持使用 Waffle 库进行智能合约测试，基于 Mocha 测试框架：
+const { expect } = require("chai"); const { ethers } = require("hardhat"); const { time } = require("@nomicfoundation/hardhat-network-helpers"); describe("Token Contract", function () { let token; let owner; let user; let anotherUser; beforeEach(async function () { [owner, user, anotherUser] = await ethers.getSigners(); const Token = await ethers.getContractFactory("MyToken"); token = await Token.deploy(ethers.parseEther("1000000")); await token.waitForDeployment(); }); describe("Deployment", function () { it("should set the correct name and symbol", async function () { expect(await token.name()).to.equal("MyToken"); expect(await token.symbol()).to.equal("MTK"); }); it("should assign total supply to owner", async function () { const ownerBalance = await token.balanceOf(owner.address); expect(ownerBalance).to.equal(ethers.parseEther("1000000")); }); }); describe("Transfers", function () { it("should transfer tokens between accounts", async function () { await token.transfer(user.address, ethers.parseEther("100")); expect(await token.balanceOf(user.address)) .to.equal(ethers.parseEther("100")); }); it("should fail if sender doesn&#39;t have enough tokens", async function () { await expect( token.connect(user).transfer(anotherUser.address, ethers.parseEther("1000")) ).to.be.revertedWith("Insufficient balance"); }); }); }); Foundry 测试 Foundry 的测试用 Solidity 编写，执行速度极快：'><meta itemprop=wordCount content="782"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='智能合约测试与部署：从测试网到主网 为什么测试至关重要 智能合约一旦部署就无法修改（除非使用代理模式），任何漏洞都可能导致不可逆的资产损失。2021 年 Poly Network 被盗 6.11 亿美元，2022 年 Ronin Network 被盗 6.2 亿美元——这些事故几乎都与合约漏洞有关。
+智能合约测试是守门员，不是可选项。
+测试框架概述 Hardhat 测试 Hardhat 原生支持使用 Waffle 库进行智能合约测试，基于 Mocha 测试框架：
+const { expect } = require("chai"); const { ethers } = require("hardhat"); const { time } = require("@nomicfoundation/hardhat-network-helpers"); describe("Token Contract", function () { let token; let owner; let user; let anotherUser; beforeEach(async function () { [owner, user, anotherUser] = await ethers.getSigners(); const Token = await ethers.getContractFactory("MyToken"); token = await Token.deploy(ethers.parseEther("1000000")); await token.waitForDeployment(); }); describe("Deployment", function () { it("should set the correct name and symbol", async function () { expect(await token.name()).to.equal("MyToken"); expect(await token.symbol()).to.equal("MTK"); }); it("should assign total supply to owner", async function () { const ownerBalance = await token.balanceOf(owner.address); expect(ownerBalance).to.equal(ethers.parseEther("1000000")); }); }); describe("Transfers", function () { it("should transfer tokens between accounts", async function () { await token.transfer(user.address, ethers.parseEther("100")); expect(await token.balanceOf(user.address)) .to.equal(ethers.parseEther("100")); }); it("should fail if sender doesn&#39;t have enough tokens", async function () { await expect( token.connect(user).transfer(anotherUser.address, ethers.parseEther("1000")) ).to.be.revertedWith("Insufficient balance"); }); }); }); Foundry 测试 Foundry 的测试用 Solidity 编写，执行速度极快：'><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-06-智能合约测试与部署"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#为什么测试至关重要>为什么测试至关重要</a></li><li><a href=#测试框架概述>测试框架概述</a><ul><li><a href=#hardhat-测试>Hardhat 测试</a></li><li><a href=#foundry-测试>Foundry 测试</a></li></ul></li><li><a href=#测试类型>测试类型</a><ul><li><a href=#1-单元测试>1. 单元测试</a></li><li><a href=#2-集成测试>2. 集成测试</a></li><li><a href=#3-场景测试fork-testing>3. 场景测试（Fork Testing）</a></li><li><a href=#4-模糊测试fuzz-testing>4. 模糊测试（Fuzz Testing）</a></li></ul></li><li><a href=#gas-报告分析>Gas 报告分析</a></li><li><a href=#部署流程>部署流程</a><ul><li><a href=#1-准备部署脚本>1. 准备部署脚本</a></li><li><a href=#2-配置网络>2. 配置网络</a></li><li><a href=#3-执行部署>3. 执行部署</a></li><li><a href=#4-验证合约源码>4. 验证合约源码</a></li><li><a href=#5-主网部署前的检查清单>5. 主网部署前的检查清单</a></li></ul></li><li><a href=#监控与运维>监控与运维</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>782 字</span></div></header><h1 id=智能合约测试与部署从测试网到主网>智能合约测试与部署：从测试网到主网</h1><h2 id=为什么测试至关重要>为什么测试至关重要</h2><p>智能合约一旦部署就无法修改（除非使用代理模式），任何漏洞都可能导致不可逆的资产损失。2021 年 Poly Network 被盗 6.11 亿美元，2022 年 Ronin Network 被盗 6.2 亿美元——这些事故几乎都与合约漏洞有关。</p><p><strong>智能合约测试是守门员，不是可选项。</strong></p><h2 id=测试框架概述>测试框架概述</h2><h3 id=hardhat-测试>Hardhat 测试</h3><p>Hardhat 原生支持使用 Waffle 库进行智能合约测试，基于 Mocha 测试框架：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>expect</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#34;chai&#34;</span>);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>ethers</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#34;hardhat&#34;</span>);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>time</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#34;@nomicfoundation/hardhat-network-helpers&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>describe</span>(<span style=color:#e6db74>&#34;Token Contract&#34;</span>, <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>token</span>;
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>owner</span>;
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>user</span>;
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>anotherUser</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>beforeEach</span>(<span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    [<span style=color:#a6e22e>owner</span>, <span style=color:#a6e22e>user</span>, <span style=color:#a6e22e>anotherUser</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getSigners</span>();
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>Token</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;MyToken&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>token</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>Token</span>.<span style=color:#a6e22e>deploy</span>(<span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>parseEther</span>(<span style=color:#e6db74>&#34;1000000&#34;</span>));
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>waitForDeployment</span>();
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>describe</span>(<span style=color:#e6db74>&#34;Deployment&#34;</span>, <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should set the correct name and symbol&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>expect</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>name</span>()).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>equal</span>(<span style=color:#e6db74>&#34;MyToken&#34;</span>);
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>expect</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>symbol</span>()).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>equal</span>(<span style=color:#e6db74>&#34;MTK&#34;</span>);
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should assign total supply to owner&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>ownerBalance</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>balanceOf</span>(<span style=color:#a6e22e>owner</span>.<span style=color:#a6e22e>address</span>);
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>expect</span>(<span style=color:#a6e22e>ownerBalance</span>).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>equal</span>(<span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>parseEther</span>(<span style=color:#e6db74>&#34;1000000&#34;</span>));
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>describe</span>(<span style=color:#e6db74>&#34;Transfers&#34;</span>, <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should transfer tokens between accounts&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>transfer</span>(<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>address</span>, <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>parseEther</span>(<span style=color:#e6db74>&#34;100&#34;</span>));
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>expect</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>balanceOf</span>(<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>address</span>))
+</span></span><span style=display:flex><span>        .<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>equal</span>(<span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>parseEther</span>(<span style=color:#e6db74>&#34;100&#34;</span>));
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should fail if sender doesn&#39;t have enough tokens&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>expect</span>(
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>connect</span>(<span style=color:#a6e22e>user</span>).<span style=color:#a6e22e>transfer</span>(<span style=color:#a6e22e>anotherUser</span>.<span style=color:#a6e22e>address</span>, <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>parseEther</span>(<span style=color:#e6db74>&#34;1000&#34;</span>))
+</span></span><span style=display:flex><span>      ).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>be</span>.<span style=color:#a6e22e>revertedWith</span>(<span style=color:#e6db74>&#34;Insufficient balance&#34;</span>);
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><h3 id=foundry-测试>Foundry 测试</h3><p>Foundry 的测试用 Solidity 编写，执行速度极快：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// test/Token.t.sol
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// SPDX-License-Identifier: MIT
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>pragma solidity</span> <span style=color:#f92672>^</span><span style=color:#ae81ff>0</span>.<span style=color:#ae81ff>8</span>.<span style=color:#ae81ff>24</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;forge-std/Test.sol&#34;</span>;
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;../src/Token.sol&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>TokenTest</span> <span style=color:#66d9ef>is</span> Test {
+</span></span><span style=display:flex><span>    Token token;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> owner;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> user;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setUp</span>() <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        owner <span style=color:#f92672>=</span> <span style=color:#66d9ef>address</span>(this);
+</span></span><span style=display:flex><span>        user <span style=color:#f92672>=</span> makeAddr(<span style=color:#e6db74>&#34;user&#34;</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        token <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Token(<span style=color:#e6db74>&#34;MyToken&#34;</span>, <span style=color:#e6db74>&#34;MTK&#34;</span>, <span style=color:#ae81ff>1</span>_000_000e18);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>testNameAndSymbol</span>() <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        assertEq(token.name(), <span style=color:#e6db74>&#34;MyToken&#34;</span>);
+</span></span><span style=display:flex><span>        assertEq(token.symbol(), <span style=color:#e6db74>&#34;MTK&#34;</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>testTransfer</span>() <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        token.transfer(user, <span style=color:#ae81ff>100</span>e18);
+</span></span><span style=display:flex><span>        assertEq(token.balanceOf(user), <span style=color:#ae81ff>100</span>e18);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>testInsufficientBalance</span>() <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        vm.expectRevert(<span style=color:#e6db74>&#34;Insufficient balance&#34;</span>);
+</span></span><span style=display:flex><span>        token.transfer(user, <span style=color:#ae81ff>1</span>_000_001e18);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>运行测试：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>forge test
+</span></span></code></pre></div><h2 id=测试类型>测试类型</h2><h3 id=1-单元测试>1. 单元测试</h3><p>测试单个函数的功能：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should calculate reward correctly&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>reward</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>staking</span>.<span style=color:#a6e22e>calculateReward</span>(<span style=color:#a6e22e>holder</span>.<span style=color:#a6e22e>address</span>);
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 预期奖励 = 质押量 × 年化收益率 × 质押时长 / 365天
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>expected</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>stakeAmount</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>1000</span> <span style=color:#f92672>/</span> <span style=color:#ae81ff>10000</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>stakingDays</span> <span style=color:#f92672>/</span> (<span style=color:#ae81ff>365</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>86400</span>) <span style=color:#f92672>*</span> <span style=color:#ae81ff>1e18</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>expect</span>(<span style=color:#a6e22e>reward</span>).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>be</span>.<span style=color:#a6e22e>closeTo</span>(<span style=color:#a6e22e>expected</span>, <span style=color:#ae81ff>1</span>); <span style=color:#75715e>// 允许 1 wei 误差
+</span></span></span><span style=display:flex><span>});
+</span></span></code></pre></div><h3 id=2-集成测试>2. 集成测试</h3><p>测试合约间的交互：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#a6e22e>describe</span>(<span style=color:#e6db74>&#34;Staking Integration&#34;</span>, <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should integrate with reward token&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 1. 质押代币
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>staking</span>.<span style=color:#a6e22e>stake</span>(<span style=color:#a6e22e>stakeAmount</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 2. 时间推进
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>increase</span>(<span style=color:#ae81ff>30</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>86400</span>); <span style=color:#75715e>// 30天后
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 3. 领取奖励
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>staking</span>.<span style=color:#a6e22e>claimReward</span>();
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 4. 验证奖励代币到账
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>rewardBalance</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>rewardToken</span>.<span style=color:#a6e22e>balanceOf</span>(<span style=color:#a6e22e>staker</span>.<span style=color:#a6e22e>address</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>expect</span>(<span style=color:#a6e22e>rewardBalance</span>).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>be</span>.<span style=color:#a6e22e>gt</span>(<span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><h3 id=3-场景测试fork-testing>3. 场景测试（Fork Testing）</h3><p>在主网分叉环境中测试，使用真实数据和协议：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// Hardhat Fork 测试
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>describe</span>(<span style=color:#e6db74>&#34;Uniswap Integration&#34;</span>, <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>beforeEach</span>(<span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Fork Sepolia 测试网
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>network</span>.<span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>request</span>({
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;hardhat_reset&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>params</span><span style=color:#f92672>:</span> [{
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>forking</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>          <span style=color:#a6e22e>jsonRpcUrl</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>env</span>.<span style=color:#a6e22e>SEPOLIA_RPC_URL</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      }]
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should swap ETH for USDC via Uniswap&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 使用真实的 Uniswap V2 Router
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>router</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractAt</span>(
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#34;IUniswapV2Router02&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#34;0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D&#34;</span>
+</span></span><span style=display:flex><span>    );
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>path</span> <span style=color:#f92672>=</span> [<span style=color:#a6e22e>WETH</span>, <span style=color:#a6e22e>USDC</span>]; <span style=color:#75715e>// 路径
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>amountOutMin</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>1800</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>1e6</span>; <span style=color:#75715e>// 至少收到 1800 USDC
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>router</span>.<span style=color:#a6e22e>swapExactETHForTokens</span>(
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>amountOutMin</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>path</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>owner</span>.<span style=color:#a6e22e>address</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>deadline</span>,
+</span></span><span style=display:flex><span>      { <span style=color:#a6e22e>value</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>parseEther</span>(<span style=color:#e6db74>&#34;1&#34;</span>) }
+</span></span><span style=display:flex><span>    );
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><h3 id=4-模糊测试fuzz-testing>4. 模糊测试（Fuzz Testing）</h3><p>随机输入发现边界case：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// Foundry Fuzz Testing
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>testTransferRandomAmounts</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    amount <span style=color:#f92672>=</span> bound(amount, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>1000</span>e18);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    token.transfer(user, amount);
+</span></span><span style=display:flex><span>    assertEq(token.balanceOf(user), amount);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=gas-报告分析>Gas 报告分析</h2><p>Hardhat 的 <code>hardhat-gas-reporter</code> 插件可以追踪每个函数的 Gas 消耗：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm install --save-dev hardhat-gas-reporter @nomicfoundation/hardhat-ignition-gnache
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// hardhat.config.js
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>module</span>.<span style=color:#a6e22e>exports</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>gasReporter</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>enabled</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>currency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;USD&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>coinmarketcap</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>env</span>.<span style=color:#a6e22e>COINMARKETCAP_API_KEY</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><p>输出示例：</p><pre tabindex=0><code>·---------------------------|------------|------------|-------------|-------------·
+|  Solc version: 0.8.24     ·  Optimizer enabled: false  ·  Runs: 200      ·
+·---------------------------|------------|------------|-------------|-------------·
+|  Methods                  ·               ·               ·       │
+|  Contract                 ·  Min  ·  Avg  ·    Max  ·   # calls │
+·---------------------------|------------|------------|-------------|-------------·
+|  Token                    ·     -  ·     -  ·       -  ·        - │
+|  ├─ transfer              ·  51625  · 51625  ·   51625  ·        6 │
+|  ├─ approve               ·  24669  · 24669  ·   24669  ·        2 │
+|  └─ transferFrom          ·  46967  · 46967  ·   46967  ·        3 │
+·---------------------------|------------|------------|-------------|-------------·
+</code></pre><h2 id=部署流程>部署流程</h2><h3 id=1-准备部署脚本>1. 准备部署脚本</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// scripts/deploy.js
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>ethers</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#34;hardhat&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>deployer</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getSigners</span>();
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;Deploying contracts with account:&#34;</span>, <span style=color:#a6e22e>deployer</span>.<span style=color:#a6e22e>address</span>);
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;Account balance:&#34;</span>, (<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>deployer</span>.<span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getBalance</span>(<span style=color:#a6e22e>deployer</span>.<span style=color:#a6e22e>address</span>)).<span style=color:#a6e22e>toString</span>());
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 部署主合约
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>Token</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;MyToken&#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>token</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>Token</span>.<span style=color:#a6e22e>deploy</span>(<span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>parseEther</span>(<span style=color:#e6db74>&#34;1000000&#34;</span>));
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>waitForDeployment</span>();
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;Token deployed to:&#34;</span>, <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>getAddress</span>());
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 如果有依赖合约，先部署依赖
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>Staking</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;Staking&#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>staking</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>Staking</span>.<span style=color:#a6e22e>deploy</span>(<span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>getAddress</span>());
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>staking</span>.<span style=color:#a6e22e>waitForDeployment</span>();
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;Staking deployed to:&#34;</span>, <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>staking</span>.<span style=color:#a6e22e>getAddress</span>());
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 验证部署
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>totalSupply</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>totalSupply</span>();
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;Total Supply:&#34;</span>, <span style=color:#a6e22e>totalSupply</span>);
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>main</span>()
+</span></span><span style=display:flex><span>  .<span style=color:#a6e22e>then</span>(() =&gt; <span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>exit</span>(<span style=color:#ae81ff>0</span>))
+</span></span><span style=display:flex><span>  .<span style=color:#66d9ef>catch</span>((<span style=color:#a6e22e>error</span>) =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>error</span>(<span style=color:#a6e22e>error</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>exit</span>(<span style=color:#ae81ff>1</span>);
+</span></span><span style=display:flex><span>  });
+</span></span></code></pre></div><h3 id=2-配置网络>2. 配置网络</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// hardhat.config.js
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>module</span>.<span style=color:#a6e22e>exports</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>networks</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>sepolia</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>url</span><span style=color:#f92672>:</span> <span style=color:#e6db74>`https://sepolia.infura.io/v3/</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>env</span>.<span style=color:#a6e22e>INFURA_API_KEY</span><span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>accounts</span><span style=color:#f92672>:</span> [<span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>env</span>.<span style=color:#a6e22e>DEPLOYER_PRIVATE_KEY</span>],
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>chainId</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>11155111</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>mainnet</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>url</span><span style=color:#f92672>:</span> <span style=color:#e6db74>`https://mainnet.infura.io/v3/</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>env</span>.<span style=color:#a6e22e>INFURA_API_KEY</span><span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>accounts</span><span style=color:#f92672>:</span> [<span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>env</span>.<span style=color:#a6e22e>DEPLOYER_PRIVATE_KEY</span>],
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>chainId</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><h3 id=3-执行部署>3. 执行部署</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 本地网络</span>
+</span></span><span style=display:flex><span>npx hardhat run scripts/deploy.js --network hardhat
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Sepolia 测试网</span>
+</span></span><span style=display:flex><span>npx hardhat run scripts/deploy.js --network sepolia
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 主网（谨慎！）</span>
+</span></span><span style=display:flex><span>npx hardhat run scripts/deploy.js --network mainnet
+</span></span></code></pre></div><h3 id=4-验证合约源码>4. 验证合约源码</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># Etherscan 验证</span>
+</span></span><span style=display:flex><span>npx hardhat verify --network sepolia &lt;CONTRACT_ADDRESS&gt; &lt;CONSTRUCTOR_ARGS&gt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 多文件合约验证</span>
+</span></span><span style=display:flex><span>npx hardhat verify --network sepolia &lt;CONTRACT_ADDRESS&gt; --contract contracts/Token.sol:MyToken
+</span></span></code></pre></div><h3 id=5-主网部署前的检查清单>5. 主网部署前的检查清单</h3><pre tabindex=0><code>□ 所有测试通过，覆盖率 &gt; 95%
+□ Gas 消耗在合理范围
+□ 代码经过至少一次第三方审计
+□ 多签钱包配置正确
+□ 紧急暂停机制已测试
+□ 合约已在测试网运行至少 1 周
+□ 团队分配代币已锁仓
+□ 准备好监控和报警系统
+□ 制定好升级和迁移策略
+</code></pre><h2 id=监控与运维>监控与运维</h2><p>部署完成后需要持续监控：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// 监控大额转账（使用 The Graph 或直接监听事件）
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>on</span>(<span style=color:#e6db74>&#34;Transfer&#34;</span>, (<span style=color:#a6e22e>from</span>, <span style=color:#a6e22e>to</span>, <span style=color:#a6e22e>value</span>, <span style=color:#a6e22e>event</span>) =&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>gt</span>(<span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>parseEther</span>(<span style=color:#e6db74>&#34;1000&#34;</span>))) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>`Large transfer detected: </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>value</span><span style=color:#e6db74>}</span><span style=color:#e6db74> from </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>from</span><span style=color:#e6db74>}</span><span style=color:#e6db74> to </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>to</span><span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 发送告警：邮件/Telegram/Slack
+</span></span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><h2 id=总结>总结</h2><p>智能合约测试需要多层次覆盖：单元测试验证基本功能，集成测试验证合约间交互，Fork 测试使用真实数据验证，模糊测试发现边界问题。部署应遵循测试网 → 审计 → 主网的流程，每一步都要谨慎。</p><p>下一篇文章我们将深入讨论智能合约的常见安全漏洞与防范措施。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/developer/07-%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E4%B8%8E%E9%98%B2%E8%8C%83/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/developer/05-defi%E6%A0%B8%E5%BF%83%E5%90%88%E7%BA%A6%E8%A7%A3%E6%9E%90/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

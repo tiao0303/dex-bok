@@ -1,796 +1,155 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/%E5%AE%89%E5%85%A8/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/%E5%AE%89%E5%85%A8/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/%E5%AE%89%E5%85%A8/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/%E5%AE%89%E5%85%A8/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="安全"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="安全"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T01:45:00+08:00"><meta itemprop=dateModified content="2026-03-19T01:45:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="安全"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 avenir bg-near-white production is-term"><header><div class="pb3-m pb6-l bg-white"><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l center items-center justify-between"><a href=/dex-bok/ class="f3 fw2 hover-white white-90 dib no-underline">DEX 学习笔记 | 去中心化交易所实战指南</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/ title="首页 page">首页</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/posts/ title="文章 page">文章</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/guides/ title="教程 page">教程</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/tools/ title="工具 page">工具</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/about/ title="关于 page">关于</a></li></ul><div class=ananke-socials></div></div></div></nav><div class="tc-l pv3 ph3 ph4-ns"><h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">安全</h1></div></div></header><main class=pb7 role=main><article class="pa3 pa4-ns nested-copy-line-height"><section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section><section class="flex-ns mt5 flex-wrap justify-around"><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/08-mev-front-running/ class="link black dim">T2 进阶实战 08：MEV 与前端运行防御</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h1 id=mev-与前端运行防御>MEV 与前端运行防御</h1><h2 id=引言>引言</h2><p>MEV（Maximal Extractable Value，最大可提取价值）是区块链生态中的重要概念。理解 MEV 的运作机制和防御策略，对于保护 DEX 用户资金安全至关重要。</p><h2 id=mev-概述>MEV 概述</h2><h3 id=定义>定义</h3><p><strong>MEV</strong> = 矿工/验证者通过重新排序、插入或审查交易可提取的额外价值</p><h3 id=mev-类型>MEV 类型</h3><table><thead><tr><th>类型</th><th>描述</th><th>影响</th></tr></thead><tbody><tr><td>套利</td><td>利用不同 DEX 间的价格差异</td><td>中性/正面</td></tr><tr><td>清算</td><td>清算不足的抵押头寸</td><td>正面</td></tr><tr><td>前端运行</td><td>在目标交易前插入交易</td><td>负面</td></tr><tr><td>三明治攻击</td><td>前后夹击目标交易</td><td>负面</td></tr><tr><td>时间带宽套利</td><td>利用信息传播延迟</td><td>负面</td></tr></tbody></table><h2 id=前端运行front-running>前端运行（Front-running）</h2><h3 id=攻击原理>攻击原理</h3><pre tabindex=0><code>攻击流程：
-1. 监控待处理交易池（mempool）
-2. 发现有利可图的大额交易
-3. 以更高 Gas 价格提交相同交易
-4. 矿工优先打包攻击者交易
-5. 攻击者获利，受害者承受滑点
-</code></pre><h3 id=代码示例被前端运行的交易>代码示例：被前端运行的交易</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ 容易被前端运行的交易
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>buyToken</span>(<span style=color:#66d9ef>uint</span> amount) <span style=color:#66d9ef>external</span> {
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 任何人都可以看到这笔交易
-</span></span></span><span style=display:flex><span>    <span style=color:#75715e>// 攻击者可以复制并以更高 Gas 发送
-</span></span></span><span style=display:flex><span>    IERC20(token).transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amount);
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> tokens <span style=color:#f92672>=</span> calculateTokens(amount);
-</span></span><span style=display:flex><span>    IERC20(token).transfer(msg.sender, tokens);
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 攻击者合约
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>FrontRunner</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>frontRun</span>(<span style=color:#66d9ef>address</span> victim, <span style=color:#66d9ef>uint</span> amount) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>payable</span> {
-</span></span><span style=display:flex><span>        <span style=color:#75715e>// 以更高 Gas 发送相同交易
-</span></span></span><span style=display:flex><span>        targetContract.buyToken{gas<span style=color:#f92672>:</span> <span style=color:#ae81ff>500000</span>, gasPrice<span style=color:#f92672>:</span> tx.gasPrice <span style=color:#f92672>*</span> <span style=color:#ae81ff>150</span><span style=color:#f92672>%</span>}(amount);
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=三明治攻击sandwich-attack>三明治攻击（Sandwich Attack）</h2><h3 id=攻击流程>攻击流程</h3><pre tabindex=0><code>步骤：
-1. 受害者提交大额买入交易（待处理）
-2. 攻击者发现并分析交易
-3. 攻击者发送买入交易（更高 Gas）→ 前置
-4. 受害者交易执行，推高价格
-5. 攻击者发送卖出交易 → 后置
-6. 攻击者获利，受害者承受额外滑点
-</code></pre><h3 id=可视化示例>可视化示例</h3><pre tabindex=0><code>初始状态：
-- 池子：1000 ETH / 2,000,000 USDC
-- 价格：2000 USDC/ETH
-
-攻击过程：
-1. 攻击者买入 50 ETH（花费 95,238 USDC）
-   新价格：2095 USDC/ETH
-
-2. 受害者买入 100 ETH（花费 218,750 USDC）
-   新价格：2381 USDC/ETH
-   受害者预期价格：2000 USDC/ETH
-   受害者实际价格：2187.5 USDC/ETH
-   受害者损失：18.75% 额外滑点
-
-3. 攻击者卖出 50 ETH（获得 107,143 USDC）
-   新价格：2095 USDC/ETH
-
-攻击者利润：107,143 - 95,238 = 11,905 USDC
-</code></pre><h3 id=检测三明治攻击>检测三明治攻击</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>event</span> <span style=color:#a6e22e>SandwichAttackDetected</span>(
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> attacker,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> victim,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> frontRunAmount,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> backRunAmount,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> victimLoss
-</span></span><span style=display:flex><span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>detectSandwichAttack</span>(
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> trader,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> amountIn,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> expectedOut,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> actualOut
-</span></span><span style=display:flex><span>) <span style=color:#66d9ef>internal</span> <span style=color:#66d9ef>view</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> slippage <span style=color:#f92672>=</span> ((expectedOut <span style=color:#f92672>-</span> actualOut) <span style=color:#f92672>*</span> <span style=color:#ae81ff>10000</span>) <span style=color:#f92672>/</span> expectedOut;
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 异常高滑点可能表示三明治攻击
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (slippage <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>500</span>) { <span style=color:#75715e>// 超过 5%
-</span></span></span><span style=display:flex><span>        <span style=color:#75715e>// 检查前后是否有可疑交易
-</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span>[] <span style=color:#66d9ef>memory</span> recentTraders <span style=color:#f92672>=</span> getRecentTraders(<span style=color:#ae81ff>10</span>);
-</span></span><span style=display:flex><span>        
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>uint</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> recentTraders.length; i<span style=color:#f92672>++</span>) {
-</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> (recentTraders[i] <span style=color:#f92672>!=</span> trader) {
-</span></span><span style=display:flex><span>                <span style=color:#75715e>// 分析交易模式
-</span></span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> (isSuspiciousPattern(recentTraders[i], trader)) {
-</span></span><span style=display:flex><span>                    emit SandwichAttackDetected(
-</span></span><span style=display:flex><span>                        recentTraders[i],
-</span></span><span style=display:flex><span>                        trader,
-</span></span><span style=display:flex><span>                        <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>0</span>, slippage
-</span></span><span style=display:flex><span>                    );
-</span></span><span style=display:flex><span>                }
-</span></span><span style=display:flex><span>            }
-</span></span><span style=display:flex><span>        }
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=防御策略>防御策略</h2><h3 id=1-提交隐藏交易private-transactions>1. 提交隐藏交易（Private Transactions）</h3><p>使用 Flashbots 等私有交易服务：</p></div><a href=/dex-bok/posts/08-mev-front-running/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/29-hack-attack-technical-analysis/ class="link black dim">黑客攻击技术复盘 - 重入、预言机操纵详解</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=defi-黑客攻击概览>DeFi 黑客攻击概览</h2><h3 id=损失统计>损失统计</h3><table><thead><tr><th>年份</th><th>总损失</th><th>重大事件数</th><th>平均损失</th></tr></thead><tbody><tr><td>2020</td><td>$1 亿</td><td>5</td><td>$2000 万</td></tr><tr><td>2021</td><td>$15 亿</td><td>20</td><td>$7500 万</td></tr><tr><td>2022</td><td>$38 亿</td><td>35</td><td>$1.1 亿</td></tr><tr><td>2023</td><td>$18 亿</td><td>25</td><td>$7200 万</td></tr><tr><td>2024</td><td>$25 亿</td><td>30</td><td>$8300 万</td></tr></tbody></table><h3 id=攻击类型分布>攻击类型分布</h3><pre tabindex=0><code>重入攻击：15%
-预言机操纵：20%
-权限提升：12%
-逻辑漏洞：25%
-经济攻击：18%
-其他：10%
-</code></pre><hr><h2 id=攻击一重入攻击reentrancy>攻击一：重入攻击（Reentrancy）</h2><h3 id=原理>原理</h3><pre tabindex=0><code>攻击流程：
-1. 攻击者合约调用目标合约
-2. 目标合约转账给攻击者
-3. 攻击者 fallback 函数再次调用目标
-4. 此时目标合约状态未更新
-5. 重复提款，直到 Gas 耗尽
-</code></pre><h3 id=经典案例the-dao-2016>经典案例：The DAO (2016)</h3><pre tabindex=0><code>时间：2016.06
-损失：$6000 万（当时 ETH 价格）
-影响：导致以太坊分叉（ETH/ETC）
-
-漏洞代码：
-function withdraw(uint amount) {
-    require balances[msg.sender] &gt;= amount;
-    msg.sender.call.value(amount)();  // 外部调用
-    balances[msg.sender] -= amount;   // 状态更新在后
-}
-
-问题：
-- 外部调用在状态更新之前
-- 攻击者可在 balances 更新前再次调用
-</code></pre><h3 id=攻击合约示例>攻击合约示例</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Attacker</span> {
-</span></span><span style=display:flex><span>    Target target;
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>attack</span>() <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>payable</span> {
-</span></span><span style=display:flex><span>        target.deposit.value(msg.value)();
-</span></span><span style=display:flex><span>        target.withdraw(msg.value);
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span>() <span style=color:#66d9ef>payable</span> <span style=color:#66d9ef>external</span> {
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (<span style=color:#66d9ef>address</span>(target).balance <span style=color:#f92672>&gt;=</span> msg.value) {
-</span></span><span style=display:flex><span>            target.withdraw(msg.value);  <span style=color:#75715e>// 重入
-</span></span></span><span style=display:flex><span>        }
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=防范措施>防范措施</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 方法 1：Checks-Effects-Interactions
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint</span> amount) {
-</span></span><span style=display:flex><span>    require balances[msg.sender] <span style=color:#f92672>&gt;=</span> amount;  <span style=color:#75715e>// Check
-</span></span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>-=</span> amount;          <span style=color:#75715e>// Effect
-</span></span></span><span style=display:flex><span>    msg.sender.transfer(amount);             <span style=color:#75715e>// Interaction
-</span></span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 方法 2：重入锁
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>bool</span> <span style=color:#66d9ef>private</span> locked;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>modifier</span> <span style=color:#a6e22e>noReentrant</span>() {
-</span></span><span style=display:flex><span>    require(<span style=color:#f92672>!</span>locked, <span style=color:#e6db74>&#34;Reentrant&#34;</span>);
-</span></span><span style=display:flex><span>    locked <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>_</span>;
-</span></span><span style=display:flex><span>    locked <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>() noReentrant {
-</span></span><span style=display:flex><span>    ...
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 方法 3：使用 OpenZeppelin
-</span></span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts/security/ReentrancyGuard.sol&#34;</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyContract</span> <span style=color:#66d9ef>is</span> ReentrancyGuard {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>() nonReentrant {
-</span></span><span style=display:flex><span>        ...
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><hr><h2 id=攻击二预言机操纵>攻击二：预言机操纵</h2><h3 id=原理-1>原理</h3><pre tabindex=0><code>攻击流程：
-1. 攻击者用闪电贷借入大量资金
-2. 在 DEX 大额交易，操纵价格
-3. 利用被操纵价格进行借贷/清算
-4. 归还闪电贷，获利
-</code></pre><h3 id=经典案例bzx-202002>经典案例：bZx (2020.02)</h3><pre tabindex=0><code>时间：2020.02
-损失：$35 万
-手法：预言机操纵
-
-攻击步骤：
-1. 闪电贷借入 10,000 ETH
-2. 在 Uniswap 用 ETH 买入 WBTC（推高价格）
-3. bZx 使用 Uniswap 价格作为预言机
-4. 用高估的 WBTC 抵押借出更多 ETH
-5. 归还闪电贷，净利润
-</code></pre><h3 id=攻击代码分析>攻击代码分析</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 简化的攻击逻辑
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>attack</span>() <span style=color:#66d9ef>public</span> {
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 1. 闪电贷
-</span></span></span><span style=display:flex><span>    flashLoan(<span style=color:#ae81ff>10000</span> ETH);
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 2. 操纵价格
-</span></span></span><span style=display:flex><span>    uniswap.swap(ETH, WBTC, <span style=color:#ae81ff>5000</span> ETH);  <span style=color:#75715e>// ETH→WBTC，推高 WBTC 价格
-</span></span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 3. 利用高估价格
-</span></span></span><span style=display:flex><span>    bZx.deposit(WBTC);  <span style=color:#75715e>// 存入被高估的 WBTC
-</span></span></span><span style=display:flex><span>    bZx.borrow(ETH);    <span style=color:#75715e>// 借出更多 ETH
-</span></span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 4. 归还贷款
-</span></span></span><span style=display:flex><span>    flashLoanRepay(<span style=color:#ae81ff>10000</span> ETH <span style=color:#f92672>+</span> fee);
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 5. 利润
-</span></span></span><span style=display:flex><span>    profit <span style=color:#f92672>=</span> remaining ETH;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=防范措施-1>防范措施</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 方法 1：使用 TWAP 预言机
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getPrice</span>() <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 时间加权平均价格（多个区块）
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> uniswap.getTwapPrice(token, <span style=color:#ae81ff>30</span> <span style=color:#66d9ef>minutes</span>);
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 方法 2：多预言机聚合
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getPrice</span>() <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> price1 <span style=color:#f92672>=</span> uniswap.getPrice();
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> price2 <span style=color:#f92672>=</span> sushiswap.getPrice();
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> price3 <span style=color:#f92672>=</span> chainlink.getPrice();
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 取中位数，排除异常值
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> median([price1, price2, price3]);
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 方法 3：价格偏离检查
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>swap</span>(<span style=color:#66d9ef>uint</span> amount) <span style=color:#66d9ef>public</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> priceBefore <span style=color:#f92672>=</span> oracle.getPrice();
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    _swap(amount);
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> priceAfter <span style=color:#f92672>=</span> oracle.getPrice();
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 价格变化不能超过 5%
-</span></span></span><span style=display:flex><span>    require(abs(priceAfter <span style=color:#f92672>-</span> priceBefore) <span style=color:#f92672>/</span> priceBefore <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0</span>.<span style=color:#ae81ff>05</span>, <span style=color:#e6db74>&#34;Price manipulation detected&#34;</span>);
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><hr><h2 id=攻击三权限提升>攻击三：权限提升</h2><h3 id=原理-2>原理</h3><pre tabindex=0><code>攻击者通过漏洞获得管理员权限：
-- 调用管理员函数
-- 修改关键参数
-- 转走资金
-</code></pre><h3 id=经典案例nomad-bridge-202208>经典案例：Nomad Bridge (2022.08)</h3><pre tabindex=0><code>时间：2022.08
-损失：$1.9 亿
-原因：权限验证漏洞
-
-漏洞：
-- 初始化函数可被重复调用
-- 攻击者将自己设为管理员
-- 授权虚假交易
-- 资金被转走
-</code></pre><h3 id=漏洞代码示例>漏洞代码示例</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 错误示例：初始化函数无保护
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>initialize</span>(<span style=color:#66d9ef>address</span> _owner) <span style=color:#66d9ef>public</span> {
-</span></span><span style=display:flex><span>    owner <span style=color:#f92672>=</span> _owner;  <span style=color:#75715e>// 可被重复调用
-</span></span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 攻击者调用：
-</span></span></span><span style=display:flex><span>initialize(attackerAddress);  <span style=color:#75715e>// 成为新 owner
-</span></span></span></code></pre></div><h3 id=正确写法>正确写法</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 正确示例：使用 OpenZeppelin 的 Initializable
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyContract</span> <span style=color:#66d9ef>is</span> Initializable {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>public</span> owner;
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>initialize</span>(<span style=color:#66d9ef>address</span> _owner) <span style=color:#66d9ef>public</span> initializer {
-</span></span><span style=display:flex><span>        owner <span style=color:#f92672>=</span> _owner;  <span style=color:#75715e>// 只能调用一次
-</span></span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 或者使用构造函数
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>constructor</span>(<span style=color:#66d9ef>address</span> _owner) {
-</span></span><span style=display:flex><span>    owner <span style=color:#f92672>=</span> _owner;  <span style=color:#75715e>// 部署时设置，不可更改
-</span></span></span><span style=display:flex><span>}
-</span></span></code></pre></div><hr><h2 id=攻击四闪电贷攻击>攻击四：闪电贷攻击</h2><h3 id=原理-3>原理</h3><pre tabindex=0><code>无需抵押借款：
-1. 借入大量资金
-2. 执行攻击（操纵价格/治理等）
-3. 归还贷款
-4. 保留利润
-
-如果无法归还，交易回滚
-</code></pre><h3 id=经典案例beanstalk-202204>经典案例：Beanstalk (2022.04)</h3><pre tabindex=0><code>时间：2022.04
-损失：$1.8 亿
-手法：闪电贷 + 治理攻击
-
-步骤：
-1. 闪电贷借入 13,000 ETH
-2. 购买 Beanstalk 治理代币
-3. 获得&gt;50% 投票权
-4. 提交恶意提案：转走国库资金
-5. 投票通过
-6. 执行提案
-7. 归还闪电贷
-</code></pre><h3 id=防范措施-2>防范措施</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 方法 1：投票锁定期
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>vote</span>(<span style=color:#66d9ef>uint256</span> proposalId, <span style=color:#66d9ef>bool</span> support) <span style=color:#66d9ef>public</span> {
-</span></span><span style=display:flex><span>    require(block.timestamp <span style=color:#f92672>-</span> token.lockTime(msg.sender) <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>7</span> <span style=color:#66d9ef>days</span>, <span style=color:#e6db74>&#34;Tokens too new&#34;</span>);
-</span></span><span style=display:flex><span>    ...
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 方法 2：时间锁
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>executeProposal</span>(<span style=color:#66d9ef>uint256</span> proposalId) <span style=color:#66d9ef>public</span> {
-</span></span><span style=display:flex><span>    require(block.timestamp <span style=color:#f92672>&gt;=</span> proposal.timelock, <span style=color:#e6db74>&#34;Timelock not passed&#34;</span>);
-</span></span><span style=display:flex><span>    ...
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 方法 3：限制闪电贷
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>flashLoan</span>(<span style=color:#66d9ef>uint</span> amount) <span style=color:#66d9ef>public</span> {
-</span></span><span style=display:flex><span>    require(msg.sender <span style=color:#f92672>!=</span> contractAddress, <span style=color:#e6db74>&#34;No flash loan attacks&#34;</span>);
-</span></span><span style=display:flex><span>    ...
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><hr><h2 id=攻击五经济攻击>攻击五：经济攻击</h2><h3 id=原理-4>原理</h3><pre tabindex=0><code>利用协议经济模型漏洞：
-- 无需技术漏洞
-- 利用激励机制缺陷
-- 合法但不道德
-</code></pre><h3 id=类型一流动性挖矿滥用>类型一：流动性挖矿滥用</h3><pre tabindex=0><code>攻击手法：
-1. 创建新池子
-2. 自己提供流动性
-3. 挖取大量奖励代币
-4. 立即卖出
-5. 币价暴跌，其他 LP 亏损
-
-防范：
-- 设置锁定期
-- 逐步释放奖励
-- 多代币奖励（降低单一代币抛压）
-</code></pre><h3 id=类型二治理贿赂>类型二：治理贿赂</h3><pre tabindex=0><code>攻击手法：
-1. 贿赂 veCRV 持有者
-2. 投票给自家池子更高权重
-3. 获得不成比例的奖励
-4. 其他参与者受损
-
-防范：
-- 投票保密
-- 限制单一池子权重
-- 要求长期锁仓
-</code></pre><hr><h2 id=攻击检测与响应>攻击检测与响应</h2><h3 id=监控系统>监控系统</h3><h4 id=链上监控>链上监控</h4><pre tabindex=0><code>监控指标：
-- 大额转账（&gt;$100 万）
-- 异常交易模式
-- 治理提案提交
-- 合约参数修改
-
-工具：
-- Forta：实时警报
-- OpenZeppelin Defender：自动化监控
-- 自建脚本：Web3.py + 事件监听
-</code></pre><h4 id=社交媒体监控>社交媒体监控</h4><pre tabindex=0><code>监控渠道：
-- Twitter：安全研究员
-- Discord：项目官方
-- Telegram：社区警报
-
-关键词：
-- &#34;exploit&#34;
-- &#34;hack&#34;
-- &#34;vulnerability&#34;
-- 项目名称 + &#34;security&#34;
-</code></pre><h3 id=应急响应流程>应急响应流程</h3><pre tabindex=0><code>1. 确认攻击（5-10 分钟）
-   - 验证交易
-   - 评估损失
-   
-2. 暂停协议（如有权限）
-   - 调用 pause() 函数
-   - 阻止进一步损失
-   
-3. 通知社区
-   - Twitter 公告
-   - Discord 通知
-   - 媒体沟通
-   
-4. 追踪资金
-   - 使用 Chainalysis
-   - 联系交易所冻结
-   
-5. 修复与恢复
-   - 审计公司修复
-   - 重新部署
-   - 补偿计划
-</code></pre><hr><h2 id=安全审计清单>安全审计清单</h2><h3 id=代码审计>代码审计</h3><pre tabindex=0><code>□ 重入保护
-□ 访问控制
-□ 整数溢出
-□ 预言机安全
-□ 闪电贷防护
-□ 前端运行防护
-□ Gas 优化
-□ 事件发射
-</code></pre><h3 id=经济审计>经济审计</h3><pre tabindex=0><code>□ 代币分配合理性
-□ 解锁计划
-□ 排放曲线
-□ 激励机制
-□ 治理设计
-□ 极端情况压力测试
-</code></pre><h3 id=运营审计>运营审计</h3><pre tabindex=0><code>□ 多签钱包设置
-□ 权限管理
-□ 密钥保管
-□ 应急响应计划
-□ 保险覆盖
-</code></pre><hr><h2 id=总结>总结</h2><p>黑客攻击防范：</p></div><a href=/dex-bok/posts/29-hack-attack-technical-analysis/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/27-formal-verification/ class="link black dim">智能合约形式化验证 - Certora 与 Spec 语言</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=什么是形式化验证>什么是形式化验证</h2><h3 id=定义>定义</h3><p><strong>形式化验证</strong> = 用数学方法证明代码符合规范</p><h3 id=与传统测试对比>与传统测试对比</h3><table><thead><tr><th>方法</th><th>覆盖率</th><th>可靠性</th><th>成本</th></tr></thead><tbody><tr><td>单元测试</td><td>部分路径</td><td>中</td><td>低</td></tr><tr><td>模糊测试</td><td>大量路径</td><td>中高</td><td>中</td></tr><tr><td>形式化验证</td><td>所有路径</td><td>极高 ✅</td><td>高</td></tr></tbody></table><h3 id=为什么需要>为什么需要</h3><pre tabindex=0><code>智能合约特点：
-- 一旦部署无法修改
-- 管理大量资金
-- 攻击者动机强
-
-传统测试不足：
-- 无法覆盖所有情况
-- 边界条件易遗漏
-- 逻辑漏洞难发现
-</code></pre><hr><h2 id=形式化验证原理>形式化验证原理</h2><h3 id=核心概念>核心概念</h3><h4 id=1-规范specification>1. 规范（Specification）</h4><pre tabindex=0><code>用形式化语言描述合约应该满足的性质
-
-示例（代币合约）：
-- 总供应量恒定
-- 余额之和 = 总供应量
-- 无法凭空增发
-</code></pre><h4 id=2-不变量invariant>2. 不变量（Invariant）</h4><pre tabindex=0><code>在任何状态下都必须为真的条件
-
-示例（AMM）：
-- x * y &gt;= k（恒定乘积）
-- 余额非负
-- 手续费正确计算
-</code></pre><h4 id=3-断言assertion>3. 断言（Assertion）</h4><pre tabindex=0><code>在特定条件下必须成立的陈述
-
-示例：
-assert balance[user] &gt;= 0
-assert totalSupply == SUM(balance[all_users])
-</code></pre><hr><h2 id=certora-验证工具>Certora 验证工具</h2><h3 id=certora-架构>Certora 架构</h3><pre tabindex=0><code>组成：
-1. CVL（Certora Verification Language）
-   - 编写规范的语言
-   
-2. Prover
-   - 数学证明引擎
-   
-3. 报告生成器
-   - 输出验证结果
-</code></pre><h3 id=cvl-语言基础>CVL 语言基础</h3><h4 id=基本语法>基本语法</h4><pre tabindex=0><code class=language-cvl data-lang=cvl>// 定义规则
-rule balanceOfInvariant(address user) {
-    // 前置条件
-    require user != address(0);
-    
-    // 不变量
-    assert token.balanceOf(user) &gt;= 0;
-}
-
-// 定义属性
-property totalSupplyConstant() {
-    // 总供应量在转账前后不变
-    env e;
-    address from, to;
-    uint256 amount;
-    
-    require e.msg.sender == from;
-    require token.balanceOf(from) &gt;= amount;
-    
-    token.transfer(e, to, amount);
-    
-    assert token.totalSupply() == old(token.totalSupply());
-}
-</code></pre><h4 id=常用断言>常用断言</h4><pre tabindex=0><code class=language-cvl data-lang=cvl>// 余额非负
-assert token.balanceOf(user) &gt;= 0;
-
-// 总供应量不变
-assert token.totalSupply() == old(token.totalSupply());
-
-// 授权不被修改
-assert token.allowance(owner, spender) == old(token.allowance(owner, spender));
-
-// 事件正确发射
-emit Transfer(from, to, amount);
-</code></pre><hr><h3 id=实战验证-erc20>实战：验证 ERC20</h3><h4 id=完整-cvl-规范>完整 CVL 规范</h4><pre tabindex=0><code class=language-cvl data-lang=cvl>// SPDX-License-Identifier: MIT
-pragma cvl 0.1;
-
-import &#34;./IERC20.sol&#34;;
-
-contract ERC20Spec {
-    IERC20 token;
-    
-    // 不变量：总供应量恒定
-    invariant totalSupplyInvariant() {
-        token.totalSupply() == INITIAL_SUPPLY;
-    }
-    
-    // 不变量：余额之和等于总供应量
-    invariant balanceSumInvariant() {
-        uint256 sum = 0;
-        for (address user : all_users) {
-            sum += token.balanceOf(user);
-        }
-        sum == token.totalSupply();
-    }
-    
-    // 规则：转账后余额正确更新
-    rule transferUpdatesBalances(address from, address to, uint256 amount) {
-        require token.balanceOf(from) &gt;= amount;
-        require to != address(0);
-        
-        uint256 balanceFromBefore = token.balanceOf(from);
-        uint256 balanceToBefore = token.balanceOf(to);
-        
-        token.transfer(msg.sender, to, amount);
-        
-        assert token.balanceOf(from) == balanceFromBefore - amount;
-        assert token.balanceOf(to) == balanceToBefore + amount;
-    }
-    
-    // 规则：授权不能被滥用
-    rule allowanceNotAbused(address owner, address spender, uint256 amount) {
-        require token.allowance(owner, spender) == 0;
-        require msg.sender != spender;
-        
-        token.transferFrom(msg.sender, owner, amount);
-        
-        assert token.allowance(owner, spender) == 0;
-    }
-}
-</code></pre><hr><h2 id=常见验证模式>常见验证模式</h2><h3 id=模式一访问控制>模式一：访问控制</h3><pre tabindex=0><code class=language-cvl data-lang=cvl>rule onlyOwnerCanPause() {
-    require !contract.isPaused();
-    require msg.sender != contract.owner();
-    
-    contract.pause(msg.sender);
-    
-    assert contract.isPaused() == false;  // 应该失败
-}
-</code></pre><h3 id=模式二重入保护>模式二：重入保护</h3><pre tabindex=0><code class=language-cvl data-lang=cvl>rule noReentrancy() {
-    require contract.balanceOf(msg.sender) &gt; 0;
-    
-    // 模拟恶意合约
-    contract.withdraw(msg.sender);
-    
-    // 验证余额在调用期间未被修改
-    assert contract.balanceOf(msg.sender) == old(contract.balanceOf(msg.sender));
-}
-</code></pre><h3 id=模式三价格操纵防护>模式三：价格操纵防护</h3><pre tabindex=0><code class=language-cvl data-lang=cvl>rule priceNotManipulable() {
-    uint256 priceBefore = contract.getPrice();
-    
-    // 尝试大额交易操纵价格
-    contract.swap(hugeAmount);
-    
-    uint256 priceAfter = contract.getPrice();
-    
-    // 价格变化应在合理范围内
-    assert abs(priceAfter - priceBefore) / priceBefore &lt; 0.05;  // &lt;5%
-}
-</code></pre><hr><h2 id=验证流程>验证流程</h2><h3 id=步骤一编写规范>步骤一：编写规范</h3><pre tabindex=0><code>1. 阅读合约代码
-2. 识别关键不变量
-3. 编写 CVL 规范
-4. 同行评审规范
-</code></pre><h3 id=步骤二运行验证>步骤二：运行验证</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 安装 Certora CLI</span>
-</span></span><span style=display:flex><span>pip install certora-cli
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># 运行验证</span>
-</span></span><span style=display:flex><span>certoraRun Token.sol:Token ERC20Spec.spec <span style=color:#ae81ff>\
-</span></span></span><span style=display:flex><span>    --rule balanceOfInvariant,totalSupplyInvariant <span style=color:#ae81ff>\
-</span></span></span><span style=display:flex><span>    --msg_sender attacker <span style=color:#ae81ff>\
-</span></span></span><span style=display:flex><span>    --verify Token:ERC20Spec
-</span></span></code></pre></div><h3 id=步骤三分析结果>步骤三：分析结果</h3><pre tabindex=0><code>验证结果：
-✅ PASS: balanceOfInvariant
-✅ PASS: totalSupplyInvariant
-❌ FAIL: transferUpdatesBalances
-
-失败分析：
-- 查看反例（Counterexample）
-- 定位代码问题
-- 修复后重新验证
-</code></pre><h3 id=步骤四修复与迭代>步骤四：修复与迭代</h3><pre tabindex=0><code>循环：
-1. 修复代码
-2. 重新验证
-3. 直到所有规则通过
-</code></pre><hr><h2 id=真实案例分析>真实案例分析</h2><h3 id=案例一compound-利率计算验证>案例一：Compound 利率计算验证</h3><h4 id=问题>问题</h4><pre tabindex=0><code>Compound 的利率计算涉及复杂数学：
-- 指数增长
-- 精度舍入
-- 边界条件
-
-传统测试难以覆盖所有情况
-</code></pre><h4 id=验证规范>验证规范</h4><pre tabindex=0><code class=language-cvl data-lang=cvl>rule interestAccruesCorrectly() {
-    uint256 balanceBefore = contract.balanceOf(user);
-    uint256 timeElapsed = 1 days;
-    
-    fastForward(timeElapsed);
-    
-    uint256 balanceAfter = contract.balanceOf(user);
-    
-    // 利息应按年利率正确计算
-    assert balanceAfter &gt;= balanceBefore * (1 + ANNUAL_RATE / 365);
-}
-</code></pre><h4 id=发现的问题>发现的问题</h4><pre tabindex=0><code>Bug：
-- 闰年处理错误
-- 精度损失累积
-- 极端利率下溢出
-
-修复后重新验证通过
-</code></pre><hr><h3 id=案例二uniswap-v3-流动性验证>案例二：Uniswap V3 流动性验证</h3><h4 id=挑战>挑战</h4><pre tabindex=0><code>Uniswap V3 集中流动性：
-- 价格区间复杂
-- 虚拟储备计算
-- 边界条件多
-</code></pre><h4 id=关键不变量>关键不变量</h4><pre tabindex=0><code class=language-cvl data-lang=cvl>invariant liquidityInRange() {
-    // 流动性只在价格区间内有效
-    if (price &lt; lowerTick || price &gt; upperTick) {
-        assert position.liquidity == 0;
-    }
-}
-
-invariant feesAccrueCorrectly() {
-    // 手续费正确累积
-    assert position.feesOwed == calculateFees(position, time);
-}
-</code></pre><hr><h2 id=验证最佳实践>验证最佳实践</h2><h3 id=1-从简单开始>1. 从简单开始</h3><pre tabindex=0><code>先验证基础属性：
-- 余额非负
-- 总供应量恒定
-- 访问控制
-
-再验证复杂逻辑：
-- 利率计算
-- 价格预言机
-- 治理机制
-</code></pre><h3 id=2-分层验证>2. 分层验证</h3><pre tabindex=0><code>Layer 1：基本不变量
-Layer 2：业务逻辑规则
-Layer 3：复杂场景组合
-</code></pre><h3 id=3-组合测试>3. 组合测试</h3><pre tabindex=0><code>形式化验证 + 单元测试 + 模糊测试
-
-覆盖率：
-- 形式化：100% 逻辑路径
-- 单元测试：关键路径
-- 模糊测试：边界情况
-</code></pre><hr><h2 id=工具对比>工具对比</h2><table><thead><tr><th>工具</th><th>语言</th><th>特点</th><th>价格</th></tr></thead><tbody><tr><td>Certora</td><td>CVL</td><td>易用，文档好</td><td>$10k+/年</td></tr><tr><td>K Framework</td><td>K</td><td>学术级，强大</td><td>开源</td></tr><tr><td>Isabelle/HOL</td><td>Isabelle</td><td>最严格</td><td>开源</td></tr><tr><td>Coq</td><td>Gallina</td><td>证明辅助</td><td>开源</td></tr></tbody></table><hr><h2 id=学习路线>学习路线</h2><h3 id=阶段一基础1-2-月>阶段一：基础（1-2 月）</h3><pre tabindex=0><code>1. 学习离散数学
-2. 理解逻辑与证明
-3. 阅读形式化验证论文
-</code></pre><h3 id=阶段二工具2-3-月>阶段二：工具（2-3 月）</h3><pre tabindex=0><code>1. 学习 CVL 语法
-2. 练习简单合约验证
-3. 阅读 Certora 文档
-</code></pre><h3 id=阶段三实战3-6-月>阶段三：实战（3-6 月）</h3><pre tabindex=0><code>1. 验证开源项目
-2. 参与审计
-3. 建立验证框架
-</code></pre><hr><h2 id=总结>总结</h2><p>形式化验证核心：</p></div><a href=/dex-bok/posts/27-formal-verification/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/24-governance-attack-cases/ class="link black dim">治理攻击案例研究 - 投票操纵与贿赂市场</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=什么是治理攻击>什么是治理攻击</h2><h3 id=定义>定义</h3><p><strong>治理攻击</strong> = 通过操纵投票机制，获取不当利益或破坏协议</p><h3 id=攻击类型>攻击类型</h3><table><thead><tr><th>类型</th><th>手段</th><th>影响</th></tr></thead><tbody><tr><td>投票操纵</td><td>集中代币投票</td><td>通过恶意提案</td></tr><tr><td>贿赂</td><td>收买投票权</td><td>扭曲治理结果</td></tr><tr><td>闪电贷攻击</td><td>借用代币投票</td><td>临时控制治理</td></tr><tr><td>提案攻击</td><td>恶意提案</td><td>盗取资金/破坏协议</td></tr></tbody></table><hr><h2 id=经典案例复盘>经典案例复盘</h2><h3 id=案例一beanstalk-闪电贷治理攻击-202204->案例一：Beanstalk 闪电贷治理攻击 (2022.04) 🔴</h3><h4 id=事件回顾>事件回顾</h4><pre tabindex=0><code>时间：2022.04.17
-损失：$1.8 亿
-攻击者：匿名
-</code></pre><h4 id=攻击步骤>攻击步骤</h4><pre tabindex=0><code>1. 闪电贷借入 13,000 ETH（价值$3600 万）
-2. 用 ETH 购买 Beanstalk 治理代币
-3. 获得足够投票权（&gt;50%）
-4. 提交恶意提案：将国库资金转给自己
-5. 投票通过（自己投自己）
-6. 执行提案，转走$1.8 亿
-7. 归还闪电贷
-8. 净利润：$1.4 亿
-</code></pre><h4 id=漏洞分析>漏洞分析</h4><pre tabindex=0><code>1. 无投票锁定期
-   - 买入代币立即可投票
-   - 闪电贷可利用
-
-2. 提案无延迟
-   - 通过后立即执行
-   - 无反应时间
-
-3. 投票门槛低
-   - 只需简单多数
-   - 无最低参与度要求
-</code></pre><h4 id=教训>教训</h4><ul><li>✅ 必须设置投票锁定期（Timelock）</li><li>✅ 提案通过后延迟执行</li><li>✅ 设置最低投票率</li><li>✅ 闪电贷无法借入治理代币</li></ul><hr><h3 id=案例二curve-贿赂战争-2022-2023->案例二：Curve 贿赂战争 (2022-2023) 🟡</h3><h4 id=背景>背景</h4><pre tabindex=0><code>Curve 有 3pool（DAI/USDC/USDT）
-不同稳定币项目方希望自己的币获得更高权重
-→ 引发贿赂竞争
-</code></pre><h4 id=运作机制>运作机制</h4><pre tabindex=0><code>1. Curve 治理决定池子权重
-2. veCRV 持有者投票
-3. 项目方贿赂 veCRV 持有者
-4. 投票给自家池子
-5. 获得更高权重 → 更多流动性
-</code></pre><h4 id=贿赂平台>贿赂平台</h4><table><thead><tr><th>平台</th><th>总贿赂金额</th><th>特点</th></tr></thead><tbody><tr><td>VoteLocker</td><td>$5000 万+</td><td>Curve 官方</td></tr><tr><td>Votium</td><td>$3000 万+</td><td>匿名</td></tr><tr><td>Hidden Hand</td><td>$2000 万+</td><td>多链支持</td></tr></tbody></table><h4 id=案例分析>案例分析</h4><pre tabindex=0><code>正面：
-- 市场化分配权重
-- veCRV 持有者获得额外收益
-- 透明度较高
-
-负面：
-- 小 holder 被边缘化
-- 项目方成本转嫁用户
-- 可能形成垄断
-</code></pre><h4 id=教训-1>教训</h4><ul><li>⚠️ 贿赂是双刃剑</li><li>⚠️ 需要透明披露</li><li>⚠️ 防止单一项目垄断</li></ul><hr><h3 id=案例三uniswap-治理冷漠-2021-2023->案例三：Uniswap 治理冷漠 (2021-2023) 🟠</h3><h4 id=问题>问题</h4><pre tabindex=0><code>UNI 代币持有者：30 万+
-实际投票率：&lt;5%
-提案通过率：低
-</code></pre><h4 id=原因分析>原因分析</h4><pre tabindex=0><code>1. 投票成本高
-   - 链上投票 Gas 贵
-   - 小 holder 不划算
-
-2. 信息不对称
-   - 提案太复杂
-   - 普通人看不懂
-
-3. 激励不足
-   - 投票无奖励
-   - 搭便车心理
-
-4. 鲸鱼控制
-   - 前 10 地址持币 60%
-   - 小户投票无影响
-</code></pre><h4 id=影响>影响</h4><pre tabindex=0><code>- 治理效率低
-- 重要提案难通过
-- 社区分裂
-- 竞争力下降（vs Sushi 等）
-</code></pre><h4 id=改进建议>改进建议</h4><ul><li>✅ 链下投票（Snapshot）</li><li>✅ 投票奖励</li><li>✅ 简化提案流程</li><li>✅ 委托投票机制</li></ul><hr><h3 id=案例四optimism-空投猎人治理-2023->案例四：Optimism 空投猎人治理 (2023) 🟢</h3><h4 id=背景-1>背景</h4><pre tabindex=0><code>OP 空投后：
-- 大量空投猎人持币
-- 短期抛售压力大
-- 治理参与度低
-</code></pre><h4 id=解决方案>解决方案</h4><pre tabindex=0><code>1. 公民屋（Citizens&#39; House）
-   - 长期贡献者特殊投票权
-   - 对抗短期投机者
-
-2. 锁仓激励
-   - 锁仓获得额外投票权
-   - 鼓励长期参与
-
-3. 委托投票
-   - 可委托给活跃代表
-   - 降低参与门槛
-</code></pre><h4 id=效果>效果</h4><pre tabindex=0><code>- 投票率提升至 15%+
-- 提案质量提高
-- 社区更活跃
-</code></pre><hr><h2 id=治理攻击防范>治理攻击防范</h2><h3 id=1-技术防范->1. 技术防范 ⭐⭐⭐⭐⭐</h3><h4 id=投票锁定期>投票锁定期</h4><pre tabindex=0><code>要求：
-- 投票前锁仓至少 3-7 天
-- 防止闪电贷攻击
-
-实现：
-function vote(uint256 proposalId, bool support) {
-    require(block.timestamp - lockTime &gt;= 7 days, &#34;Too new&#34;);
-    ...
-}
-</code></pre><h4 id=时间锁timelock>时间锁（Timelock）</h4><pre tabindex=0><code>要求：
-- 提案通过后延迟执行
-- 给用户反应时间
-
-实现：
-- 延迟 2-7 天
-- 紧急情况下可暂停
-</code></pre><h4 id=投票门槛>投票门槛</h4><pre tabindex=0><code>建议设置：
-- 最低投票率：10-20%
-- 通过门槛：&gt;50% 或&gt;67%
-- 反对门槛：可触发二次投票
-</code></pre><hr><h3 id=2-经济防范->2. 经济防范 ⭐⭐⭐⭐</h3><h4 id=投票权设计>投票权设计</h4><pre tabindex=0><code>方案：
-- 锁仓时间越长，投票权越大
-- 防止短期操纵
-
-公式：
-投票权 = 代币数量 × 锁仓系数
-
-锁仓系数：
-1 天 = 1x
-30 天 = 2x
-90 天 = 3x
-365 天 = 4x
-</code></pre><h4 id=反贿赂机制>反贿赂机制</h4><pre tabindex=0><code>方案：
-- 投票保密（直到结束）
-- 增加贿赂难度
-- 披露大额投票
-</code></pre><h4 id=质押要求>质押要求</h4><pre tabindex=0><code>提案门槛：
-- 质押一定数量代币
-- 提案失败则没收
-- 防止垃圾提案
-</code></pre><hr><h3 id=3-社区防范->3. 社区防范 ⭐⭐⭐⭐</h3><h4 id=多签治理>多签治理</h4><pre tabindex=0><code>关键决策：
-- 需要多签钱包执行
-- 5/9 或 7/11 签名
-- 分散权力
-</code></pre><h4 id=社区监督>社区监督</h4><pre tabindex=0><code>机制：
-- 论坛充分讨论
-- 第三方审计提案
-- 媒体监督
-</code></pre><h4 id=紧急暂停>紧急暂停</h4><pre tabindex=0><code>权限：
-- 社区可投票暂停治理
-- 发现攻击时紧急响应
-- 多签也可触发
-</code></pre><hr><h2 id=治理参与策略>治理参与策略</h2><h3 id=个人参与者>个人参与者</h3><h4 id=小-holder1-万代币>小 holder（&lt;1 万代币）</h4><pre tabindex=0><code>建议：
-1. 委托投票给信任的代表
-2. 关注核心提案
-3. 参与论坛讨论
-4. 不要盲目投票
-</code></pre><h4 id=中-holder1-10-万代币>中 holder（1-10 万代币）</h4><pre tabindex=0><code>建议：
-1. 直接参与投票
-2. 加入治理委员会
-3. 提出改进建议
-4. 联合其他 holder
-</code></pre><h4 id=大-holder10-万代币>大 holder（>10 万代币）</h4><pre tabindex=0><code>建议：
-1. 积极参与所有投票
-2. 提出高质量提案
-3. 承担社区责任
-4. 避免权力滥用
-</code></pre><hr><h3 id=机构投资者>机构投资者</h3><h4 id=治理策略>治理策略</h4><pre tabindex=0><code>1. 专业团队分析提案
-2. 建立投票框架
-3. 与其他机构协调
-4. 长期参与治理
-</code></pre><h4 id=利益冲突管理>利益冲突管理</h4><pre tabindex=0><code>披露：
-- 持仓情况
-- 关联项目
-- 投票理由
-
-回避：
-- 利益相关提案回避投票
-- 保持独立性
-</code></pre><hr><h2 id=我的治理参与>我的治理参与</h2><h3 id=持仓协议治理>持仓协议治理</h3><table><thead><tr><th>协议</th><th>持仓</th><th>参与度</th><th>策略</th></tr></thead><tbody><tr><td>Aave</td><td>$50k</td><td>每案必投</td><td>支持稳健提案</td></tr><tr><td>Uniswap</td><td>$30k</td><td>选择性</td><td>关注费用开关</td></tr><tr><td>Curve</td><td>$20k</td><td>委托投票</td><td>委托给活跃代表</td></tr><tr><td>Optimism</td><td>$10k</td><td>观察</td><td>学习为主</td></tr></tbody></table><h3 id=投票原则>投票原则</h3><pre tabindex=0><code>1. 仔细阅读提案全文
-2. 查看论坛讨论
-3. 评估风险和收益
-4. 考虑长期影响
-5. 不盲目跟随大 V
-</code></pre><h3 id=时间分配>时间分配</h3><pre tabindex=0><code>每周：
-- 阅读提案：2 小时
-- 论坛讨论：1 小时
-- 投票决策：1 小时
-
-每月：
-- 深度研究：4 小时
-- 社区互动：2 小时
-</code></pre><hr><h2 id=总结>总结</h2><p>治理攻击防范：</p></div><a href=/dex-bok/posts/24-governance-attack-cases/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/12-cross-chain-bridge/ class="link black dim">跨链桥安全指南 - 如何安全转移资产</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=跨链桥风险>跨链桥风险</h2><h3 id=历史大案>历史大案</h3><table><thead><tr><th>事件</th><th>时间</th><th>损失</th></tr></thead><tbody><tr><td>Ronin Bridge</td><td>2022.03</td><td>$6.2 亿</td></tr><tr><td>Wormhole</td><td>2022.02</td><td>$3.2 亿</td></tr><tr><td>Nomad</td><td>2022.08</td><td>$1.9 亿</td></tr><tr><td>Poly Network</td><td>2021.08</td><td>$6.1 亿</td></tr></tbody></table><h3 id=常见攻击方式>常见攻击方式</h3><ol><li><strong>签名验证绕过</strong></li><li><strong>重放攻击</strong></li><li><strong>预言机操纵</strong></li><li><strong>权限提升</strong></li></ol><h2 id=安全使用指南>安全使用指南</h2><h3 id=选择桥的标准>选择桥的标准</h3><ul><li>✅ 经过多家审计公司审计</li><li>✅ 有 bug bounty 计划</li><li>✅ TVL 高且稳定</li><li>✅ 团队公开透明</li></ul><h3 id=推荐桥>推荐桥</h3><table><thead><tr><th>桥</th><th>审计</th><th>TVL</th><th>推荐度</th></tr></thead><tbody><tr><td>Hop Protocol</td><td>✅ 2 家</td><td>$500M</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>Stargate</td><td>✅ 3 家</td><td>$800M</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>Across</td><td>✅ 2 家</td><td>$300M</td><td>⭐⭐⭐⭐</td></tr><tr><td>官方桥</td><td>✅ 多家</td><td>varies</td><td>⭐⭐⭐⭐</td></tr></tbody></table><h3 id=使用技巧>使用技巧</h3><ol><li>小额测试 first</li><li>避开新上线桥（&lt;3 个月）</li><li>关注官方 Twitter 警报</li><li>大额分多次跨</li></ol><hr><p><strong>作者</strong>：QingHeart Qin
-<strong>邮箱</strong>：qingxin0919@gmail.com</p></div><a href=/dex-bok/posts/12-cross-chain-bridge/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/11-dex-security-audit/ class="link black dim">DEX 智能合约审计入门 - 避开 90% 的坑</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=为什么需要审计>为什么需要审计</h2><p>DEX 合约一旦有漏洞，可能导致：</p><ul><li>资金被盗（如 2022 年 Nomad 桥 $1.9 亿）</li><li>价格操纵（如 2021 年 Cream Finance）</li><li>无限铸币（如 2020 年 Value DeFi）</li></ul><h2 id=审计清单>审计清单</h2><h3 id=1-权限控制>1. 权限控制</h3><ul><li><input disabled type=checkbox> 管理员权限是否过度集中</li><li><input disabled type=checkbox> 是否有 timelock 保护</li><li><input disabled type=checkbox> 多签钱包阈值是否合理</li></ul><h3 id=2-价格预言机>2. 价格预言机</h3><ul><li><input disabled type=checkbox> 是否使用去中心化预言机（Chainlink）</li><li><input disabled type=checkbox> 是否有价格偏离保护</li><li><input disabled type=checkbox> 是否有时间加权平均价（TWAP）</li></ul><h3 id=3-重入攻击>3. 重入攻击</h3><ul><li><input disabled type=checkbox> 是否使用 checks-effects-interactions 模式</li><li><input disabled type=checkbox> 是否有 ReentrancyGuard</li><li><input disabled type=checkbox> 状态更新是否在转账前</li></ul><h3 id=4-整数溢出>4. 整数溢出</h3><ul><li><input disabled type=checkbox> 是否使用 SafeMath（Solidity 0.8+ 内置）</li><li><input disabled type=checkbox> 是否有边界检查</li></ul><h2 id=工具推荐>工具推荐</h2><ul><li>Slither：静态分析</li><li>Mythril：符号执行</li><li>Echidna：模糊测试</li></ul><hr><p><strong>作者</strong>：QingHeart Qin
-<strong>邮箱</strong>：qingxin0919@gmail.com</p></div><a href=/dex-bok/posts/11-dex-security-audit/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/10-risk-management/ class="link black dim">DeFi 风险管理 - 保住本金的 10 条铁律</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=血泪教训>血泪教训</h2><p>3 年 DeFi 经历，见过太多：</p><ul><li>百万仓位一夜归零</li><li>高 APY 诱惑后 rug pull</li><li>操作失误损失惨重</li></ul><p>总结 10 条铁律，帮你保住本金。</p><hr><h2 id=铁律-1只用闲钱->铁律 1：只用闲钱 ⭐⭐⭐⭐⭐</h2><p><strong>原则</strong>：</p><ul><li>最多 20% 净资产投入 DeFi</li><li>亏光也不影响生活</li><li>不要借钱玩 DeFi</li></ul><p><strong>为什么</strong>：</p><ul><li>DeFi 波动极大</li><li>黑天鹅随时发生</li><li>心态影响决策</li></ul><p><strong>执行</strong>：</p><pre tabindex=0><code>月收入分配：
-- 50% 生活开支
-- 30% 储蓄/投资
-- 20% DeFi（可承受损失）
-</code></pre><hr><h2 id=铁律-2分散分散再分散->铁律 2：分散分散再分散 ⭐⭐⭐⭐⭐</h2><p><strong>不要</strong>：</p><ul><li>All-in 一个协议</li><li>All-in 一个池子</li><li>All-in 一条链</li></ul><p><strong>要</strong>：</p><pre tabindex=0><code>资金分配示例：
-- 30% 稳定币 LP（Curve 3pool）
-- 25% 主流币 LP（ETH/USDC）
-- 20% 借贷（Aave）
-- 15% 质押（Lido）
-- 10% 高风险 Farm
-</code></pre><p><strong>效果</strong>：</p></div><a href=/dex-bok/posts/10-risk-management/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/05-mev-protection/ class="link black dim">MEV 防护指南 - 避免被机器人收割</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=什么是-mev>什么是 MEV</h2><p><strong>MEV</strong>（Maximal Extractable Value）= 矿工/验证者可提取价值</p><p>简单说：机器人监控公开交易池，通过特殊手段从你的交易中获利。</p><hr><h2 id=常见-mev-攻击>常见 MEV 攻击</h2><h3 id=1-抢跑front-running>1. 抢跑（Front-running）</h3><p><strong>手法</strong>：</p><ol><li>机器人发现你的大额买单</li><li>出更高 Gas 抢先买入</li><li>价格被推高后，卖给你获利</li></ol><p><strong>损失</strong>：滑点增加 0.5-5%</p><h3 id=2-三明治攻击sandwich>2. 三明治攻击（Sandwich）</h3><p><strong>手法</strong>：</p><pre tabindex=0><code>你的交易：买入 10 ETH 的 Token A
-
-机器人操作：
-1. 抢先买入 Token A（推高价格）
-2. 你的买单执行（价格更高）
-3. 立即卖出 Token A（获利）
-</code></pre><p><strong>损失</strong>：可达 10%+</p><h3 id=3-清算抢跑>3. 清算抢跑</h3><p><strong>手法</strong>：</p><ol><li>监控借贷协议清算线</li><li>发现可清算仓位</li><li>抢先执行清算获利</li></ol><p><strong>影响</strong>：借款人损失清算罚金</p><hr><h2 id=防护工具>防护工具</h2><h3 id=1-flashbots-protect->1. Flashbots Protect ⭐⭐⭐⭐⭐</h3><p><strong>原理</strong>：私有 RPC，交易不公开到 mempool</p><p><strong>使用</strong>：</p><pre tabindex=0><code>RPC 地址：
-https://rpc.flashbots.net
-
-MetaMask 设置：
-1. 添加新网络
-2. 输入上述 RPC
-3. 切换到 Flashbots 网络交易
-</code></pre><p><strong>效果</strong>：免疫 99% MEV 攻击</p></div><a href=/dex-bok/posts/05-mev-protection/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/t1-02-wallet-setup/ class="link black dim">T1 新手入门 02 - 创建钱包：安全保管你的加密资产</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h1 id=t1-新手入门-02---创建钱包安全保管你的加密资产>T1 新手入门 02 - 创建钱包：安全保管你的加密资产</h1><p>在开始使用 DEX 之前，你需要一个加密钱包。这是你在 Web3 世界的身份和保险箱。</p><h2 id=什么是加密钱包>什么是加密钱包？</h2><p>加密钱包不是"装"币的容器，而是<strong>管理私钥的工具</strong>：</p><ul><li><strong>公钥</strong> → 你的地址（可以公开，类似银行账号）</li><li><strong>私钥</strong> → 你的密码（绝对不能泄露，类似银行卡密码）</li><li><strong>助记词</strong> → 私钥的人类可读形式（12-24 个单词）</li></ul><pre tabindex=0><code>助记词 → 私钥 → 公钥 → 地址
-</code></pre><h2 id=钱包类型对比>钱包类型对比</h2><h3 id=-热钱包hot-wallet>🔥 热钱包（Hot Wallet）</h3><p>联网的钱包，方便但安全性较低。</p><table><thead><tr><th>钱包</th><th>平台</th><th>适合</th></tr></thead><tbody><tr><td>MetaMask</td><td>浏览器插件/手机</td><td>Ethereum 及 EVM 链</td></tr><tr><td>Phantom</td><td>浏览器/手机</td><td>Solana</td></tr><tr><td>Trust Wallet</td><td>手机</td><td>多链支持</td></tr><tr><td>Rainbow</td><td>手机/浏览器</td><td>Ethereum，UI 友好</td></tr></tbody></table><h3 id=-冷钱包cold-wallet>🧊 冷钱包（Cold Wallet）</h3><p>离线存储，安全性最高。</p><table><thead><tr><th>钱包</th><th>价格</th><th>特点</th></tr></thead><tbody><tr><td>Ledger Nano X</td><td>~$149</td><td>蓝牙，支持多链</td></tr><tr><td>Trezor Model T</td><td>~$219</td><td>触摸屏，开源</td></tr><tr><td>OneKey</td><td>~$119</td><td>性价比高</td></tr></tbody></table><p><strong>建议</strong>：新手从热钱包开始，资产超过$1000 后考虑冷钱包。</p></div><a href=/dex-bok/posts/t1-02-wallet-setup/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div></section></article></main><footer class="bg-white bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href=https://tiao0303.github.io/dex-bok/>&copy; DEX 学习笔记 | 去中心化交易所实战指南 2026</a><div><div class=ananke-socials></div></div></div></footer></body></html>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/%E5%AE%89%E5%85%A8/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/%E5%AE%89%E5%85%A8/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/%E5%AE%89%E5%85%A8/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/%E5%AE%89%E5%85%A8/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="安全"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="安全"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T13:00:00+08:00"><meta itemprop=dateModified content="2026-03-19T13:00:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="安全"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-term"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-list-layout><header class=geek-list-header><h1>安全</h1></header><div class=geek-tag-filter><button class="tag-btn active" data-tag=all>全部</button>
+<button class=tag-btn data-tag=1inch>1inch</button>
+<button class=tag-btn data-tag=AML>AML</button>
+<button class=tag-btn data-tag=AMM>AMM</button>
+<button class=tag-btn data-tag=Arbitrum>Arbitrum</button>
+<button class=tag-btn data-tag=BSC>BSC</button>
+<button class=tag-btn data-tag=Curve>Curve</button>
+<button class=tag-btn data-tag=DAO>DAO</button>
+<button class=tag-btn data-tag=DCA>DCA</button>
+<button class=tag-btn data-tag=DeFi>DeFi</button>
+<button class=tag-btn data-tag=DEX>DEX</button>
+<button class=tag-btn data-tag=ERC20>ERC20</button>
+<button class=tag-btn data-tag=ERC4626>ERC4626</button>
+<button class=tag-btn data-tag=ERC721>ERC721</button>
+<button class=tag-btn data-tag=Ethereum>Ethereum</button>
+<button class=tag-btn data-tag=Gas>Gas</button>
+<button class=tag-btn data-tag="Gas 费">Gas 费</button>
+<button class=tag-btn data-tag=GDPR>GDPR</button>
+<button class=tag-btn data-tag=KYC>KYC</button>
+<button class=tag-btn data-tag=Layer2>Layer2</button>
+<button class=tag-btn data-tag=LayerZero>LayerZero</button>
+<button class=tag-btn data-tag=LP>LP</button>
+<button class=tag-btn data-tag=Matcha>Matcha</button>
+<button class=tag-btn data-tag=MEV>MEV</button>
+<button class=tag-btn data-tag=NFT>NFT</button>
+<button class=tag-btn data-tag=Optimism>Optimism</button>
+<button class=tag-btn data-tag=PMM>PMM</button>
+<button class=tag-btn data-tag=Rebasing>Rebasing</button>
+<button class=tag-btn data-tag=StableSwap>StableSwap</button>
+<button class=tag-btn data-tag=T3>T3</button>
+<button class=tag-btn data-tag=Uniswap>Uniswap</button>
+<button class=tag-btn data-tag=V2>V2</button>
+<button class=tag-btn data-tag=V3>V3</button>
+<button class=tag-btn data-tag=V4>V4</button>
+<button class=tag-btn data-tag="Yield Farming">Yield Farming</button>
+<button class=tag-btn data-tag=主动做市商>主动做市商</button>
+<button class=tag-btn data-tag=事件管理>事件管理</button>
+<button class=tag-btn data-tag=交易>交易</button>
+<button class=tag-btn data-tag=交易优化>交易优化</button>
+<button class=tag-btn data-tag=交易工具>交易工具</button>
+<button class=tag-btn data-tag=代币>代币</button>
+<button class=tag-btn data-tag=代币安全>代币安全</button>
+<button class=tag-btn data-tag=代币标准>代币标准</button>
+<button class=tag-btn data-tag=代码审查>代码审查</button>
+<button class=tag-btn data-tag=以太坊>以太坊</button>
+<button class=tag-btn data-tag=价格影响>价格影响</button>
+<button class=tag-btn data-tag=优化>优化</button>
+<button class=tag-btn data-tag=估值>估值</button>
+<button class=tag-btn data-tag=假币识别>假币识别</button>
+<button class=tag-btn data-tag=做市>做市</button>
+<button class=tag-btn data-tag=做市商>做市商</button>
+<button class=tag-btn data-tag=充值>充值</button>
+<button class=tag-btn data-tag=前端运行>前端运行</button>
+<button class=tag-btn data-tag=加密>加密</button>
+<button class=tag-btn data-tag=加密货币>加密货币</button>
+<button class=tag-btn data-tag=助记词>助记词</button>
+<button class=tag-btn data-tag=原理>原理</button>
+<button class=tag-btn data-tag=去中心化交易所>去中心化交易所</button>
+<button class=tag-btn data-tag=可变权重池>可变权重池</button>
+<button class=tag-btn data-tag=合约验证>合约验证</button>
+<button class=tag-btn data-tag=合规>合规</button>
+<button class=tag-btn data-tag=土狗币>土狗币</button>
+<button class=tag-btn data-tag=基础>基础</button>
+<button class=tag-btn data-tag=多链>多链</button>
+<button class=tag-btn data-tag=套利>套利</button>
+<button class=tag-btn data-tag=安全>安全</button>
+<button class=tag-btn data-tag=安全合规>安全合规</button>
+<button class=tag-btn data-tag=安全审计>安全审计</button>
+<button class=tag-btn data-tag=审计>审计</button>
+<button class=tag-btn data-tag=对冲>对冲</button>
+<button class=tag-btn data-tag=对比>对比</button>
+<button class=tag-btn data-tag=工具>工具</button>
+<button class=tag-btn data-tag=应急响应>应急响应</button>
+<button class=tag-btn data-tag=异常检测>异常检测</button>
+<button class=tag-btn data-tag=弹性供应>弹性供应</button>
+<button class=tag-btn data-tag=形式化>形式化</button>
+<button class=tag-btn data-tag=技术>技术</button>
+<button class=tag-btn data-tag=投票>投票</button>
+<button class=tag-btn data-tag=投资>投资</button>
+<button class=tag-btn data-tag=投资组合>投资组合</button>
+<button class=tag-btn data-tag=报税>报税</button>
+<button class=tag-btn data-tag=挖矿>挖矿</button>
+<button class=tag-btn data-tag=搜索者>搜索者</button>
+<button class=tag-btn data-tag=收入分析>收入分析</button>
+<button class=tag-btn data-tag=收益>收益</button>
+<button class=tag-btn data-tag=收益聚合>收益聚合</button>
+<button class=tag-btn data-tag=攻击>攻击</button>
+<button class=tag-btn data-tag=教程>教程</button>
+<button class=tag-btn data-tag=数字收藏>数字收藏</button>
+<button class=tag-btn data-tag=数学>数学</button>
+<button class=tag-btn data-tag=数据>数据</button>
+<button class=tag-btn data-tag=数据隐私>数据隐私</button>
+<button class=tag-btn data-tag=新手>新手</button>
+<button class=tag-btn data-tag=新手入门>新手入门</button>
+<button class=tag-btn data-tag=无常损失>无常损失</button>
+<button class=tag-btn data-tag=智能合约>智能合约</button>
+<button class=tag-btn data-tag=期权>期权</button>
+<button class=tag-btn data-tag=未来>未来</button>
+<button class=tag-btn data-tag=本金>本金</button>
+<button class=tag-btn data-tag=机构>机构</button>
+<button class=tag-btn data-tag=架构>架构</button>
+<button class=tag-btn data-tag=桥>桥</button>
+<button class=tag-btn data-tag=比价>比价</button>
+<button class=tag-btn data-tag=治理>治理</button>
+<button class=tag-btn data-tag=流动性>流动性</button>
+<button class=tag-btn data-tag=滑点>滑点</button>
+<button class=tag-btn data-tag=灾难恢复>灾难恢复</button>
+<button class=tag-btn data-tag=私钥>私钥</button>
+<button class=tag-btn data-tag=税务>税务</button>
+<button class=tag-btn data-tag=稳定币>稳定币</button>
+<button class=tag-btn data-tag=策略>策略</button>
+<button class=tag-btn data-tag=经济>经济</button>
+<button class=tag-btn data-tag=经济模型>经济模型</button>
+<button class=tag-btn data-tag=聚合器>聚合器</button>
+<button class=tag-btn data-tag=脱锚>脱锚</button>
+<button class=tag-btn data-tag=设计>设计</button>
+<button class=tag-btn data-tag=趋势>趋势</button>
+<button class=tag-btn data-tag=跨链>跨链</button>
+<button class=tag-btn data-tag=身份验证>身份验证</button>
+<button class=tag-btn data-tag=进阶>进阶</button>
+<button class=tag-btn data-tag=量化>量化</button>
+<button class=tag-btn data-tag=金库标准>金库标准</button>
+<button class=tag-btn data-tag=钱包>钱包</button>
+<button class=tag-btn data-tag=链上分析>链上分析</button>
+<button class=tag-btn data-tag=链上监控>链上监控</button>
+<button class=tag-btn data-tag=防护>防护</button>
+<button class=tag-btn data-tag=限价单>限价单</button>
+<button class=tag-btn data-tag=集中流动性>集中流动性</button>
+<button class=tag-btn data-tag=非同质化代币>非同质化代币</button>
+<button class=tag-btn data-tag=预测>预测</button>
+<button class=tag-btn data-tag=风险>风险</button>
+<button class=tag-btn data-tag=验证>验证</button>
+<button class=tag-btn data-tag=黑客>黑客</button></div><div class=geek-posts-grid><article class=geek-post-card data-tags="DEX MEV 前端运行 安全 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/08-mev-front-running/>T2 进阶实战 08：MEV 与前端运行防御</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>800字</span></p><p class=post-excerpt><h1 id=mev-与前端运行防御>MEV 与前端运行防御</h1><h2 id=引言>引言</h2><p>MEV（Maximal Extractable Value，最大可提取价值）是区块链生态中的重要概念。理解 MEV 的运作机制和防御策略，对于保护 DEX 用户资金安全至关重要。</p><h2 id=mev-概述>MEV 概述</h2><h3 id=定义>定义</h3><p><strong>MEV</strong> = …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/08-mev-front-running/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="DeFi 安全 智能合约 审计 攻击 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/defi-security-attack-defense/>DeFi 安全实战 - 智能合约攻击与防护完全指南</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>1139字</span></p><p class=post-excerpt><h2 id=前言>前言</h2><p>DeFi 协议累计遭受攻击损失已超过 <strong>60 亿美元</strong>。本文将从实战角度分析常见攻击手段，并提供可落地的防护方案。</p><h2 id=一2024-2025-年重大攻击事件>一、2024-2025 年重大攻击事件</h2><table><thead><tr><th>协议</th><th>损失金额 …</th></tr></thead></table></p><a href=https://tiao0303.github.io/dex-bok/posts/defi-security-attack-defense/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="黑客 安全 攻击 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/29-hack-attack-technical-analysis/>黑客攻击技术复盘 - 重入、预言机操纵详解</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>728字</span></p><p class=post-excerpt><h2 id=defi-黑客攻击概览>DeFi 黑客攻击概览</h2><h3 id=损失统计>损失统计</h3><table><thead><tr><th>年份</th><th>总损失</th><th>重大事件数</th><th>平均损失</th></tr></thead><tbody><tr><td>2020 …</td></tr></tbody></table></p><a href=https://tiao0303.github.io/dex-bok/posts/29-hack-attack-technical-analysis/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="验证 安全 形式化 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/27-formal-verification/>智能合约形式化验证 - Certora 与 Spec 语言</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>624字</span></p><p class=post-excerpt><h2 id=什么是形式化验证>什么是形式化验证</h2><h3 id=定义>定义</h3><p><strong>形式化验证</strong> = 用数学方法证明代码符合规范</p><h3 id=与传统测试对比>与传统测试对比</h3><table><thead><tr><th>方法</th><th>覆盖率</th><th>可靠性</th><th>成本 …</th></tr></thead></table></p><a href=https://tiao0303.github.io/dex-bok/posts/27-formal-verification/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="治理 DAO 安全 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/24-governance-attack-cases/>治理攻击案例研究 - 投票操纵与贿赂市场</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>514字</span></p><p class=post-excerpt><h2 id=什么是治理攻击>什么是治理攻击</h2><h3 id=定义>定义</h3><p><strong>治理攻击</strong> = 通过操纵投票机制，获取不当利益或破坏协议</p><h3 id=攻击类型>攻击类型</h3><table><thead><tr><th>类型</th><th>手段</th><th>影响 …</th></tr></thead></table></p><a href=https://tiao0303.github.io/dex-bok/posts/24-governance-attack-cases/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="跨链 桥 安全 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/12-cross-chain-bridge/>跨链桥安全指南 - 如何安全转移资产</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>83字</span></p><p class=post-excerpt><h2 id=跨链桥风险>跨链桥风险</h2><h3 id=历史大案>历史大案</h3><table><thead><tr><th>事件</th><th>时间</th><th>损失</th></tr></thead><tbody><tr><td>Ronin Bridge …</td></tr></tbody></table></p><a href=https://tiao0303.github.io/dex-bok/posts/12-cross-chain-bridge/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="安全 审计 智能合约 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/11-dex-security-audit/>DEX 智能合约审计入门 - 避开 90% 的坑</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>55字</span></p><p class=post-excerpt><h2 id=为什么需要审计>为什么需要审计</h2><p>DEX 合约一旦有漏洞，可能导致：</p><ul><li>资金被盗（如 2022 年 Nomad 桥 $1.9 亿）</li><li>价格操纵（如 2021 年 Cream Finance）</li><li>无限铸币（如 2020 年 Value DeFi）</li></ul><h2 id=审计清单>审计清单</h2><h3 id=1-权限控制>1. …</h3></p><a href=https://tiao0303.github.io/dex-bok/posts/11-dex-security-audit/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="风险 安全 本金 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/10-risk-management/>DeFi 风险管理 - 保住本金的 10 条铁律</a></h3><p class=post-meta><span>2026-03-18</span>
+<span class=meta-sep>•</span>
+<span>334字</span></p><p class=post-excerpt><h2 id=血泪教训>血泪教训</h2><p>3 年 DeFi 经历，见过太多：</p><ul><li>百万仓位一夜归零</li><li>高 APY 诱惑后 rug pull</li><li>操作失误损失惨重</li></ul><p>总结 10 条铁律，帮你保住本金。</p><hr><h2 id=铁律-1只用闲钱->铁律 1：只用闲钱 ⭐⭐⭐⭐⭐</h2><p><strong>原则</strong>：</p><ul><li>最多 20% 净资产投入 DeFi …</li></ul></p><a href=https://tiao0303.github.io/dex-bok/posts/10-risk-management/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="MEV 安全 防护 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/05-mev-protection/>MEV 防护指南 - 避免被机器人收割</a></h3><p class=post-meta><span>2026-03-18</span>
+<span class=meta-sep>•</span>
+<span>232字</span></p><p class=post-excerpt><h2 id=什么是-mev>什么是 MEV</h2><p><strong>MEV</strong>（Maximal Extractable Value）= 矿工/验证者可提取价值</p><p>简单说：机器人监控公开交易池，通过特殊手段从你的交易中获利。</p><hr><h2 id=常见-mev-攻击>常见 MEV 攻击</h2><h3 id=1-抢跑front-running>1. 抢跑（Front-running）</h3><p><strong>手法</strong>： …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/05-mev-protection/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="钱包 私钥 助记词 安全 新手入门 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/t1-02-wallet-setup/>T1 新手入门 02 - 创建钱包：安全保管你的加密资产</a></h3><p class=post-meta><span>2026-03-18</span>
+<span class=meta-sep>•</span>
+<span>247字</span></p><p class=post-excerpt><h1 id=t1-新手入门-02---创建钱包安全保管你的加密资产>T1 新手入门 02 - 创建钱包：安全保管你的加密资产</h1><p>在开始使用 DEX 之前，你需要一个加密钱包。这是你在 Web3 世界的身份和保险箱。</p><h2 id=什么是加密钱包>什么是加密钱包？</h2><p>加密钱包不是"装"币的容器，而是<strong>管理私钥的工具</strong>：</p><ul><li><strong>公钥 …</strong></li></ul></p><a href=https://tiao0303.github.io/dex-bok/posts/t1-02-wallet-setup/ class=read-more>阅读全文 →</a></div></article></div></div><script>document.addEventListener("DOMContentLoaded",function(){const e=document.querySelectorAll(".tag-btn"),t=document.querySelectorAll(".geek-post-card");e.forEach(n=>{n.addEventListener("click",function(){const n=this.dataset.tag;e.forEach(e=>e.classList.remove("active")),this.classList.add("active"),t.forEach(e=>{if(n==="all")e.style.display="";else{const t=e.dataset.tags||"";t.includes(n)?e.style.display="":e.style.display="none"}})})})})</script></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

@@ -1,0 +1,110 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='区块链技术原理（进阶）
+
+难度：⭐⭐ 进阶 | 字数：约 1,400 字 | 预计阅读时间：6 分钟
+
+
+一、从拜占庭将军问题说起
+想象一个场景：10 位拜占庭将军各自率领一支军队，包围了一座城市。他们必须同时进攻或同时撤退，否则就会被各个击破。但将军们分散在城市周围，只能通过信使传递消息。
+问题是：如何确保所有将军在有叛徒存在的情况下，仍然能达成一致的行动方案？
+这就是著名的拜占庭将军问题（Byzantine Generals Problem），由 Leslie Lamport 在 1982 年提出。它本质上探讨的是：在不可靠的网络中，如何让一群互不信任的节点达成共识？
+中本聪在 2008 年发布的比特币白皮书中，用技术手段优雅地解决了这个问题，从而开启了区块链时代。
+
+二、区块链的四大核心技术
+1. 分布式账本（Distributed Ledger）
+传统银行系统中，只有一本"账本"——银行的数据库。你转账给朋友，实际上只是银行在自己的账本上改了两个数字。
+区块链颠覆了这一点：网络中每个节点都拥有一份完整的账本副本。 任何一笔交易，都需要同步给网络中所有节点。这意味着：
+
+没有单一故障点：即使某个节点宕机，账本依然完好
+账本不可伪造：想要作弊，必须同时修改全球数万个节点上的账本
+
+2. 密码学哈希函数（Cryptographic Hash Function）
+哈希函数是将任意长度的输入，通过某种算法转化为固定长度输出的函数。好比你把一整本书丢进一个"粉碎机"，出来的是一串固定长度的"指纹"。
+比特币使用的是 SHA-256 算法，它具备三个重要特性：
+
+单向性：知道输出无法反推输入
+雪崩效应：输入一个字符的变化，输出完全不同
+抗碰撞性：几乎不可能找到两个不同的输入得到相同的输出
+
+举一个具体例子：
+输入: "Hello, Blockchain!"
+SHA-256输出: 4c4a6f8c9b3d7e2f1a0c8d9e2f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2
+
+输入: "Hello, blockchain!"  (仅改变一个字母的大小写)
+SHA-256输出: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1
+3. 默克尔树（Merkle Tree）
+区块链中的每个区块，并非将所有交易数据平铺存储，而是通过默克尔树这种数据结构组织起来。
+结构如下：大量交易首先被哈希配对，形成"叶子节点"；相邻两个哈希再合并计算，得到上一层的哈希值…… 最终汇聚到唯一的根哈希（Merkle Root）。
+        Root Hash (Merkle Root)
+              |
+      ┌───────┴───────┐
+  Hash(AB)         Hash(CD)
+   |                    |
+┌──┴──┐             ┌──┴──┐
+HashA  HashB    HashC  HashD
+ |      |         |      |
+Tx1    Tx2      Tx3    Tx4
+默克尔树的价值在于：只需保存区块头（包含根哈希），而非全部交易数据，就能验证某笔交易是否存在于区块中。 这大大降低了轻节点（Light Node）的存储和验证负担。'><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/researcher/02-%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/researcher/02-%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='区块链技术原理（进阶） 难度：⭐⭐ 进阶 | 字数：约 1,400 字 | 预计阅读时间：6 分钟
+一、从拜占庭将军问题说起 想象一个场景：10 位拜占庭将军各自率领一支军队，包围了一座城市。他们必须同时进攻或同时撤退，否则就会被各个击破。但将军们分散在城市周围，只能通过信使传递消息。
+问题是：如何确保所有将军在有叛徒存在的情况下，仍然能达成一致的行动方案？
+这就是著名的拜占庭将军问题（Byzantine Generals Problem），由 Leslie Lamport 在 1982 年提出。它本质上探讨的是：在不可靠的网络中，如何让一群互不信任的节点达成共识？
+中本聪在 2008 年发布的比特币白皮书中，用技术手段优雅地解决了这个问题，从而开启了区块链时代。
+二、区块链的四大核心技术 1. 分布式账本（Distributed Ledger） 传统银行系统中，只有一本"账本"——银行的数据库。你转账给朋友，实际上只是银行在自己的账本上改了两个数字。
+区块链颠覆了这一点：网络中每个节点都拥有一份完整的账本副本。 任何一笔交易，都需要同步给网络中所有节点。这意味着：
+没有单一故障点：即使某个节点宕机，账本依然完好 账本不可伪造：想要作弊，必须同时修改全球数万个节点上的账本 2. 密码学哈希函数（Cryptographic Hash Function） 哈希函数是将任意长度的输入，通过某种算法转化为固定长度输出的函数。好比你把一整本书丢进一个"粉碎机"，出来的是一串固定长度的"指纹"。
+比特币使用的是 SHA-256 算法，它具备三个重要特性：
+单向性：知道输出无法反推输入 雪崩效应：输入一个字符的变化，输出完全不同 抗碰撞性：几乎不可能找到两个不同的输入得到相同的输出 举一个具体例子：
+输入: "Hello, Blockchain!" SHA-256输出: 4c4a6f8c9b3d7e2f1a0c8d9e2f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2 输入: "Hello, blockchain!" (仅改变一个字母的大小写) SHA-256输出: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1 3. 默克尔树（Merkle Tree） 区块链中的每个区块，并非将所有交易数据平铺存储，而是通过默克尔树这种数据结构组织起来。
+结构如下：大量交易首先被哈希配对，形成"叶子节点"；相邻两个哈希再合并计算，得到上一层的哈希值…… 最终汇聚到唯一的根哈希（Merkle Root）。
+Root Hash (Merkle Root) | ┌───────┴───────┐ Hash(AB) Hash(CD) | | ┌──┴──┐ ┌──┴──┐ HashA HashB HashC HashD | | | | Tx1 Tx2 Tx3 Tx4 默克尔树的价值在于：只需保存区块头（包含根哈希），而非全部交易数据，就能验证某笔交易是否存在于区块中。 这大大降低了轻节点（Light Node）的存储和验证负担。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='区块链技术原理（进阶） 难度：⭐⭐ 进阶 | 字数：约 1,400 字 | 预计阅读时间：6 分钟
+一、从拜占庭将军问题说起 想象一个场景：10 位拜占庭将军各自率领一支军队，包围了一座城市。他们必须同时进攻或同时撤退，否则就会被各个击破。但将军们分散在城市周围，只能通过信使传递消息。
+问题是：如何确保所有将军在有叛徒存在的情况下，仍然能达成一致的行动方案？
+这就是著名的拜占庭将军问题（Byzantine Generals Problem），由 Leslie Lamport 在 1982 年提出。它本质上探讨的是：在不可靠的网络中，如何让一群互不信任的节点达成共识？
+中本聪在 2008 年发布的比特币白皮书中，用技术手段优雅地解决了这个问题，从而开启了区块链时代。
+二、区块链的四大核心技术 1. 分布式账本（Distributed Ledger） 传统银行系统中，只有一本"账本"——银行的数据库。你转账给朋友，实际上只是银行在自己的账本上改了两个数字。
+区块链颠覆了这一点：网络中每个节点都拥有一份完整的账本副本。 任何一笔交易，都需要同步给网络中所有节点。这意味着：
+没有单一故障点：即使某个节点宕机，账本依然完好 账本不可伪造：想要作弊，必须同时修改全球数万个节点上的账本 2. 密码学哈希函数（Cryptographic Hash Function） 哈希函数是将任意长度的输入，通过某种算法转化为固定长度输出的函数。好比你把一整本书丢进一个"粉碎机"，出来的是一串固定长度的"指纹"。
+比特币使用的是 SHA-256 算法，它具备三个重要特性：
+单向性：知道输出无法反推输入 雪崩效应：输入一个字符的变化，输出完全不同 抗碰撞性：几乎不可能找到两个不同的输入得到相同的输出 举一个具体例子：
+输入: "Hello, Blockchain!" SHA-256输出: 4c4a6f8c9b3d7e2f1a0c8d9e2f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2 输入: "Hello, blockchain!" (仅改变一个字母的大小写) SHA-256输出: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1 3. 默克尔树（Merkle Tree） 区块链中的每个区块，并非将所有交易数据平铺存储，而是通过默克尔树这种数据结构组织起来。
+结构如下：大量交易首先被哈希配对，形成"叶子节点"；相邻两个哈希再合并计算，得到上一层的哈希值…… 最终汇聚到唯一的根哈希（Merkle Root）。
+Root Hash (Merkle Root) | ┌───────┴───────┐ Hash(AB) Hash(CD) | | ┌──┴──┐ ┌──┴──┐ HashA HashB HashC HashD | | | | Tx1 Tx2 Tx3 Tx4 默克尔树的价值在于：只需保存区块头（包含根哈希），而非全部交易数据，就能验证某笔交易是否存在于区块中。 这大大降低了轻节点（Light Node）的存储和验证负担。'><meta itemprop=wordCount content="173"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='区块链技术原理（进阶） 难度：⭐⭐ 进阶 | 字数：约 1,400 字 | 预计阅读时间：6 分钟
+一、从拜占庭将军问题说起 想象一个场景：10 位拜占庭将军各自率领一支军队，包围了一座城市。他们必须同时进攻或同时撤退，否则就会被各个击破。但将军们分散在城市周围，只能通过信使传递消息。
+问题是：如何确保所有将军在有叛徒存在的情况下，仍然能达成一致的行动方案？
+这就是著名的拜占庭将军问题（Byzantine Generals Problem），由 Leslie Lamport 在 1982 年提出。它本质上探讨的是：在不可靠的网络中，如何让一群互不信任的节点达成共识？
+中本聪在 2008 年发布的比特币白皮书中，用技术手段优雅地解决了这个问题，从而开启了区块链时代。
+二、区块链的四大核心技术 1. 分布式账本（Distributed Ledger） 传统银行系统中，只有一本"账本"——银行的数据库。你转账给朋友，实际上只是银行在自己的账本上改了两个数字。
+区块链颠覆了这一点：网络中每个节点都拥有一份完整的账本副本。 任何一笔交易，都需要同步给网络中所有节点。这意味着：
+没有单一故障点：即使某个节点宕机，账本依然完好 账本不可伪造：想要作弊，必须同时修改全球数万个节点上的账本 2. 密码学哈希函数（Cryptographic Hash Function） 哈希函数是将任意长度的输入，通过某种算法转化为固定长度输出的函数。好比你把一整本书丢进一个"粉碎机"，出来的是一串固定长度的"指纹"。
+比特币使用的是 SHA-256 算法，它具备三个重要特性：
+单向性：知道输出无法反推输入 雪崩效应：输入一个字符的变化，输出完全不同 抗碰撞性：几乎不可能找到两个不同的输入得到相同的输出 举一个具体例子：
+输入: "Hello, Blockchain!" SHA-256输出: 4c4a6f8c9b3d7e2f1a0c8d9e2f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2 输入: "Hello, blockchain!" (仅改变一个字母的大小写) SHA-256输出: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1 3. 默克尔树（Merkle Tree） 区块链中的每个区块，并非将所有交易数据平铺存储，而是通过默克尔树这种数据结构组织起来。
+结构如下：大量交易首先被哈希配对，形成"叶子节点"；相邻两个哈希再合并计算，得到上一层的哈希值…… 最终汇聚到唯一的根哈希（Merkle Root）。
+Root Hash (Merkle Root) | ┌───────┴───────┐ Hash(AB) Hash(CD) | | ┌──┴──┐ ┌──┴──┐ HashA HashB HashC HashD | | | | Tx1 Tx2 Tx3 Tx4 默克尔树的价值在于：只需保存区块头（包含根哈希），而非全部交易数据，就能验证某笔交易是否存在于区块中。 这大大降低了轻节点（Light Node）的存储和验证负担。'><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-02-区块链技术原理"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#一从拜占庭将军问题说起>一、从拜占庭将军问题说起</a></li><li><a href=#二区块链的四大核心技术>二、区块链的四大核心技术</a><ul><li><a href=#1-分布式账本distributed-ledger>1. 分布式账本（Distributed Ledger）</a></li><li><a href=#2-密码学哈希函数cryptographic-hash-function>2. 密码学哈希函数（Cryptographic Hash Function）</a></li><li><a href=#3-默克尔树merkle-tree>3. 默克尔树（Merkle Tree）</a></li><li><a href=#4-共识机制consensus-mechanism>4. 共识机制（Consensus Mechanism）</a></li></ul></li><li><a href=#三区块链的结构详解>三、区块链的结构详解</a></li><li><a href=#四区块链的不可篡改性从何而来>四、区块链的不可篡改性从何而来？</a></li><li><a href=#五区块链的局限与挑战>五、区块链的局限与挑战</a></li><li><a href=#六结语>六、结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>173 字</span></div></header><h1 id=区块链技术原理进阶>区块链技术原理（进阶）</h1><blockquote><p><strong>难度：⭐⭐ 进阶</strong> | 字数：约 1,400 字 | 预计阅读时间：6 分钟</p></blockquote><hr><h2 id=一从拜占庭将军问题说起>一、从拜占庭将军问题说起</h2><p>想象一个场景：10 位拜占庭将军各自率领一支军队，包围了一座城市。他们必须同时进攻或同时撤退，否则就会被各个击破。但将军们分散在城市周围，只能通过信使传递消息。</p><p>问题是：<strong>如何确保所有将军在有叛徒存在的情况下，仍然能达成一致的行动方案？</strong></p><p>这就是著名的<strong>拜占庭将军问题（Byzantine Generals Problem）</strong>，由 Leslie Lamport 在 1982 年提出。它本质上探讨的是：<strong>在不可靠的网络中，如何让一群互不信任的节点达成共识？</strong></p><p>中本聪在 2008 年发布的比特币白皮书中，用技术手段优雅地解决了这个问题，从而开启了区块链时代。</p><hr><h2 id=二区块链的四大核心技术>二、区块链的四大核心技术</h2><h3 id=1-分布式账本distributed-ledger>1. 分布式账本（Distributed Ledger）</h3><p>传统银行系统中，只有一本"账本"——银行的数据库。你转账给朋友，实际上只是银行在自己的账本上改了两个数字。</p><p>区块链颠覆了这一点：<strong>网络中每个节点都拥有一份完整的账本副本。</strong> 任何一笔交易，都需要同步给网络中所有节点。这意味着：</p><ul><li>没有单一故障点：即使某个节点宕机，账本依然完好</li><li>账本不可伪造：想要作弊，必须同时修改全球数万个节点上的账本</li></ul><h3 id=2-密码学哈希函数cryptographic-hash-function>2. 密码学哈希函数（Cryptographic Hash Function）</h3><p>哈希函数是将任意长度的输入，通过某种算法转化为固定长度输出的函数。好比你把一整本书丢进一个"粉碎机"，出来的是一串固定长度的"指纹"。</p><p>比特币使用的是 <strong>SHA-256</strong> 算法，它具备三个重要特性：</p><ul><li><strong>单向性</strong>：知道输出无法反推输入</li><li><strong>雪崩效应</strong>：输入一个字符的变化，输出完全不同</li><li><strong>抗碰撞性</strong>：几乎不可能找到两个不同的输入得到相同的输出</li></ul><p>举一个具体例子：</p><pre tabindex=0><code>输入: &#34;Hello, Blockchain!&#34;
+SHA-256输出: 4c4a6f8c9b3d7e2f1a0c8d9e2f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2
+
+输入: &#34;Hello, blockchain!&#34;  (仅改变一个字母的大小写)
+SHA-256输出: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1
+</code></pre><h3 id=3-默克尔树merkle-tree>3. 默克尔树（Merkle Tree）</h3><p>区块链中的每个区块，并非将所有交易数据平铺存储，而是通过<strong>默克尔树</strong>这种数据结构组织起来。</p><p>结构如下：大量交易首先被哈希配对，形成"叶子节点"；相邻两个哈希再合并计算，得到上一层的哈希值…… 最终汇聚到唯一的<strong>根哈希（Merkle Root）</strong>。</p><pre tabindex=0><code>        Root Hash (Merkle Root)
+              |
+      ┌───────┴───────┐
+  Hash(AB)         Hash(CD)
+   |                    |
+┌──┴──┐             ┌──┴──┐
+HashA  HashB    HashC  HashD
+ |      |         |      |
+Tx1    Tx2      Tx3    Tx4
+</code></pre><p>默克尔树的价值在于：<strong>只需保存区块头（包含根哈希），而非全部交易数据，就能验证某笔交易是否存在于区块中。</strong> 这大大降低了轻节点（Light Node）的存储和验证负担。</p><h3 id=4-共识机制consensus-mechanism>4. 共识机制（Consensus Mechanism）</h3><p>这是区块链最核心、也最复杂的一部分。共识机制解决的是：<strong>在去中心化网络中，谁有权添加下一个区块？</strong></p><h4 id=工作量证明pow>工作量证明（PoW）</h4><p>比特币采用的方案。矿工通过大量计算竞争出块权，类似于一场"数学抽奖"。胜出者的"工作量"（计算次数）证明了其诚意，同时获得了新发行的比特币作为奖励。</p><ul><li>优点：安全性极高，经过十多年实战检验</li><li>缺点：能耗巨大（曾被批评为"用电黑洞"），出块速度受限于计算资源</li></ul><h4 id=权益证明pos>权益证明（PoS）</h4><p>以太坊 2.0 采用的方案。验证者（Validator）不再比拼"算力"，而是质押（Stake）自己的加密货币作为保证金。系统根据质押量和质押时长来随机选择出块者。</p><ul><li>优点：能耗降低约 99.9%，出块速度更快</li><li>缺点：资本门槛带来"富者愈富"的争议，潜在的安全复杂性更高</li></ul><h4 id=其他共识机制>其他共识机制</h4><ul><li><strong>DPoS（委托权益证明）</strong>：持币者投票选出有限数量的代表节点负责出块（如 EOS）</li><li><strong>PoH（历史证明）</strong>：Solana 采用，通过时间戳序列降低共识开销</li><li><strong>PBFT（实用拜占庭容错）</strong>：联盟链场景下效率较高（如 Hyperledger Fabric）</li></ul><hr><h2 id=三区块链的结构详解>三、区块链的结构详解</h2><p>一个典型的区块包含两部分：</p><pre tabindex=0><code>┌─────────────────────────────────┐
+│           区块头 (Block Header) │
+│  版本号 / 前一区块哈希          │
+│  默克尔根 / 时间戳              │
+│  难度目标 / Nonce（随机数）     │
+├─────────────────────────────────┤
+│         区块体 (Block Body)     │
+│  交易列表（通常数百至数千笔）   │
+└─────────────────────────────────┘
+</code></pre><p>区块链的链式结构体现在：<strong>每个区块的"前一区块哈希"字段，指向了前一个区块的哈希值。</strong> 这就像自行车链条——如果某一环被替换，后续所有环的"链接关系"都会断裂。</p><hr><h2 id=四区块链的不可篡改性从何而来>四、区块链的不可篡改性从何而来？</h2><p>区块链之所以"不可篡改"，依赖三重保障：</p><ol><li><strong>哈希指针</strong>：每个区块通过哈希指向前一区块，篡改历史数据会改变哈希，链条立即断裂</li><li><strong>分布式存储</strong>：在全球数万个节点上同时存储，篡改必须同时控制大多数节点（PoW 中这被称为"51% 攻击"），成本极高</li><li><strong>共识机制</strong>：添加新区块需要消耗真实资源（电力或质押资产），使得"回溯修改"代价远超收益</li></ol><hr><h2 id=五区块链的局限与挑战>五、区块链的局限与挑战</h2><p>没有技术是完美的，区块链同样面临以下问题：</p><table><thead><tr><th>挑战</th><th>说明</th></tr></thead><tbody><tr><td>不可能三角</td><td>去中心化、安全性、可扩展性三者难以同时最优</td></tr><tr><td>存储瓶颈</td><td>随着账本增长，全量节点的存储成本持续上升</td></tr><tr><td>隐私问题</td><td>所有交易公开可查，用户隐私保护成为难题</td></tr><tr><td>治理困境</td><td>去中心化社区如何做出高效决策？</td></tr></tbody></table><hr><h2 id=六结语>六、结语</h2><p>区块链不仅仅是一项"存储技术"，更是一套<strong>在没有信任基础的情况下，建立信任</strong>的系统工程。从拜占庭将军问题到 SHA-256 哈希，从工作量证明到权益证明——每一行代码背后，都是密码学家和工程师数十年心血的结晶。</p><p>理解这些底层原理，才能真正看清区块链的应用边界与未来方向。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/researcher/03-defi%E6%98%AF%E4%BB%80%E4%B9%88/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/researcher/01-%E4%BB%80%E4%B9%88%E6%98%AF%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

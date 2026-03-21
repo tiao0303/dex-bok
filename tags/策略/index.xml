@@ -1,4 +1,61 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>策略 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E7%AD%96%E7%95%A5/</link><description>Recent content in 策略 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E7%AD%96%E7%95%A5/index.xml" rel="self" type="application/rss+xml"/><item><title>做市商内部运作揭秘 - Wintermute、Jump 模式解析</title><link>https://tiao0303.github.io/dex-bok/posts/21-market-maker-insider/</link><pubDate>Thu, 19 Mar 2026 01:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/21-market-maker-insider/</guid><description>&lt;h2 id="什么是专业做市商"&gt;什么是专业做市商&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>策略 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E7%AD%96%E7%95%A5/</link><description>Recent content in 策略 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E7%AD%96%E7%95%A5/index.xml" rel="self" type="application/rss+xml"/><item><title>DeFi 量化策略 - 套利与做市实战完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/defi-quant-strategy-arbitrage-market-making/</link><pubDate>Thu, 19 Mar 2026 14:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/defi-quant-strategy-arbitrage-market-making/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;DeFi 市场的低效性为量化交易者创造了大量机会。本文将深入分析主流量化策略，提供可落地的代码实现，并探讨风险控制方法。&lt;/p&gt;
+&lt;h2 id="一套利策略全景图"&gt;一、套利策略全景图&lt;/h2&gt;
+&lt;h3 id="11-主要套利类型"&gt;1.1 主要套利类型&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;策略类型&lt;/th&gt;
+ &lt;th&gt;利润来源&lt;/th&gt;
+ &lt;th&gt;复杂度&lt;/th&gt;
+ &lt;th&gt;资金要求&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;跨DEX套利&lt;/td&gt;
+ &lt;td&gt;价格差&lt;/td&gt;
+ &lt;td&gt;⭐⭐&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;三角套利&lt;/td&gt;
+ &lt;td&gt;汇率差&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;资金费率套利&lt;/td&gt;
+ &lt;td&gt;资金费差额&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;跨链套利&lt;/td&gt;
+ &lt;td&gt;跨链价差&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;期现套利&lt;/td&gt;
+ &lt;td&gt;期货溢价&lt;/td&gt;
+ &lt;td&gt;⭐⭐&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="二跨dex三角套利策略"&gt;二、跨DEX三角套利策略&lt;/h2&gt;
+&lt;h3 id="21-策略原理"&gt;2.1 策略原理&lt;/h3&gt;
+&lt;p&gt;利用三个交易对之间的价格不平衡进行无风险获利：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;路径：ETH → USDC → USDT → ETH
+
+1. 用 ETH 换 USDC（DEX A）
+2. 用 USDC 换 USDT（DEX B）
+3. 用 USDT 换 ETH（DEX C）
+
+如果：汇率乘积 ≠ 1，则存在利润
+profit = initial_amount × (rate1 × rate2 × rate3 - 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;数学公式&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>做市商内部运作揭秘 - Wintermute、Jump 模式解析</title><link>https://tiao0303.github.io/dex-bok/posts/21-market-maker-insider/</link><pubDate>Thu, 19 Mar 2026 01:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/21-market-maker-insider/</guid><description>&lt;h2 id="什么是专业做市商"&gt;什么是专业做市商&lt;/h2&gt;
 &lt;h3 id="核心职能"&gt;核心职能&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;提供买卖双边报价&lt;/li&gt;

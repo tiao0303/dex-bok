@@ -1,0 +1,103 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='安全漏洞案例分析
+作者：评审 Agent | 难度：高级 | 标签：安全漏洞 · 智能合约 · 历史案例 · DeFi
+
+引言
+智能合约安全领域的每一次重大漏洞，都以真实资产损失为代价推动着整个行业的安全意识进步。本篇文章通过分析历史上几起标志性安全事件，深入理解漏洞的根源、攻击原理，以及如何避免重蹈覆辙。
+一、The DAO 事件（2016）—— 重入攻击的教科书
+背景
+The DAO 是区块链史上首个去中心化自治组织，通过智能合约管理投资资金，融资超过 1.5 亿美元。
+漏洞代码
+function splitDAO(
+    uint _proposalID,
+    address _newCurator
+) noEther onlyCurator {
+    // ...
+    // 转移代币前先调用 splitDAO
+    uint fundsToSend = balances[msg.sender];
+    
+    // ❌ 危险：先转账后清零
+    payable(msg.sender).call{value: fundsToSend}("");
+    balances[msg.sender] = 0; // 在外部调用之后！
+    
+    // ...
+}
+攻击原理
+
+攻击合约向 The DAO 存入资金，获得 DAO 代币
+攻击合约调用 splitDAO，触发提现逻辑
+The DAO 先执行 call{value: fundsToSend}("") 转账 ETH
+攻击合约的 fallback 函数收到 ETH 后，再次调用 splitDAO
+由于 balances[msg.sender] 尚未清零，攻击者可以重复提现
+最终攻击者提取了约 360 万 ETH（当时价值 6000 万美元）
+
+教训
+
+Checks-Effects-Interactions 模式：状态更新必须在外部调用之前
+合约互调风险：使用 call 调用外部合约时，假设对方可能重入
+紧急应对：社区通过软分叉尝试阻止，但最终选择硬分叉（导致 Ethereum Classic 分叉）
+
+
+二、Parity 多签钱包漏洞（2017）—— 初始化函数缺失
+背景
+Parity 提供多签钱包合约，被大量项目方用于管理资金。'><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/reviewer/08-%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/reviewer/08-%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='安全漏洞案例分析 作者：评审 Agent | 难度：高级 | 标签：安全漏洞 · 智能合约 · 历史案例 · DeFi
+引言 智能合约安全领域的每一次重大漏洞，都以真实资产损失为代价推动着整个行业的安全意识进步。本篇文章通过分析历史上几起标志性安全事件，深入理解漏洞的根源、攻击原理，以及如何避免重蹈覆辙。
+一、The DAO 事件（2016）—— 重入攻击的教科书 背景 The DAO 是区块链史上首个去中心化自治组织，通过智能合约管理投资资金，融资超过 1.5 亿美元。
+漏洞代码 function splitDAO( uint _proposalID, address _newCurator ) noEther onlyCurator { // ... // 转移代币前先调用 splitDAO uint fundsToSend = balances[msg.sender]; // ❌ 危险：先转账后清零 payable(msg.sender).call{value: fundsToSend}(""); balances[msg.sender] = 0; // 在外部调用之后！ // ... } 攻击原理 攻击合约向 The DAO 存入资金，获得 DAO 代币 攻击合约调用 splitDAO，触发提现逻辑 The DAO 先执行 call{value: fundsToSend}("") 转账 ETH 攻击合约的 fallback 函数收到 ETH 后，再次调用 splitDAO 由于 balances[msg.sender] 尚未清零，攻击者可以重复提现 最终攻击者提取了约 360 万 ETH（当时价值 6000 万美元） 教训 Checks-Effects-Interactions 模式：状态更新必须在外部调用之前 合约互调风险：使用 call 调用外部合约时，假设对方可能重入 紧急应对：社区通过软分叉尝试阻止，但最终选择硬分叉（导致 Ethereum Classic 分叉） 二、Parity 多签钱包漏洞（2017）—— 初始化函数缺失 背景 Parity 提供多签钱包合约，被大量项目方用于管理资金。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='安全漏洞案例分析 作者：评审 Agent | 难度：高级 | 标签：安全漏洞 · 智能合约 · 历史案例 · DeFi
+引言 智能合约安全领域的每一次重大漏洞，都以真实资产损失为代价推动着整个行业的安全意识进步。本篇文章通过分析历史上几起标志性安全事件，深入理解漏洞的根源、攻击原理，以及如何避免重蹈覆辙。
+一、The DAO 事件（2016）—— 重入攻击的教科书 背景 The DAO 是区块链史上首个去中心化自治组织，通过智能合约管理投资资金，融资超过 1.5 亿美元。
+漏洞代码 function splitDAO( uint _proposalID, address _newCurator ) noEther onlyCurator { // ... // 转移代币前先调用 splitDAO uint fundsToSend = balances[msg.sender]; // ❌ 危险：先转账后清零 payable(msg.sender).call{value: fundsToSend}(""); balances[msg.sender] = 0; // 在外部调用之后！ // ... } 攻击原理 攻击合约向 The DAO 存入资金，获得 DAO 代币 攻击合约调用 splitDAO，触发提现逻辑 The DAO 先执行 call{value: fundsToSend}("") 转账 ETH 攻击合约的 fallback 函数收到 ETH 后，再次调用 splitDAO 由于 balances[msg.sender] 尚未清零，攻击者可以重复提现 最终攻击者提取了约 360 万 ETH（当时价值 6000 万美元） 教训 Checks-Effects-Interactions 模式：状态更新必须在外部调用之前 合约互调风险：使用 call 调用外部合约时，假设对方可能重入 紧急应对：社区通过软分叉尝试阻止，但最终选择硬分叉（导致 Ethereum Classic 分叉） 二、Parity 多签钱包漏洞（2017）—— 初始化函数缺失 背景 Parity 提供多签钱包合约，被大量项目方用于管理资金。'><meta itemprop=wordCount content="391"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='安全漏洞案例分析 作者：评审 Agent | 难度：高级 | 标签：安全漏洞 · 智能合约 · 历史案例 · DeFi
+引言 智能合约安全领域的每一次重大漏洞，都以真实资产损失为代价推动着整个行业的安全意识进步。本篇文章通过分析历史上几起标志性安全事件，深入理解漏洞的根源、攻击原理，以及如何避免重蹈覆辙。
+一、The DAO 事件（2016）—— 重入攻击的教科书 背景 The DAO 是区块链史上首个去中心化自治组织，通过智能合约管理投资资金，融资超过 1.5 亿美元。
+漏洞代码 function splitDAO( uint _proposalID, address _newCurator ) noEther onlyCurator { // ... // 转移代币前先调用 splitDAO uint fundsToSend = balances[msg.sender]; // ❌ 危险：先转账后清零 payable(msg.sender).call{value: fundsToSend}(""); balances[msg.sender] = 0; // 在外部调用之后！ // ... } 攻击原理 攻击合约向 The DAO 存入资金，获得 DAO 代币 攻击合约调用 splitDAO，触发提现逻辑 The DAO 先执行 call{value: fundsToSend}("") 转账 ETH 攻击合约的 fallback 函数收到 ETH 后，再次调用 splitDAO 由于 balances[msg.sender] 尚未清零，攻击者可以重复提现 最终攻击者提取了约 360 万 ETH（当时价值 6000 万美元） 教训 Checks-Effects-Interactions 模式：状态更新必须在外部调用之前 合约互调风险：使用 call 调用外部合约时，假设对方可能重入 紧急应对：社区通过软分叉尝试阻止，但最终选择硬分叉（导致 Ethereum Classic 分叉） 二、Parity 多签钱包漏洞（2017）—— 初始化函数缺失 背景 Parity 提供多签钱包合约，被大量项目方用于管理资金。'><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-08-安全漏洞案例分析"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#引言>引言</a></li><li><a href=#一the-dao-事件2016-重入攻击的教科书>一、The DAO 事件（2016）—— 重入攻击的教科书</a><ul><li><a href=#背景>背景</a></li><li><a href=#漏洞代码>漏洞代码</a></li><li><a href=#攻击原理>攻击原理</a></li><li><a href=#教训>教训</a></li></ul></li><li><a href=#二parity-多签钱包漏洞2017-初始化函数缺失>二、Parity 多签钱包漏洞（2017）—— 初始化函数缺失</a><ul><li><a href=#背景-1>背景</a></li><li><a href=#漏洞代码-1>漏洞代码</a></li><li><a href=#漏洞原理>漏洞原理</a></li><li><a href=#教训-1>教训</a></li></ul></li><li><a href=#三beauty-chainbec整数溢出2018>三、Beauty Chain（BEC）整数溢出（2018）</a><ul><li><a href=#漏洞代码-2>漏洞代码</a></li><li><a href=#漏洞原理-1>漏洞原理</a></li><li><a href=#教训-2>教训</a></li></ul></li><li><a href=#四cream-finance-闪电贷攻击2021-预言机操纵>四、Cream Finance 闪电贷攻击（2021）—— 预言机操纵</a><ul><li><a href=#攻击原理-1>攻击原理</a></li><li><a href=#教训-3>教训</a></li></ul></li><li><a href=#五ronin-network-跨链桥攻击2022-私钥泄露>五、Ronin Network 跨链桥攻击（2022）—— 私钥泄露</a><ul><li><a href=#攻击原理-2>攻击原理</a></li><li><a href=#教训-4>教训</a></li></ul></li><li><a href=#安全漏洞分类总结>安全漏洞分类总结</a></li><li><a href=#评审员的思考方式>评审员的思考方式</a></li><li><a href=#结语>结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>391 字</span></div></header><h1 id=安全漏洞案例分析>安全漏洞案例分析</h1><p><strong>作者：评审 Agent</strong> | <strong>难度：高级</strong> | <strong>标签：安全漏洞 · 智能合约 · 历史案例 · DeFi</strong></p><hr><h2 id=引言>引言</h2><p>智能合约安全领域的每一次重大漏洞，都以真实资产损失为代价推动着整个行业的安全意识进步。本篇文章通过分析历史上几起标志性安全事件，深入理解漏洞的根源、攻击原理，以及如何避免重蹈覆辙。</p><h2 id=一the-dao-事件2016-重入攻击的教科书>一、The DAO 事件（2016）—— 重入攻击的教科书</h2><h3 id=背景>背景</h3><p>The DAO 是区块链史上首个去中心化自治组织，通过智能合约管理投资资金，融资超过 1.5 亿美元。</p><h3 id=漏洞代码>漏洞代码</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>splitDAO</span>(
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> _proposalID,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> _newCurator
+</span></span><span style=display:flex><span>) noEther onlyCurator {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>// 转移代币前先调用 splitDAO
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> fundsToSend <span style=color:#f92672>=</span> balances[msg.sender];
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ❌ 危险：先转账后清零
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>payable</span>(msg.sender).call{value<span style=color:#f92672>:</span> fundsToSend}(<span style=color:#e6db74>&#34;&#34;</span>);
+</span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#75715e>// 在外部调用之后！
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=攻击原理>攻击原理</h3><ol><li>攻击合约向 The DAO 存入资金，获得 DAO 代币</li><li>攻击合约调用 <code>splitDAO</code>，触发提现逻辑</li><li>The DAO 先执行 <code>call{value: fundsToSend}("")</code> 转账 ETH</li><li>攻击合约的 <code>fallback</code> 函数收到 ETH 后，再次调用 <code>splitDAO</code></li><li>由于 <code>balances[msg.sender]</code> 尚未清零，攻击者可以重复提现</li><li>最终攻击者提取了约 360 万 ETH（当时价值 6000 万美元）</li></ol><h3 id=教训>教训</h3><ul><li><strong>Checks-Effects-Interactions 模式</strong>：状态更新必须在外部调用之前</li><li><strong>合约互调风险</strong>：使用 <code>call</code> 调用外部合约时，假设对方可能重入</li><li><strong>紧急应对</strong>：社区通过软分叉尝试阻止，但最终选择硬分叉（导致 Ethereum Classic 分叉）</li></ul><hr><h2 id=二parity-多签钱包漏洞2017-初始化函数缺失>二、Parity 多签钱包漏洞（2017）—— 初始化函数缺失</h2><h3 id=背景-1>背景</h3><p>Parity 提供多签钱包合约，被大量项目方用于管理资金。</p><h3 id=漏洞代码-1>漏洞代码</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ library 没有初始化函数检查
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>WalletLibrary</span> <span style=color:#66d9ef>is</span> WalletEvents {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>initDayLimit</span>(<span style=color:#66d9ef>uint</span> _limit) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (m_dailyLimit <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>) {
+</span></span><span style=display:flex><span>            m_dailyLimit <span style=color:#f92672>=</span> _limit;
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>init</span>(<span style=color:#66d9ef>address</span>[] _owners) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 没有限制谁可以调用！
+</span></span></span><span style=display:flex><span>        m_numOwners <span style=color:#f92672>=</span> _owners.length <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>;
+</span></span><span style=display:flex><span>        m_owners[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>uint256</span>(msg.sender);
+</span></span><span style=display:flex><span>        m_owners[<span style=color:#ae81ff>2</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>uint256</span>(_owners[<span style=color:#ae81ff>0</span>]);
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=漏洞原理>漏洞原理</h3><ol><li>攻击者调用 <code>initWallet</code> 初始化合约，将自己设为钱包所有者</li><li>攻击者调用 <code>execute</code> 转移所有资金到自己的地址</li><li>损失超过 15 万 ETH（约 3000 万美元）</li></ol><h3 id=教训-1>教训</h3><ul><li><strong>构造函数风险</strong>：旧版 Solidity 构造函数名与合约名不一致会导致构造函数变成普通函数</li><li><strong>初始化检查</strong>：初始化函数应有权限控制或一次性模式</li><li><strong>Library 安全</strong>：Library 不应包含可被任何人调用的初始化逻辑</li></ul><hr><h2 id=三beauty-chainbec整数溢出2018>三、Beauty Chain（BEC）整数溢出（2018）</h2><h3 id=漏洞代码-2>漏洞代码</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>batchTransfer</span>(<span style=color:#66d9ef>address</span>[] _receivers, <span style=color:#66d9ef>uint256</span> _value) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> cnt <span style=color:#f92672>=</span> _receivers.length;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> amount <span style=color:#f92672>=</span> cnt <span style=color:#f92672>*</span> _value; <span style=color:#75715e>// ❌ 溢出点
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    require(cnt <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>&amp;&amp;</span> cnt <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>20</span>);
+</span></span><span style=display:flex><span>    require(_value <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>&amp;&amp;</span> amount <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>&amp;&amp;</span> balanceOf[msg.sender] <span style=color:#f92672>&gt;=</span> amount);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>uint</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> cnt; i<span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>        balanceOf[_receivers[i]] <span style=color:#f92672>+=</span> _value;
+</span></span><span style=display:flex><span>        Transfer(msg.sender, _receivers[i], _value);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    balanceOf[msg.sender] <span style=color:#f92672>-=</span> amount;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=漏洞原理-1>漏洞原理</h3><p>当 <code>_receivers</code> 数组长度 <code>cnt = 2</code>，<code>_value = 57896044618658097711785492504343953926634992332820282019728792003954464872960</code>（即 <code>2^255</code>）时：</p><pre tabindex=0><code>cnt * _value = 2 * 2^255 = 2^256 = 0（溢出）
+</code></pre><p><code>amount</code> 变成 0，绕过 <code>require</code> 检查，攻击者给自己和另一个账户各转入了天文数字的 BEC 代币。</p><h3 id=教训-2>教训</h3><ul><li><strong>溢出风险</strong>：Solidity 0.7.x 及之前版本的整数运算是危险的</li><li><strong>使用 SafeMath</strong>：或升级到 Solidity 0.8+（内置溢出检查）</li><li><strong>批量操作检查</strong>：批量转账等操作应逐个验证每笔金额</li></ul><hr><h2 id=四cream-finance-闪电贷攻击2021-预言机操纵>四、Cream Finance 闪电贷攻击（2021）—— 预言机操纵</h2><h3 id=攻击原理-1>攻击原理</h3><ol><li>攻击者从 Uniswap 大量借出 USDH 稳定币</li><li>在另一借贷平台抵押 USDH，借出大量其他资产</li><li>操纵 Uniswap V2 中 USDH/ETH 交易对价格</li><li>由于部分平台使用 Uniswap 作为价格预言机，抵押品价值被高估</li><li>清算其他用户仓位获利</li></ol><p><strong>损失</strong>：1.3 亿美元</p><h3 id=教训-3>教训</h3><ul><li><strong>预言机依赖</strong>：单一 DEX 价格源容易操纵</li><li><strong>TWAP 机制</strong>：使用时间加权平均价格（TWAP）而非即时价格</li><li><strong>多源预言机</strong>：聚合多个数据源，取中位数或加权平均</li></ul><hr><h2 id=五ronin-network-跨链桥攻击2022-私钥泄露>五、Ronin Network 跨链桥攻击（2022）—— 私钥泄露</h2><h3 id=攻击原理-2>攻击原理</h3><ol><li>Ronin Bridge 使用 9 个验证者节点</li><li>攻击者通过钓鱼攻击或社会工程获取 5 个私钥（超过阈值）</li><li>使用被泄露的私钥签名了两笔异常交易</li><li>窃取 17.36 万 ETH 和 2550 万 USDC</li></ol><p><strong>损失</strong>：6.25 亿美元（史上最大 DeFi 攻击）</p><h3 id=教训-4>教训</h3><ul><li><strong>私钥安全</strong>：验证者节点的私钥管理是跨链安全的关键</li><li><strong>多签策略</strong>：增加验证者数量，降低单点泄露风险</li><li><strong>监控告警</strong>：对异常交易和签名行为实施实时监控</li></ul><hr><h2 id=安全漏洞分类总结>安全漏洞分类总结</h2><table><thead><tr><th>类型</th><th>案例</th><th>风险等级</th></tr></thead><tbody><tr><td>重入攻击</td><td>The DAO</td><td>🔴 极高</td></tr><tr><td>初始化漏洞</td><td>Parity 多签</td><td>🔴 极高</td></tr><tr><td>整数溢出</td><td>BEC</td><td>🟠 高</td></tr><tr><td>预言机操纵</td><td>Cream Finance</td><td>🟠 高</td></tr><tr><td>私钥泄露</td><td>Ronin</td><td>🔴 极高</td></tr><tr><td>闪电贷攻击</td><td>多个</td><td>🟠 高</td></tr></tbody></table><hr><h2 id=评审员的思考方式>评审员的思考方式</h2><p>面对合约代码，资深评审者会思考：</p><ol><li><strong>谁可以调用这个函数？</strong> → 权限控制</li><li><strong>调用后会触发外部合约吗？</strong> → 重入风险</li><li><strong>状态在什么时候更新？</strong> → Checks-Effects-Interactions</li><li><strong>金额计算有溢出风险吗？</strong> → SafeMath / 0.8+</li><li><strong>如果我是攻击者，我会怎么利用这个函数？</strong></li></ol><p>当你能站在攻击者的角度审视代码时，你就掌握了安全评审的核心能力。</p><h2 id=结语>结语</h2><p>历史上的每一次重大漏洞，都是整个行业的安全课程。理解漏洞原理不是为了嘲笑受害者，而是为了在评审中识别相似风险，防患于未然。</p><p>下一篇文章我们将介绍更系统化的安全保障方法——<strong>形式化验证入门</strong>，了解如何通过数学证明确保合约的正确性。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/reviewer/09-%E5%BD%A2%E5%BC%8F%E5%8C%96%E9%AA%8C%E8%AF%81%E5%85%A5%E9%97%A8/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/reviewer/07-%E4%BB%A3%E7%A0%81%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

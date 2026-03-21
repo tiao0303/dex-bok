@@ -1,792 +1,137 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="灾难恢复"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="灾难恢复"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T00:27:00+08:00"><meta itemprop=dateModified content="2026-03-19T00:27:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="灾难恢复"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 avenir bg-near-white production is-term"><header><div class="pb3-m pb6-l bg-white"><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l center items-center justify-between"><a href=/dex-bok/ class="f3 fw2 hover-white white-90 dib no-underline">DEX 学习笔记 | 去中心化交易所实战指南</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/ title="首页 page">首页</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/posts/ title="文章 page">文章</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/guides/ title="教程 page">教程</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/tools/ title="工具 page">工具</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/about/ title="关于 page">关于</a></li></ul><div class=ananke-socials></div></div></div></nav><div class="tc-l pv3 ph3 ph4-ns"><h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">灾难恢复</h1></div></div></header><main class=pb7 role=main><article class="pa3 pa4-ns nested-copy-line-height"><section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section><section class="flex-ns mt5 flex-wrap justify-around"><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/t3-security-compliance-15/ class="link black dim">T3 安全合规系列 (15/15)：应急响应与事件管理</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=引言>引言</h2><p>即使有最完善的安全措施，安全事件仍可能发生。本文介绍 T3 的应急响应体系和事件管理流程，确保在安全事件发生时能够快速检测、响应和恢复，最大程度减少损失和影响。</p><h2 id=应急响应组织架构>应急响应组织架构</h2><h3 id=安全事件响应团队-sirt>安全事件响应团队 (SIRT)</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>SIRTMember</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>role</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>responsibilities</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>contactMethods</span>: <span style=color:#66d9ef>ContactInfo</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>escalationLevel</span>: <span style=color:#66d9ef>number</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>availability</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;24/7&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;BUSINESS_HOURS&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;ON_CALL&#39;</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>SIRT_STRUCTURE</span>: <span style=color:#66d9ef>SIRTMember</span>[] <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>role</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Incident Commander&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>responsibilities</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;总体指挥和决策&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;资源协调&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;对外沟通审批&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;升级决策&#39;</span>
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>contactMethods</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;phone&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>1</span> },
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;secure_messenger&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>2</span> },
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;email&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>3</span> }
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>escalationLevel</span>: <span style=color:#66d9ef>1</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>availability</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;24/7&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>role</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Security Lead&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>responsibilities</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;技术分析&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;攻击溯源&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;漏洞修复指导&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;证据保全&#39;</span>
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>contactMethods</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;phone&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>1</span> },
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;secure_messenger&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>2</span> }
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>escalationLevel</span>: <span style=color:#66d9ef>1</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>availability</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;24/7&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>role</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Engineering Lead&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>responsibilities</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;系统修复&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;部署补丁&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;服务恢复&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;监控增强&#39;</span>
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>contactMethods</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;phone&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>1</span> },
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;slack&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>2</span> }
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>escalationLevel</span>: <span style=color:#66d9ef>1</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>availability</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;24/7&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>role</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Communications Lead&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>responsibilities</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;内部沟通&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;用户通知&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;媒体应对&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;监管报告&#39;</span>
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>contactMethods</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;phone&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>1</span> },
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;email&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>2</span> }
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>escalationLevel</span>: <span style=color:#66d9ef>2</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>availability</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;24/7&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>role</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Legal Counsel&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>responsibilities</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;法律风险评估&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;监管合规指导&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;执法部门协调&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;保险理赔&#39;</span>
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>contactMethods</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;phone&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>1</span> },
-</span></span><span style=display:flex><span>      { <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;email&#39;</span>, <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>2</span> }
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>escalationLevel</span>: <span style=color:#66d9ef>2</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>availability</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ON_CALL&#39;</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>];
-</span></span></code></pre></div><h3 id=升级矩阵>升级矩阵</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>EscalationMatrix</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>severity</span>: <span style=color:#66d9ef>IncidentSeverity</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>responseTime</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// minutes
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>requiredRoles</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>notificationChannels</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>externalNotification</span>: <span style=color:#66d9ef>boolean</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>ESCALATION_MATRIX</span>: <span style=color:#66d9ef>EscalationMatrix</span>[] <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV1_CRITICAL&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>responseTime</span>: <span style=color:#66d9ef>15</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiredRoles</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Incident Commander&#39;</span>, <span style=color:#e6db74>&#39;Security Lead&#39;</span>, <span style=color:#e6db74>&#39;Engineering Lead&#39;</span>, <span style=color:#e6db74>&#39;CEO&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>notificationChannels</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;phone&#39;</span>, <span style=color:#e6db74>&#39;secure_messenger&#39;</span>, <span style=color:#e6db74>&#39;war_room&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>externalNotification</span>: <span style=color:#66d9ef>true</span> <span style=color:#75715e>// 监管、执法
-</span></span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV2_HIGH&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>responseTime</span>: <span style=color:#66d9ef>30</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiredRoles</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Incident Commander&#39;</span>, <span style=color:#e6db74>&#39;Security Lead&#39;</span>, <span style=color:#e6db74>&#39;Engineering Lead&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>notificationChannels</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;phone&#39;</span>, <span style=color:#e6db74>&#39;secure_messenger&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>externalNotification</span>: <span style=color:#66d9ef>false</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV3_MEDIUM&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>responseTime</span>: <span style=color:#66d9ef>120</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiredRoles</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Security Lead&#39;</span>, <span style=color:#e6db74>&#39;Engineering Lead&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>notificationChannels</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;slack&#39;</span>, <span style=color:#e6db74>&#39;email&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>externalNotification</span>: <span style=color:#66d9ef>false</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV4_LOW&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>responseTime</span>: <span style=color:#66d9ef>480</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiredRoles</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Security Analyst&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>notificationChannels</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;ticket_system&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>externalNotification</span>: <span style=color:#66d9ef>false</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>];
-</span></span></code></pre></div><h2 id=事件分类与定级>事件分类与定级</h2><h3 id=事件类型>事件类型</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>enum</span> <span style=color:#a6e22e>IncidentType</span> {
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 资金安全
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>FUNDS_LOSS</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;funds_loss&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>UNAUTHORIZED_WITHDRAWAL</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;unauthorized_withdrawal&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>SMART_CONTRACT_EXPLOIT</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;smart_contract_exploit&#39;</span>,
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 系统安全
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>SYSTEM_BREACH</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;system_breach&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>DATA_BREACH</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;data_breach&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>DDOS_ATTACK</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;ddos_attack&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>RANSOMWARE</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;ransomware&#39;</span>,
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 业务连续性
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>SERVICE_OUTAGE</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;service_outage&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>PERFORMANCE_DEGRADATION</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;performance_degradation&#39;</span>,
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 合规相关
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>REGULATORY_INVESTIGATION</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;regulatory_investigation&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>SANCTIONS_VIOLATION</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;sanctions_violation&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>MONEY_LAUNDERING_SUSPICION</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;money_laundering_suspicion&#39;</span>,
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 内部威胁
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>INSIDER_THREAT</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;insider_threat&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>CREDENTIAL_COMPROMISE</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;credential_compromise&#39;</span>
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=严重程度定义>严重程度定义</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>SeverityDefinition</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>level</span>: <span style=color:#66d9ef>IncidentSeverity</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>criteria</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>financialImpact</span><span style=color:#f92672>?:</span> { <span style=color:#a6e22e>min</span>: <span style=color:#66d9ef>number</span>; <span style=color:#a6e22e>max</span>: <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>userImpact?</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>dataExposure?</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>duration?</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>reputationalImpact?</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  };
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>examples</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>SEVERITY_DEFINITIONS</span>: <span style=color:#66d9ef>SeverityDefinition</span>[] <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>level</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV1_CRITICAL&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>criteria</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>financialImpact</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>min</span>: <span style=color:#66d9ef>1000000</span>, <span style=color:#a6e22e>max</span>: <span style=color:#66d9ef>Infinity</span> },
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>userImpact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;所有用户无法访问或资金损失&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>dataExposure</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;敏感数据大规模泄露 (&gt;10 万用户)&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>reputationalImpact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;重大负面媒体报道&#39;</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>examples</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;智能合约漏洞导致资金被盗&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;私钥泄露&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;核心系统被完全攻破&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;大规模数据泄露&#39;</span>
-</span></span><span style=display:flex><span>    ]
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>level</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV2_HIGH&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>criteria</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>financialImpact</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>min</span>: <span style=color:#66d9ef>100000</span>, <span style=color:#a6e22e>max</span>: <span style=color:#66d9ef>1000000</span> },
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>userImpact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;部分用户受影响&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>dataExposure</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;中等规模数据泄露 (1 万 -10 万用户)&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>reputationalImpact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;局部负面报道&#39;</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>examples</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;部分用户资金异常&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;DDoS 攻击导致服务中断&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;中等规模数据泄露&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;关键功能故障&#39;</span>
-</span></span><span style=display:flex><span>    ]
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>level</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV3_MEDIUM&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>criteria</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>financialImpact</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>min</span>: <span style=color:#66d9ef>10000</span>, <span style=color:#a6e22e>max</span>: <span style=color:#66d9ef>100000</span> },
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>userImpact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;少数用户受影响&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>dataExposure</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;小规模数据泄露 (&lt;1 万用户)&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>reputationalImpact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;轻微影响&#39;</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>examples</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;个别账户异常&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;非核心功能故障&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;小规模钓鱼攻击成功&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;性能下降&#39;</span>
-</span></span><span style=display:flex><span>    ]
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>level</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV4_LOW&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>criteria</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>financialImpact</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>min</span>: <span style=color:#66d9ef>0</span>, <span style=color:#a6e22e>max</span>: <span style=color:#66d9ef>10000</span> },
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>userImpact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;几乎无影响&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>dataExposure</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;无敏感数据泄露&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>reputationalImpact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;无&#39;</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>examples</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;尝试性攻击被阻止&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;轻微配置错误&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;单用户问题&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;监控告警误报&#39;</span>
-</span></span><span style=display:flex><span>    ]
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>];
-</span></span></code></pre></div><h2 id=检测与告警>检测与告警</h2><h3 id=监控指标>监控指标</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>MonitoringMetrics</span> {
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 安全指标
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>security</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>failedLoginAttempts</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>unusualWithdrawalPatterns</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>smartContractAnomalies</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>apiAbuse</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>  };
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 系统指标
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>system</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>errorRate</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>latency</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>availability</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>resourceUtilization</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>  };
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 业务指标
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>business</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>withdrawalVolume</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>tradingVolume</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>userComplaints</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>number</span>; window<span style=color:#f92672>:</span> <span style=color:#66d9ef>number</span> };
-</span></span><span style=display:flex><span>  };
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>MONITORING_CONFIG</span>: <span style=color:#66d9ef>MonitoringMetrics</span> <span style=color:#f92672>=</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>security</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>failedLoginAttempts</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>100</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>300</span> }, <span style=color:#75715e>// 5 分钟 100 次
-</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>unusualWithdrawalPatterns</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>10</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>60</span> },
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>smartContractAnomalies</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>1</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>0</span> }, <span style=color:#75715e>// 立即
-</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>apiAbuse</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>1000</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>60</span> }
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>system</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>errorRate</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>0.05</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>300</span> }, <span style=color:#75715e>// 5% 错误率
-</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>latency</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>5000</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>300</span> }, <span style=color:#75715e>// 5 秒
-</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>availability</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>0.99</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>60</span> }, <span style=color:#75715e>// 99%
-</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>resourceUtilization</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>0.9</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>300</span> }
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>business</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>withdrawalVolume</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>1000000</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>3600</span> }, <span style=color:#75715e>// 1 小时 100 万 USD
-</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>tradingVolume</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>0.5</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>3600</span> }, <span style=color:#75715e>// 50% 波动
-</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>userComplaints</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>threshold</span>: <span style=color:#66d9ef>50</span>, window<span style=color:#f92672>:</span> <span style=color:#ae81ff>3600</span> }
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>};
-</span></span></code></pre></div><h3 id=告警路由>告警路由</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>AlertRule</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>condition</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>severity</span>: <span style=color:#66d9ef>IncidentSeverity</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>channels</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>escalationPolicy</span>: <span style=color:#66d9ef>EscalationPolicy</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>runbook</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>ALERT_RULES</span>: <span style=color:#66d9ef>AlertRule</span>[] <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Large Unauthorized Withdrawal&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>condition</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;withdrawal_amount &gt; 100000 AND risk_score &gt; 0.8&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV1_CRITICAL&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channels</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;pagerduty&#39;</span>, <span style=color:#e6db74>&#39;phone&#39;</span>, <span style=color:#e6db74>&#39;slack_critical&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>escalationPolicy</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>initial</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Security Lead&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>timeout</span>: <span style=color:#66d9ef>5</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>escalateTo</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Incident Commander&#39;</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>runbook</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/runbooks/unauthorized-withdrawal.md&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Smart Contract Exploit Detected&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>condition</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;contract_event == &#34;ExploitDetected&#34;&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV1_CRITICAL&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channels</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;pagerduty&#39;</span>, <span style=color:#e6db74>&#39;phone&#39;</span>, <span style=color:#e6db74>&#39;slack_critical&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>escalationPolicy</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>initial</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Security Lead&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>timeout</span>: <span style=color:#66d9ef>5</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>escalateTo</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Incident Commander&#39;</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>runbook</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/runbooks/smart-contract-exploit.md&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Service Availability Below Threshold&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>condition</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;availability &lt; 0.99&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>severity</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SEV2_HIGH&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channels</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;pagerduty&#39;</span>, <span style=color:#e6db74>&#39;slack_oncall&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>escalationPolicy</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>initial</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Engineering Lead&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>timeout</span>: <span style=color:#66d9ef>15</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>escalateTo</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Incident Commander&#39;</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>runbook</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/runbooks/service-outage.md&#39;</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>];
-</span></span></code></pre></div><h2 id=响应流程>响应流程</h2><h3 id=标准响应流程>标准响应流程</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>enum</span> <span style=color:#a6e22e>IncidentPhase</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>DETECTION</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;detection&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>TRIAGE</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;triage&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>CONTAINMENT</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;containment&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>ERADICATION</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;eradication&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>RECOVERY</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;recovery&#39;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>LESSONS_LEARNED</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;lessons_learned&#39;</span>
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>IncidentResponse</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>incidentId</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>phase</span>: <span style=color:#66d9ef>IncidentPhase</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>actions</span>: <span style=color:#66d9ef>IncidentAction</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>timeline</span>: <span style=color:#66d9ef>TimelineEntry</span>[];
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>executeResponse</span>(<span style=color:#a6e22e>incident</span>: <span style=color:#66d9ef>Incident</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>switch</span> (<span style=color:#a6e22e>incident</span>.<span style=color:#a6e22e>severity</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>case</span> <span style=color:#e6db74>&#39;SEV1_CRITICAL&#39;</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>executeCriticalResponse</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>break</span>;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>case</span> <span style=color:#e6db74>&#39;SEV2_HIGH&#39;</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>executeHighResponse</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>break</span>;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>default</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>executeStandardResponse</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>executeCriticalResponse</span>(<span style=color:#a6e22e>incident</span>: <span style=color:#66d9ef>Incident</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 1. 立即召集 SIRT
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>assembleSIRT</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 2. 启动作战室
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>createWarRoom</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 3. 执行遏制措施
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>executeContainment</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 4. 通知相关方
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>notifyStakeholders</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 5. 证据保全
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>preserveEvidence</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 6. 开始调查
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>beginInvestigation</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=遏制措施>遏制措施</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>ContainmentAction</span> {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;NETWORK&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;SYSTEM&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;APPLICATION&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;ACCOUNT&#39;</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>action</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>impact</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>rollbackPlan</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>boolean</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>CONTAINMENT_PLAYBOOK</span>: <span style=color:#66d9ef>Record</span>&lt;<span style=color:#f92672>IncidentType</span>, <span style=color:#a6e22e>ContainmentAction</span><span style=color:#960050;background-color:#1e0010>[]</span>&gt; <span style=color:#f92672>=</span> {
-</span></span><span style=display:flex><span>  [<span style=color:#a6e22e>IncidentType</span>.<span style=color:#a6e22e>SMART_CONTRACT_EXPLOIT</span>]<span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;APPLICATION&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Pause all contract interactions&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>impact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;所有交易暂停&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>rollbackPlan</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Resume contracts after fix&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>true</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;APPLICATION&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Blacklist attacker addresses&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>impact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;阻止攻击者资金转移&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>rollbackPlan</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Remove blacklist if false positive&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>true</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;NETWORK&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Notify partner exchanges&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>impact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;防止资金外流&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>rollbackPlan</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;N/A&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>true</span>
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>  ],
-</span></span><span style=display:flex><span>  [<span style=color:#a6e22e>IncidentType</span>.<span style=color:#a6e22e>DATA_BREACH</span>]<span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SYSTEM&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Isolate affected systems&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>impact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;部分服务不可用&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>rollbackPlan</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Reconnect after verification&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>true</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ACCOUNT&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Force password reset for affected users&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>impact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;用户需重新登录&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>rollbackPlan</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;N/A&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>false</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;NETWORK&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Block suspicious IPs&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>impact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;可能误伤正常用户&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>rollbackPlan</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Remove blocks after investigation&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>false</span>
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>  ],
-</span></span><span style=display:flex><span>  [<span style=color:#a6e22e>IncidentType</span>.<span style=color:#a6e22e>DDOS_ATTACK</span>]<span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;NETWORK&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Enable DDoS mitigation&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>impact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;可能增加延迟&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>rollbackPlan</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Disable mitigation when attack ends&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>false</span>
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;NETWORK&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Rate limit traffic&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>impact</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;部分请求被拒绝&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>rollbackPlan</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Remove rate limits&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>false</span>
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>  ]
-</span></span><span style=display:flex><span>};
-</span></span></code></pre></div><h2 id=沟通策略>沟通策略</h2><h3 id=内部沟通>内部沟通</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>InternalCommunication</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>audience</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>channel</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>frequency</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>content</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>owner</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>INTERNAL_COMMS_PLAN</span>: <span style=color:#66d9ef>InternalCommunication</span>[] <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>audience</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SIRT Members&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channel</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;War Room (Secure)&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Continuous&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>content</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Technical updates&#39;</span>, <span style=color:#e6db74>&#39;Action assignments&#39;</span>, <span style=color:#e6db74>&#39;Status changes&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>owner</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Incident Commander&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>audience</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Executive Team&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channel</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Executive Briefing&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Every 30 minutes&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>content</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Impact summary&#39;</span>, <span style=color:#e6db74>&#39;Business implications&#39;</span>, <span style=color:#e6db74>&#39;Resource needs&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>owner</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Incident Commander&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>audience</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;All Employees&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channel</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Company-wide Email&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;As needed&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>content</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;General awareness&#39;</span>, <span style=color:#e6db74>&#39;What to expect&#39;</span>, <span style=color:#e6db74>&#39;Who to contact&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>owner</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Communications Lead&#39;</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>];
-</span></span></code></pre></div><h3 id=外部沟通>外部沟通</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>ExternalCommunication</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>audience</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>channel</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>timing</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>approvalRequired</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>template</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>EXTERNAL_COMMS_PLAN</span>: <span style=color:#66d9ef>ExternalCommunication</span>[] <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>audience</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Users&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channel</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Email + In-app Notification&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>timing</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Within 2 hours of confirmation&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>approvalRequired</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Legal Counsel&#39;</span>, <span style=color:#e6db74>&#39;CEO&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>template</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/templates/user-notification.md&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>audience</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Public&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channel</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Blog Post + Social Media&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>timing</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;After initial containment&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>approvalRequired</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Legal Counsel&#39;</span>, <span style=color:#e6db74>&#39;CEO&#39;</span>, <span style=color:#e6db74>&#39;PR Agency&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>template</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/templates/public-statement.md&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>audience</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Regulators&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channel</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Official Report&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>timing</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;As required by regulation&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>approvalRequired</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Legal Counsel&#39;</span>, <span style=color:#e6db74>&#39;Compliance Officer&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>template</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/templates/regulatory-report.md&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>audience</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Law Enforcement&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channel</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Official Report&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>timing</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;When criminal activity confirmed&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>approvalRequired</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Legal Counsel&#39;</span>, <span style=color:#e6db74>&#39;CEO&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>template</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/templates/law-enforcement-report.md&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>audience</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Partners&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>channel</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Direct Communication&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>timing</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Within 4 hours&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>approvalRequired</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Partnerships Lead&#39;</span>, <span style=color:#e6db74>&#39;Legal Counsel&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>template</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/templates/partner-notification.md&#39;</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>];
-</span></span></code></pre></div><h3 id=沟通模板>沟通模板</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-markdown data-lang=markdown><span style=display:flex><span># 用户通知模板
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>主题：[重要] T3 安全事件通知
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>亲爱的用户，
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>我们写此信是为了告知您一起影响 T3 平台的安全事件。
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>## 发生了什么
-</span></span></span><span style=display:flex><span>[简要描述事件]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>## 何时发生
-</span></span></span><span style=display:flex><span>[时间线]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>## 影响范围
-</span></span></span><span style=display:flex><span>[受影响的用户/功能]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>## 我们采取的措施
-</span></span></span><span style=display:flex><span>[已采取的应对措施]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>## 您需要做什么
-</span></span></span><span style=display:flex><span>[用户行动建议]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>## 联系我们
-</span></span></span><span style=display:flex><span>[联系方式]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>我们深知此事给您带来的不便，并将全力解决。
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>此致
-</span></span><span style=display:flex><span>T3 安全团队
-</span></span></code></pre></div><h2 id=事后处理>事后处理</h2><h3 id=根本原因分析>根本原因分析</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>RCA</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>incidentId</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>summary</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>timeline</span>: <span style=color:#66d9ef>TimelineEntry</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>rootCause</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>contributingFactors</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>impact</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>financial</span>: <span style=color:#66d9ef>number</span>;
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>users</span>: <span style=color:#66d9ef>number</span>;
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>duration</span>: <span style=color:#66d9ef>number</span>;
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>reputation</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  };
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>correctiveActions</span>: <span style=color:#66d9ef>CorrectiveAction</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>preventiveActions</span>: <span style=color:#66d9ef>PreventiveAction</span>[];
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>conductRCA</span>(<span style=color:#a6e22e>incident</span>: <span style=color:#66d9ef>Incident</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>RCA</span> {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>timeline</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>buildTimeline</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>rootCause</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>fiveWhys</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>contributingFactors</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>identifyContributingFactors</span>(<span style=color:#a6e22e>incident</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>incidentId</span>: <span style=color:#66d9ef>incident.id</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>summary</span>: <span style=color:#66d9ef>incident.summary</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>timeline</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rootCause</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>contributingFactors</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>impact</span>: <span style=color:#66d9ef>calculateImpact</span>(<span style=color:#a6e22e>incident</span>),
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>correctiveActions</span>: <span style=color:#66d9ef>defineCorrectiveActions</span>(<span style=color:#a6e22e>rootCause</span>),
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>preventiveActions</span>: <span style=color:#66d9ef>definePreventiveActions</span>(<span style=color:#a6e22e>contributingFactors</span>)
-</span></span><span style=display:flex><span>  };
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 五问法
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>fiveWhys</span>(<span style=color:#a6e22e>incident</span>: <span style=color:#66d9ef>Incident</span>)<span style=color:#f92672>:</span> <span style=color:#66d9ef>string</span> {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>why</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>incident</span>.<span style=color:#a6e22e>immediateCause</span>;
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>5</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>why</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>askWhy</span>(<span style=color:#a6e22e>why</span>);
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>why</span>) <span style=color:#66d9ef>break</span>;
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>why</span>;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=改进跟踪>改进跟踪</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>ActionItem</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>id</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>description</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>owner</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>dueDate</span>: <span style=color:#66d9ef>Date</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>status</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;OPEN&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;IN_PROGRESS&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;COMPLETED&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;BLOCKED&#39;</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>priority</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;P0&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;P1&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;P2&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;P3&#39;</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>relatedIncident</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>trackImprovements</span>(<span style=color:#a6e22e>rca</span>: <span style=color:#66d9ef>RCA</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>action</span> <span style=color:#66d9ef>of</span> [...<span style=color:#a6e22e>rca</span>.<span style=color:#a6e22e>correctiveActions</span>, ...<span style=color:#a6e22e>rca</span>.<span style=color:#a6e22e>preventiveActions</span>]) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>createActionItem</span>({
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>id</span>: <span style=color:#66d9ef>generateId</span>(),
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>description</span>: <span style=color:#66d9ef>action.description</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>owner</span>: <span style=color:#66d9ef>action.owner</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>dueDate</span>: <span style=color:#66d9ef>calculateDueDate</span>(<span style=color:#a6e22e>action</span>.<span style=color:#a6e22e>priority</span>),
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>status</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;OPEN&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>action.priority</span>,
-</span></span><span style=display:flex><span>      <span style=color:#a6e22e>relatedIncident</span>: <span style=color:#66d9ef>rca.incidentId</span>
-</span></span><span style=display:flex><span>    });
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 定期跟进
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>scheduleFollowUp</span>(<span style=color:#a6e22e>rca</span>.<span style=color:#a6e22e>incidentId</span>);
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=灾难恢复>灾难恢复</h2><h3 id=备份策略>备份策略</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>BackupPolicy</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>data</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>frequency</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>retention</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// days
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>locations</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>encryption</span>: <span style=color:#66d9ef>boolean</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>testingFrequency</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>BACKUP_POLICIES</span>: <span style=color:#66d9ef>BackupPolicy</span>[] <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>data</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;User balances&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Real-time replication&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>retention</span>: <span style=color:#66d9ef>365</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>locations</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Primary DC&#39;</span>, <span style=color:#e6db74>&#39;Secondary DC&#39;</span>, <span style=color:#e6db74>&#39;Cold storage&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>encryption</span>: <span style=color:#66d9ef>true</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>testingFrequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Monthly&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>data</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Transaction history&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Every 15 minutes&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>retention</span>: <span style=color:#66d9ef>2555</span>, <span style=color:#75715e>// 7 年
-</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>locations</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Primary DC&#39;</span>, <span style=color:#e6db74>&#39;Secondary DC&#39;</span>, <span style=color:#e6db74>&#39;Archive&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>encryption</span>: <span style=color:#66d9ef>true</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>testingFrequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Quarterly&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>data</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Smart contract state&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Every block&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>retention</span>: <span style=color:#66d9ef>365</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>locations</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;On-chain&#39;</span>, <span style=color:#e6db74>&#39;Off-chain backup&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>encryption</span>: <span style=color:#66d9ef>true</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>testingFrequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Monthly&#39;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>data</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Configuration&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;On every change&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>retention</span>: <span style=color:#66d9ef>365</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>locations</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Git repository&#39;</span>, <span style=color:#e6db74>&#39;Encrypted backup&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>encryption</span>: <span style=color:#66d9ef>true</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>testingFrequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Weekly&#39;</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>];
-</span></span></code></pre></div><h3 id=恢复时间目标>恢复时间目标</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>RecoveryObjective</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>system</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>rto</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// Recovery Time Objective (minutes)
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>rpo</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// Recovery Point Objective (minutes)
-</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>number</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>RECOVERY_OBJECTIVES</span>: <span style=color:#66d9ef>RecoveryObjective</span>[] <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>system</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Trading Engine&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rto</span>: <span style=color:#66d9ef>30</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rpo</span>: <span style=color:#66d9ef>1</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>1</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>system</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;User Authentication&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rto</span>: <span style=color:#66d9ef>15</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rpo</span>: <span style=color:#66d9ef>5</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>1</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>system</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Withdrawal Processing&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rto</span>: <span style=color:#66d9ef>60</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rpo</span>: <span style=color:#66d9ef>5</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>2</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>system</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Analytics Dashboard&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rto</span>: <span style=color:#66d9ef>240</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rpo</span>: <span style=color:#66d9ef>60</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>priority</span>: <span style=color:#66d9ef>3</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>];
-</span></span></code></pre></div><h3 id=恢复流程>恢复流程</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>executeDisasterRecovery</span>(<span style=color:#a6e22e>scenario</span>: <span style=color:#66d9ef>string</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 1. 评估情况
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>assessment</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>assessDamage</span>(<span style=color:#a6e22e>scenario</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 2. 启动 DR 团队
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>activateDRTeam</span>(<span style=color:#a6e22e>assessment</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 3. 切换到备用系统
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>failover</span>(<span style=color:#a6e22e>assessment</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 4. 恢复数据
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>restoreData</span>(<span style=color:#a6e22e>assessment</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 5. 验证功能
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>validateRecovery</span>();
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 6. 通知用户
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>notifyRecoveryStatus</span>();
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 7. 监控稳定性
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>monitorStability</span>();
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>failover</span>(<span style=color:#a6e22e>assessment</span>: <span style=color:#66d9ef>DamageAssessment</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// DNS 切换
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>updateDNS</span>(<span style=color:#e6db74>&#39;primary.t3.exchange&#39;</span>, <span style=color:#e6db74>&#39;secondary.t3.exchange&#39;</span>);
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 数据库切换
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>promoteReplicaToPrimary</span>();
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 服务启动
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>startServicesInSecondaryDC</span>();
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// 验证连接
-</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>verifyConnectivity</span>();
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=演练与培训>演练与培训</h2><h3 id=演练计划>演练计划</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>DrillSchedule</span> {
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;TABLETOP&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;SIMULATION&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;FULL_EXERCISE&#39;</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>frequency</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>participants</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>scenarios</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>duration</span>: <span style=color:#66d9ef>number</span>; <span style=color:#75715e>// hours
-</span></span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>DRILL_SCHEDULE</span>: <span style=color:#66d9ef>DrillSchedule</span>[] <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;TABLETOP&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Monthly&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>participants</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;SIRT Core&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>scenarios</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Smart Contract Exploit&#39;</span>, <span style=color:#e6db74>&#39;Data Breach&#39;</span>, <span style=color:#e6db74>&#39;DDoS&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>duration</span>: <span style=color:#66d9ef>2</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SIMULATION&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Quarterly&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>participants</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;SIRT&#39;</span>, <span style=color:#e6db74>&#39;Engineering&#39;</span>, <span style=color:#e6db74>&#39;Support&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>scenarios</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Full System Compromise&#39;</span>, <span style=color:#e6db74>&#39;Insider Threat&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>duration</span>: <span style=color:#66d9ef>4</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;FULL_EXERCISE&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Annually&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>participants</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;All Departments&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>scenarios</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;Catastrophic Failure&#39;</span>, <span style=color:#e6db74>&#39;Multi-vector Attack&#39;</span>],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>duration</span>: <span style=color:#66d9ef>8</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>];
-</span></span></code></pre></div><h3 id=培训要求>培训要求</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>TrainingRequirement</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>role</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>requiredCourses</span>: <span style=color:#66d9ef>string</span>[];
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>frequency</span>: <span style=color:#66d9ef>string</span>;
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>certification</span>: <span style=color:#66d9ef>boolean</span>;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>TRAINING_REQUIREMENTS</span>: <span style=color:#66d9ef>TrainingRequirement</span>[] <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>role</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;SIRT Member&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiredCourses</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;Incident Response Fundamentals&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;Digital Forensics&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;Crisis Communication&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;Legal Considerations&#39;</span>
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Annual&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>certification</span>: <span style=color:#66d9ef>true</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>role</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Engineer&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiredCourses</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;Security Best Practices&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;Incident Detection&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;Escalation Procedures&#39;</span>
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Annual&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>certification</span>: <span style=color:#66d9ef>false</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>role</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;All Employees&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>requiredCourses</span><span style=color:#f92672>:</span> [
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;Security Awareness&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;Phishing Prevention&#39;</span>,
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#39;Incident Reporting&#39;</span>
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>frequency</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Annual&#39;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>certification</span>: <span style=color:#66d9ef>true</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>];
-</span></span></code></pre></div><h2 id=最佳实践>最佳实践</h2><ol><li><strong>准备充分</strong>：定期演练，保持 readiness</li><li><strong>快速响应</strong>：时间就是损失，分秒必争</li><li><strong>透明沟通</strong>：及时、准确、诚实</li><li><strong>证据保全</strong>：为调查和法律程序保留证据</li><li><strong>持续改进</strong>：每次事件都是学习机会</li><li><strong>文档完整</strong>：所有决策和行动可追溯</li><li><strong>外部协作</strong>：与执法、监管、行业伙伴合作</li></ol><h2 id=小结>小结</h2><p>应急响应能力是 T3 安全体系的最后一道防线。通过完善的组织架构、清晰的流程、充分的准备和持续的改进，T3 能够在安全事件发生时快速响应、有效控制、迅速恢复，最大程度保护用户利益和平台声誉。</p></div><a href=/dex-bok/posts/t3-security-compliance-15/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div></section></article></main><footer class="bg-white bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href=https://tiao0303.github.io/dex-bok/>&copy; DEX 学习笔记 | 去中心化交易所实战指南 2026</a><div><div class=ananke-socials></div></div></div></footer></body></html>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/%E7%81%BE%E9%9A%BE%E6%81%A2%E5%A4%8D/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="灾难恢复"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="灾难恢复"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T00:27:00+08:00"><meta itemprop=dateModified content="2026-03-19T00:27:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="灾难恢复"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-term"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-list-layout><header class=geek-list-header><h1>灾难恢复</h1></header><div class=geek-tag-filter><button class="tag-btn active" data-tag=all>全部</button>
+<button class=tag-btn data-tag=1inch>1inch</button>
+<button class=tag-btn data-tag=AML>AML</button>
+<button class=tag-btn data-tag=AMM>AMM</button>
+<button class=tag-btn data-tag=Arbitrum>Arbitrum</button>
+<button class=tag-btn data-tag=BSC>BSC</button>
+<button class=tag-btn data-tag=Curve>Curve</button>
+<button class=tag-btn data-tag=DAO>DAO</button>
+<button class=tag-btn data-tag=DCA>DCA</button>
+<button class=tag-btn data-tag=DeFi>DeFi</button>
+<button class=tag-btn data-tag=DEX>DEX</button>
+<button class=tag-btn data-tag=ERC20>ERC20</button>
+<button class=tag-btn data-tag=ERC4626>ERC4626</button>
+<button class=tag-btn data-tag=ERC721>ERC721</button>
+<button class=tag-btn data-tag=Ethereum>Ethereum</button>
+<button class=tag-btn data-tag=Gas>Gas</button>
+<button class=tag-btn data-tag="Gas 费">Gas 费</button>
+<button class=tag-btn data-tag=GDPR>GDPR</button>
+<button class=tag-btn data-tag=KYC>KYC</button>
+<button class=tag-btn data-tag=Layer2>Layer2</button>
+<button class=tag-btn data-tag=LayerZero>LayerZero</button>
+<button class=tag-btn data-tag=LP>LP</button>
+<button class=tag-btn data-tag=Matcha>Matcha</button>
+<button class=tag-btn data-tag=MEV>MEV</button>
+<button class=tag-btn data-tag=NFT>NFT</button>
+<button class=tag-btn data-tag=Optimism>Optimism</button>
+<button class=tag-btn data-tag=PMM>PMM</button>
+<button class=tag-btn data-tag=Rebasing>Rebasing</button>
+<button class=tag-btn data-tag=StableSwap>StableSwap</button>
+<button class=tag-btn data-tag=T3>T3</button>
+<button class=tag-btn data-tag=Uniswap>Uniswap</button>
+<button class=tag-btn data-tag=V2>V2</button>
+<button class=tag-btn data-tag=V3>V3</button>
+<button class=tag-btn data-tag=V4>V4</button>
+<button class=tag-btn data-tag="Yield Farming">Yield Farming</button>
+<button class=tag-btn data-tag=主动做市商>主动做市商</button>
+<button class=tag-btn data-tag=事件管理>事件管理</button>
+<button class=tag-btn data-tag=交易>交易</button>
+<button class=tag-btn data-tag=交易优化>交易优化</button>
+<button class=tag-btn data-tag=交易工具>交易工具</button>
+<button class=tag-btn data-tag=代币>代币</button>
+<button class=tag-btn data-tag=代币安全>代币安全</button>
+<button class=tag-btn data-tag=代币标准>代币标准</button>
+<button class=tag-btn data-tag=代码审查>代码审查</button>
+<button class=tag-btn data-tag=以太坊>以太坊</button>
+<button class=tag-btn data-tag=价格影响>价格影响</button>
+<button class=tag-btn data-tag=优化>优化</button>
+<button class=tag-btn data-tag=估值>估值</button>
+<button class=tag-btn data-tag=假币识别>假币识别</button>
+<button class=tag-btn data-tag=做市>做市</button>
+<button class=tag-btn data-tag=做市商>做市商</button>
+<button class=tag-btn data-tag=充值>充值</button>
+<button class=tag-btn data-tag=前端运行>前端运行</button>
+<button class=tag-btn data-tag=加密>加密</button>
+<button class=tag-btn data-tag=加密货币>加密货币</button>
+<button class=tag-btn data-tag=助记词>助记词</button>
+<button class=tag-btn data-tag=原理>原理</button>
+<button class=tag-btn data-tag=去中心化交易所>去中心化交易所</button>
+<button class=tag-btn data-tag=可变权重池>可变权重池</button>
+<button class=tag-btn data-tag=合约验证>合约验证</button>
+<button class=tag-btn data-tag=合规>合规</button>
+<button class=tag-btn data-tag=土狗币>土狗币</button>
+<button class=tag-btn data-tag=基础>基础</button>
+<button class=tag-btn data-tag=多链>多链</button>
+<button class=tag-btn data-tag=套利>套利</button>
+<button class=tag-btn data-tag=安全>安全</button>
+<button class=tag-btn data-tag=安全合规>安全合规</button>
+<button class=tag-btn data-tag=安全审计>安全审计</button>
+<button class=tag-btn data-tag=审计>审计</button>
+<button class=tag-btn data-tag=对冲>对冲</button>
+<button class=tag-btn data-tag=对比>对比</button>
+<button class=tag-btn data-tag=工具>工具</button>
+<button class=tag-btn data-tag=应急响应>应急响应</button>
+<button class=tag-btn data-tag=异常检测>异常检测</button>
+<button class=tag-btn data-tag=弹性供应>弹性供应</button>
+<button class=tag-btn data-tag=形式化>形式化</button>
+<button class=tag-btn data-tag=技术>技术</button>
+<button class=tag-btn data-tag=投票>投票</button>
+<button class=tag-btn data-tag=投资>投资</button>
+<button class=tag-btn data-tag=投资组合>投资组合</button>
+<button class=tag-btn data-tag=报税>报税</button>
+<button class=tag-btn data-tag=挖矿>挖矿</button>
+<button class=tag-btn data-tag=搜索者>搜索者</button>
+<button class=tag-btn data-tag=收入分析>收入分析</button>
+<button class=tag-btn data-tag=收益>收益</button>
+<button class=tag-btn data-tag=收益聚合>收益聚合</button>
+<button class=tag-btn data-tag=攻击>攻击</button>
+<button class=tag-btn data-tag=教程>教程</button>
+<button class=tag-btn data-tag=数字收藏>数字收藏</button>
+<button class=tag-btn data-tag=数学>数学</button>
+<button class=tag-btn data-tag=数据>数据</button>
+<button class=tag-btn data-tag=数据隐私>数据隐私</button>
+<button class=tag-btn data-tag=新手>新手</button>
+<button class=tag-btn data-tag=新手入门>新手入门</button>
+<button class=tag-btn data-tag=无常损失>无常损失</button>
+<button class=tag-btn data-tag=智能合约>智能合约</button>
+<button class=tag-btn data-tag=期权>期权</button>
+<button class=tag-btn data-tag=未来>未来</button>
+<button class=tag-btn data-tag=本金>本金</button>
+<button class=tag-btn data-tag=机构>机构</button>
+<button class=tag-btn data-tag=架构>架构</button>
+<button class=tag-btn data-tag=桥>桥</button>
+<button class=tag-btn data-tag=比价>比价</button>
+<button class=tag-btn data-tag=治理>治理</button>
+<button class=tag-btn data-tag=流动性>流动性</button>
+<button class=tag-btn data-tag=滑点>滑点</button>
+<button class=tag-btn data-tag=灾难恢复>灾难恢复</button>
+<button class=tag-btn data-tag=私钥>私钥</button>
+<button class=tag-btn data-tag=税务>税务</button>
+<button class=tag-btn data-tag=稳定币>稳定币</button>
+<button class=tag-btn data-tag=策略>策略</button>
+<button class=tag-btn data-tag=经济>经济</button>
+<button class=tag-btn data-tag=经济模型>经济模型</button>
+<button class=tag-btn data-tag=聚合器>聚合器</button>
+<button class=tag-btn data-tag=脱锚>脱锚</button>
+<button class=tag-btn data-tag=设计>设计</button>
+<button class=tag-btn data-tag=趋势>趋势</button>
+<button class=tag-btn data-tag=跨链>跨链</button>
+<button class=tag-btn data-tag=身份验证>身份验证</button>
+<button class=tag-btn data-tag=进阶>进阶</button>
+<button class=tag-btn data-tag=量化>量化</button>
+<button class=tag-btn data-tag=金库标准>金库标准</button>
+<button class=tag-btn data-tag=钱包>钱包</button>
+<button class=tag-btn data-tag=链上分析>链上分析</button>
+<button class=tag-btn data-tag=链上监控>链上监控</button>
+<button class=tag-btn data-tag=防护>防护</button>
+<button class=tag-btn data-tag=限价单>限价单</button>
+<button class=tag-btn data-tag=集中流动性>集中流动性</button>
+<button class=tag-btn data-tag=非同质化代币>非同质化代币</button>
+<button class=tag-btn data-tag=预测>预测</button>
+<button class=tag-btn data-tag=风险>风险</button>
+<button class=tag-btn data-tag=验证>验证</button>
+<button class=tag-btn data-tag=黑客>黑客</button></div><div class=geek-posts-grid><article class=geek-post-card data-tags="T3 安全合规 应急响应 事件管理 灾难恢复 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-15/>T3 安全合规系列 (15/15)：应急响应与事件管理</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>1930字</span></p><p class=post-excerpt><h2 id=引言>引言</h2><p>即使有最完善的安全措施，安全事件仍可能发生。本文介绍 T3 的应急响应体系和事件管理流程，确保在安全事件发生时能够快速检测、响应和恢复，最大程度减少损失和影响。</p><h2 id=应急响应组织架构>应急响应组织架构</h2><h3 id=安全事件响应团队-sirt>安全事件响应团队 (SIRT)</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>interface …</span></span></span></code></pre></div></p><a href=https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-15/ class=read-more>阅读全文 →</a></div></article></div></div><script>document.addEventListener("DOMContentLoaded",function(){const e=document.querySelectorAll(".tag-btn"),t=document.querySelectorAll(".geek-post-card");e.forEach(n=>{n.addEventListener("click",function(){const n=this.dataset.tag;e.forEach(e=>e.classList.remove("active")),this.classList.add("active"),t.forEach(e=>{if(n==="all")e.style.display="";else{const t=e.dataset.tags||"";t.includes(n)?e.style.display="":e.style.display="none"}})})})})</script></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

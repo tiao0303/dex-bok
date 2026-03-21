@@ -1,0 +1,147 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='审计流程详解：一份合约要经历怎样的安全审视
+为什么需要安全审计
+2022 年 Web3 安全事件造成的损失超过 37 亿美元，其中大量事件发生在已"通过审计"的项目上。这并不意味着审计无效，而是提醒我们：审计是降低风险的重要手段，但不是消除风险的灵丹妙药。
+安全审计是由专业安全团队对智能合约代码进行系统性分析，找出潜在漏洞和风险并提出修复建议的过程。理解审计流程，有助于开发者和用户正确评估审计报告的价值。
+审计团队的选择
+头部审计机构
+
+  
+      
+          机构
+          特点
+      
+  
+  
+      
+          Trail of Bits
+          行业标杆，工具链完善，代码覆盖率极高
+      
+      
+          OpenZeppelin
+          审计+开发，Defender 等工具生态完善
+      
+      
+          Consensys Diligence
+          以太坊生态深度积累
+      
+      
+          Certik
+          形式化验证能力强，亚洲市场广泛
+      
+      
+          Spearbit
+          专注于高质量审计，小而精
+      
+      
+          Salhyscan / PeckShield
+          中文市场活跃，实战经验丰富
+      
+  
+
+选择标准
+
+审计过同类协议（借贷 vs 借贷，NFT vs NFT）
+有公开的后续跟进和事件响应记录
+团队有安全研究背景（非纯开发背景）
+
+审计流程详解
+第一阶段：信息收集与范围确定（1-2周）
+审计方和项目方共同完成
+
+获取代码仓库访问权限
+明确审计范围（哪些合约在审计范围内，哪些不在）
+理解项目架构和设计文档
+签署保密协议（NDA）
+确认时间表和交付物
+
+交付物：Scope of Audit 文档，明确列出本次审计覆盖的代码文件和功能。
+第二阶段：自动化扫描（持续）
+自动化工具在审计师手动分析之前运行，作为基础筛查：
+
+  
+      
+          工具
+          检测内容
+      
+  
+  
+      
+          Slither
+          整数溢出、重入、变量未使用等
+      
+      
+          Mythril
+          基于符号执行的漏洞检测
+      
+      
+          Echidna
+          属性测试（模糊测试）
+      
+      
+          Manticore
+          符号执行
+      
+      
+          Surya
+          可视化代码结构
+      
+      
+          Solidity Metrics
+          代码复杂度分析
+      
+  
+
+自动化扫描不能替代人工审计，但能快速发现明显问题。
+第三阶段：手动代码审计（2-4周）
+这是审计的核心环节。审计师逐行分析代码，识别以下风险类别：'><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/security/09-security-audit-process/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/security/09-security-audit-process/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='审计流程详解：一份合约要经历怎样的安全审视 为什么需要安全审计 2022 年 Web3 安全事件造成的损失超过 37 亿美元，其中大量事件发生在已"通过审计"的项目上。这并不意味着审计无效，而是提醒我们：审计是降低风险的重要手段，但不是消除风险的灵丹妙药。
+安全审计是由专业安全团队对智能合约代码进行系统性分析，找出潜在漏洞和风险并提出修复建议的过程。理解审计流程，有助于开发者和用户正确评估审计报告的价值。
+审计团队的选择 头部审计机构 机构 特点 Trail of Bits 行业标杆，工具链完善，代码覆盖率极高 OpenZeppelin 审计+开发，Defender 等工具生态完善 Consensys Diligence 以太坊生态深度积累 Certik 形式化验证能力强，亚洲市场广泛 Spearbit 专注于高质量审计，小而精 Salhyscan / PeckShield 中文市场活跃，实战经验丰富 选择标准 审计过同类协议（借贷 vs 借贷，NFT vs NFT） 有公开的后续跟进和事件响应记录 团队有安全研究背景（非纯开发背景） 审计流程详解 第一阶段：信息收集与范围确定（1-2周） 审计方和项目方共同完成
+获取代码仓库访问权限 明确审计范围（哪些合约在审计范围内，哪些不在） 理解项目架构和设计文档 签署保密协议（NDA） 确认时间表和交付物 交付物：Scope of Audit 文档，明确列出本次审计覆盖的代码文件和功能。
+第二阶段：自动化扫描（持续） 自动化工具在审计师手动分析之前运行，作为基础筛查：
+工具 检测内容 Slither 整数溢出、重入、变量未使用等 Mythril 基于符号执行的漏洞检测 Echidna 属性测试（模糊测试） Manticore 符号执行 Surya 可视化代码结构 Solidity Metrics 代码复杂度分析 自动化扫描不能替代人工审计，但能快速发现明显问题。
+第三阶段：手动代码审计（2-4周） 这是审计的核心环节。审计师逐行分析代码，识别以下风险类别：'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='审计流程详解：一份合约要经历怎样的安全审视 为什么需要安全审计 2022 年 Web3 安全事件造成的损失超过 37 亿美元，其中大量事件发生在已"通过审计"的项目上。这并不意味着审计无效，而是提醒我们：审计是降低风险的重要手段，但不是消除风险的灵丹妙药。
+安全审计是由专业安全团队对智能合约代码进行系统性分析，找出潜在漏洞和风险并提出修复建议的过程。理解审计流程，有助于开发者和用户正确评估审计报告的价值。
+审计团队的选择 头部审计机构 机构 特点 Trail of Bits 行业标杆，工具链完善，代码覆盖率极高 OpenZeppelin 审计+开发，Defender 等工具生态完善 Consensys Diligence 以太坊生态深度积累 Certik 形式化验证能力强，亚洲市场广泛 Spearbit 专注于高质量审计，小而精 Salhyscan / PeckShield 中文市场活跃，实战经验丰富 选择标准 审计过同类协议（借贷 vs 借贷，NFT vs NFT） 有公开的后续跟进和事件响应记录 团队有安全研究背景（非纯开发背景） 审计流程详解 第一阶段：信息收集与范围确定（1-2周） 审计方和项目方共同完成
+获取代码仓库访问权限 明确审计范围（哪些合约在审计范围内，哪些不在） 理解项目架构和设计文档 签署保密协议（NDA） 确认时间表和交付物 交付物：Scope of Audit 文档，明确列出本次审计覆盖的代码文件和功能。
+第二阶段：自动化扫描（持续） 自动化工具在审计师手动分析之前运行，作为基础筛查：
+工具 检测内容 Slither 整数溢出、重入、变量未使用等 Mythril 基于符号执行的漏洞检测 Echidna 属性测试（模糊测试） Manticore 符号执行 Surya 可视化代码结构 Solidity Metrics 代码复杂度分析 自动化扫描不能替代人工审计，但能快速发现明显问题。
+第三阶段：手动代码审计（2-4周） 这是审计的核心环节。审计师逐行分析代码，识别以下风险类别：'><meta itemprop=wordCount content="234"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='审计流程详解：一份合约要经历怎样的安全审视 为什么需要安全审计 2022 年 Web3 安全事件造成的损失超过 37 亿美元，其中大量事件发生在已"通过审计"的项目上。这并不意味着审计无效，而是提醒我们：审计是降低风险的重要手段，但不是消除风险的灵丹妙药。
+安全审计是由专业安全团队对智能合约代码进行系统性分析，找出潜在漏洞和风险并提出修复建议的过程。理解审计流程，有助于开发者和用户正确评估审计报告的价值。
+审计团队的选择 头部审计机构 机构 特点 Trail of Bits 行业标杆，工具链完善，代码覆盖率极高 OpenZeppelin 审计+开发，Defender 等工具生态完善 Consensys Diligence 以太坊生态深度积累 Certik 形式化验证能力强，亚洲市场广泛 Spearbit 专注于高质量审计，小而精 Salhyscan / PeckShield 中文市场活跃，实战经验丰富 选择标准 审计过同类协议（借贷 vs 借贷，NFT vs NFT） 有公开的后续跟进和事件响应记录 团队有安全研究背景（非纯开发背景） 审计流程详解 第一阶段：信息收集与范围确定（1-2周） 审计方和项目方共同完成
+获取代码仓库访问权限 明确审计范围（哪些合约在审计范围内，哪些不在） 理解项目架构和设计文档 签署保密协议（NDA） 确认时间表和交付物 交付物：Scope of Audit 文档，明确列出本次审计覆盖的代码文件和功能。
+第二阶段：自动化扫描（持续） 自动化工具在审计师手动分析之前运行，作为基础筛查：
+工具 检测内容 Slither 整数溢出、重入、变量未使用等 Mythril 基于符号执行的漏洞检测 Echidna 属性测试（模糊测试） Manticore 符号执行 Surya 可视化代码结构 Solidity Metrics 代码复杂度分析 自动化扫描不能替代人工审计，但能快速发现明显问题。
+第三阶段：手动代码审计（2-4周） 这是审计的核心环节。审计师逐行分析代码，识别以下风险类别：'><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-09-security-audit-process"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#为什么需要安全审计>为什么需要安全审计</a></li><li><a href=#审计团队的选择>审计团队的选择</a><ul><li><a href=#头部审计机构>头部审计机构</a></li><li><a href=#选择标准>选择标准</a></li></ul></li><li><a href=#审计流程详解>审计流程详解</a><ul><li><a href=#第一阶段信息收集与范围确定1-2周>第一阶段：信息收集与范围确定（1-2周）</a></li><li><a href=#第二阶段自动化扫描持续>第二阶段：自动化扫描（持续）</a></li><li><a href=#第三阶段手动代码审计2-4周>第三阶段：手动代码审计（2-4周）</a></li><li><a href=#第四阶段攻击模拟红队测试>第四阶段：攻击模拟（红队测试）</a></li><li><a href=#第五阶段报告撰写与沟通>第五阶段：报告撰写与沟通</a></li><li><a href=#第六阶段修复验证1-2周>第六阶段：修复验证（1-2周）</a></li></ul></li><li><a href=#审计的局限性>审计的局限性</a><ul><li><a href=#时间有限>时间有限</a></li><li><a href=#组合性风险>组合性风险</a></li><li><a href=#零日漏洞>零日漏洞</a></li><li><a href=#经济模型假设>经济模型假设</a></li><li><a href=#后端和前端>后端和前端</a></li></ul></li><li><a href=#超越审计的安全措施>超越审计的安全措施</a></li><li><a href=#如何阅读审计报告>如何阅读审计报告</a><ul><li><a href=#关注严重程度分布>关注严重程度分布</a></li><li><a href=#检查修复状态>检查修复状态</a></li><li><a href=#查看团队回复>查看团队回复</a></li><li><a href=#对比多家审计报告>对比多家审计报告</a></li></ul></li><li><a href=#经典案例审计通过但仍被攻击>经典案例：审计通过但仍被攻击</a></li><li><a href=#结语>结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>234 字</span></div></header><h1 id=审计流程详解一份合约要经历怎样的安全审视>审计流程详解：一份合约要经历怎样的安全审视</h1><h2 id=为什么需要安全审计>为什么需要安全审计</h2><p>2022 年 Web3 安全事件造成的损失超过 <strong>37 亿美元</strong>，其中大量事件发生在已"通过审计"的项目上。这并不意味着审计无效，而是提醒我们：<strong>审计是降低风险的重要手段，但不是消除风险的灵丹妙药</strong>。</p><p>安全审计是由专业安全团队对智能合约代码进行系统性分析，找出潜在漏洞和风险并提出修复建议的过程。理解审计流程，有助于开发者和用户正确评估审计报告的价值。</p><h2 id=审计团队的选择>审计团队的选择</h2><h3 id=头部审计机构>头部审计机构</h3><table><thead><tr><th>机构</th><th>特点</th></tr></thead><tbody><tr><td>Trail of Bits</td><td>行业标杆，工具链完善，代码覆盖率极高</td></tr><tr><td>OpenZeppelin</td><td>审计+开发，Defender 等工具生态完善</td></tr><tr><td>Consensys Diligence</td><td>以太坊生态深度积累</td></tr><tr><td>Certik</td><td>形式化验证能力强，亚洲市场广泛</td></tr><tr><td>Spearbit</td><td>专注于高质量审计，小而精</td></tr><tr><td>Salhyscan / PeckShield</td><td>中文市场活跃，实战经验丰富</td></tr></tbody></table><h3 id=选择标准>选择标准</h3><ul><li>审计过同类协议（借贷 vs 借贷，NFT vs NFT）</li><li>有公开的后续跟进和事件响应记录</li><li>团队有安全研究背景（非纯开发背景）</li></ul><h2 id=审计流程详解>审计流程详解</h2><h3 id=第一阶段信息收集与范围确定1-2周>第一阶段：信息收集与范围确定（1-2周）</h3><p><strong>审计方和项目方共同完成</strong></p><ul><li>获取代码仓库访问权限</li><li>明确审计范围（哪些合约在审计范围内，哪些不在）</li><li>理解项目架构和设计文档</li><li>签署保密协议（NDA）</li><li>确认时间表和交付物</li></ul><p><strong>交付物</strong>：<code>Scope of Audit</code> 文档，明确列出本次审计覆盖的代码文件和功能。</p><h3 id=第二阶段自动化扫描持续>第二阶段：自动化扫描（持续）</h3><p>自动化工具在审计师手动分析之前运行，作为基础筛查：</p><table><thead><tr><th>工具</th><th>检测内容</th></tr></thead><tbody><tr><td>Slither</td><td>整数溢出、重入、变量未使用等</td></tr><tr><td>Mythril</td><td>基于符号执行的漏洞检测</td></tr><tr><td>Echidna</td><td>属性测试（模糊测试）</td></tr><tr><td>Manticore</td><td>符号执行</td></tr><tr><td>Surya</td><td>可视化代码结构</td></tr><tr><td>Solidity Metrics</td><td>代码复杂度分析</td></tr></tbody></table><p><strong>自动化扫描不能替代人工审计</strong>，但能快速发现明显问题。</p><h3 id=第三阶段手动代码审计2-4周>第三阶段：手动代码审计（2-4周）</h3><p>这是审计的核心环节。审计师逐行分析代码，识别以下风险类别：</p><h4 id=31-架构审查>3.1 架构审查</h4><ul><li>合约间调用关系是否清晰</li><li>信任假设是否合理</li><li>升级机制设计是否安全</li><li>外部依赖是否可被攻击</li></ul><h4 id=32-代码逻辑审查>3.2 代码逻辑审查</h4><ul><li>权限控制是否完整</li><li>边界条件是否被处理</li><li>状态更新顺序是否正确</li><li>计算精度是否准确</li></ul><h4 id=33-经济模型分析>3.3 经济模型分析</h4><ul><li>代币经济学是否可持续</li><li>激励机制是否可能被滥用</li><li>攻击者的经济动机分析</li><li>女巫攻击（Sybil Attack）风险</li></ul><h4 id=34-链上交互分析>3.4 链上交互分析</h4><ul><li>与其他 DeFi 协议的交互风险</li><li>闪电贷场景下的行为</li><li>Gas 优化与 DoS 风险</li></ul><h3 id=第四阶段攻击模拟红队测试>第四阶段：攻击模拟（红队测试）</h3><p>审计师尝试构造攻击场景，手动验证漏洞可利用性：</p><pre tabindex=0><code>攻击场景设计：
+1. 预言机操纵场景 → 能否通过 TWAP 窗口限制绕过？
+2. 重入攻击场景 → 假设存在可重入点，能否完成攻击？
+3. 治理攻击场景 → 假设攻击者持有 X% 投票权，能否通过恶意提案？
+</code></pre><h3 id=第五阶段报告撰写与沟通>第五阶段：报告撰写与沟通</h3><h4 id=审计报告结构>审计报告结构</h4><pre tabindex=0><code>一、执行摘要
+   - 项目概述
+   - 审计范围
+   - 总体风险评估
+   
+二、发现的问题（按严重程度分类）
+
+   🔴 严重（Critical）
+   🟠 高风险（High）
+   🟡 中风险（Medium）
+   🟢 低风险（Low）
+   ⚪ 建议（Informational / Optimization）
+
+   每条发现包含：
+   - 漏洞描述
+   - 风险评级依据
+   - PoC（概念验证）或攻击步骤
+   - 修复建议
+   - 参考资料
+   
+三、团队回复与修复状态
+   
+四、结论
+</code></pre><h3 id=第六阶段修复验证1-2周>第六阶段：修复验证（1-2周）</h3><p>项目方根据报告修复问题后，审计师进行<strong>复核</strong>（通常费用单独计算）：</p><ul><li>确认每个问题是否已正确修复</li><li>检查修复是否引入新问题</li><li>可能需要补充测试</li></ul><h2 id=审计的局限性>审计的局限性</h2><h3 id=时间有限>时间有限</h3><p>审计通常是 2-6 周，而开发者可能写了数月的代码。审计师不可能覆盖所有代码路径。</p><h3 id=组合性风险>组合性风险</h3><p>DeFi 协议之间的组合产生了指数级复杂性。审计 A 协议无法覆盖其与 B、C 协议交互的所有场景。</p><h3 id=零日漏洞>零日漏洞</h3><p>审计发现的是已知漏洞模式。全新类型的漏洞（零日）不在审计范围内。</p><h3 id=经济模型假设>经济模型假设</h3><p>审计师基于公开信息和合理假设进行经济分析，但市场条件可能超出预期。</p><h3 id=后端和前端>后端和前端</h3><p>许多安全事件涉及前端漏洞（钓鱼网站、恶意跳转）和后端漏洞（私钥泄露），这些通常不在合约审计范围内。</p><h2 id=超越审计的安全措施>超越审计的安全措施</h2><table><thead><tr><th>安全措施</th><th>作用</th></tr></thead><tbody><tr><td>Bug Bounty（漏洞赏金）</td><td>上线后的持续安全激励</td></tr><tr><td>形式化验证</td><td>数学证明代码正确性</td></tr><tr><td>实时监控</td><td>Defender、Forta 等监控异常交易</td></tr><tr><td>保险协议</td><td>Nexus Mutual 等提供智能合约保险</td></tr><tr><td>测试覆盖率</td><td>使用 foundry/forge 实现高覆盖率</td></tr><tr><td>主网上线前的 Testnet 充分测试</td><td>发现实际环境问题</td></tr></tbody></table><h2 id=如何阅读审计报告>如何阅读审计报告</h2><h3 id=关注严重程度分布>关注严重程度分布</h3><ul><li><strong>0 严重漏洞</strong> + <strong>0 高风险漏洞</strong> = 较好的基准</li><li>关注中低风险漏洞是否被正确理解并有应对方案</li></ul><h3 id=检查修复状态>检查修复状态</h3><ul><li>已修复的问题是否真的被修复？</li><li>&ldquo;已知风险&rdquo;（Accepted Risk）是否在可接受范围内？</li></ul><h3 id=查看团队回复>查看团队回复</h3><ul><li>团队是否认真对待每一条发现？</li><li>修复方案是否合理，还是敷衍了事？</li></ul><h3 id=对比多家审计报告>对比多家审计报告</h3><p>重要项目最好有两家以上独立机构的审计报告。</p><h2 id=经典案例审计通过但仍被攻击>经典案例：审计通过但仍被攻击</h2><p><strong>Compound 预言机漏洞（2021）</strong>：
+Compound Finance 在上线前通过了 Trail of Bits 审计，但预言机配置中的一个错误在 2021 年被利用——审计覆盖了代码，但没有覆盖链上配置参数。</p><p><strong>教训</strong>：合约代码的安全不等于系统整体的安全。部署配置、治理参数、依赖的外部合约都需要持续审视。</p><h2 id=结语>结语</h2><p>安全审计是一份严肃的安全评估工作，但它的价值取决于你如何解读和使用它。下一篇文章我们将汇总所有安全要点，谈谈开发者如何从一开始就写出更安全的合约。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/security/10-secure-development-best-practices/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/security/08-contract-upgrade-risks/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

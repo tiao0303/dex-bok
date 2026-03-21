@@ -1,258 +1,137 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/%E7%BB%8F%E6%B5%8E%E6%A8%A1%E5%9E%8B/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/%E7%BB%8F%E6%B5%8E%E6%A8%A1%E5%9E%8B/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/%E7%BB%8F%E6%B5%8E%E6%A8%A1%E5%9E%8B/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/%E7%BB%8F%E6%B5%8E%E6%A8%A1%E5%9E%8B/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="经济模型"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="经济模型"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T01:40:00+08:00"><meta itemprop=dateModified content="2026-03-19T01:40:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="经济模型"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 avenir bg-near-white production is-term"><header><div class="pb3-m pb6-l bg-white"><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l center items-center justify-between"><a href=/dex-bok/ class="f3 fw2 hover-white white-90 dib no-underline">DEX 学习笔记 | 去中心化交易所实战指南</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/ title="首页 page">首页</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/posts/ title="文章 page">文章</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/guides/ title="教程 page">教程</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/tools/ title="工具 page">工具</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/about/ title="关于 page">关于</a></li></ul><div class=ananke-socials></div></div></div></nav><div class="tc-l pv3 ph3 ph4-ns"><h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">经济模型</h1></div></div></header><main class=pb7 role=main><article class="pa3 pa4-ns nested-copy-line-height"><section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section><section class="flex-ns mt5 flex-wrap justify-around"><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/28-dex-tokenomics-design/ class="link black dim">DEX 经济模型设计 - 代币排放与激励机制</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=代币经济核心要素>代币经济核心要素</h2><h3 id=1-代币用途utility>1. 代币用途（Utility）</h3><h4 id=基本用途>基本用途</h4><table><thead><tr><th>用途</th><th>说明</th><th>价值捕获</th></tr></thead><tbody><tr><td>治理投票</td><td>参与协议决策</td><td>中</td></tr><tr><td>费用折扣</td><td>交易手续费减免</td><td>高 ✅</td></tr><tr><td>质押奖励</td><td>获得代币排放</td><td>中</td></tr><tr><td>流动性挖矿</td><td>额外收益激励</td><td>高 ✅</td></tr></tbody></table><h4 id=高级用途>高级用途</h4><pre tabindex=0><code>- 费用分成：持有代币获得协议收入
-- 保险基金：代币作为风险储备
-- 抵押品：借贷协议接受作为抵押
-- 白名单：持有代币获得新资产访问权
-</code></pre><hr><h3 id=2-供应量设计>2. 供应量设计</h3><h4 id=固定供应-vs-通胀模型>固定供应 vs 通胀模型</h4><table><thead><tr><th>模型</th><th>代表</th><th>优点</th><th>缺点</th></tr></thead><tbody><tr><td>固定供应</td><td>UNI(10 亿)</td><td>通缩预期</td><td>激励不可持续</td></tr><tr><td>温和通胀</td><td>AAVE(1600 万/年)</td><td>持续激励</td><td>稀释持有者</td></tr><tr><td>动态调整</td><td>算法稳定币</td><td>灵活</td><td>复杂，风险高</td></tr></tbody></table><h4 id=分配结构建议>分配结构建议</h4><pre tabindex=0><code>健康分配：
-- 社区/生态：40-60%
-- 团队：10-20%（4 年解锁）
-- 投资人：15-25%（1-2 年解锁）
-- 预留：10-15%
-
-危险信号：
-- 团队 + 投资人 &gt;50%
-- 解锁期&lt;1 年
-- 无锁仓直接流通
-</code></pre><hr><h3 id=3-解锁计划>3. 解锁计划</h3><h4 id=标准解锁曲线>标准解锁曲线</h4><pre tabindex=0><code>TGE（代币生成事件）：10-15%
-6 个月后：每月 5%
-4 年解锁完毕
-
-示例（1 亿代币）：
-TGE: 1000 万（10%）
-7-12 月：每月 500 万
-13-48 月：每月 250 万
-</code></pre><h4 id=解锁影响分析>解锁影响分析</h4><pre tabindex=0><code>大量解锁 → 抛压增加 → 价格下跌
-
-缓解措施：
-- 分期解锁（避免集中）
-- 解锁前通知市场
-- 配合回购/销毁
-- 提供质押选项（延迟卖出）
-</code></pre><hr><h2 id=激励机制设计>激励机制设计</h2><h3 id=流动性挖矿设计>流动性挖矿设计</h3><h4 id=奖励分配公式>奖励分配公式</h4><pre tabindex=0><code>每个池子奖励 = 总奖励 × (该池子 TVL / 总 TVL) × 乘数
-
-乘数设计：
-- 稳定币池：0.5x（低风险）
-- 主流币池：1.0x（标准）
-- 长尾资产：2.0x（高风险，需要更多激励）
-</code></pre><h4 id=排放率设计>排放率设计</h4><pre tabindex=0><code>目标：
-- 早期：高排放（吸引流动性）
-- 中期：稳定排放（维持流动性）
-- 长期：低排放（靠手续费）
-
-示例曲线：
-年第 1 年：5000 万代币/年
-年第 2 年：2500 万代币/年
-年第 3 年：1250 万代币/年
-年第 4 年+：500 万代币/年（永久）
-</code></pre><hr><h3 id=费用分成模型>费用分成模型</h3><h4 id=模型一全部给-lp>模型一：全部给 LP</h4><pre tabindex=0><code>代表：Uniswap V3
-
-分配：
-- LP：100%
-- 协议：0%
-
-优点：
-- 流动性最大化
-- 简单透明
-
-缺点：
-- 协议无收入
-- 代币价值捕获弱
-</code></pre><h4 id=模型二协议分成>模型二：协议分成</h4><pre tabindex=0><code>代表：SushiSwap、Curve
-
-分配：
-- LP：70-90%
-- 协议：10-30%
-- 协议收入用于：回购销毁/国库/开发
-
-优点：
-- 协议可持续
-- 代币有实际价值
-
-缺点：
-- LP 收益降低
-- 可能影响流动性
-</code></pre><h4 id=模型三代币持有者分成>模型三：代币持有者分成</h4><pre tabindex=0><code>代表：GMX、GNS
-
-分配：
-- LP：70%
-- 代币质押者：30%
-
-优点：
-- 激励长期持有
-- 减少流通抛压
-
-缺点：
-- 复杂度高
-- LP 可能不满
-</code></pre><hr><h2 id=真实案例分析>真实案例分析</h2><h3 id=案例一uniswapuni>案例一：Uniswap（UNI）</h3><h4 id=代币经济>代币经济</h4><pre tabindex=0><code>总供应：10 亿 UNI
-分配：
-- 社区：60%（6 亿）
-- 团队：21%（2.1 亿，4 年解锁）
-- 投资人：18%（1.8 亿，4 年解锁）
-- 顾问：1%（1000 万，4 年解锁）
-
-解锁：
-- TGE: 1%
-- 之后 4 年线性解锁
-</code></pre><h4 id=问题与改进>问题与改进</h4><pre tabindex=0><code>问题：
-- 无费用分成（代币价值捕获弱）
-- 排放已结束（激励不足）
-- 治理参与度低
-
-改进提案（未通过）：
-- 开启费用开关（10-25% 给协议）
-- 重启流动性挖矿
-- 质押 UNI 获得分成
-</code></pre><hr><h3 id=案例二curvecrv>案例二：Curve（CRV）</h3><h4 id=代币经济-1>代币经济</h4><pre tabindex=0><code>总供应：30 亿 CRV
-分配：
-- 社区：62%
-- 团队：30%（2-6 年解锁）
-- 投资人：3%
-- 储备：5%
-
-排放：
-- 初始：~400 万 CRV/天
-- 每年减半
-- 60 年后排放完毕
-</code></pre><h4 id=vecrv-模型创新>veCRV 模型（创新）</h4><pre tabindex=0><code>机制：
-- 锁仓 CRV 获得 veCRV
-- 锁仓时间越长，veCRV 越多
-- 最多锁 4 年，获得 3x boost
-
-用途：
-1. 治理投票
-2. 获得交易手续费分成
-3. 获得 CRV 奖励 boost
-4. 接收贿赂（Vote Locker）
-
-效果：
-- 长期锁仓&gt;60%
-- 流通供应减少
-- 治理参与度高
-</code></pre><hr><h3 id=案例三gmxgmx>案例三：GMX（GMX）</h3><h4 id=代币经济-2>代币经济</h4><pre tabindex=0><code>总供应：1325 万 GMX
-分配：
-- 流动性挖矿：60%
-- 团队：15%
-- 顾问：10%
--  treasury：15%
-
-解锁：
-- 无 TGE 解锁
-- 全部通过挖矿释放
-- 团队/顾问线性解锁 1 年
-</code></pre><h4 id=价值捕获>价值捕获</h4><pre tabindex=0><code>协议收入分配：
-- 30%：GMX 质押者（ETH 形式）
-- 30%：GLP 提供者
-- 40%：国库
-
-效果：
-- GMX 质押 APY 10-20%
-- 直接获得 ETH（非代币）
-- 真实收益模型
-</code></pre><hr><h2 id=经济模型设计框架>经济模型设计框架</h2><h3 id=步骤一定义目标>步骤一：定义目标</h3><pre tabindex=0><code>问题：
-- 需要吸引什么？（流动性/用户/开发者）
-- 代币价值来源？（费用/治理/其他）
-- 长期可持续性？
-
-目标示例：
-- 6 个月内 TVL 达到$1 亿
-- 日交易量$5000 万
-- 代币持有者&gt;10 万
-</code></pre><h3 id=步骤二设计代币用途>步骤二：设计代币用途</h3><pre tabindex=0><code>必选项（至少 2 个）：
-□ 治理投票
-□ 费用折扣
-□ 质押奖励
-□ 流动性挖矿
-
-可选项（差异化）：
-□ 费用分成
-□ 白名单访问
-□ 保险基金
-□ 跨链治理
-</code></pre><h3 id=步骤三确定供应量>步骤三：确定供应量</h3><pre tabindex=0><code>考虑因素：
-- 目标市值（代币价格 × 供应量）
-- 心理价位（$1-10 更易接受）
-- 竞品对比（参考类似项目）
-
-示例计算：
-目标市值：$5 亿
-目标价格：$5
-总供应：1 亿代币
-</code></pre><h3 id=步骤四设计分配>步骤四：设计分配</h3><pre tabindex=0><code>原则：
-- 社区占比最大（&gt;50%）
-- 团队/投资人锁仓&gt;2 年
-- 预留应急资金
-
-示例：
-- 社区挖矿：50%
-- 团队：15%（4 年解锁）
-- 投资人：15%（2 年解锁）
-- 国库：10%
-- 空投：10%
-</code></pre><h3 id=步骤五设计排放>步骤五：设计排放</h3><pre tabindex=0><code>考虑：
-- 早期需要高激励
-- 长期依赖手续费
-- 避免通胀过高
-
-示例曲线：
-年第 1 年：20% 供应（高激励）
-年第 2 年：15% 供应
-年第 3 年：10% 供应
-年第 4 年：5% 供应
-年第 5 年+：2% 供应（长期维持）
-</code></pre><h3 id=步骤六模拟验证>步骤六：模拟验证</h3><pre tabindex=0><code>工具：
-- Excel/Python 建模
-- 不同场景压力测试
-
-测试场景：
-- 牛市（价格涨 10 倍）
-- 熊市（价格跌 90%）
-- 横盘（价格不变）
-
-验证指标：
-- 通胀率是否可持续
-- 激励是否足够
-- 抛压是否可控
-</code></pre><hr><h2 id=常见陷阱与规避>常见陷阱与规避</h2><h3 id=陷阱一过度通胀>陷阱一：过度通胀</h3><pre tabindex=0><code>问题：
-- 排放过高（&gt;50% 年通胀）
-- 代币价格持续下跌
-- 形成死亡螺旋
-
-案例：
-- 许多 Farm 项目年通胀 100%+
-- 3 个月后代币跌 95%
-- 项目归零
-
-规避：
-- 年通胀控制在 20% 以内
-- 设计通缩机制（回购销毁）
-- 逐步降低排放
-</code></pre><h3 id=陷阱二价值捕获弱>陷阱二：价值捕获弱</h3><pre tabindex=0><code>问题：
-- 代币只有治理用途
-- 协议收入不分给持有者
-- 代币价格无支撑
-
-案例：
-- Uniswap（无费用分成）
-- 许多 DAO 代币（纯治理）
-
-规避：
-- 费用分成给质押者
-- 回购销毁机制
-- 多种用途设计
-</code></pre><h3 id=陷阱三解锁集中>陷阱三：解锁集中</h3><pre tabindex=0><code>问题：
-- 团队/投资人解锁集中
-- 大量抛压
-- 价格暴跌
-
-案例：
-- 多个项目解锁日跌 30%+
-
-规避：
-- 分期解锁（每月/每周）
-- 提前通知市场
-- 配合回购计划
-</code></pre><hr><h2 id=我的评估框架>我的评估框架</h2><h3 id=代币经济评分卡>代币经济评分卡</h3><table><thead><tr><th>指标</th><th>权重</th><th>评分标准</th></tr></thead><tbody><tr><td>代币用途</td><td>25%</td><td>4+ 用途=满分</td></tr><tr><td>分配结构</td><td>20%</td><td>社区>50%=满分</td></tr><tr><td>解锁计划</td><td>20%</td><td>4 年+=满分</td></tr><tr><td>排放曲线</td><td>20%</td><td>可持续=满分</td></tr><tr><td>价值捕获</td><td>15%</td><td>费用分成=满分</td></tr></tbody></table><h3 id=投资决策>投资决策</h3><pre tabindex=0><code>总分 &gt;80：强烈买入
-总分 60-80：谨慎买入
-总分 40-60：观望
-总分 &lt;40：避免
-</code></pre><hr><h2 id=总结>总结</h2><p>代币经济设计核心：</p></div><a href=/dex-bok/posts/28-dex-tokenomics-design/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div></section></article></main><footer class="bg-white bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href=https://tiao0303.github.io/dex-bok/>&copy; DEX 学习笔记 | 去中心化交易所实战指南 2026</a><div><div class=ananke-socials></div></div></div></footer></body></html>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/%E7%BB%8F%E6%B5%8E%E6%A8%A1%E5%9E%8B/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/%E7%BB%8F%E6%B5%8E%E6%A8%A1%E5%9E%8B/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/%E7%BB%8F%E6%B5%8E%E6%A8%A1%E5%9E%8B/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/%E7%BB%8F%E6%B5%8E%E6%A8%A1%E5%9E%8B/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="经济模型"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="经济模型"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T01:40:00+08:00"><meta itemprop=dateModified content="2026-03-19T01:40:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="经济模型"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-term"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-list-layout><header class=geek-list-header><h1>经济模型</h1></header><div class=geek-tag-filter><button class="tag-btn active" data-tag=all>全部</button>
+<button class=tag-btn data-tag=1inch>1inch</button>
+<button class=tag-btn data-tag=AML>AML</button>
+<button class=tag-btn data-tag=AMM>AMM</button>
+<button class=tag-btn data-tag=Arbitrum>Arbitrum</button>
+<button class=tag-btn data-tag=BSC>BSC</button>
+<button class=tag-btn data-tag=Curve>Curve</button>
+<button class=tag-btn data-tag=DAO>DAO</button>
+<button class=tag-btn data-tag=DCA>DCA</button>
+<button class=tag-btn data-tag=DeFi>DeFi</button>
+<button class=tag-btn data-tag=DEX>DEX</button>
+<button class=tag-btn data-tag=ERC20>ERC20</button>
+<button class=tag-btn data-tag=ERC4626>ERC4626</button>
+<button class=tag-btn data-tag=ERC721>ERC721</button>
+<button class=tag-btn data-tag=Ethereum>Ethereum</button>
+<button class=tag-btn data-tag=Gas>Gas</button>
+<button class=tag-btn data-tag="Gas 费">Gas 费</button>
+<button class=tag-btn data-tag=GDPR>GDPR</button>
+<button class=tag-btn data-tag=KYC>KYC</button>
+<button class=tag-btn data-tag=Layer2>Layer2</button>
+<button class=tag-btn data-tag=LayerZero>LayerZero</button>
+<button class=tag-btn data-tag=LP>LP</button>
+<button class=tag-btn data-tag=Matcha>Matcha</button>
+<button class=tag-btn data-tag=MEV>MEV</button>
+<button class=tag-btn data-tag=NFT>NFT</button>
+<button class=tag-btn data-tag=Optimism>Optimism</button>
+<button class=tag-btn data-tag=PMM>PMM</button>
+<button class=tag-btn data-tag=Rebasing>Rebasing</button>
+<button class=tag-btn data-tag=StableSwap>StableSwap</button>
+<button class=tag-btn data-tag=T3>T3</button>
+<button class=tag-btn data-tag=Uniswap>Uniswap</button>
+<button class=tag-btn data-tag=V2>V2</button>
+<button class=tag-btn data-tag=V3>V3</button>
+<button class=tag-btn data-tag=V4>V4</button>
+<button class=tag-btn data-tag="Yield Farming">Yield Farming</button>
+<button class=tag-btn data-tag=主动做市商>主动做市商</button>
+<button class=tag-btn data-tag=事件管理>事件管理</button>
+<button class=tag-btn data-tag=交易>交易</button>
+<button class=tag-btn data-tag=交易优化>交易优化</button>
+<button class=tag-btn data-tag=交易工具>交易工具</button>
+<button class=tag-btn data-tag=代币>代币</button>
+<button class=tag-btn data-tag=代币安全>代币安全</button>
+<button class=tag-btn data-tag=代币标准>代币标准</button>
+<button class=tag-btn data-tag=代码审查>代码审查</button>
+<button class=tag-btn data-tag=以太坊>以太坊</button>
+<button class=tag-btn data-tag=价格影响>价格影响</button>
+<button class=tag-btn data-tag=优化>优化</button>
+<button class=tag-btn data-tag=估值>估值</button>
+<button class=tag-btn data-tag=假币识别>假币识别</button>
+<button class=tag-btn data-tag=做市>做市</button>
+<button class=tag-btn data-tag=做市商>做市商</button>
+<button class=tag-btn data-tag=充值>充值</button>
+<button class=tag-btn data-tag=前端运行>前端运行</button>
+<button class=tag-btn data-tag=加密>加密</button>
+<button class=tag-btn data-tag=加密货币>加密货币</button>
+<button class=tag-btn data-tag=助记词>助记词</button>
+<button class=tag-btn data-tag=原理>原理</button>
+<button class=tag-btn data-tag=去中心化交易所>去中心化交易所</button>
+<button class=tag-btn data-tag=可变权重池>可变权重池</button>
+<button class=tag-btn data-tag=合约验证>合约验证</button>
+<button class=tag-btn data-tag=合规>合规</button>
+<button class=tag-btn data-tag=土狗币>土狗币</button>
+<button class=tag-btn data-tag=基础>基础</button>
+<button class=tag-btn data-tag=多链>多链</button>
+<button class=tag-btn data-tag=套利>套利</button>
+<button class=tag-btn data-tag=安全>安全</button>
+<button class=tag-btn data-tag=安全合规>安全合规</button>
+<button class=tag-btn data-tag=安全审计>安全审计</button>
+<button class=tag-btn data-tag=审计>审计</button>
+<button class=tag-btn data-tag=对冲>对冲</button>
+<button class=tag-btn data-tag=对比>对比</button>
+<button class=tag-btn data-tag=工具>工具</button>
+<button class=tag-btn data-tag=应急响应>应急响应</button>
+<button class=tag-btn data-tag=异常检测>异常检测</button>
+<button class=tag-btn data-tag=弹性供应>弹性供应</button>
+<button class=tag-btn data-tag=形式化>形式化</button>
+<button class=tag-btn data-tag=技术>技术</button>
+<button class=tag-btn data-tag=投票>投票</button>
+<button class=tag-btn data-tag=投资>投资</button>
+<button class=tag-btn data-tag=投资组合>投资组合</button>
+<button class=tag-btn data-tag=报税>报税</button>
+<button class=tag-btn data-tag=挖矿>挖矿</button>
+<button class=tag-btn data-tag=搜索者>搜索者</button>
+<button class=tag-btn data-tag=收入分析>收入分析</button>
+<button class=tag-btn data-tag=收益>收益</button>
+<button class=tag-btn data-tag=收益聚合>收益聚合</button>
+<button class=tag-btn data-tag=攻击>攻击</button>
+<button class=tag-btn data-tag=教程>教程</button>
+<button class=tag-btn data-tag=数字收藏>数字收藏</button>
+<button class=tag-btn data-tag=数学>数学</button>
+<button class=tag-btn data-tag=数据>数据</button>
+<button class=tag-btn data-tag=数据隐私>数据隐私</button>
+<button class=tag-btn data-tag=新手>新手</button>
+<button class=tag-btn data-tag=新手入门>新手入门</button>
+<button class=tag-btn data-tag=无常损失>无常损失</button>
+<button class=tag-btn data-tag=智能合约>智能合约</button>
+<button class=tag-btn data-tag=期权>期权</button>
+<button class=tag-btn data-tag=未来>未来</button>
+<button class=tag-btn data-tag=本金>本金</button>
+<button class=tag-btn data-tag=机构>机构</button>
+<button class=tag-btn data-tag=架构>架构</button>
+<button class=tag-btn data-tag=桥>桥</button>
+<button class=tag-btn data-tag=比价>比价</button>
+<button class=tag-btn data-tag=治理>治理</button>
+<button class=tag-btn data-tag=流动性>流动性</button>
+<button class=tag-btn data-tag=滑点>滑点</button>
+<button class=tag-btn data-tag=灾难恢复>灾难恢复</button>
+<button class=tag-btn data-tag=私钥>私钥</button>
+<button class=tag-btn data-tag=税务>税务</button>
+<button class=tag-btn data-tag=稳定币>稳定币</button>
+<button class=tag-btn data-tag=策略>策略</button>
+<button class=tag-btn data-tag=经济>经济</button>
+<button class=tag-btn data-tag=经济模型>经济模型</button>
+<button class=tag-btn data-tag=聚合器>聚合器</button>
+<button class=tag-btn data-tag=脱锚>脱锚</button>
+<button class=tag-btn data-tag=设计>设计</button>
+<button class=tag-btn data-tag=趋势>趋势</button>
+<button class=tag-btn data-tag=跨链>跨链</button>
+<button class=tag-btn data-tag=身份验证>身份验证</button>
+<button class=tag-btn data-tag=进阶>进阶</button>
+<button class=tag-btn data-tag=量化>量化</button>
+<button class=tag-btn data-tag=金库标准>金库标准</button>
+<button class=tag-btn data-tag=钱包>钱包</button>
+<button class=tag-btn data-tag=链上分析>链上分析</button>
+<button class=tag-btn data-tag=链上监控>链上监控</button>
+<button class=tag-btn data-tag=防护>防护</button>
+<button class=tag-btn data-tag=限价单>限价单</button>
+<button class=tag-btn data-tag=集中流动性>集中流动性</button>
+<button class=tag-btn data-tag=非同质化代币>非同质化代币</button>
+<button class=tag-btn data-tag=预测>预测</button>
+<button class=tag-btn data-tag=风险>风险</button>
+<button class=tag-btn data-tag=验证>验证</button>
+<button class=tag-btn data-tag=黑客>黑客</button></div><div class=geek-posts-grid><article class=geek-post-card data-tags="经济模型 代币 设计 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/28-dex-tokenomics-design/>DEX 经济模型设计 - 代币排放与激励机制</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>623字</span></p><p class=post-excerpt><h2 id=代币经济核心要素>代币经济核心要素</h2><h3 id=1-代币用途utility>1. 代币用途（Utility）</h3><h4 id=基本用途>基本用途</h4><table><thead><tr><th>用途</th><th>说明</th><th>价值捕获</th></tr></thead><tbody><tr><td>治理投票 …</td></tr></tbody></table></p><a href=https://tiao0303.github.io/dex-bok/posts/28-dex-tokenomics-design/ class=read-more>阅读全文 →</a></div></article></div></div><script>document.addEventListener("DOMContentLoaded",function(){const e=document.querySelectorAll(".tag-btn"),t=document.querySelectorAll(".geek-post-card");e.forEach(n=>{n.addEventListener("click",function(){const n=this.dataset.tag;e.forEach(e=>e.classList.remove("active")),this.classList.add("active"),t.forEach(e=>{if(n==="all")e.style.display="";else{const t=e.dataset.tags||"";t.includes(n)?e.style.display="":e.style.display="none"}})})})})</script></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

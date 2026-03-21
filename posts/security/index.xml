@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>security on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/posts/security/</link><description>Recent content in security on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Mon, 01 Jan 0001 00:00:00 +0000</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/posts/security/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://tiao0303.github.io/dex-bok/posts/security/01-blockchain-security-overview/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/01-blockchain-security-overview/</guid><description>&lt;h1 id="区块链安全概述为什么去中心化不等于无风险"&gt;区块链安全概述：为什么去中心化不等于无风险&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;&amp;ldquo;区块链是安全的&amp;rdquo;——这是许多人入局加密世界时听到的第一句话。这句话既对也不对。区块链本身的共识机制确实提供了前所未有的数据不可篡改性，但一旦我们把目光从链层移开，移到智能合约、DApp、钱包和交易所，整个图景就完全不同了。&lt;/p&gt;
+&lt;p&gt;本文作为系列开篇，带你建立对区块链安全的整体认知框架，理解风险究竟藏在哪里。&lt;/p&gt;
+&lt;h2 id="信任的重新分配"&gt;信任的重新分配&lt;/h2&gt;
+&lt;p&gt;传统金融系统中，你信任银行、支付机构、监管机构——中心化的中介机构。在区块链世界中，我们用代码和密码学替代了这些中介。但这不意味着&amp;quot;无需信任&amp;quot;，而是把信任从人转移到了代码。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关键区别在于：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;传统系统：你可以起诉银行、申请退款、冻结账户&lt;/li&gt;
+&lt;li&gt;区块链系统：代码即法律。一旦漏洞被利用，资金可能永久丢失，没有撤销按钮&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这意味着智能合约的安全直接决定了用户资产的安全等级。&lt;/p&gt;
+&lt;h2 id="区块链安全的三层风险模型"&gt;区块链安全的三层风险模型&lt;/h2&gt;
+&lt;h3 id="第一层链层layer-1"&gt;第一层：链层（Layer 1）&lt;/h3&gt;
+&lt;p&gt;共识协议级别的攻击，如 51% 攻击、日食攻击等。主要影响小市值链，对主流公链威胁有限。&lt;/p&gt;
+&lt;h3 id="第二层协议层"&gt;第二层：协议层&lt;/h3&gt;
+&lt;p&gt;智能合约的代码逻辑漏洞。这是目前损失最大的风险源——据 Dune Analytics 数据，DeFi 历史上因合约漏洞损失已超过 &lt;strong&gt;60 亿美元&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id="第三层应用层"&gt;第三层：应用层&lt;/h3&gt;
+&lt;p&gt;钓鱼攻击、私钥泄露、社交工程。Web3 用户最大的实际威胁往往来自这一层。&lt;/p&gt;
+&lt;h2 id="智能合约安全的关键战场"&gt;智能合约：安全的关键战场&lt;/h2&gt;
+&lt;p&gt;智能合约是部署在区块链上、自动执行的程序。当用户向合约转入加密资产，合约代码决定了这些资产如何被处理——正是这种&amp;quot;代码即金库&amp;quot;的特性，使得任何逻辑漏洞都可能直接转化为资产损失。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;高风险场景包括：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;DeFi 协议&lt;/strong&gt;：AMM（自动做市商）、借贷平台、衍生品&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NFT 合约&lt;/strong&gt;：批量铸造、随机数生成&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;跨链桥&lt;/strong&gt;：多链资产映射的复杂性带来额外风险&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DAO 治理&lt;/strong&gt;：投票机制被操纵&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2024-年的教训十大攻击事件回顾"&gt;2024 年的教训：十大攻击事件回顾&lt;/h2&gt;
+&lt;p&gt;过去一年发生了多起震惊行业的安全事件：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Bybit 前端攻击&lt;/strong&gt;：利用多签钱包更新逻辑缺陷，损失约 14 亿美元（2025年2月）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ronin Bridge 攻击&lt;/strong&gt;：社会工程+私钥管理缺陷&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多项闪电贷攻击&lt;/strong&gt;：利用价格预言机漏洞获利&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;社交工程持续威胁&lt;/strong&gt;：Discord 被入侵、钓鱼链接泛滥&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这些事件的共同点：&lt;strong&gt;绝大多数攻击并非区块链本身被攻破，而是其上层的合约或运营环节出了问题。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="为什么安全很难"&gt;为什么安全很难&lt;/h2&gt;
+&lt;p&gt;区块链安全面临几个独特的挑战：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;不可逆性&lt;/strong&gt;：链上交易无法撤销，发现漏洞时可能已有资产被盗&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;透明性双刃剑&lt;/strong&gt;：代码公开意味着漏洞也被公开可见（虽然同时也是众人可审计）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;组合性风险&lt;/strong&gt;：DeFi 协议之间相互集成，一个协议的漏洞可能拖垮整个生态&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;快速迭代压力&lt;/strong&gt;：Competitive DeFi 环境下，项目方往往在安全审计未完成时急于上线&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="如何评估一个项目的安全性"&gt;如何评估一个项目的安全性&lt;/h2&gt;
+&lt;p&gt;作为普通用户，你可以从以下几个维度做初步判断：&lt;/p&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;评估维度&lt;/th&gt;
+ &lt;th&gt;检查要点&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;审计报告&lt;/td&gt;
+ &lt;td&gt;是否经过知名审计公司（如 Trail of Bits、OpenZeppelin、Certik）审计&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;代码开源&lt;/td&gt;
+ &lt;td&gt;是否在 GitHub 等平台开源并有活跃维护&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Bug Bounty&lt;/td&gt;
+ &lt;td&gt;是否设有漏洞赏金计划&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;团队背景&lt;/td&gt;
+ &lt;td&gt;核心开发者是否有安全从业背景&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;合约升级机制&lt;/td&gt;
+ &lt;td&gt;是否有紧急暂停、速率限制等保护机制&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="结语"&gt;结语&lt;/h2&gt;
+&lt;p&gt;区块链安全不是&amp;quot;有了就行&amp;quot;的附属品，而是整个生态的地基。本文系列后续将深入剖析各类漏洞的原理、攻击案例和防御策略。无论你是开发者还是用户，理解这些风险都是保护自身资产的必修课。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/security/02-common-smart-contract-vulnerabilities/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/02-common-smart-contract-vulnerabilities/</guid><description>&lt;h1 id="智能合约常见漏洞从入门到理解真实风险"&gt;智能合约常见漏洞：从入门到理解真实风险&lt;/h1&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;智能合约漏洞不是小概率事件——据 DefiLlama 统计，截至 2025 年初，DeFi 领域因合约漏洞累计损失已超过 &lt;strong&gt;70 亿美元&lt;/strong&gt;。本文聚焦几类最常见、最易被利用的漏洞类型，用真实案例帮助你建立直观认知。&lt;/p&gt;
+&lt;h2 id="1-整数溢出与下溢integer-overflowunderflow"&gt;1. 整数溢出与下溢（Integer Overflow/Underflow）&lt;/h2&gt;
+&lt;h3 id="原理"&gt;原理&lt;/h3&gt;
+&lt;p&gt;Solidity 0.8 之前的版本中，整数变量有固定大小。以 &lt;code&gt;uint8&lt;/code&gt; 为例，它的取值范围是 0~255。当一个 &lt;code&gt;uint8&lt;/code&gt; 变量从 255 继续加 1，会&lt;strong&gt;溢出&lt;/strong&gt;变成 0；从 0 继续减 1，会&lt;strong&gt;下溢&lt;/strong&gt;变成 255。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Solidity 0.7.x（存在溢出风险）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;withdraw&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; balances[msg.sender] &lt;span style="color:#f92672"&gt;-=&lt;/span&gt; amount; &lt;span style="color:#75715e"&gt;// 下溢！0 - 1 = 2^256 - 1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; msg.sender.transfer(amount);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="真实案例"&gt;真实案例&lt;/h3&gt;
+&lt;p&gt;2018 年的 BEC（Batch Aero Coin）代币事件：攻击者利用整数溢出在单笔交易中凭空生成天量代币，币价瞬间归零，单日蒸发市值 60 亿美元。&lt;/p&gt;
+&lt;h3 id="防御"&gt;防御&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 Solidity 0.8+（内置溢出检查，溢出时交易回滚）&lt;/li&gt;
+&lt;li&gt;或使用 OpenZeppelin 的 &lt;code&gt;SafeMath&lt;/code&gt; 库&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="2-访问控制缺陷access-control-issues"&gt;2. 访问控制缺陷（Access Control Issues）&lt;/h2&gt;
+&lt;h3 id="原理-1"&gt;原理&lt;/h3&gt;
+&lt;p&gt;区块链上的合约默认没有权限隔离。如果关键函数（如提款、铸造、参数修改）缺少 &lt;code&gt;onlyOwner&lt;/code&gt; 或角色校验，任何人都能调用它们。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/security/03-reentrancy-attack/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/03-reentrancy-attack/</guid><description>&lt;h1 id="重入攻击原理与防范the-dao-事件的教训"&gt;重入攻击原理与防范：The DAO 事件的教训&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;2016年6月，一个名为 The DAO 的项目在以太坊上众筹了价值 1.5 亿美元的 ETH。然而仅仅三周后，这些 ETH 几乎全部被盗。攻击手段就是&lt;strong&gt;重入攻击（Reentrancy Attack）&lt;/strong&gt;——它让区块链安全社区第一次深刻认识到智能合约逻辑漏洞的毁灭性。&lt;/p&gt;
+&lt;p&gt;八年后，重入攻击仍是 Web3 安全中最常见的高危漏洞之一。&lt;/p&gt;
+&lt;h2 id="核心原理合约调用合约"&gt;核心原理：合约调用合约&lt;/h2&gt;
+&lt;p&gt;重入攻击的本质是&lt;strong&gt;一个合约在执行过程中被诱使再次调用自身（或另一个合约），而此时第一次调用的状态还未更新&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;关键在于 Solidity 的执行顺序：当你向另一个地址发送 ETH 时，Solidity 会自动调用该地址的 &lt;code&gt;receive()&lt;/code&gt; 或 &lt;code&gt;fallback()&lt;/code&gt; 函数。如果被调用的是一个合约地址，这个回调函数就会执行，而此时&lt;strong&gt;你的合约状态可能还未修改&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id="经典攻击模式"&gt;经典攻击模式&lt;/h2&gt;
+&lt;h3 id="单函数重入"&gt;单函数重入&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 有漏洞的提款合约
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;VulnerableBank&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;mapping&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; balances;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;deposit&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;payable&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; balances[msg.sender] &lt;span style="color:#f92672"&gt;+=&lt;/span&gt; msg.value;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;withdraw&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 检查：余额是否足够
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(balances[msg.sender] &lt;span style="color:#f92672"&gt;&amp;gt;=&lt;/span&gt; amount);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 关键问题：先转账，后更新状态！
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 在 msg.sender.transfer(amount) 执行期间，
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 攻击者合约的 receive() 函数被调用
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; (&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; success, ) &lt;span style="color:#f92672"&gt;=&lt;/span&gt; msg.sender.call{value&lt;span style="color:#f92672"&gt;:&lt;/span&gt; amount}(&lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(success);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 状态更新发生在转账之后
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; balances[msg.sender] &lt;span style="color:#f92672"&gt;-=&lt;/span&gt; amount;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="攻击过程详解"&gt;攻击过程详解&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;攻击者部署一个&lt;strong&gt;恶意合约&lt;/strong&gt;并存入 1 ETH&lt;/li&gt;
+&lt;li&gt;调用 &lt;code&gt;withdraw(1 ETH)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;合约检查余额（通过），开始转账&lt;/li&gt;
+&lt;li&gt;攻击者合约的 &lt;code&gt;receive()&lt;/code&gt; 收到 1 ETH，被触发&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;在 &lt;code&gt;receive()&lt;/code&gt; 中，攻击者再次调用 &lt;code&gt;withdraw(1 ETH)&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;此时 &lt;code&gt;balances[msg.sender]&lt;/code&gt; &lt;strong&gt;仍然是 1 ETH&lt;/strong&gt;（因为第5步的状态更新还没执行）&lt;/li&gt;
+&lt;li&gt;重复以上步骤，直到合约余额耗尽&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;攻击者存款: 1 ETH
+合约余额: 100 ETH
+
+第1次 withdraw: 合约检查余额=1 ✅ → 转账1 ETH → 攻击者receive触发
+ → 第2次 withdraw: 检查余额=1 ✅ → 转账1 ETH → receive触发
+ → ... 重复直到合约清空
+
+攻击者实际提走: ~100 ETH（存款1 + 利润99）
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="重入攻击的变体"&gt;重入攻击的变体&lt;/h2&gt;
+&lt;h3 id="1-跨函数重入cross-function-reentrancy"&gt;1. 跨函数重入（Cross-Function Reentrancy）&lt;/h3&gt;
+&lt;p&gt;即使 &lt;code&gt;withdraw()&lt;/code&gt; 函数本身有保护，如果合约中存在另一个也能修改余额的函数，攻击者可能从另一个函数路径发起重入。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/security/04-access-control-issues/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/04-access-control-issues/</guid><description>&lt;h1 id="权限控制问题被忽视的合约安全命门"&gt;权限控制问题：被忽视的合约安全命门&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;在代码安全审计中，权限控制缺陷（Access Control Issues）是最常见、同时也是最容易被忽视的漏洞类型之一。与重入攻击不同，权限控制问题往往不需要复杂的攻击技巧——只需要找到一个没有人调用的公开函数。&lt;/p&gt;
+&lt;h2 id="为什么权限控制如此关键"&gt;为什么权限控制如此关键&lt;/h2&gt;
+&lt;p&gt;智能合约的一个重要特点是&lt;strong&gt;默认公开&lt;/strong&gt;。除 &lt;code&gt;private&lt;/code&gt; 和 &lt;code&gt;internal&lt;/code&gt; 函数外，所有 &lt;code&gt;public&lt;/code&gt; 和 &lt;code&gt;external&lt;/code&gt; 函数都可能被任何人调用。如果关键操作（如铸造代币、修改参数、暂停合约、转走资金）缺少权限校验，等同于把金库的钥匙挂在门上。&lt;/p&gt;
+&lt;h2 id="权限控制漏洞的常见形态"&gt;权限控制漏洞的常见形态&lt;/h2&gt;
+&lt;h3 id="形态一缺失权限校验"&gt;形态一：缺失权限校验&lt;/h3&gt;
+&lt;p&gt;最基础的错误：关键函数没有 &lt;code&gt;onlyOwner&lt;/code&gt; 或等价修饰符。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 有漏洞
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setFeeRecipient&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; _feeRecipient) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; feeRecipient &lt;span style="color:#f92672"&gt;=&lt;/span&gt; _feeRecipient;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 正确
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setFeeRecipient&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; _feeRecipient) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; onlyAdmin {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; feeRecipient &lt;span style="color:#f92672"&gt;=&lt;/span&gt; _feeRecipient;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;影响&lt;/strong&gt;：攻击者可以将费用接收地址改为自己，持续吸走协议收入。&lt;/p&gt;
+&lt;h3 id="形态二权限覆盖不足"&gt;形态二：权限覆盖不足&lt;/h3&gt;
+&lt;p&gt;关键参数有权限校验，但只保护了部分修改路径，其他路径同样能修改该参数。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// setFeeRecipient 有权限
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setFeeRecipient&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; _feeRecipient) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; onlyAdmin {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; feeRecipient &lt;span style="color:#f92672"&gt;=&lt;/span&gt; _feeRecipient;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 但 init() 初始化函数没有权限保护！
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;initialize&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; _feeRecipient) &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; feeRecipient &lt;span style="color:#f92672"&gt;=&lt;/span&gt; _feeRecipient; &lt;span style="color:#75715e"&gt;// 任何人可重新初始化
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="形态三过于宽松的所有权"&gt;形态三：过于宽松的所有权&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// owner() 是公开可读的，但 setOwner() 没有权限保护
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setOwner&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; _newOwner) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; _transferOwnership(_newOwner); &lt;span style="color:#75715e"&gt;// 任何人都能把自己设为 owner
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="形态四owner-密钥泄露"&gt;形态四：Owner 密钥泄露&lt;/h3&gt;
+&lt;p&gt;即使代码层面权限控制完美，如果 owner 私钥被钓鱼或木马窃取，一切防护形同虚设。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/security/05-flash-loan-attacks/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/05-flash-loan-attacks/</guid><description>&lt;h1 id="闪电贷攻击解析defi-的无本生意如何成为黑客提款机"&gt;闪电贷攻击解析：DeFi 的无本生意如何成为黑客提款机&lt;/h1&gt;
+&lt;h2 id="什么是闪电贷"&gt;什么是闪电贷？&lt;/h2&gt;
+&lt;p&gt;闪电贷（Flash Loan）是 DeFi 最强大的创新之一，也是最容易被滥用的工具。它的原理基于以太坊交易的原子性：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;你可以在单笔交易中借出任意数量的资产，条件是：必须在同一个区块结束前归还本金和利息，否则整笔交易回滚。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;这意味着：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;零抵押&lt;/strong&gt;：不需要预先存入任何资产&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;无上限借款&lt;/strong&gt;：理论上可以借到池子里所有资产&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;原子性保证&lt;/strong&gt;：如果无法归还，整个交易撤销，借贷不成立&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 闪电贷基本模式（Aave V2）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;executeOperation&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;[] calldata assets,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[] calldata amounts,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[] calldata premiums,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; initiator,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bytes&lt;/span&gt; calldata params
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;override&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 在这里对借来的资产做任何操作
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// ...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 最后必须偿还：本金 + 费用
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amountToRepay &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amounts[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;] &lt;span style="color:#f92672"&gt;+&lt;/span&gt; premiums[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(assets[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]).transferFrom(msg.sender, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this), amountToRepay);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;闪电贷的初衷是好的：为 DeFi 提供流动性，让任何人在无需抵押的情况下执行套利、清算等操作。&lt;/p&gt;
+&lt;h2 id="攻击原理利用无本金撬动市场"&gt;攻击原理：利用&amp;quot;无本金&amp;quot;撬动市场&lt;/h2&gt;
+&lt;p&gt;闪电贷攻击的本质是&lt;strong&gt;在单笔交易中操纵市场条件&lt;/strong&gt;。由于借款金额巨大，攻击者可以在一个 DEX 上大量买入某种资产，推高价格，然后在另一个平台以高价卖出——整个过程不需要自己的本金。&lt;/p&gt;
+&lt;h3 id="攻击步骤分解"&gt;攻击步骤分解&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;第1步：借出 1000 万 USDC（闪电贷）
+第2步：在 DEX A 上用 USDC 大量买入 Token X → Token X 价格从 $1 涨到 $100
+第3步：在 DEX B 上以 $100 高价卖出 Token X → 获得 100 倍利润
+第4步：归还 1000 万 USDC + 手续费
+第5步：攻击者净赚数百万美元
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;关键在于：&lt;strong&gt;所有这些操作都在同一个交易内完成&lt;/strong&gt;，因此无需真实的资金来源。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/security/06-token-standard-security/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/06-token-standard-security/</guid><description>&lt;h1 id="代币标准安全考量erc-20-与-erc-721-的隐藏陷阱"&gt;代币标准安全考量：ERC-20 与 ERC-721 的隐藏陷阱&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;ERC-20 是 DeFi 的血液，ERC-721（NFT）是 Web3 经济的基石。这些标准带来了互操作性和生态系统繁荣，但同时也埋下了安全隐患。理解代币标准的安全边界，是每个智能合约开发者的必修课。&lt;/p&gt;
+&lt;h2 id="erc-20-的七大安全陷阱"&gt;ERC-20 的七大安全陷阱&lt;/h2&gt;
+&lt;h3 id="陷阱一transfer-返回值被忽略"&gt;陷阱一：transfer() 返回值被忽略&lt;/h3&gt;
+&lt;p&gt;ERC-20 规范中 &lt;code&gt;transfer()&lt;/code&gt; 和 &lt;code&gt;transferFrom()&lt;/code&gt; 返回 &lt;code&gt;bool&lt;/code&gt; 值，但许多合约调用后不检查返回值：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 危险：未检查返回值
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;token.transfer(to, amount);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 安全：检查返回值
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;require(token.transfer(to, amount), &lt;span style="color:#e6db74"&gt;&amp;#34;Transfer failed&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果代币转账失败（如代币有白名单限制、Gas Token 等），返回 &lt;code&gt;false&lt;/code&gt; 但调用方仍继续执行，可能导致资产损失或逻辑不一致。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;更安全的做法&lt;/strong&gt;：&lt;code&gt;SafeERC20&lt;/code&gt; 库会在底层自动检查返回值并在失败时 revert。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;using&lt;/span&gt; SafeERC20 &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; IERC20;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;token.safeTransfer(to, amount);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="陷阱二approve--transferfrom-的竞态条件"&gt;陷阱二：approve + transferFrom 的竞态条件&lt;/h3&gt;
+&lt;p&gt;经典的 ERC-20 approve 竞态问题：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. Alice 授权 DEX 1000 TOKEN
+2. DEX 使用 1000 TOKEN（正常）
+3. Alice 想把授权改为 500 TOKEN，调用 approve(DEX, 500)
+4. 此时 DEX 在同一区块内也调用 transferFrom，想再花 1000 TOKEN
+5. approve 还没执行完，DEX 却仍能花掉 1000（旧授权）
+6. 结果：DEX 实际花了 1000，Alice 只剩 500，但授权改成了 500
+7. 再次调用 transferFrom 时，授权不足，交易 revert
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;解决方案&lt;/strong&gt;：先调用 &lt;code&gt;approve()&lt;/code&gt; 设为 0，再设为目标值（两笔交易），或使用 &lt;code&gt;increaseAllowance&lt;/code&gt; / &lt;code&gt;decreaseAllowance&lt;/code&gt;。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/security/07-oracle-manipulation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/07-oracle-manipulation/</guid><description>&lt;h1 id="预言机-manipulationdefi-定价的隐形杀手"&gt;预言机 Manipulation：DeFi 定价的隐形杀手&lt;/h1&gt;
+&lt;h2 id="预言机defi-的眼睛"&gt;预言机：DeFi 的眼睛&lt;/h2&gt;
+&lt;p&gt;DeFi 协议需要知道链外资产的价格才能运行——借贷协议需要知道抵押品值多少钱，AMM 需要维持资产间的汇率，合成资产协议需要锚定真实世界价格。&lt;strong&gt;预言机（Oracle）&lt;/strong&gt; 就是负责将链外数据（主要是价格）引入区块链的机制。&lt;/p&gt;
+&lt;p&gt;但预言机也是 DeFi 最脆弱的环节之一。因为预言机的输入——价格——本身可以被操控。&lt;/p&gt;
+&lt;h2 id="预言机类型与各自风险"&gt;预言机类型与各自风险&lt;/h2&gt;
+&lt;h3 id="类型一链上价格源amm-池价格"&gt;类型一：链上价格源（AMM 池价格）&lt;/h3&gt;
+&lt;p&gt;直接从 DEX 的交易对池子中获取价格。Uniswap 的 &lt;code&gt;getReserves()&lt;/code&gt; 就是一个典型的链上价格源。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：无需信任第三方，实时可用
+&lt;strong&gt;缺点&lt;/strong&gt;：极易被操纵（单笔大交易即可影响价格）&lt;/p&gt;
+&lt;h3 id="类型二中心化喂价chainlink"&gt;类型二：中心化喂价（Chainlink）&lt;/h3&gt;
+&lt;p&gt;由数据提供商聚合多个交易所的价格后喂给链上合约。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：聚合多源数据，难以单点操纵
+&lt;strong&gt;缺点&lt;/strong&gt;：依赖第三方信任，数据源可能成为攻击面&lt;/p&gt;
+&lt;h3 id="类型三时间加权平均价格twap"&gt;类型三：时间加权平均价格（TWAP）&lt;/h3&gt;
+&lt;p&gt;Uniswap V2 和 V3 原生支持 TWAP，计算一段时间内的平均价格。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：需要时间积累，无法单笔交易操纵
+&lt;strong&gt;缺点&lt;/strong&gt;：波动市场下可能反应滞后；TWAP 窗口设置过短仍可被操纵&lt;/p&gt;
+&lt;h3 id="类型四移动平均ma"&gt;类型四：移动平均（MA）&lt;/h3&gt;
+&lt;p&gt;类似 TWAP，但使用更长时间窗口的移动平均。&lt;/p&gt;
+&lt;h2 id="预言机操纵的典型手法"&gt;预言机操纵的典型手法&lt;/h2&gt;
+&lt;h3 id="手法一单池价格操纵"&gt;手法一：单池价格操纵&lt;/h3&gt;
+&lt;p&gt;攻击者通过闪电贷在单笔交易内大幅改变 DEX 池子的资产比例：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Uniswap V2 池子：10 ETH + 10000 USDC
+
+正常价格：1 ETH = 1000 USDC
+
+攻击操作：
+1. 闪电贷借 500 万 USDC
+2. 用 500 万 USDC 兑换 ETH（swapExactTokensForETH）
+3. 池子变成：~5100 ETH + 5000 USDC（价格已被严重扭曲）
+4. 此时 Uniswap 价格：1 ETH = 10000 USDC（10倍！）
+5. 攻击者在其他协议以这个&amp;#34;虚高价格&amp;#34;借款或结算
+6. 归还闪电贷
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="手法二预言机合约攻击"&gt;手法二：预言机合约攻击&lt;/h3&gt;
+&lt;p&gt;即使协议使用的是 Chainlink，如果 Chainlink 节点本身使用 Uniswap 作为数据源，仍然可能被间接操纵。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/security/08-contract-upgrade-risks/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/08-contract-upgrade-risks/</guid><description>&lt;h1 id="合约升级风险升级即风险的艺术"&gt;合约升级风险：升级即风险的艺术&lt;/h1&gt;
+&lt;h2 id="为什么需要合约升级"&gt;为什么需要合约升级&lt;/h2&gt;
+&lt;p&gt;智能合约一旦部署到区块链上，其字节码就永远无法更改。这是区块链不变性的核心特性，但也是一把双刃剑——如果合约有 bug，唯一修复方式是在新地址部署新合约，所有用户数据需要迁移。&lt;/p&gt;
+&lt;p&gt;对于需要长期运营的 DeFi 协议，这意味着：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;发现漏洞后无法热修复&lt;/li&gt;
+&lt;li&gt;无法添加新功能&lt;/li&gt;
+&lt;li&gt;无法适应监管变化&lt;/li&gt;
+&lt;li&gt;一旦私钥泄露，整个系统无解&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;可升级合约（Upgradeable Contracts）&lt;/strong&gt; 的出现正是为了解决这个矛盾。&lt;/p&gt;
+&lt;h2 id="可升级合约的实现模式"&gt;可升级合约的实现模式&lt;/h2&gt;
+&lt;h3 id="模式一代理模式proxy-pattern"&gt;模式一：代理模式（Proxy Pattern）&lt;/h3&gt;
+&lt;p&gt;这是最广泛使用的升级方案。将合约拆分为两部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;代理合约（Proxy）&lt;/strong&gt;：地址不变，持有所有用户数据和资产&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实现合约（Implementation）&lt;/strong&gt;：存放逻辑代码，可随时升级&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户调用 Proxy -&amp;gt; Proxy DELEGATECALL Implementation -&amp;gt; 执行逻辑
+ ↑
+ 可以随时更换指向新的 Implementation
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Delegatecall 是关键&lt;/strong&gt;：代理合约使用 &lt;code&gt;delegatecall&lt;/code&gt; 调用实现合约，逻辑在代理的存储上下文中执行——就像代理&amp;quot;借用&amp;quot;了实现合约的代码。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 简化版代理合约
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Proxy&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; implementation;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fallback() &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;payable&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;assembly&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;let&lt;/span&gt; ptr &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;mload&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;0x40&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;calldatacopy&lt;/span&gt;(ptr, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;calldatasize&lt;/span&gt;())
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;let&lt;/span&gt; result &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;delegatecall&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;gas&lt;/span&gt;(), 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; implementation, 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ptr, 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;calldatasize&lt;/span&gt;(), 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; )
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;returndatacopy&lt;/span&gt;(ptr, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;returndatasize&lt;/span&gt;())
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;switch&lt;/span&gt; result
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; case &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;revert&lt;/span&gt;(ptr, &lt;span style="color:#a6e22e"&gt;returndatasize&lt;/span&gt;()) }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; default { &lt;span style="color:#a6e22e"&gt;return&lt;/span&gt;(ptr, &lt;span style="color:#a6e22e"&gt;returndatasize&lt;/span&gt;()) }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="模式二eip-1967透明代理"&gt;模式二：EIP-1967透明代理&lt;/h3&gt;
+&lt;p&gt;业界标准代理实现，通过特定存储槽存储实现合约地址（避免存储冲突风险）：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/security/09-security-audit-process/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/09-security-audit-process/</guid><description>&lt;h1 id="审计流程详解一份合约要经历怎样的安全审视"&gt;审计流程详解：一份合约要经历怎样的安全审视&lt;/h1&gt;
+&lt;h2 id="为什么需要安全审计"&gt;为什么需要安全审计&lt;/h2&gt;
+&lt;p&gt;2022 年 Web3 安全事件造成的损失超过 &lt;strong&gt;37 亿美元&lt;/strong&gt;，其中大量事件发生在已&amp;quot;通过审计&amp;quot;的项目上。这并不意味着审计无效，而是提醒我们：&lt;strong&gt;审计是降低风险的重要手段，但不是消除风险的灵丹妙药&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;安全审计是由专业安全团队对智能合约代码进行系统性分析，找出潜在漏洞和风险并提出修复建议的过程。理解审计流程，有助于开发者和用户正确评估审计报告的价值。&lt;/p&gt;
+&lt;h2 id="审计团队的选择"&gt;审计团队的选择&lt;/h2&gt;
+&lt;h3 id="头部审计机构"&gt;头部审计机构&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;机构&lt;/th&gt;
+ &lt;th&gt;特点&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Trail of Bits&lt;/td&gt;
+ &lt;td&gt;行业标杆，工具链完善，代码覆盖率极高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;OpenZeppelin&lt;/td&gt;
+ &lt;td&gt;审计+开发，Defender 等工具生态完善&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Consensys Diligence&lt;/td&gt;
+ &lt;td&gt;以太坊生态深度积累&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Certik&lt;/td&gt;
+ &lt;td&gt;形式化验证能力强，亚洲市场广泛&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Spearbit&lt;/td&gt;
+ &lt;td&gt;专注于高质量审计，小而精&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Salhyscan / PeckShield&lt;/td&gt;
+ &lt;td&gt;中文市场活跃，实战经验丰富&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="选择标准"&gt;选择标准&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;审计过同类协议（借贷 vs 借贷，NFT vs NFT）&lt;/li&gt;
+&lt;li&gt;有公开的后续跟进和事件响应记录&lt;/li&gt;
+&lt;li&gt;团队有安全研究背景（非纯开发背景）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="审计流程详解"&gt;审计流程详解&lt;/h2&gt;
+&lt;h3 id="第一阶段信息收集与范围确定1-2周"&gt;第一阶段：信息收集与范围确定（1-2周）&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;审计方和项目方共同完成&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;获取代码仓库访问权限&lt;/li&gt;
+&lt;li&gt;明确审计范围（哪些合约在审计范围内，哪些不在）&lt;/li&gt;
+&lt;li&gt;理解项目架构和设计文档&lt;/li&gt;
+&lt;li&gt;签署保密协议（NDA）&lt;/li&gt;
+&lt;li&gt;确认时间表和交付物&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;交付物&lt;/strong&gt;：&lt;code&gt;Scope of Audit&lt;/code&gt; 文档，明确列出本次审计覆盖的代码文件和功能。&lt;/p&gt;
+&lt;h3 id="第二阶段自动化扫描持续"&gt;第二阶段：自动化扫描（持续）&lt;/h3&gt;
+&lt;p&gt;自动化工具在审计师手动分析之前运行，作为基础筛查：&lt;/p&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;工具&lt;/th&gt;
+ &lt;th&gt;检测内容&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Slither&lt;/td&gt;
+ &lt;td&gt;整数溢出、重入、变量未使用等&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Mythril&lt;/td&gt;
+ &lt;td&gt;基于符号执行的漏洞检测&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Echidna&lt;/td&gt;
+ &lt;td&gt;属性测试（模糊测试）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Manticore&lt;/td&gt;
+ &lt;td&gt;符号执行&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Surya&lt;/td&gt;
+ &lt;td&gt;可视化代码结构&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Solidity Metrics&lt;/td&gt;
+ &lt;td&gt;代码复杂度分析&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;自动化扫描不能替代人工审计&lt;/strong&gt;，但能快速发现明显问题。&lt;/p&gt;
+&lt;h3 id="第三阶段手动代码审计2-4周"&gt;第三阶段：手动代码审计（2-4周）&lt;/h3&gt;
+&lt;p&gt;这是审计的核心环节。审计师逐行分析代码，识别以下风险类别：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/security/10-secure-development-best-practices/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/10-secure-development-best-practices/</guid><description>&lt;h1 id="安全开发最佳实践如何从一开始就写出安全的合约"&gt;安全开发最佳实践：如何从一开始就写出安全的合约&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;安全审计师经常说：最好的安全审计是那些发现很少问题的审计。这说明安全问题最好在编写代码的第一天就预防，而不是留到审计阶段再发现。&lt;/p&gt;
+&lt;p&gt;本文作为系列收尾，将开发者视角的安全原则和技术实践整合为一份可操作的清单。无论你是刚入门 Solidity 的新手，还是希望系统化安全流程的团队，都能找到实用的参考。&lt;/p&gt;
+&lt;h2 id="左侧优先安全设计原则"&gt;左侧优先：安全设计原则&lt;/h2&gt;
+&lt;h3 id="原则一最小权限原则principle-of-least-privilege"&gt;原则一：最小权限原则（Principle of Least Privilege）&lt;/h3&gt;
+&lt;p&gt;每个角色、每个函数、每个调用都应该只拥有完成其任务所需的最小权限。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ❌ 过度授权
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setConfig&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; _fee) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fee &lt;span style="color:#f92672"&gt;=&lt;/span&gt; _fee;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ✅ 最小权限
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setFeeRecipient&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; _feeRecipient) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; onlyAdmin {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; feeRecipient &lt;span style="color:#f92672"&gt;=&lt;/span&gt; _feeRecipient;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setFee&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; _newFee) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; onlyGovernance {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(_newFee &lt;span style="color:#f92672"&gt;&amp;lt;=&lt;/span&gt; MAX_FEE, &lt;span style="color:#e6db74"&gt;&amp;#34;Fee too high&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fee &lt;span style="color:#f92672"&gt;=&lt;/span&gt; _newFee;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="原则二防御性编程"&gt;原则二：防御性编程&lt;/h3&gt;
+&lt;p&gt;假设所有外部输入都是恶意的，假设调用者会尽一切可能破坏你的合约。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ❌ 信任外部输入
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;deposit&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amount &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; balances[msg.sender] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amount; &lt;span style="color:#75715e"&gt;// 假设 amount 是你想要的值
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ✅ 防御性检查
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;deposit&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amount &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;Zero amount&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amount &lt;span style="color:#f92672"&gt;&amp;lt;=&lt;/span&gt; MAX_DEPOSIT, &lt;span style="color:#e6db74"&gt;&amp;#34;Amount too large&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amount &lt;span style="color:#f92672"&gt;&amp;gt;=&lt;/span&gt; MIN_DEPOSIT, &lt;span style="color:#e6db74"&gt;&amp;#34;Amount too small&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; balanceBefore &lt;span style="color:#f92672"&gt;=&lt;/span&gt; token.balanceOf(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; token.transferFrom(msg.sender, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this), amount);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; received &lt;span style="color:#f92672"&gt;=&lt;/span&gt; token.balanceOf(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this)) &lt;span style="color:#f92672"&gt;-&lt;/span&gt; balanceBefore;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; balances[msg.sender] &lt;span style="color:#f92672"&gt;+=&lt;/span&gt; received; &lt;span style="color:#75715e"&gt;// 使用实际收到的金额
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="原则三简单优先"&gt;原则三：简单优先&lt;/h3&gt;
+&lt;p&gt;复杂的合约更难审计、更容易出错。在安全性和功能性之间，优先选择简单：&lt;/p&gt;</description></item></channel></rss>

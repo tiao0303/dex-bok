@@ -1,0 +1,152 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="Web3.js / Ethers.js 入门：连接前端与区块链
+
+难度：🌱🌿 进阶 | 字数：约 1050 字 | 预计阅读：7 分钟
+
+前言
+传统前端通过 HTTP 请求与后端 API 通信，而 Web3 前端则需要与区块链节点交互。Web3.js 和 Ethers.js 就是这座桥梁的核心库。本篇文章将详细对比两者，并手把手带你写出入门级的链上交互代码。
+
+一、Web3.js vs Ethers.js：选哪个？
+
+  
+      
+          维度
+          Web3.js
+          Ethers.js
+      
+  
+  
+      
+          体积
+          较大（~500KB）
+          轻量（~80KB）
+      
+      
+          API 风格
+          命令式，接近底层
+          简洁，抽象良好
+      
+      
+          钱包支持
+          自己实现
+          内置 Wallet 类
+      
+      
+          当前维护
+          Ethereum 官方维护
+          独立社区，更新活跃
+      
+      
+          生态采用
+          较老项目使用较多
+          新项目首选
+      
+  
+
+结论：新项目建议优先选择 Ethers.js（v6），它更轻量、API 更友好，且是当前主流 DApp 开发的首选。Web3.js 适合需要与节点底层细节频繁打交道的场景。
+
+二、Ethers.js 核心概念
+2.1 Provider：连接区块链节点
+Provider 是与区块链节点通信的抽象。你可以使用公开的 RPC 节点，也可以使用付费的专业节点服务（如 Infura、Alchemy）：
+import { BrowserProvider } from 'ethers';
+
+// 方式一：使用 MetaMask 提供的 BrowserProvider（最常用）
+const provider = new BrowserProvider(window.ethereum);
+
+// 方式二：使用公开 RPC
+import { JsonRpcProvider } from 'ethers';
+const provider = new JsonRpcProvider('https://mainnet.infura.io/v3/YOUR_PROJECT_ID');
+
+// 方式三：使用 WSS（WebSocket）——适合监听实时事件
+import { WebSocketProvider } from 'ethers';
+const wsProvider = new WebSocketProvider('wss://mainnet.infura.io/ws/v3/YOUR_PROJECT_ID');
+2.2 Signer：交易签名者
+Signer 持有私钥，可以签署交易并发送至网络。通过 MetaMask 连接时，BrowserProvider.getSigner() 返回的就是当前钱包的签名者："><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/frontend/04-web3-ethers-getting-started/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/frontend/04-web3-ethers-getting-started/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="Web3.js / Ethers.js 入门：连接前端与区块链 难度：🌱🌿 进阶 | 字数：约 1050 字 | 预计阅读：7 分钟
+前言 传统前端通过 HTTP 请求与后端 API 通信，而 Web3 前端则需要与区块链节点交互。Web3.js 和 Ethers.js 就是这座桥梁的核心库。本篇文章将详细对比两者，并手把手带你写出入门级的链上交互代码。
+一、Web3.js vs Ethers.js：选哪个？ 维度 Web3.js Ethers.js 体积 较大（~500KB） 轻量（~80KB） API 风格 命令式，接近底层 简洁，抽象良好 钱包支持 自己实现 内置 Wallet 类 当前维护 Ethereum 官方维护 独立社区，更新活跃 生态采用 较老项目使用较多 新项目首选 结论：新项目建议优先选择 Ethers.js（v6），它更轻量、API 更友好，且是当前主流 DApp 开发的首选。Web3.js 适合需要与节点底层细节频繁打交道的场景。
+二、Ethers.js 核心概念 2.1 Provider：连接区块链节点 Provider 是与区块链节点通信的抽象。你可以使用公开的 RPC 节点，也可以使用付费的专业节点服务（如 Infura、Alchemy）：
+import { BrowserProvider } from 'ethers'; // 方式一：使用 MetaMask 提供的 BrowserProvider（最常用） const provider = new BrowserProvider(window.ethereum); // 方式二：使用公开 RPC import { JsonRpcProvider } from 'ethers'; const provider = new JsonRpcProvider('https://mainnet.infura.io/v3/YOUR_PROJECT_ID'); // 方式三：使用 WSS（WebSocket）——适合监听实时事件 import { WebSocketProvider } from 'ethers'; const wsProvider = new WebSocketProvider('wss://mainnet.infura.io/ws/v3/YOUR_PROJECT_ID'); 2.2 Signer：交易签名者 Signer 持有私钥，可以签署交易并发送至网络。通过 MetaMask 连接时，BrowserProvider.getSigner() 返回的就是当前钱包的签名者："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="Web3.js / Ethers.js 入门：连接前端与区块链 难度：🌱🌿 进阶 | 字数：约 1050 字 | 预计阅读：7 分钟
+前言 传统前端通过 HTTP 请求与后端 API 通信，而 Web3 前端则需要与区块链节点交互。Web3.js 和 Ethers.js 就是这座桥梁的核心库。本篇文章将详细对比两者，并手把手带你写出入门级的链上交互代码。
+一、Web3.js vs Ethers.js：选哪个？ 维度 Web3.js Ethers.js 体积 较大（~500KB） 轻量（~80KB） API 风格 命令式，接近底层 简洁，抽象良好 钱包支持 自己实现 内置 Wallet 类 当前维护 Ethereum 官方维护 独立社区，更新活跃 生态采用 较老项目使用较多 新项目首选 结论：新项目建议优先选择 Ethers.js（v6），它更轻量、API 更友好，且是当前主流 DApp 开发的首选。Web3.js 适合需要与节点底层细节频繁打交道的场景。
+二、Ethers.js 核心概念 2.1 Provider：连接区块链节点 Provider 是与区块链节点通信的抽象。你可以使用公开的 RPC 节点，也可以使用付费的专业节点服务（如 Infura、Alchemy）：
+import { BrowserProvider } from 'ethers'; // 方式一：使用 MetaMask 提供的 BrowserProvider（最常用） const provider = new BrowserProvider(window.ethereum); // 方式二：使用公开 RPC import { JsonRpcProvider } from 'ethers'; const provider = new JsonRpcProvider('https://mainnet.infura.io/v3/YOUR_PROJECT_ID'); // 方式三：使用 WSS（WebSocket）——适合监听实时事件 import { WebSocketProvider } from 'ethers'; const wsProvider = new WebSocketProvider('wss://mainnet.infura.io/ws/v3/YOUR_PROJECT_ID'); 2.2 Signer：交易签名者 Signer 持有私钥，可以签署交易并发送至网络。通过 MetaMask 连接时，BrowserProvider.getSigner() 返回的就是当前钱包的签名者："><meta itemprop=wordCount content="408"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="Web3.js / Ethers.js 入门：连接前端与区块链 难度：🌱🌿 进阶 | 字数：约 1050 字 | 预计阅读：7 分钟
+前言 传统前端通过 HTTP 请求与后端 API 通信，而 Web3 前端则需要与区块链节点交互。Web3.js 和 Ethers.js 就是这座桥梁的核心库。本篇文章将详细对比两者，并手把手带你写出入门级的链上交互代码。
+一、Web3.js vs Ethers.js：选哪个？ 维度 Web3.js Ethers.js 体积 较大（~500KB） 轻量（~80KB） API 风格 命令式，接近底层 简洁，抽象良好 钱包支持 自己实现 内置 Wallet 类 当前维护 Ethereum 官方维护 独立社区，更新活跃 生态采用 较老项目使用较多 新项目首选 结论：新项目建议优先选择 Ethers.js（v6），它更轻量、API 更友好，且是当前主流 DApp 开发的首选。Web3.js 适合需要与节点底层细节频繁打交道的场景。
+二、Ethers.js 核心概念 2.1 Provider：连接区块链节点 Provider 是与区块链节点通信的抽象。你可以使用公开的 RPC 节点，也可以使用付费的专业节点服务（如 Infura、Alchemy）：
+import { BrowserProvider } from 'ethers'; // 方式一：使用 MetaMask 提供的 BrowserProvider（最常用） const provider = new BrowserProvider(window.ethereum); // 方式二：使用公开 RPC import { JsonRpcProvider } from 'ethers'; const provider = new JsonRpcProvider('https://mainnet.infura.io/v3/YOUR_PROJECT_ID'); // 方式三：使用 WSS（WebSocket）——适合监听实时事件 import { WebSocketProvider } from 'ethers'; const wsProvider = new WebSocketProvider('wss://mainnet.infura.io/ws/v3/YOUR_PROJECT_ID'); 2.2 Signer：交易签名者 Signer 持有私钥，可以签署交易并发送至网络。通过 MetaMask 连接时，BrowserProvider.getSigner() 返回的就是当前钱包的签名者："><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-04-web3-ethers-getting-started"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#一web3js-vs-ethersjs选哪个>一、Web3.js vs Ethers.js：选哪个？</a></li><li><a href=#二ethersjs-核心概念>二、Ethers.js 核心概念</a><ul><li><a href=#21-provider连接区块链节点>2.1 Provider：连接区块链节点</a></li><li><a href=#22-signer交易签名者>2.2 Signer：交易签名者</a></li><li><a href=#23-contract智能合约交互>2.3 Contract：智能合约交互</a></li></ul></li><li><a href=#三实战从零构建一个余额查询工具>三、实战：从零构建一个余额查询工具</a><ul><li><a href=#31-安装依赖>3.1 安装依赖</a></li><li><a href=#32-完整代码>3.2 完整代码</a></li></ul></li><li><a href=#四abi-从哪来>四、ABI 从哪来？</a><ul><li><a href=#41-solidity-源文件生成>4.1 Solidity 源文件生成</a></li><li><a href=#42-etherscan-验证后获取>4.2 Etherscan 验证后获取</a></li><li><a href=#43-abi-编码器注意事项>4.3 ABI 编码器注意事项</a></li></ul></li><li><a href=#五常见错误与排查>五、常见错误与排查</a></li><li><a href=#小结>小结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>408 字</span></div></header><h1 id=web3js--ethersjs-入门连接前端与区块链>Web3.js / Ethers.js 入门：连接前端与区块链</h1><blockquote><p>难度：🌱🌿 进阶 | 字数：约 1050 字 | 预计阅读：7 分钟</p></blockquote><h2 id=前言>前言</h2><p>传统前端通过 HTTP 请求与后端 API 通信，而 Web3 前端则需要与区块链节点交互。Web3.js 和 Ethers.js 就是这座桥梁的核心库。本篇文章将详细对比两者，并手把手带你写出入门级的链上交互代码。</p><hr><h2 id=一web3js-vs-ethersjs选哪个>一、Web3.js vs Ethers.js：选哪个？</h2><table><thead><tr><th>维度</th><th>Web3.js</th><th>Ethers.js</th></tr></thead><tbody><tr><td>体积</td><td>较大（~500KB）</td><td>轻量（~80KB）</td></tr><tr><td>API 风格</td><td>命令式，接近底层</td><td>简洁，抽象良好</td></tr><tr><td>钱包支持</td><td>自己实现</td><td>内置 Wallet 类</td></tr><tr><td>当前维护</td><td>Ethereum 官方维护</td><td>独立社区，更新活跃</td></tr><tr><td>生态采用</td><td>较老项目使用较多</td><td>新项目首选</td></tr></tbody></table><p><strong>结论</strong>：新项目建议优先选择 <strong>Ethers.js</strong>（v6），它更轻量、API 更友好，且是当前主流 DApp 开发的首选。Web3.js 适合需要与节点底层细节频繁打交道的场景。</p><hr><h2 id=二ethersjs-核心概念>二、Ethers.js 核心概念</h2><h3 id=21-provider连接区块链节点>2.1 Provider：连接区块链节点</h3><p>Provider 是与区块链节点通信的抽象。你可以使用公开的 RPC 节点，也可以使用付费的专业节点服务（如 Infura、Alchemy）：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>BrowserProvider</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 方式一：使用 MetaMask 提供的 BrowserProvider（最常用）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>provider</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>BrowserProvider</span>(window.<span style=color:#a6e22e>ethereum</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 方式二：使用公开 RPC
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>JsonRpcProvider</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>provider</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>JsonRpcProvider</span>(<span style=color:#e6db74>&#39;https://mainnet.infura.io/v3/YOUR_PROJECT_ID&#39;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 方式三：使用 WSS（WebSocket）——适合监听实时事件
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>WebSocketProvider</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>wsProvider</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>WebSocketProvider</span>(<span style=color:#e6db74>&#39;wss://mainnet.infura.io/ws/v3/YOUR_PROJECT_ID&#39;</span>);
+</span></span></code></pre></div><h3 id=22-signer交易签名者>2.2 Signer：交易签名者</h3><p>Signer 持有私钥，可以签署交易并发送至网络。通过 MetaMask 连接时，<code>BrowserProvider.getSigner()</code> 返回的就是当前钱包的签名者：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>signer</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getSigner</span>();
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>address</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>signer</span>.<span style=color:#a6e22e>getAddress</span>();
+</span></span><span style=display:flex><span><span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;当前签名账户:&#39;</span>, <span style=color:#a6e22e>address</span>);
+</span></span></code></pre></div><h3 id=23-contract智能合约交互>2.3 Contract：智能合约交互</h3><p><code>Contract</code> 是 Ethers.js 最核心的抽象，用于与部署在链上的智能合约通信。你需要准备两样东西：</p><ul><li><strong>合约地址</strong>：已部署合约在链上的位置</li><li><strong>ABI</strong>：合约的接口定义，描述了有哪些可调用的方法</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>Contract</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// ERC-20 代币合约示例（USDT on Ethereum Mainnet）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>USDT_ADDRESS</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;0xdAC17F958D2ee523a2206206994597C13D831ec7&#39;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>USDT_ABI</span> <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#39;function balanceOf(address owner) view returns (uint256)&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#39;function transfer(address to, uint256 amount) returns (bool)&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#39;function symbol() view returns (string)&#39;</span>,
+</span></span><span style=display:flex><span>];
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>contract</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Contract</span>(<span style=color:#a6e22e>USDT_ADDRESS</span>, <span style=color:#a6e22e>USDT_ABI</span>, <span style=color:#a6e22e>provider</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 只读调用（不需要签名）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>symbol</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>contract</span>.<span style=color:#a6e22e>symbol</span>();
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>balance</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>contract</span>.<span style=color:#a6e22e>balanceOf</span>(<span style=color:#e6db74>&#39;0x...&#39;</span>);
+</span></span><span style=display:flex><span><span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>`代币符号: </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>symbol</span><span style=color:#e6db74>}</span><span style=color:#e6db74>, 余额: </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>balance</span><span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 写入交易（需要签名）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>signer</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getSigner</span>();
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>contractWithSigner</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>contract</span>.<span style=color:#a6e22e>connect</span>(<span style=color:#a6e22e>signer</span>);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>tx</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>contractWithSigner</span>.<span style=color:#a6e22e>transfer</span>(<span style=color:#a6e22e>toAddress</span>, <span style=color:#a6e22e>amount</span>);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>await</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>wait</span>(); <span style=color:#75715e>// 等待链上确认
+</span></span></span><span style=display:flex><span><span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;交易已发送，哈希:&#39;</span>, <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>hash</span>);
+</span></span></code></pre></div><hr><h2 id=三实战从零构建一个余额查询工具>三、实战：从零构建一个余额查询工具</h2><h3 id=31-安装依赖>3.1 安装依赖</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm install ethers
+</span></span></code></pre></div><h3 id=32-完整代码>3.2 完整代码</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>BrowserProvider</span>, <span style=color:#a6e22e>parseEther</span>, <span style=color:#a6e22e>formatEther</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 1. 检查 MetaMask 是否安装
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span>window.<span style=color:#a6e22e>ethereum</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>alert</span>(<span style=color:#e6db74>&#39;请安装 MetaMask 钱包&#39;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 2. 请求账户授权
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>provider</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>BrowserProvider</span>(window.<span style=color:#a6e22e>ethereum</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>accounts</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>send</span>(<span style=color:#e6db74>&#39;eth_requestAccounts&#39;</span>, []);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>account</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>accounts</span>[<span style=color:#ae81ff>0</span>];
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 3. 获取 ETH 余额
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>balance</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getBalance</span>(<span style=color:#a6e22e>account</span>);
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>`账户 </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>account</span><span style=color:#e6db74>}</span><span style=color:#e6db74> 的 ETH 余额: </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>formatEther</span>(<span style=color:#a6e22e>balance</span>)<span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 4. 监听账户切换
+</span></span></span><span style=display:flex><span>  window.<span style=color:#a6e22e>ethereum</span>.<span style=color:#a6e22e>on</span>(<span style=color:#e6db74>&#39;accountsChanged&#39;</span>, <span style=color:#66d9ef>async</span> (<span style=color:#a6e22e>newAccounts</span>) =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>newAccounts</span>.<span style=color:#a6e22e>length</span> <span style=color:#f92672>===</span> <span style=color:#ae81ff>0</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;钱包已断开&#39;</span>);
+</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>newBalance</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getBalance</span>(<span style=color:#a6e22e>newAccounts</span>[<span style=color:#ae81ff>0</span>]);
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>`新账户余额: </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>formatEther</span>(<span style=color:#a6e22e>newBalance</span>)<span style=color:#e6db74>}</span><span style=color:#e6db74> ETH`</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>main</span>().<span style=color:#66d9ef>catch</span>(<span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>error</span>);
+</span></span></code></pre></div><hr><h2 id=四abi-从哪来>四、ABI 从哪来？</h2><h3 id=41-solidity-源文件生成>4.1 Solidity 源文件生成</h3><p>如果你有合约的 Solidity 源码，可以使用 Hardhat 或 Foundry 的编译器自动生成 ABI：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># Hardhat 项目中，ABI 自动生成到 artifacts/</span>
+</span></span><span style=display:flex><span>npx hardhat compile
+</span></span></code></pre></div><h3 id=42-etherscan-验证后获取>4.2 Etherscan 验证后获取</h3><p>在 Etherscan 上验证过的合约，可以直接在页面查看 ABI：</p><pre tabindex=0><code>https://api.etherscan.io/api?module=contract&amp;action=getabi&amp;address=0xdAC17F958D2ee523a2206206994597C13D831ec7
+</code></pre><h3 id=43-abi-编码器注意事项>4.3 ABI 编码器注意事项</h3><p>Ethers.js v6 对 ABI 的解析更加严格。如果遇到 <code>Invalid ABI</code> 错误，检查：</p><ul><li>函数名是否拼写正确</li><li><code>view</code> / <code>pure</code>（只读）vs 无标记（写入）的区分</li><li><code>returns (uint256)</code> vs <code>returns(uint256)</code> —— 注意空格</li></ul><hr><h2 id=五常见错误与排查>五、常见错误与排查</h2><table><thead><tr><th>错误信息</th><th>常见原因</th></tr></thead><tbody><tr><td><code>insufficient funds for gas</code></td><td>账户 ETH 余额不足以支付 gas</td></tr><tr><td><code>nonce too low</code></td><td>交易 nonce 重复，通常由未正确处理 pending 状态导致</td></tr><tr><td><code>execution reverted</code></td><td>合约内部逻辑拒绝执行（余额不足、权限问题等）</td></tr><tr><td><code>network changed</code></td><td>网络切换后 provider 未重建</td></tr></tbody></table><hr><h2 id=小结>小结</h2><p>Ethers.js 是 Web3 前端开发的核心工具，掌握 Provider / Signer / Contract 三大概念就能完成大部分链上交互。下篇文章我们将深入实战，完整实现"连接钱包"这一 Web3 DApp 的必备功能。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/05-wallet-connection-implementation/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/03-react-vue-getting-started/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

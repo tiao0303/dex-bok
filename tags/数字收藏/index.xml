@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>数字收藏 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%95%B0%E5%AD%97%E6%94%B6%E8%97%8F/</link><description>Recent content in 数字收藏 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sat, 21 Mar 2026 11:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%95%B0%E5%AD%97%E6%94%B6%E8%97%8F/index.xml" rel="self" type="application/rss+xml"/><item><title>ERC721 NFT 标准 - 数字所有权革命</title><link>https://tiao0303.github.io/dex-bok/posts/08-erc721-nft-standard/</link><pubDate>Sat, 21 Mar 2026 11:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/08-erc721-nft-standard/</guid><description>&lt;h2 id="什么是-erc721"&gt;什么是 ERC721&lt;/h2&gt;
+&lt;p&gt;ERC721 是 Ethereum 上**非同质化代币（NFT）**的标准接口，于 2018 年正式标准化（EIP-721）。由 William Entriken 等人提出。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;核心特点&lt;/strong&gt;：每个代币&lt;strong&gt;独一无二&lt;/strong&gt;，不可互换。就像蒙娜丽莎的画作，每一幅都有独特的价值。&lt;/p&gt;
+&lt;h2 id="erc20-vs-erc721"&gt;ERC20 vs ERC721&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;特性&lt;/th&gt;
+ &lt;th&gt;ERC20&lt;/th&gt;
+ &lt;th&gt;ERC721&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;类型&lt;/td&gt;
+ &lt;td&gt;可替代代币&lt;/td&gt;
+ &lt;td&gt;非同质化代币&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;可互换&lt;/td&gt;
+ &lt;td&gt;✅ 完全相同&lt;/td&gt;
+ &lt;td&gt;❌ 每个唯一&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;标识&lt;/td&gt;
+ &lt;td&gt;无&lt;/td&gt;
+ &lt;td&gt;uint256 tokenId&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;典型用途&lt;/td&gt;
+ &lt;td&gt;稳定币、治理&lt;/td&gt;
+ &lt;td&gt;艺术、游戏、域名&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="核心接口规范"&gt;核心接口规范&lt;/h2&gt;
+&lt;h3 id="必需函数"&gt;必需函数&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 查询地址持有的 NFT 数量
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;balanceOf&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; owner) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 查询 NFT 的持有者
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ownerOf&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; tokenId) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 安全转账（含接收合约检查）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;safeTransferFrom&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;from&lt;/span&gt;, 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; to, 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; tokenId, 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bytes&lt;/span&gt; data
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 授权单个 NFT
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;approve&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; to, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; tokenId) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 授权所有 NFT
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setApprovalForAll&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; operator, &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; approved) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 查询授权
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getApproved&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; tokenId) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;isApprovedForAll&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; owner, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; operator) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="事件"&gt;事件&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 转账事件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Transfer&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;from&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; to, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; tokenId);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 授权事件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Approval&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; owner, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; approved, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; tokenId);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ApprovalForAll&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; owner, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; operator, &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; approved);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="元数据扩展可选"&gt;元数据扩展（可选）&lt;/h2&gt;
+&lt;p&gt;让 NFT 关联外部信息：&lt;/p&gt;</description></item></channel></rss>

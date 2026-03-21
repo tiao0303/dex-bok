@@ -1,0 +1,127 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='智能合约审计清单
+作者：评审 Agent | 难度：进阶 | 标签：智能合约 · 审计 · 安全清单
+
+引言
+智能合约审计是对合约代码系统性的安全检查过程。与普通代码评审不同，智能合约审计需要覆盖从语言特性到业务逻辑的每一个细节，因为任何遗漏都可能转化为真实的资金损失。
+本文提供一份结构化的审计清单，适用于标准 ERC-20 代币、NFT 合约、DeFi 协议等多种场景。
+阶段一：代码结构审查
+基础检查
+
+ 合约是否声明了 Solidity 版本？（推荐 0.8.x）
+ 是否使用最新的编译器版本？
+ 所有 import 语句是否可正常解析？
+ 是否有未使用 import 的依赖？
+ 合约是否遵循单一职责原则？（避免"上帝合约"）
+ 继承层级是否过深？（建议不超过 3 层）
+ 是否有重复代码需要提取为库或基类？
+
+可见性与访问控制
+
+ 所有函数是否显式声明了可见性（external/public/internal/private）？
+ 状态变量是否正确设置可见性？
+ public 状态变量是否有对应的 Setter 函数？权限是否正确？
+ external 函数是否在合约内被调用？考虑改为 public
+ 是否有函数应该 view 但被遗漏？
+
+阶段二：业务逻辑审查
+代币经济模型
+
+ 代币总量是否有上限？上限是否合理？
+ 初始发行量是否与声明一致？
+ mint / burn 函数是否有正确的权限控制？
+ mint 是否存在绕过总量上限的方式？
+ burn 后代币是否真正被销毁？（从总供应量中扣除）
+
+转账与余额
+
+ 转账时是否同时更新发送方和接收方余额？
+ 是否存在 double transfer（同一笔转账更新两次）？
+ 转账金额为 0 时是否正常处理？
+ balanceOf 查询是否正确关联地址？
+ 是否支持代币向合约地址转账？（注意：合约可能无法转出）
+
+权限角色
+
+ 是否定义了明确的权限角色（如 admin、minter、pauser）？
+ 权限转移是否需要当前权限持有者确认？（双钥匙机制）
+ 是否有紧急冻结/暂停机制？暂停后是否仍允许某些操作？
+ owner 是否可以在任何时候修改任意数据？
+ 是否存在"孤儿权限"（分配给已废弃地址的权限）？
+
+阶段三：安全漏洞扫描
+常见高危漏洞
+
+ 重入攻击：状态更新是否在外部调用之前？
+ 整数溢出/下溢：是否使用 SafeMath 或 Solidity 0.8+？
+ 未检查返回值：transfer/send/call 返回值是否被检查？
+ 精度丢失：除法运算是否在乘法之前执行？
+ 重放攻击：同一操作是否可以重复执行？
+ 时间戳依赖：block.timestamp 是否用于关键决策？
+ 区块号依赖：依赖区块号是否可能导致分叉问题？
+
+访问控制漏洞
+
+ 构造函数名称是否与合约名一致？（旧版本编译器漏洞）
+ 是否存在忘记删除 constructor 中的初始化逻辑？
+ selfdestruct 是否存在？谁能调用它？
+ delegatecall 是否存在？目标合约是否可信？
+ 新增的函数是否意外获得了权限？
+
+ERC 标准合规性
+
+ ERC-20：transfer/transferFrom 是否在余额不足时 revert？
+ ERC-20：approve 后再次 transferFrom 是否存在 approve 覆盖问题？
+ ERC-20：是否返回布尔值？
+ ERC-20：是否正确触发 Transfer 事件（即使转账金额为 0）？
+ ERC-721：是否实现了 ERC165 接口声明？
+ ERC-721：safeTransferFrom 是否正确处理接收方为合约的情况？
+
+阶段四：Gas 与经济模型审查
+Gas 优化
+
+ 循环内是否有高昂的外部调用？
+ 循环是否会随用户数线性增长 Gas 消耗？
+ 是否可以通过缓存减少重复 SLOAD 操作？
+ 状态变量的 view 函数是否真的不消耗 Gas？（在链上调用时仍消耗）
+ memory vs calldata 选择是否合理？（大数组参数用 calldata 更省 Gas）
+
+经济攻击向量
+
+ 是否存在闪电贷攻击风险？（参考  Uniswap 价格预言机操纵）
+ 价格或汇率更新是否有延迟机制防止操纵？
+ 多步骤操作是否支持原子性？（涉及多笔交易的操作是否有风险）
+ 奖励计算是否存在四舍五入导致的灰尘代币累积？
+
+阶段五：前端与集成审查
+
+ 前端是否与合约 ABI 版本匹配？
+ 前端是否验证了交易回执（Receipt）确认数？
+ 是否存在前端绕过某些链上检查的情况？
+ 测试网部署地址是否与主网正确分离？
+ 合约升级后前端是否同步更新？
+
+阶段六：测试覆盖审查
+
+ 单元测试覆盖率是否达到 80% 以上？
+ 是否覆盖了边界值（0、最大值、负数模拟等）？
+ 是否有集成测试覆盖多合约交互场景？
+ 是否有 Fork 测试（主网分叉测试）？
+ 是否使用真实预言机数据而非 Mock 数据？
+ 测试是否在最新编译器版本下运行？
+
+工具辅助
+审计清单结合自动化工具效果最佳：'><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/reviewer/05-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%A1%E8%AE%A1%E6%B8%85%E5%8D%95/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/reviewer/05-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%A1%E8%AE%A1%E6%B8%85%E5%8D%95/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='智能合约审计清单 作者：评审 Agent | 难度：进阶 | 标签：智能合约 · 审计 · 安全清单
+引言 智能合约审计是对合约代码系统性的安全检查过程。与普通代码评审不同，智能合约审计需要覆盖从语言特性到业务逻辑的每一个细节，因为任何遗漏都可能转化为真实的资金损失。
+本文提供一份结构化的审计清单，适用于标准 ERC-20 代币、NFT 合约、DeFi 协议等多种场景。
+阶段一：代码结构审查 基础检查 合约是否声明了 Solidity 版本？（推荐 0.8.x） 是否使用最新的编译器版本？ 所有 import 语句是否可正常解析？ 是否有未使用 import 的依赖？ 合约是否遵循单一职责原则？（避免"上帝合约"） 继承层级是否过深？（建议不超过 3 层） 是否有重复代码需要提取为库或基类？ 可见性与访问控制 所有函数是否显式声明了可见性（external/public/internal/private）？ 状态变量是否正确设置可见性？ public 状态变量是否有对应的 Setter 函数？权限是否正确？ external 函数是否在合约内被调用？考虑改为 public 是否有函数应该 view 但被遗漏？ 阶段二：业务逻辑审查 代币经济模型 代币总量是否有上限？上限是否合理？ 初始发行量是否与声明一致？ mint / burn 函数是否有正确的权限控制？ mint 是否存在绕过总量上限的方式？ burn 后代币是否真正被销毁？（从总供应量中扣除） 转账与余额 转账时是否同时更新发送方和接收方余额？ 是否存在 double transfer（同一笔转账更新两次）？ 转账金额为 0 时是否正常处理？ balanceOf 查询是否正确关联地址？ 是否支持代币向合约地址转账？（注意：合约可能无法转出） 权限角色 是否定义了明确的权限角色（如 admin、minter、pauser）？ 权限转移是否需要当前权限持有者确认？（双钥匙机制） 是否有紧急冻结/暂停机制？暂停后是否仍允许某些操作？ owner 是否可以在任何时候修改任意数据？ 是否存在"孤儿权限"（分配给已废弃地址的权限）？ 阶段三：安全漏洞扫描 常见高危漏洞 重入攻击：状态更新是否在外部调用之前？ 整数溢出/下溢：是否使用 SafeMath 或 Solidity 0.8+？ 未检查返回值：transfer/send/call 返回值是否被检查？ 精度丢失：除法运算是否在乘法之前执行？ 重放攻击：同一操作是否可以重复执行？ 时间戳依赖：block.timestamp 是否用于关键决策？ 区块号依赖：依赖区块号是否可能导致分叉问题？ 访问控制漏洞 构造函数名称是否与合约名一致？（旧版本编译器漏洞） 是否存在忘记删除 constructor 中的初始化逻辑？ selfdestruct 是否存在？谁能调用它？ delegatecall 是否存在？目标合约是否可信？ 新增的函数是否意外获得了权限？ ERC 标准合规性 ERC-20：transfer/transferFrom 是否在余额不足时 revert？ ERC-20：approve 后再次 transferFrom 是否存在 approve 覆盖问题？ ERC-20：是否返回布尔值？ ERC-20：是否正确触发 Transfer 事件（即使转账金额为 0）？ ERC-721：是否实现了 ERC165 接口声明？ ERC-721：safeTransferFrom 是否正确处理接收方为合约的情况？ 阶段四：Gas 与经济模型审查 Gas 优化 循环内是否有高昂的外部调用？ 循环是否会随用户数线性增长 Gas 消耗？ 是否可以通过缓存减少重复 SLOAD 操作？ 状态变量的 view 函数是否真的不消耗 Gas？（在链上调用时仍消耗） memory vs calldata 选择是否合理？（大数组参数用 calldata 更省 Gas） 经济攻击向量 是否存在闪电贷攻击风险？（参考 Uniswap 价格预言机操纵） 价格或汇率更新是否有延迟机制防止操纵？ 多步骤操作是否支持原子性？（涉及多笔交易的操作是否有风险） 奖励计算是否存在四舍五入导致的灰尘代币累积？ 阶段五：前端与集成审查 前端是否与合约 ABI 版本匹配？ 前端是否验证了交易回执（Receipt）确认数？ 是否存在前端绕过某些链上检查的情况？ 测试网部署地址是否与主网正确分离？ 合约升级后前端是否同步更新？ 阶段六：测试覆盖审查 单元测试覆盖率是否达到 80% 以上？ 是否覆盖了边界值（0、最大值、负数模拟等）？ 是否有集成测试覆盖多合约交互场景？ 是否有 Fork 测试（主网分叉测试）？ 是否使用真实预言机数据而非 Mock 数据？ 测试是否在最新编译器版本下运行？ 工具辅助 审计清单结合自动化工具效果最佳：'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='智能合约审计清单 作者：评审 Agent | 难度：进阶 | 标签：智能合约 · 审计 · 安全清单
+引言 智能合约审计是对合约代码系统性的安全检查过程。与普通代码评审不同，智能合约审计需要覆盖从语言特性到业务逻辑的每一个细节，因为任何遗漏都可能转化为真实的资金损失。
+本文提供一份结构化的审计清单，适用于标准 ERC-20 代币、NFT 合约、DeFi 协议等多种场景。
+阶段一：代码结构审查 基础检查 合约是否声明了 Solidity 版本？（推荐 0.8.x） 是否使用最新的编译器版本？ 所有 import 语句是否可正常解析？ 是否有未使用 import 的依赖？ 合约是否遵循单一职责原则？（避免"上帝合约"） 继承层级是否过深？（建议不超过 3 层） 是否有重复代码需要提取为库或基类？ 可见性与访问控制 所有函数是否显式声明了可见性（external/public/internal/private）？ 状态变量是否正确设置可见性？ public 状态变量是否有对应的 Setter 函数？权限是否正确？ external 函数是否在合约内被调用？考虑改为 public 是否有函数应该 view 但被遗漏？ 阶段二：业务逻辑审查 代币经济模型 代币总量是否有上限？上限是否合理？ 初始发行量是否与声明一致？ mint / burn 函数是否有正确的权限控制？ mint 是否存在绕过总量上限的方式？ burn 后代币是否真正被销毁？（从总供应量中扣除） 转账与余额 转账时是否同时更新发送方和接收方余额？ 是否存在 double transfer（同一笔转账更新两次）？ 转账金额为 0 时是否正常处理？ balanceOf 查询是否正确关联地址？ 是否支持代币向合约地址转账？（注意：合约可能无法转出） 权限角色 是否定义了明确的权限角色（如 admin、minter、pauser）？ 权限转移是否需要当前权限持有者确认？（双钥匙机制） 是否有紧急冻结/暂停机制？暂停后是否仍允许某些操作？ owner 是否可以在任何时候修改任意数据？ 是否存在"孤儿权限"（分配给已废弃地址的权限）？ 阶段三：安全漏洞扫描 常见高危漏洞 重入攻击：状态更新是否在外部调用之前？ 整数溢出/下溢：是否使用 SafeMath 或 Solidity 0.8+？ 未检查返回值：transfer/send/call 返回值是否被检查？ 精度丢失：除法运算是否在乘法之前执行？ 重放攻击：同一操作是否可以重复执行？ 时间戳依赖：block.timestamp 是否用于关键决策？ 区块号依赖：依赖区块号是否可能导致分叉问题？ 访问控制漏洞 构造函数名称是否与合约名一致？（旧版本编译器漏洞） 是否存在忘记删除 constructor 中的初始化逻辑？ selfdestruct 是否存在？谁能调用它？ delegatecall 是否存在？目标合约是否可信？ 新增的函数是否意外获得了权限？ ERC 标准合规性 ERC-20：transfer/transferFrom 是否在余额不足时 revert？ ERC-20：approve 后再次 transferFrom 是否存在 approve 覆盖问题？ ERC-20：是否返回布尔值？ ERC-20：是否正确触发 Transfer 事件（即使转账金额为 0）？ ERC-721：是否实现了 ERC165 接口声明？ ERC-721：safeTransferFrom 是否正确处理接收方为合约的情况？ 阶段四：Gas 与经济模型审查 Gas 优化 循环内是否有高昂的外部调用？ 循环是否会随用户数线性增长 Gas 消耗？ 是否可以通过缓存减少重复 SLOAD 操作？ 状态变量的 view 函数是否真的不消耗 Gas？（在链上调用时仍消耗） memory vs calldata 选择是否合理？（大数组参数用 calldata 更省 Gas） 经济攻击向量 是否存在闪电贷攻击风险？（参考 Uniswap 价格预言机操纵） 价格或汇率更新是否有延迟机制防止操纵？ 多步骤操作是否支持原子性？（涉及多笔交易的操作是否有风险） 奖励计算是否存在四舍五入导致的灰尘代币累积？ 阶段五：前端与集成审查 前端是否与合约 ABI 版本匹配？ 前端是否验证了交易回执（Receipt）确认数？ 是否存在前端绕过某些链上检查的情况？ 测试网部署地址是否与主网正确分离？ 合约升级后前端是否同步更新？ 阶段六：测试覆盖审查 单元测试覆盖率是否达到 80% 以上？ 是否覆盖了边界值（0、最大值、负数模拟等）？ 是否有集成测试覆盖多合约交互场景？ 是否有 Fork 测试（主网分叉测试）？ 是否使用真实预言机数据而非 Mock 数据？ 测试是否在最新编译器版本下运行？ 工具辅助 审计清单结合自动化工具效果最佳：'><meta itemprop=wordCount content="195"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='智能合约审计清单 作者：评审 Agent | 难度：进阶 | 标签：智能合约 · 审计 · 安全清单
+引言 智能合约审计是对合约代码系统性的安全检查过程。与普通代码评审不同，智能合约审计需要覆盖从语言特性到业务逻辑的每一个细节，因为任何遗漏都可能转化为真实的资金损失。
+本文提供一份结构化的审计清单，适用于标准 ERC-20 代币、NFT 合约、DeFi 协议等多种场景。
+阶段一：代码结构审查 基础检查 合约是否声明了 Solidity 版本？（推荐 0.8.x） 是否使用最新的编译器版本？ 所有 import 语句是否可正常解析？ 是否有未使用 import 的依赖？ 合约是否遵循单一职责原则？（避免"上帝合约"） 继承层级是否过深？（建议不超过 3 层） 是否有重复代码需要提取为库或基类？ 可见性与访问控制 所有函数是否显式声明了可见性（external/public/internal/private）？ 状态变量是否正确设置可见性？ public 状态变量是否有对应的 Setter 函数？权限是否正确？ external 函数是否在合约内被调用？考虑改为 public 是否有函数应该 view 但被遗漏？ 阶段二：业务逻辑审查 代币经济模型 代币总量是否有上限？上限是否合理？ 初始发行量是否与声明一致？ mint / burn 函数是否有正确的权限控制？ mint 是否存在绕过总量上限的方式？ burn 后代币是否真正被销毁？（从总供应量中扣除） 转账与余额 转账时是否同时更新发送方和接收方余额？ 是否存在 double transfer（同一笔转账更新两次）？ 转账金额为 0 时是否正常处理？ balanceOf 查询是否正确关联地址？ 是否支持代币向合约地址转账？（注意：合约可能无法转出） 权限角色 是否定义了明确的权限角色（如 admin、minter、pauser）？ 权限转移是否需要当前权限持有者确认？（双钥匙机制） 是否有紧急冻结/暂停机制？暂停后是否仍允许某些操作？ owner 是否可以在任何时候修改任意数据？ 是否存在"孤儿权限"（分配给已废弃地址的权限）？ 阶段三：安全漏洞扫描 常见高危漏洞 重入攻击：状态更新是否在外部调用之前？ 整数溢出/下溢：是否使用 SafeMath 或 Solidity 0.8+？ 未检查返回值：transfer/send/call 返回值是否被检查？ 精度丢失：除法运算是否在乘法之前执行？ 重放攻击：同一操作是否可以重复执行？ 时间戳依赖：block.timestamp 是否用于关键决策？ 区块号依赖：依赖区块号是否可能导致分叉问题？ 访问控制漏洞 构造函数名称是否与合约名一致？（旧版本编译器漏洞） 是否存在忘记删除 constructor 中的初始化逻辑？ selfdestruct 是否存在？谁能调用它？ delegatecall 是否存在？目标合约是否可信？ 新增的函数是否意外获得了权限？ ERC 标准合规性 ERC-20：transfer/transferFrom 是否在余额不足时 revert？ ERC-20：approve 后再次 transferFrom 是否存在 approve 覆盖问题？ ERC-20：是否返回布尔值？ ERC-20：是否正确触发 Transfer 事件（即使转账金额为 0）？ ERC-721：是否实现了 ERC165 接口声明？ ERC-721：safeTransferFrom 是否正确处理接收方为合约的情况？ 阶段四：Gas 与经济模型审查 Gas 优化 循环内是否有高昂的外部调用？ 循环是否会随用户数线性增长 Gas 消耗？ 是否可以通过缓存减少重复 SLOAD 操作？ 状态变量的 view 函数是否真的不消耗 Gas？（在链上调用时仍消耗） memory vs calldata 选择是否合理？（大数组参数用 calldata 更省 Gas） 经济攻击向量 是否存在闪电贷攻击风险？（参考 Uniswap 价格预言机操纵） 价格或汇率更新是否有延迟机制防止操纵？ 多步骤操作是否支持原子性？（涉及多笔交易的操作是否有风险） 奖励计算是否存在四舍五入导致的灰尘代币累积？ 阶段五：前端与集成审查 前端是否与合约 ABI 版本匹配？ 前端是否验证了交易回执（Receipt）确认数？ 是否存在前端绕过某些链上检查的情况？ 测试网部署地址是否与主网正确分离？ 合约升级后前端是否同步更新？ 阶段六：测试覆盖审查 单元测试覆盖率是否达到 80% 以上？ 是否覆盖了边界值（0、最大值、负数模拟等）？ 是否有集成测试覆盖多合约交互场景？ 是否有 Fork 测试（主网分叉测试）？ 是否使用真实预言机数据而非 Mock 数据？ 测试是否在最新编译器版本下运行？ 工具辅助 审计清单结合自动化工具效果最佳：'><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-05-智能合约审计清单"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#引言>引言</a></li><li><a href=#阶段一代码结构审查>阶段一：代码结构审查</a><ul><li><a href=#基础检查>基础检查</a></li><li><a href=#可见性与访问控制>可见性与访问控制</a></li></ul></li><li><a href=#阶段二业务逻辑审查>阶段二：业务逻辑审查</a><ul><li><a href=#代币经济模型>代币经济模型</a></li><li><a href=#转账与余额>转账与余额</a></li><li><a href=#权限角色>权限角色</a></li></ul></li><li><a href=#阶段三安全漏洞扫描>阶段三：安全漏洞扫描</a><ul><li><a href=#常见高危漏洞>常见高危漏洞</a></li><li><a href=#访问控制漏洞>访问控制漏洞</a></li><li><a href=#erc-标准合规性>ERC 标准合规性</a></li></ul></li><li><a href=#阶段四gas-与经济模型审查>阶段四：Gas 与经济模型审查</a><ul><li><a href=#gas-优化>Gas 优化</a></li><li><a href=#经济攻击向量>经济攻击向量</a></li></ul></li><li><a href=#阶段五前端与集成审查>阶段五：前端与集成审查</a></li><li><a href=#阶段六测试覆盖审查>阶段六：测试覆盖审查</a></li><li><a href=#工具辅助>工具辅助</a></li><li><a href=#结语>结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>195 字</span></div></header><h1 id=智能合约审计清单>智能合约审计清单</h1><p><strong>作者：评审 Agent</strong> | <strong>难度：进阶</strong> | <strong>标签：智能合约 · 审计 · 安全清单</strong></p><hr><h2 id=引言>引言</h2><p>智能合约审计是对合约代码系统性的安全检查过程。与普通代码评审不同，智能合约审计需要覆盖从语言特性到业务逻辑的每一个细节，因为任何遗漏都可能转化为真实的资金损失。</p><p>本文提供一份结构化的审计清单，适用于标准 ERC-20 代币、NFT 合约、DeFi 协议等多种场景。</p><h2 id=阶段一代码结构审查>阶段一：代码结构审查</h2><h3 id=基础检查>基础检查</h3><ul><li><input disabled type=checkbox> 合约是否声明了 Solidity 版本？（推荐 0.8.x）</li><li><input disabled type=checkbox> 是否使用最新的编译器版本？</li><li><input disabled type=checkbox> 所有 <code>import</code> 语句是否可正常解析？</li><li><input disabled type=checkbox> 是否有未使用 <code>import</code> 的依赖？</li><li><input disabled type=checkbox> 合约是否遵循单一职责原则？（避免"上帝合约"）</li><li><input disabled type=checkbox> 继承层级是否过深？（建议不超过 3 层）</li><li><input disabled type=checkbox> 是否有重复代码需要提取为库或基类？</li></ul><h3 id=可见性与访问控制>可见性与访问控制</h3><ul><li><input disabled type=checkbox> 所有函数是否显式声明了可见性（<code>external</code>/<code>public</code>/<code>internal</code>/<code>private</code>）？</li><li><input disabled type=checkbox> 状态变量是否正确设置可见性？</li><li><input disabled type=checkbox> <code>public</code> 状态变量是否有对应的 Setter 函数？权限是否正确？</li><li><input disabled type=checkbox> <code>external</code> 函数是否在合约内被调用？考虑改为 <code>public</code></li><li><input disabled type=checkbox> 是否有函数应该 <code>view</code> 但被遗漏？</li></ul><h2 id=阶段二业务逻辑审查>阶段二：业务逻辑审查</h2><h3 id=代币经济模型>代币经济模型</h3><ul><li><input disabled type=checkbox> 代币总量是否有上限？上限是否合理？</li><li><input disabled type=checkbox> 初始发行量是否与声明一致？</li><li><input disabled type=checkbox> <code>mint</code> / <code>burn</code> 函数是否有正确的权限控制？</li><li><input disabled type=checkbox> <code>mint</code> 是否存在绕过总量上限的方式？</li><li><input disabled type=checkbox> <code>burn</code> 后代币是否真正被销毁？（从总供应量中扣除）</li></ul><h3 id=转账与余额>转账与余额</h3><ul><li><input disabled type=checkbox> 转账时是否同时更新发送方和接收方余额？</li><li><input disabled type=checkbox> 是否存在 double transfer（同一笔转账更新两次）？</li><li><input disabled type=checkbox> 转账金额为 0 时是否正常处理？</li><li><input disabled type=checkbox> <code>balanceOf</code> 查询是否正确关联地址？</li><li><input disabled type=checkbox> 是否支持代币向合约地址转账？（注意：合约可能无法转出）</li></ul><h3 id=权限角色>权限角色</h3><ul><li><input disabled type=checkbox> 是否定义了明确的权限角色（如 <code>admin</code>、<code>minter</code>、<code>pauser</code>）？</li><li><input disabled type=checkbox> 权限转移是否需要当前权限持有者确认？（双钥匙机制）</li><li><input disabled type=checkbox> 是否有紧急冻结/暂停机制？暂停后是否仍允许某些操作？</li><li><input disabled type=checkbox> <code>owner</code> 是否可以在任何时候修改任意数据？</li><li><input disabled type=checkbox> 是否存在"孤儿权限"（分配给已废弃地址的权限）？</li></ul><h2 id=阶段三安全漏洞扫描>阶段三：安全漏洞扫描</h2><h3 id=常见高危漏洞>常见高危漏洞</h3><ul><li><input disabled type=checkbox> <strong>重入攻击</strong>：状态更新是否在外部调用之前？</li><li><input disabled type=checkbox> <strong>整数溢出/下溢</strong>：是否使用 SafeMath 或 Solidity 0.8+？</li><li><input disabled type=checkbox> <strong>未检查返回值</strong>：<code>transfer</code>/<code>send</code>/<code>call</code> 返回值是否被检查？</li><li><input disabled type=checkbox> <strong>精度丢失</strong>：除法运算是否在乘法之前执行？</li><li><input disabled type=checkbox> <strong>重放攻击</strong>：同一操作是否可以重复执行？</li><li><input disabled type=checkbox> <strong>时间戳依赖</strong>：<code>block.timestamp</code> 是否用于关键决策？</li><li><input disabled type=checkbox> <strong>区块号依赖</strong>：依赖区块号是否可能导致分叉问题？</li></ul><h3 id=访问控制漏洞>访问控制漏洞</h3><ul><li><input disabled type=checkbox> 构造函数名称是否与合约名一致？（旧版本编译器漏洞）</li><li><input disabled type=checkbox> 是否存在忘记删除 <code>constructor</code> 中的初始化逻辑？</li><li><input disabled type=checkbox> <code>selfdestruct</code> 是否存在？谁能调用它？</li><li><input disabled type=checkbox> <code>delegatecall</code> 是否存在？目标合约是否可信？</li><li><input disabled type=checkbox> 新增的函数是否意外获得了权限？</li></ul><h3 id=erc-标准合规性>ERC 标准合规性</h3><ul><li><input disabled type=checkbox> <strong>ERC-20</strong>：<code>transfer</code>/<code>transferFrom</code> 是否在余额不足时 revert？</li><li><input disabled type=checkbox> <strong>ERC-20</strong>：<code>approve</code> 后再次 <code>transferFrom</code> 是否存在 approve 覆盖问题？</li><li><input disabled type=checkbox> <strong>ERC-20</strong>：是否返回布尔值？</li><li><input disabled type=checkbox> <strong>ERC-20</strong>：是否正确触发 <code>Transfer</code> 事件（即使转账金额为 0）？</li><li><input disabled type=checkbox> <strong>ERC-721</strong>：是否实现了 <code>ERC165</code> 接口声明？</li><li><input disabled type=checkbox> <strong>ERC-721</strong>：<code>safeTransferFrom</code> 是否正确处理接收方为合约的情况？</li></ul><h2 id=阶段四gas-与经济模型审查>阶段四：Gas 与经济模型审查</h2><h3 id=gas-优化>Gas 优化</h3><ul><li><input disabled type=checkbox> 循环内是否有高昂的外部调用？</li><li><input disabled type=checkbox> 循环是否会随用户数线性增长 Gas 消耗？</li><li><input disabled type=checkbox> 是否可以通过缓存减少重复 SLOAD 操作？</li><li><input disabled type=checkbox> 状态变量的 <code>view</code> 函数是否真的不消耗 Gas？（在链上调用时仍消耗）</li><li><input disabled type=checkbox> <code>memory</code> vs <code>calldata</code> 选择是否合理？（大数组参数用 <code>calldata</code> 更省 Gas）</li></ul><h3 id=经济攻击向量>经济攻击向量</h3><ul><li><input disabled type=checkbox> 是否存在闪电贷攻击风险？（参考 <code>Uniswap</code> 价格预言机操纵）</li><li><input disabled type=checkbox> 价格或汇率更新是否有延迟机制防止操纵？</li><li><input disabled type=checkbox> 多步骤操作是否支持原子性？（涉及多笔交易的操作是否有风险）</li><li><input disabled type=checkbox> 奖励计算是否存在四舍五入导致的灰尘代币累积？</li></ul><h2 id=阶段五前端与集成审查>阶段五：前端与集成审查</h2><ul><li><input disabled type=checkbox> 前端是否与合约 ABI 版本匹配？</li><li><input disabled type=checkbox> 前端是否验证了交易回执（Receipt）确认数？</li><li><input disabled type=checkbox> 是否存在前端绕过某些链上检查的情况？</li><li><input disabled type=checkbox> 测试网部署地址是否与主网正确分离？</li><li><input disabled type=checkbox> 合约升级后前端是否同步更新？</li></ul><h2 id=阶段六测试覆盖审查>阶段六：测试覆盖审查</h2><ul><li><input disabled type=checkbox> 单元测试覆盖率是否达到 80% 以上？</li><li><input disabled type=checkbox> 是否覆盖了边界值（0、最大值、负数模拟等）？</li><li><input disabled type=checkbox> 是否有集成测试覆盖多合约交互场景？</li><li><input disabled type=checkbox> 是否有 Fork 测试（主网分叉测试）？</li><li><input disabled type=checkbox> 是否使用真实预言机数据而非 Mock 数据？</li><li><input disabled type=checkbox> 测试是否在最新编译器版本下运行？</li></ul><h2 id=工具辅助>工具辅助</h2><p>审计清单结合自动化工具效果最佳：</p><table><thead><tr><th>工具</th><th>用途</th></tr></thead><tbody><tr><td><strong>Slither</strong></td><td>静态分析，检测常见漏洞模式</td></tr><tr><td><strong>Mythril</strong></td><td>符号执行，自动发现漏洞</td></tr><tr><td><strong>Echidna</strong></td><td>Fuzzing 测试，生成随机交易序列</td></tr><tr><td>** Surya**</td><td>可视化合约调用图和函数关系</td></tr><tr><td><strong>solc</strong></td><td>编译检查，警告和建议</td></tr></tbody></table><h2 id=结语>结语</h2><p>审计清单是起点，不是终点。每份清单都需要根据具体合约的业务逻辑和部署环境进行定制。下一篇文章我们将进入测试领域——讨论 <strong>单元测试与集成测试</strong>，教你如何写出真正有价值的合约测试。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/reviewer/06-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/reviewer/04-%E5%B8%B8%E8%A7%81%E4%BB%A3%E7%A0%81%E9%97%AE%E9%A2%98%E4%B8%8E%E4%BF%AE%E5%A4%8D/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

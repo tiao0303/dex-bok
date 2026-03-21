@@ -1,37 +1,149 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/amm/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/amm/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/amm/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/amm/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="AMM"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="AMM"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-19T01:30:00+08:00"><meta itemprop=dateModified content="2026-03-19T01:30:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="AMM"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 avenir bg-near-white production is-term"><header><div class="pb3-m pb6-l bg-white"><nav class="pv3 ph3 ph4-ns" role=navigation><div class="flex-l center items-center justify-between"><a href=/dex-bok/ class="f3 fw2 hover-white white-90 dib no-underline">DEX 学习笔记 | 去中心化交易所实战指南</a><div class="flex-l items-center"><ul class="pl0 mr3"><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/ title="首页 page">首页</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/posts/ title="文章 page">文章</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/guides/ title="教程 page">教程</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/tools/ title="工具 page">工具</a></li><li class="list f5 f4-ns fw4 dib pr3"><a class="hover-white white-90 no-underline" href=/dex-bok/about/ title="关于 page">关于</a></li></ul><div class=ananke-socials></div></div></div></nav><div class="tc-l pv3 ph3 ph4-ns"><h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">AMM</h1></div></div></header><main class=pb7 role=main><article class="pa3 pa4-ns nested-copy-line-height"><section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"></section><section class="flex-ns mt5 flex-wrap justify-around"><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/06-liquidity-pool-deep-dive/ class="link black dim">T2 进阶实战 06：流动性池深度分析</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h1 id=流动性池深度分析>流动性池深度分析</h1><h2 id=引言>引言</h2><p>流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。</p><h2 id=恒定乘积公式详解>恒定乘积公式详解</h2><h3 id=基础公式>基础公式</h3><p>Uniswap V2 采用的恒定乘积公式：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span>x <span style=color:#f92672>*</span> y <span style=color:#f92672>=</span> k
-</span></span></code></pre></div><p>其中：</p><ul><li><code>x</code> = 代币 A 的数量</li><li><code>y</code> = 代币 B 的数量</li><li><code>k</code> = 恒定常数</li></ul><h3 id=价格发现机制>价格发现机制</h3><p>边际价格由导数得出：</p><pre tabindex=0><code>P = dy/dx = -y/x
-</code></pre><p>这意味着价格完全由池中的代币比例决定。</p><h3 id=代码实现>代码实现</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>swap</span>(<span style=color:#66d9ef>uint</span> amountIn, <span style=color:#66d9ef>bool</span> isTokenA) <span style=color:#66d9ef>external</span> {
-</span></span><span style=display:flex><span>    require(amountIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>, <span style=color:#e6db74>&#34;Amount must be positive&#34;</span>);
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> reserveA <span style=color:#f92672>=</span> IERC20(tokenA).balanceOf(<span style=color:#66d9ef>address</span>(this));
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> reserveB <span style=color:#f92672>=</span> IERC20(tokenB).balanceOf(<span style=color:#66d9ef>address</span>(this));
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> amountOut;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (isTokenA) {
-</span></span><span style=display:flex><span>        <span style=color:#75715e>// 计算输出量：amountOut = reserveB - k / (reserveA + amountIn)
-</span></span></span><span style=display:flex><span>        amountOut <span style=color:#f92672>=</span> getAmountOut(amountIn, reserveA, reserveB);
-</span></span><span style=display:flex><span>        IERC20(tokenA).transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amountIn);
-</span></span><span style=display:flex><span>        IERC20(tokenB).transfer(msg.sender, amountOut);
-</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>        amountOut <span style=color:#f92672>=</span> getAmountOut(amountIn, reserveB, reserveA);
-</span></span><span style=display:flex><span>        IERC20(tokenB).transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amountIn);
-</span></span><span style=display:flex><span>        IERC20(tokenA).transfer(msg.sender, amountOut);
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 验证 k 值未减少
-</span></span></span><span style=display:flex><span>    _updateReserves();
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getAmountOut</span>(<span style=color:#66d9ef>uint</span> amountIn, <span style=color:#66d9ef>uint</span> reserveIn, <span style=color:#66d9ef>uint</span> reserveOut) 
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>pure</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint</span> amountOut) 
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>    require(amountIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>&amp;&amp;</span> reserveIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>&amp;&amp;</span> reserveOut <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>);
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> amountInWithFee <span style=color:#f92672>=</span> amountIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>997</span>; <span style=color:#75715e>// 0.3% 手续费
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> numerator <span style=color:#f92672>=</span> amountInWithFee <span style=color:#f92672>*</span> reserveOut;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> denominator <span style=color:#f92672>=</span> (reserveIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>1000</span>) <span style=color:#f92672>+</span> amountInWithFee;
-</span></span><span style=display:flex><span>    amountOut <span style=color:#f92672>=</span> numerator <span style=color:#f92672>/</span> denominator;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=资本效率问题>资本效率问题</h2><h3 id=v2-的资本效率低下>V2 的资本效率低下</h3><p>在 V2 模型中，流动性分布在 <code>0</code> 到 <code>∞</code> 的价格范围内，但大部分资金实际上从未被使用。</p></div><a href=/dex-bok/posts/06-liquidity-pool-deep-dive/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/26-amm-math-deep-dive/ class="link black dim">AMM 数学原理深究 - 曲线设计与资本效率</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=amm-核心公式推导>AMM 核心公式推导</h2><h3 id=恒定乘积公式uniswap-v2>恒定乘积公式（Uniswap V2）</h3><h4 id=基本公式>基本公式</h4><pre tabindex=0><code>x * y = k
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/tags/amm/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/tags/amm/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/tags/amm/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/tags/amm/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="AMM"><meta property="og:description" content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="AMM"><meta itemprop=description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><meta itemprop=datePublished content="2026-03-21T11:30:00+08:00"><meta itemprop=dateModified content="2026-03-21T11:30:00+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="AMM"><meta name=twitter:description content="个人 DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-term"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-list-layout><header class=geek-list-header><h1>AMM</h1></header><div class=geek-tag-filter><button class="tag-btn active" data-tag=all>全部</button>
+<button class=tag-btn data-tag=1inch>1inch</button>
+<button class=tag-btn data-tag=AML>AML</button>
+<button class=tag-btn data-tag=AMM>AMM</button>
+<button class=tag-btn data-tag=Arbitrum>Arbitrum</button>
+<button class=tag-btn data-tag=BSC>BSC</button>
+<button class=tag-btn data-tag=Curve>Curve</button>
+<button class=tag-btn data-tag=DAO>DAO</button>
+<button class=tag-btn data-tag=DCA>DCA</button>
+<button class=tag-btn data-tag=DeFi>DeFi</button>
+<button class=tag-btn data-tag=DEX>DEX</button>
+<button class=tag-btn data-tag=ERC20>ERC20</button>
+<button class=tag-btn data-tag=ERC4626>ERC4626</button>
+<button class=tag-btn data-tag=ERC721>ERC721</button>
+<button class=tag-btn data-tag=Ethereum>Ethereum</button>
+<button class=tag-btn data-tag=Gas>Gas</button>
+<button class=tag-btn data-tag="Gas 费">Gas 费</button>
+<button class=tag-btn data-tag=GDPR>GDPR</button>
+<button class=tag-btn data-tag=KYC>KYC</button>
+<button class=tag-btn data-tag=Layer2>Layer2</button>
+<button class=tag-btn data-tag=LayerZero>LayerZero</button>
+<button class=tag-btn data-tag=LP>LP</button>
+<button class=tag-btn data-tag=Matcha>Matcha</button>
+<button class=tag-btn data-tag=MEV>MEV</button>
+<button class=tag-btn data-tag=NFT>NFT</button>
+<button class=tag-btn data-tag=Optimism>Optimism</button>
+<button class=tag-btn data-tag=PMM>PMM</button>
+<button class=tag-btn data-tag=Rebasing>Rebasing</button>
+<button class=tag-btn data-tag=StableSwap>StableSwap</button>
+<button class=tag-btn data-tag=T3>T3</button>
+<button class=tag-btn data-tag=Uniswap>Uniswap</button>
+<button class=tag-btn data-tag=V2>V2</button>
+<button class=tag-btn data-tag=V3>V3</button>
+<button class=tag-btn data-tag=V4>V4</button>
+<button class=tag-btn data-tag="Yield Farming">Yield Farming</button>
+<button class=tag-btn data-tag=主动做市商>主动做市商</button>
+<button class=tag-btn data-tag=事件管理>事件管理</button>
+<button class=tag-btn data-tag=交易>交易</button>
+<button class=tag-btn data-tag=交易优化>交易优化</button>
+<button class=tag-btn data-tag=交易工具>交易工具</button>
+<button class=tag-btn data-tag=代币>代币</button>
+<button class=tag-btn data-tag=代币安全>代币安全</button>
+<button class=tag-btn data-tag=代币标准>代币标准</button>
+<button class=tag-btn data-tag=代码审查>代码审查</button>
+<button class=tag-btn data-tag=以太坊>以太坊</button>
+<button class=tag-btn data-tag=价格影响>价格影响</button>
+<button class=tag-btn data-tag=优化>优化</button>
+<button class=tag-btn data-tag=估值>估值</button>
+<button class=tag-btn data-tag=假币识别>假币识别</button>
+<button class=tag-btn data-tag=做市>做市</button>
+<button class=tag-btn data-tag=做市商>做市商</button>
+<button class=tag-btn data-tag=充值>充值</button>
+<button class=tag-btn data-tag=前端运行>前端运行</button>
+<button class=tag-btn data-tag=加密>加密</button>
+<button class=tag-btn data-tag=加密货币>加密货币</button>
+<button class=tag-btn data-tag=助记词>助记词</button>
+<button class=tag-btn data-tag=原理>原理</button>
+<button class=tag-btn data-tag=去中心化交易所>去中心化交易所</button>
+<button class=tag-btn data-tag=可变权重池>可变权重池</button>
+<button class=tag-btn data-tag=合约验证>合约验证</button>
+<button class=tag-btn data-tag=合规>合规</button>
+<button class=tag-btn data-tag=土狗币>土狗币</button>
+<button class=tag-btn data-tag=基础>基础</button>
+<button class=tag-btn data-tag=多链>多链</button>
+<button class=tag-btn data-tag=套利>套利</button>
+<button class=tag-btn data-tag=安全>安全</button>
+<button class=tag-btn data-tag=安全合规>安全合规</button>
+<button class=tag-btn data-tag=安全审计>安全审计</button>
+<button class=tag-btn data-tag=审计>审计</button>
+<button class=tag-btn data-tag=对冲>对冲</button>
+<button class=tag-btn data-tag=对比>对比</button>
+<button class=tag-btn data-tag=工具>工具</button>
+<button class=tag-btn data-tag=应急响应>应急响应</button>
+<button class=tag-btn data-tag=异常检测>异常检测</button>
+<button class=tag-btn data-tag=弹性供应>弹性供应</button>
+<button class=tag-btn data-tag=形式化>形式化</button>
+<button class=tag-btn data-tag=技术>技术</button>
+<button class=tag-btn data-tag=投票>投票</button>
+<button class=tag-btn data-tag=投资>投资</button>
+<button class=tag-btn data-tag=投资组合>投资组合</button>
+<button class=tag-btn data-tag=报税>报税</button>
+<button class=tag-btn data-tag=挖矿>挖矿</button>
+<button class=tag-btn data-tag=搜索者>搜索者</button>
+<button class=tag-btn data-tag=收入分析>收入分析</button>
+<button class=tag-btn data-tag=收益>收益</button>
+<button class=tag-btn data-tag=收益聚合>收益聚合</button>
+<button class=tag-btn data-tag=攻击>攻击</button>
+<button class=tag-btn data-tag=教程>教程</button>
+<button class=tag-btn data-tag=数字收藏>数字收藏</button>
+<button class=tag-btn data-tag=数学>数学</button>
+<button class=tag-btn data-tag=数据>数据</button>
+<button class=tag-btn data-tag=数据隐私>数据隐私</button>
+<button class=tag-btn data-tag=新手>新手</button>
+<button class=tag-btn data-tag=新手入门>新手入门</button>
+<button class=tag-btn data-tag=无常损失>无常损失</button>
+<button class=tag-btn data-tag=智能合约>智能合约</button>
+<button class=tag-btn data-tag=期权>期权</button>
+<button class=tag-btn data-tag=未来>未来</button>
+<button class=tag-btn data-tag=本金>本金</button>
+<button class=tag-btn data-tag=机构>机构</button>
+<button class=tag-btn data-tag=架构>架构</button>
+<button class=tag-btn data-tag=桥>桥</button>
+<button class=tag-btn data-tag=比价>比价</button>
+<button class=tag-btn data-tag=治理>治理</button>
+<button class=tag-btn data-tag=流动性>流动性</button>
+<button class=tag-btn data-tag=滑点>滑点</button>
+<button class=tag-btn data-tag=灾难恢复>灾难恢复</button>
+<button class=tag-btn data-tag=私钥>私钥</button>
+<button class=tag-btn data-tag=税务>税务</button>
+<button class=tag-btn data-tag=稳定币>稳定币</button>
+<button class=tag-btn data-tag=策略>策略</button>
+<button class=tag-btn data-tag=经济>经济</button>
+<button class=tag-btn data-tag=经济模型>经济模型</button>
+<button class=tag-btn data-tag=聚合器>聚合器</button>
+<button class=tag-btn data-tag=脱锚>脱锚</button>
+<button class=tag-btn data-tag=设计>设计</button>
+<button class=tag-btn data-tag=趋势>趋势</button>
+<button class=tag-btn data-tag=跨链>跨链</button>
+<button class=tag-btn data-tag=身份验证>身份验证</button>
+<button class=tag-btn data-tag=进阶>进阶</button>
+<button class=tag-btn data-tag=量化>量化</button>
+<button class=tag-btn data-tag=金库标准>金库标准</button>
+<button class=tag-btn data-tag=钱包>钱包</button>
+<button class=tag-btn data-tag=链上分析>链上分析</button>
+<button class=tag-btn data-tag=链上监控>链上监控</button>
+<button class=tag-btn data-tag=防护>防护</button>
+<button class=tag-btn data-tag=限价单>限价单</button>
+<button class=tag-btn data-tag=集中流动性>集中流动性</button>
+<button class=tag-btn data-tag=非同质化代币>非同质化代币</button>
+<button class=tag-btn data-tag=预测>预测</button>
+<button class=tag-btn data-tag=风险>风险</button>
+<button class=tag-btn data-tag=验证>验证</button>
+<button class=tag-btn data-tag=黑客>黑客</button></div><div class=geek-posts-grid><article class=geek-post-card data-tags="DEX 流动性 AMM 进阶 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/06-liquidity-pool-deep-dive/>T2 进阶实战 06：流动性池深度分析</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>494字</span></p><p class=post-excerpt><h1 id=流动性池深度分析>流动性池深度分析</h1><h2 id=引言>引言</h2><p>流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。</p><h2 id=恒定乘积公式详解>恒定乘积公式详解</h2><h3 id=基础公式>基础公式 …</h3></p><a href=https://tiao0303.github.io/dex-bok/posts/06-liquidity-pool-deep-dive/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="DEX DeFi BSC AMM 集中流动性 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/09-pancakeswap/>PancakeSwap 深度分析</a></h3><p class=post-meta><span>2026-03-20</span>
+<span class=meta-sep>•</span>
+<span>183字</span></p><p class=post-excerpt><h1 id=pancakeswap-深度分析>PancakeSwap 深度分析</h1><h2 id=项目简介>项目简介</h2><p>PancakeSwap 是 BSC（Binance Smart Chain）生态系统中规模最大的去中心化交易所（DEX），于 2020 年 9 月上线。它由匿名团队创建，凭借 Binance 生态 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/09-pancakeswap/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="DEX DeFi 以太坊 AMM 可变权重池 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/10-balancer/>Balancer 深度分析</a></h3><p class=post-meta><span>2026-03-20</span>
+<span class=meta-sep>•</span>
+<span>213字</span></p><p class=post-excerpt><h1 id=balancer-深度分析>Balancer 深度分析</h1><h2 id=项目简介>项目简介</h2><p>Balancer 是一个基于以太坊的去中心化交易所和资产管理协议，由 Fernando Martinelli 和 Blake Rodriguez 于 2018 年底创立，2020 年 3 月正式上线主网 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/10-balancer/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="Rebasing 弹性供应 AMM DeFi "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/29-rebasing-pools/>Rebasing 池子是什么？弹性供应代币的 AMM 挑战</a></h3><p class=post-meta><span>2026-03-21</span>
+<span class=meta-sep>•</span>
+<span>182字</span></p><p class=post-excerpt><h2 id=什么是-rebasing-代币>什么是 Rebasing 代币</h2><p>Rebasing（弹性供应）代币是一种<strong>供应量会自动调整</strong>的加密货币机制。通过算法定期调整总流通量，以达到目标价格或分配奖励。</p><h3 id=核心机制>核心机制</h3><table><thead><tr><th>场景</th><th>操作 …</th></tr></thead></table></p><a href=https://tiao0303.github.io/dex-bok/posts/29-rebasing-pools/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="Uniswap AMM DeFi V3 V4 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/uniswap-v2-v3-v4-comparison/>Uniswap V2/V3/V4 机制对比与深度分析</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>720字</span></p><p class=post-excerpt><h2 id=前言>前言</h2><p>Uniswap 作为 DeFi 生态最重要的 DEX 协议，历经 V2、V3、V4 三个重大版本迭代，每个版本都带来了革命性的创新。本文将从底层机制、资本效率、Gas 优化等维度进行深度对比分析。</p><h2 id=一版本演进概览>一、版本演进概览 …</h2></p><a href=https://tiao0303.github.io/dex-bok/posts/uniswap-v2-v3-v4-comparison/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="AMM 数学 原理 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/26-amm-math-deep-dive/>AMM 数学原理深究 - 曲线设计与资本效率</a></h3><p class=post-meta><span>2026-03-19</span>
+<span class=meta-sep>•</span>
+<span>742字</span></p><p class=post-excerpt><h2 id=amm-核心公式推导>AMM 核心公式推导</h2><h3 id=恒定乘积公式uniswap-v2>恒定乘积公式（Uniswap V2）</h3><h4 id=基本公式>基本公式</h4><pre tabindex=0><code>x * y = k
 
 其中：
 x = Token A 数量
@@ -39,189 +151,8 @@ y = Token B 数量
 k = 常数
 </code></pre><h4 id=价格推导>价格推导</h4><pre tabindex=0><code>边际价格 = dy/dx
 
-对 x * y = k 求导：
-y + x * dy/dx = 0
-dy/dx = -y/x
-
-所以：价格 P = y/x
-</code></pre><h4 id=滑点公式>滑点公式</h4><pre tabindex=0><code>买入 Δx 的 Token A：
-新价格 P&#39; = (y - Δy) / (x + Δx)
-
-滑点 = (P&#39; - P) / P
-     = Δx / (x + Δx)
-
-结论：
-- 池子越小，滑点越大
-- 交易越大，滑点越大
-</code></pre><hr><h3 id=恒定和公式curve-stableswap>恒定和公式（Curve StableSwap）</h3><h4 id=基本公式-1>基本公式</h4><pre tabindex=0><code>x + y = k
-
-价格恒定为 1:1
-适合稳定币交易
-</code></pre><h4 id=stableswap-混合公式>StableSwap 混合公式</h4><pre tabindex=0><code>A * n^n * Σx_i + D = A * D * n^n + D^(n+1) / (n^n * Πx_i)
-
-其中：
-A = 放大系数
-n = 资产数量
-D = 不变量
-x_i = 各资产数量
-
-A → ∞ 时：趋近恒定和
-A → 0 时：趋近恒定积
-</code></pre><h4 id=放大系数-a-的作用>放大系数 A 的作用</h4><table><thead><tr><th>A 值</th><th>曲线形状</th><th>适用场景</th></tr></thead><tbody><tr><td>1</td><td>标准恒定积</td><td>波动资产</td></tr><tr><td>100</td><td>中间态</td><td>弱相关资产</td></tr><tr><td>10000</td><td>接近恒定和</td><td>稳定币</td></tr></tbody></table><hr><h3 id=集中流动性公式uniswap-v3>集中流动性公式（Uniswap V3）</h3><h4 id=核心创新>核心创新</h4><pre tabindex=0><code>只在价格区间 [P_a, P_b] 内提供流动性
-
-公式：
-L = √(x * y) （在价格范围内）
-
-实际流动性 = L * (√P_b - √P_a)
-</code></pre><h4 id=资本效率提升>资本效率提升</h4><pre tabindex=0><code>效率提升倍数 = P_b / (P_b - P_a)
-
-示例：
-当前价格 P = $1800
-区间 [1600, 2000]
-效率提升 = 2000 / (2000-1600) = 5 倍
-
-区间 [1700, 1900]
-效率提升 = 1900 / (1900-1700) = 9.5 倍
-</code></pre><h4 id=虚拟储备推导>虚拟储备推导</h4><pre tabindex=0><code>在区间 [P_a, P_b] 内：
-x_real = L * (1/√P - 1/√P_b)
-y_real = L * (√P - √P_a)
-
-当 P 超出区间：
-- P &lt; P_a：全部为 x（Token A）
-- P &gt; P_b：全部为 y（Token B）
-</code></pre><hr><h2 id=无常损失数学分析>无常损失数学分析</h2><h3 id=无常损失公式推导>无常损失公式推导</h3><h4 id=基础推导>基础推导</h4><pre tabindex=0><code>初始状态：
-- 价格 P0
-- 存入 x0 个 Token A，y0 个 Token B
-- 总价值 V0 = x0 * P0 + y0
-
-价格变化后：
-- 新价格 P1 = r * P0（r 为价格变化倍数）
-- 池子自动调整：x1 * y1 = k
-
-LP 价值：
-V_lp = x1 * P1 + y1
-
-持有价值：
-V_hold = x0 * P1 + y0
-</code></pre><h4 id=无常损失公式>无常损失公式</h4><pre tabindex=0><code>IL = V_lp / V_hold - 1
-
-简化后：
-IL = 2√r / (1+r) - 1
-
-其中 r = P1/P0（价格变化倍数）
-</code></pre><h4 id=数值验证>数值验证</h4><table><thead><tr><th>价格变化</th><th>r</th><th>IL 计算</th><th>IL 结果</th></tr></thead><tbody><tr><td>+10%</td><td>1.1</td><td>2√1.1/2.1 - 1</td><td>-0.23%</td></tr><tr><td>+25%</td><td>1.25</td><td>2√1.25/2.25 - 1</td><td>-1.4%</td></tr><tr><td>+50%</td><td>1.5</td><td>2√1.5/2.5 - 1</td><td>-5.7%</td></tr><tr><td>+100%</td><td>2.0</td><td>2√2/3 - 1</td><td>-21.5%</td></tr><tr><td>-50%</td><td>0.5</td><td>2√0.5/1.5 - 1</td><td>-21.5%</td></tr></tbody></table><hr><h3 id=v3-无常损失分析>V3 无常损失分析</h3><h4 id=区间内-il>区间内 IL</h4><pre tabindex=0><code>IL_v3 = IL_v2 * (P_b - P_a) / (√P_b - √P_a)²
-
-结论：
-- 区间越窄，IL 越大
-- 但收益也越高
-- 需要权衡
-</code></pre><h4 id=被甩出损失>被甩出损失</h4><pre tabindex=0><code>当价格超出区间 [P_a, P_b]：
-
-P &lt; P_a：
-- 全部变为 Token A
-- 损失 = (P0 - P) / P0
-
-P &gt; P_b：
-- 全部变为 Token B
-- 踏空收益 = (P - P0) / P0
-</code></pre><hr><h2 id=最优费用率设计>最优费用率设计</h2><h3 id=费用率对-lp-收益影响>费用率对 LP 收益影响</h3><h4 id=收益公式>收益公式</h4><pre tabindex=0><code>LP 收益 = 交易量 × 费用率 × LP 份额
-
-年化 APY = (日交易量 × 365 × 费用率) / TVL
-</code></pre><h4 id=费用率与交易量关系>费用率与交易量关系</h4><pre tabindex=0><code>交易量 = f(费用率)
-
-费用率↑ → 单笔收益↑ → 交易量↓
-费用率↓ → 单笔收益↓ → 交易量↑
-
-最优费用率 = argmax(费用率 × 交易量)
-</code></pre><h4 id=v3-多档位设计>V3 多档位设计</h4><table><thead><tr><th>档位</th><th>适合资产</th><th>理论依据</th></tr></thead><tbody><tr><td>0.01%</td><td>稳定币</td><td>低波动，高频率</td></tr><tr><td>0.05%</td><td>主流币</td><td>中等波动</td></tr><tr><td>0.30%</td><td>长尾资产</td><td>高波动，低频率</td></tr><tr><td>1.00%</td><td>Meme 币</td><td>极高波动</td></tr></tbody></table><hr><h2 id=资本效率优化>资本效率优化</h2><h3 id=效率定义>效率定义</h3><pre tabindex=0><code>资本效率 = 相同交易量所需资金 / 实际所需资金
-
-V2 效率 = 1x
-V3 效率 = P_b / (P_b - P_a)
-</code></pre><h3 id=最优区间选择>最优区间选择</h3><h4 id=基于波动率>基于波动率</h4><pre tabindex=0><code>最优区间宽度 = 2 × 日波动率 × √T
-
-示例：
-ETH 日波动率 = 5%
-预期持有期 T = 7 天
-最优宽度 = 2 × 5% × √7 = 26.5%
-
-区间：[P×0.87, P×1.13]
-</code></pre><h4 id=基于历史数据>基于历史数据</h4><pre tabindex=0><code>步骤：
-1. 统计过去 30 天价格范围
-2. 计算 95% 置信区间
-3. 设置略宽于该区间的 LP 区间
-4. 平衡被甩风险与效率
-</code></pre><h3 id=动态再平衡策略>动态再平衡策略</h3><h4 id=再平衡触发条件>再平衡触发条件</h4><pre tabindex=0><code>条件 1：价格接近区间边界
-if P &lt; P_a × 1.1 or P &gt; P_b × 0.9:
-    rebalance()
-
-条件 2：效率下降过多
-if 当前效率 &lt; 初始效率 × 0.5:
-    rebalance()
-
-条件 3：固定时间间隔
-if days_since_last_rebalance &gt; 7:
-    rebalance()
-</code></pre><h4 id=再平衡成本>再平衡成本</h4><pre tabindex=0><code>成本 = Gas 费 + 滑点损失 + 手续费
-
-收益 = 效率提升带来的额外收益
-
-决策：
-if 收益 &gt; 成本：
-    执行再平衡
-</code></pre><hr><h2 id=高级-amm-设计>高级 AMM 设计</h2><h3 id=曲线参数优化>曲线参数优化</h3><h4 id=动态-a-值curve>动态 A 值（Curve）</h4><pre tabindex=0><code>A = f(池子不平衡度)
-
-池子平衡时：A 值高（低滑点）
-池子不平衡时：A 值低（保护流动性）
-
-公式：
-A = A_base × (1 + imbalance_factor)
-</code></pre><h4 id=动态费用uniswap-v3-改进>动态费用（Uniswap V3 改进）</h4><pre tabindex=0><code>费用率 = f(波动率，交易量)
-
-高波动时：费用率↑（保护 LP）
-低波动时：费用率↓（吸引交易）
-
-实现：
-fee = base_fee × (1 + volatility_multiplier)
-</code></pre><hr><h3 id=预言机集成>预言机集成</h3><h4 id=twap-预言机>TWAP 预言机</h4><pre tabindex=0><code>时间加权平均价格（TWAP）
-
-计算：
-TWAP = Σ(price_i × time_i) / Σtime_i
-
-用途：
-- 防止价格操纵
-- 衍生品结算
-- 跨链价格参考
-</code></pre><h4 id=预言机操纵攻击>预言机操纵攻击</h4><pre tabindex=0><code>攻击方式：
-1. 闪电贷大额交易
-2. 瞬间改变池子价格
-3. 利用被操纵价格借贷/清算
-
-防御：
-- 使用 TWAP（多区块平均）
-- 增加操纵成本
-- 多预言机聚合
-</code></pre><hr><h2 id=数学工具与代码>数学工具与代码</h2><h3 id=python-实现-il-计算器>Python 实现 IL 计算器</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> math
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>impermanent_loss</span>(price_ratio):
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;计算无常损失&#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>*</span> math<span style=color:#f92672>.</span>sqrt(price_ratio) <span style=color:#f92672>/</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>+</span> price_ratio) <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>v3_capital_efficiency</span>(price_lower, price_upper, price_current):
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;计算 V3 资本效率&#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> price_lower <span style=color:#f92672>&gt;=</span> price_upper:
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>1</span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> price_upper <span style=color:#f92672>/</span> (price_upper <span style=color:#f92672>-</span> price_lower)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>optimal_fee_rate</span>(volume_elasticity, base_volume):
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;计算最优费用率&#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># volume = base_volume * (1 - elasticity * fee_rate)</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># revenue = fee_rate * volume</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># 求导得最优解</span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>/</span> (<span style=color:#ae81ff>2</span> <span style=color:#f92672>*</span> volume_elasticity)
-</span></span></code></pre></div><hr><h2 id=总结>总结</h2><p>AMM 数学核心：</p></div><a href=/dex-bok/posts/26-amm-math-deep-dive/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div><div class="w-100 w-30-l mb4 relative bg-white"><div class="w-100 mb4 nested-copy-line-height relative bg-white"><div class="mb3 pa4 gray overflow-hidden bg-white"><span class="f6 db">文章</span><h1 class="f3 near-black"><a href=/dex-bok/posts/01-amm-principles/ class="link black dim">AMM 原理详解 - 自动做市商核心机制</a></h1><div class="nested-links f5 lh-copy nested-copy-line-height"><h2 id=什么是-amm>什么是 AMM</h2><p>自动做市商（Automated Market Maker）是去中心化交易所（DEX）的核心机制，用数学公式代替传统订单簿来实现资产交易。</p><h2 id=核心公式恒定乘积>核心公式：恒定乘积</h2><pre tabindex=0><code>x * y = k
-</code></pre><ul><li><strong>x</strong> = Token A 的数量</li><li><strong>y</strong> = Token B 的数量</li><li><strong>k</strong> = 常数（流动性总量保持不变）</li></ul><h3 id=公式含义>公式含义</h3><p>无论交易如何进行，池中两种 token 的乘积始终保持不变。这导致：</p><ul><li>买入 Token A → A 减少，B 增加 → A 价格上涨</li><li>卖出 Token A → A 增加，B 减少 → A 价格下跌</li></ul><h2 id=amm-工作流程>AMM 工作流程</h2><pre tabindex=0><code class=language-mermaid data-lang=mermaid>graph LR
-    A[用户存入双币] --&gt; B[成为 LP]
-    B --&gt; C[获得 LP Token]
-    C --&gt; D[交易产生手续费]
-    D --&gt; E[LP 获得收益]
-</code></pre><ol><li><strong>提供流动性</strong>：用户存入等值的双币（如 1 ETH + 1800 USDC）</li><li><strong>获得凭证</strong>：收到 LP Token，代表池子份额</li><li><strong>交易发生</strong>：其他用户 swap，支付手续费（通常 0.3%）</li><li><strong>收益分配</strong>：手续费累积到池中，LP 按比例分享</li></ol><h2 id=关键概念>关键概念</h2><table><thead><tr><th>术语</th><th>说明</th><th>重要性</th></tr></thead><tbody><tr><td>流动性池</td><td>存放交易对的智能合约</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>LP Token</td><td>流动性凭证，可随时赎回</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>滑点</td><td>大额交易导致的价格偏移</td><td>⭐⭐⭐⭐</td></tr><tr><td>无常损失</td><td>币价波动导致的相对损失</td><td>⭐⭐⭐⭐⭐</td></tr></tbody></table><h2 id=实战要点>实战要点</h2><h3 id=小额交易1000-usd>小额交易（&lt;1000 USD）</h3><ul><li>滑点可忽略不计</li><li>直接用 Uniswap/Sushiswap</li></ul><h3 id=大额交易10000-usd>大额交易（>10000 USD）</h3><ul><li>分多笔执行</li><li>使用聚合器（1inch、Matcha）</li><li>考虑使用 Flashbots 避免 MEV</li></ul><h3 id=选择池子>选择池子</h3><ul><li><strong>看深度</strong> > 看 APY</li><li>深度不足时，高 APY 可能是陷阱</li><li>检查历史 TVL 稳定性</li></ul><h2 id=无常损失详解>无常损失详解</h2><p>无常损失（Impermanent Loss）是 LP 最常见的风险：</p></div><a href=/dex-bok/posts/01-amm-principles/ class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a></div></div></div></section></article></main><footer class="bg-white bottom-0 w-100 pa3" role=contentinfo><div class="flex justify-between"><a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href=https://tiao0303.github.io/dex-bok/>&copy; DEX 学习笔记 | 去中心化交易所实战指南 2026</a><div><div class=ananke-socials></div></div></div></footer></body></html>
+对 x * y = k 求导 …</code></pre></p><a href=https://tiao0303.github.io/dex-bok/posts/26-amm-math-deep-dive/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags="AMM Uniswap 基础 "><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/01-amm-principles/>AMM 原理详解 - 自动做市商核心机制</a></h3><p class=post-meta><span>2026-03-18</span>
+<span class=meta-sep>•</span>
+<span>168字</span></p><p class=post-excerpt><h2 id=什么是-amm>什么是 AMM</h2><p>自动做市商（Automated Market Maker）是去中心化交易所（DEX）的核心机制，用数学公式代替传统订单簿来实现资产交易。</p><h2 id=核心公式恒定乘积>核心公式：恒定乘积</h2><pre tabindex=0><code>x * y = k
+</code></pre><ul><li><strong>x</strong> = Token A 的数量</li><li><strong>y</strong> = …</li></ul></p><a href=https://tiao0303.github.io/dex-bok/posts/01-amm-principles/ class=read-more>阅读全文 →</a></div></article></div></div><script>document.addEventListener("DOMContentLoaded",function(){const e=document.querySelectorAll(".tag-btn"),t=document.querySelectorAll(".geek-post-card");e.forEach(n=>{n.addEventListener("click",function(){const n=this.dataset.tag;e.forEach(e=>e.classList.remove("active")),this.classList.add("active"),t.forEach(e=>{if(n==="all")e.style.display="";else{const t=e.dataset.tags||"";t.includes(n)?e.style.display="":e.style.display="none"}})})})})</script></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

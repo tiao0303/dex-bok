@@ -1,0 +1,121 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="什么是系统架构？
+作者：架构师 Agent
+
+系统架构是对一个系统整体结构与组件的抽象描述。它定义了系统的各个模块、模块之间的交互关系、以及数据和信息的流向。好的架构能让复杂系统变得可理解、可维护、可扩展。
+
+从盖房子理解架构
+想象你要建一栋摩天大楼。架构师不会一开始就画细节图，而是先思考：这栋楼要建多少层？地基打多深？承重结构用什么材料？水、电、空调怎么走？
+软件开发也是如此。在动手写代码之前，架构师要先回答几个根本问题：
+
+系统由哪些核心组件构成？
+组件之间怎么通信？
+数据存储在哪里，怎么流转？
+当用户量增长 100 倍，系统还能正常工作吗？
+
+这些问题回答清楚了，架构图就自然浮现出来了。
+架构的核心要素
+1. 模块划分（Modularization）
+一个复杂的系统必须拆分成职责单一的模块。每个模块只做好一件事，模块之间通过明确定义的接口通信。
+以一个简单的 DeFi 借贷协议为例，模块可以这样划分：
+┌─────────────────────────────────────┐
+│              前端 UI                 │
+├──────────┬──────────┬───────────────┤
+│  清算模块  │  利率模块  │   抵押品模块   │
+├──────────┴──────────┴───────────────┤
+│           核心合约层                  │
+├─────────────────────────────────────┤
+│           存储层（区块链）              │
+└─────────────────────────────────────┘
+2. 关注点分离（Separation of Concerns）
+每个模块只关心自己领域内的事，不要让业务逻辑、数据表示、界面展示混在一起。这叫关注点分离，是软件工程最基本的原则之一。
+在 DeFi 协议中，合约逻辑（怎么计算利率）、数据存储（谁借了多少钱）、外部接口（前端怎么调用）是完全不同的关注点，应该分布在不同层级。
+3. 通信机制
+模块之间需要通信。常见的方式有两种：
+
+同步通信：像打电话，对方必须实时响应。适合短平快的操作。
+异步通信：像发邮件，发送方不等待回复。适合耗时任务或解耦系统。
+
+以太坊上的智能合约调用是同步的，因为交易必须立即确认；而 Chainlink 预言机喂价则采用异步机制，因为价格数据需要从外部 API 获取。
+架构与代码的区别
+很多新手会混淆架构和代码：
+
+  
+      
+          维度
+          架构
+          代码
+      
+  
+  
+      
+          回答的问题
+          &ldquo;系统由哪些部分组成，它们如何协作&rdquo;
+          &ldquo;这段代码具体做了什么&rdquo;
+      
+      
+          抽象层次
+          高，忽略实现细节
+          低，关注具体实现
+      
+      
+          变更成本
+          高，改变架构代价巨大
+          低，局部改动影响有限
+      
+      
+          文档形式
+          架构图、接口契约、决策记录
+          源代码、注释、单元测试
+      
+  
+
+简单来说：架构是代码的组织方式。 代码写得再好，架构设计失误，系统依然会变得难以维护、无法扩展。"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/architect/01-what-is-system-architecture/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/architect/01-what-is-system-architecture/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="什么是系统架构？ 作者：架构师 Agent
+系统架构是对一个系统整体结构与组件的抽象描述。它定义了系统的各个模块、模块之间的交互关系、以及数据和信息的流向。好的架构能让复杂系统变得可理解、可维护、可扩展。
+从盖房子理解架构 想象你要建一栋摩天大楼。架构师不会一开始就画细节图，而是先思考：这栋楼要建多少层？地基打多深？承重结构用什么材料？水、电、空调怎么走？
+软件开发也是如此。在动手写代码之前，架构师要先回答几个根本问题：
+系统由哪些核心组件构成？ 组件之间怎么通信？ 数据存储在哪里，怎么流转？ 当用户量增长 100 倍，系统还能正常工作吗？ 这些问题回答清楚了，架构图就自然浮现出来了。
+架构的核心要素 1. 模块划分（Modularization） 一个复杂的系统必须拆分成职责单一的模块。每个模块只做好一件事，模块之间通过明确定义的接口通信。
+以一个简单的 DeFi 借贷协议为例，模块可以这样划分：
+┌─────────────────────────────────────┐ │ 前端 UI │ ├──────────┬──────────┬───────────────┤ │ 清算模块 │ 利率模块 │ 抵押品模块 │ ├──────────┴──────────┴───────────────┤ │ 核心合约层 │ ├─────────────────────────────────────┤ │ 存储层（区块链） │ └─────────────────────────────────────┘ 2. 关注点分离（Separation of Concerns） 每个模块只关心自己领域内的事，不要让业务逻辑、数据表示、界面展示混在一起。这叫关注点分离，是软件工程最基本的原则之一。
+在 DeFi 协议中，合约逻辑（怎么计算利率）、数据存储（谁借了多少钱）、外部接口（前端怎么调用）是完全不同的关注点，应该分布在不同层级。
+3. 通信机制 模块之间需要通信。常见的方式有两种：
+同步通信：像打电话，对方必须实时响应。适合短平快的操作。 异步通信：像发邮件，发送方不等待回复。适合耗时任务或解耦系统。 以太坊上的智能合约调用是同步的，因为交易必须立即确认；而 Chainlink 预言机喂价则采用异步机制，因为价格数据需要从外部 API 获取。
+架构与代码的区别 很多新手会混淆架构和代码：
+维度 架构 代码 回答的问题 “系统由哪些部分组成，它们如何协作” “这段代码具体做了什么” 抽象层次 高，忽略实现细节 低，关注具体实现 变更成本 高，改变架构代价巨大 低，局部改动影响有限 文档形式 架构图、接口契约、决策记录 源代码、注释、单元测试 简单来说：架构是代码的组织方式。 代码写得再好，架构设计失误，系统依然会变得难以维护、无法扩展。"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="什么是系统架构？ 作者：架构师 Agent
+系统架构是对一个系统整体结构与组件的抽象描述。它定义了系统的各个模块、模块之间的交互关系、以及数据和信息的流向。好的架构能让复杂系统变得可理解、可维护、可扩展。
+从盖房子理解架构 想象你要建一栋摩天大楼。架构师不会一开始就画细节图，而是先思考：这栋楼要建多少层？地基打多深？承重结构用什么材料？水、电、空调怎么走？
+软件开发也是如此。在动手写代码之前，架构师要先回答几个根本问题：
+系统由哪些核心组件构成？ 组件之间怎么通信？ 数据存储在哪里，怎么流转？ 当用户量增长 100 倍，系统还能正常工作吗？ 这些问题回答清楚了，架构图就自然浮现出来了。
+架构的核心要素 1. 模块划分（Modularization） 一个复杂的系统必须拆分成职责单一的模块。每个模块只做好一件事，模块之间通过明确定义的接口通信。
+以一个简单的 DeFi 借贷协议为例，模块可以这样划分：
+┌─────────────────────────────────────┐ │ 前端 UI │ ├──────────┬──────────┬───────────────┤ │ 清算模块 │ 利率模块 │ 抵押品模块 │ ├──────────┴──────────┴───────────────┤ │ 核心合约层 │ ├─────────────────────────────────────┤ │ 存储层（区块链） │ └─────────────────────────────────────┘ 2. 关注点分离（Separation of Concerns） 每个模块只关心自己领域内的事，不要让业务逻辑、数据表示、界面展示混在一起。这叫关注点分离，是软件工程最基本的原则之一。
+在 DeFi 协议中，合约逻辑（怎么计算利率）、数据存储（谁借了多少钱）、外部接口（前端怎么调用）是完全不同的关注点，应该分布在不同层级。
+3. 通信机制 模块之间需要通信。常见的方式有两种：
+同步通信：像打电话，对方必须实时响应。适合短平快的操作。 异步通信：像发邮件，发送方不等待回复。适合耗时任务或解耦系统。 以太坊上的智能合约调用是同步的，因为交易必须立即确认；而 Chainlink 预言机喂价则采用异步机制，因为价格数据需要从外部 API 获取。
+架构与代码的区别 很多新手会混淆架构和代码：
+维度 架构 代码 回答的问题 “系统由哪些部分组成，它们如何协作” “这段代码具体做了什么” 抽象层次 高，忽略实现细节 低，关注具体实现 变更成本 高，改变架构代价巨大 低，局部改动影响有限 文档形式 架构图、接口契约、决策记录 源代码、注释、单元测试 简单来说：架构是代码的组织方式。 代码写得再好，架构设计失误，系统依然会变得难以维护、无法扩展。"><meta itemprop=wordCount content="119"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="什么是系统架构？ 作者：架构师 Agent
+系统架构是对一个系统整体结构与组件的抽象描述。它定义了系统的各个模块、模块之间的交互关系、以及数据和信息的流向。好的架构能让复杂系统变得可理解、可维护、可扩展。
+从盖房子理解架构 想象你要建一栋摩天大楼。架构师不会一开始就画细节图，而是先思考：这栋楼要建多少层？地基打多深？承重结构用什么材料？水、电、空调怎么走？
+软件开发也是如此。在动手写代码之前，架构师要先回答几个根本问题：
+系统由哪些核心组件构成？ 组件之间怎么通信？ 数据存储在哪里，怎么流转？ 当用户量增长 100 倍，系统还能正常工作吗？ 这些问题回答清楚了，架构图就自然浮现出来了。
+架构的核心要素 1. 模块划分（Modularization） 一个复杂的系统必须拆分成职责单一的模块。每个模块只做好一件事，模块之间通过明确定义的接口通信。
+以一个简单的 DeFi 借贷协议为例，模块可以这样划分：
+┌─────────────────────────────────────┐ │ 前端 UI │ ├──────────┬──────────┬───────────────┤ │ 清算模块 │ 利率模块 │ 抵押品模块 │ ├──────────┴──────────┴───────────────┤ │ 核心合约层 │ ├─────────────────────────────────────┤ │ 存储层（区块链） │ └─────────────────────────────────────┘ 2. 关注点分离（Separation of Concerns） 每个模块只关心自己领域内的事，不要让业务逻辑、数据表示、界面展示混在一起。这叫关注点分离，是软件工程最基本的原则之一。
+在 DeFi 协议中，合约逻辑（怎么计算利率）、数据存储（谁借了多少钱）、外部接口（前端怎么调用）是完全不同的关注点，应该分布在不同层级。
+3. 通信机制 模块之间需要通信。常见的方式有两种：
+同步通信：像打电话，对方必须实时响应。适合短平快的操作。 异步通信：像发邮件，发送方不等待回复。适合耗时任务或解耦系统。 以太坊上的智能合约调用是同步的，因为交易必须立即确认；而 Chainlink 预言机喂价则采用异步机制，因为价格数据需要从外部 API 获取。
+架构与代码的区别 很多新手会混淆架构和代码：
+维度 架构 代码 回答的问题 “系统由哪些部分组成，它们如何协作” “这段代码具体做了什么” 抽象层次 高，忽略实现细节 低，关注具体实现 变更成本 高，改变架构代价巨大 低，局部改动影响有限 文档形式 架构图、接口契约、决策记录 源代码、注释、单元测试 简单来说：架构是代码的组织方式。 代码写得再好，架构设计失误，系统依然会变得难以维护、无法扩展。"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-01-what-is-system-architecture"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#从盖房子理解架构>从盖房子理解架构</a></li><li><a href=#架构的核心要素>架构的核心要素</a><ul><li><a href=#1-模块划分modularization>1. 模块划分（Modularization）</a></li><li><a href=#2-关注点分离separation-of-concerns>2. 关注点分离（Separation of Concerns）</a></li><li><a href=#3-通信机制>3. 通信机制</a></li></ul></li><li><a href=#架构与代码的区别>架构与代码的区别</a></li><li><a href=#为什么架构很重要>为什么架构很重要？</a><ul><li><a href=#降低复杂度>降低复杂度</a></li><li><a href=#支撑扩展>支撑扩展</a></li><li><a href=#降低团队协作成本>降低团队协作成本</a></li><li><a href=#支撑演进>支撑演进</a></li></ul></li><li><a href=#架构不是一成不变的>架构不是一成不变的</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>119 字</span></div></header><h1 id=什么是系统架构>什么是系统架构？</h1><p><strong>作者：架构师 Agent</strong></p><blockquote><p>系统架构是对一个系统整体结构与组件的抽象描述。它定义了系统的各个模块、模块之间的交互关系、以及数据和信息的流向。好的架构能让复杂系统变得可理解、可维护、可扩展。</p></blockquote><h2 id=从盖房子理解架构>从盖房子理解架构</h2><p>想象你要建一栋摩天大楼。<strong>架构师</strong>不会一开始就画细节图，而是先思考：这栋楼要建多少层？地基打多深？承重结构用什么材料？水、电、空调怎么走？</p><p>软件开发也是如此。在动手写代码之前，架构师要先回答几个根本问题：</p><ul><li>系统由哪些<strong>核心组件</strong>构成？</li><li>组件之间怎么<strong>通信</strong>？</li><li>数据存储在哪里，怎么<strong>流转</strong>？</li><li>当用户量增长 100 倍，系统还能正常工作吗？</li></ul><p>这些问题回答清楚了，架构图就自然浮现出来了。</p><h2 id=架构的核心要素>架构的核心要素</h2><h3 id=1-模块划分modularization>1. 模块划分（Modularization）</h3><p>一个复杂的系统必须拆分成<strong>职责单一</strong>的模块。每个模块只做好一件事，模块之间通过明确定义的接口通信。</p><p>以一个简单的 DeFi 借贷协议为例，模块可以这样划分：</p><pre tabindex=0><code>┌─────────────────────────────────────┐
+│              前端 UI                 │
+├──────────┬──────────┬───────────────┤
+│  清算模块  │  利率模块  │   抵押品模块   │
+├──────────┴──────────┴───────────────┤
+│           核心合约层                  │
+├─────────────────────────────────────┤
+│           存储层（区块链）              │
+└─────────────────────────────────────┘
+</code></pre><h3 id=2-关注点分离separation-of-concerns>2. 关注点分离（Separation of Concerns）</h3><p>每个模块只关心自己领域内的事，不要让业务逻辑、数据表示、界面展示混在一起。这叫<strong>关注点分离</strong>，是软件工程最基本的原则之一。</p><p>在 DeFi 协议中，<strong>合约逻辑</strong>（怎么计算利率）、<strong>数据存储</strong>（谁借了多少钱）、<strong>外部接口</strong>（前端怎么调用）是完全不同的关注点，应该分布在不同层级。</p><h3 id=3-通信机制>3. 通信机制</h3><p>模块之间需要通信。常见的方式有两种：</p><ul><li><strong>同步通信</strong>：像打电话，对方必须实时响应。适合短平快的操作。</li><li><strong>异步通信</strong>：像发邮件，发送方不等待回复。适合耗时任务或解耦系统。</li></ul><p>以太坊上的智能合约调用是同步的，因为交易必须立即确认；而 Chainlink 预言机喂价则采用异步机制，因为价格数据需要从外部 API 获取。</p><h2 id=架构与代码的区别>架构与代码的区别</h2><p>很多新手会混淆<strong>架构</strong>和<strong>代码</strong>：</p><table><thead><tr><th>维度</th><th>架构</th><th>代码</th></tr></thead><tbody><tr><td>回答的问题</td><td>&ldquo;系统由哪些部分组成，它们如何协作&rdquo;</td><td>&ldquo;这段代码具体做了什么&rdquo;</td></tr><tr><td>抽象层次</td><td>高，忽略实现细节</td><td>低，关注具体实现</td></tr><tr><td>变更成本</td><td>高，改变架构代价巨大</td><td>低，局部改动影响有限</td></tr><tr><td>文档形式</td><td>架构图、接口契约、决策记录</td><td>源代码、注释、单元测试</td></tr></tbody></table><p><strong>简单来说：架构是代码的组织方式。</strong> 代码写得再好，架构设计失误，系统依然会变得难以维护、无法扩展。</p><h2 id=为什么架构很重要>为什么架构很重要？</h2><h3 id=降低复杂度>降低复杂度</h3><p>面对一个由数百万行代码构成的系统，架构提供了一<strong>张地图</strong>。开发者能快速定位自己需要修改的部分，而不必把整个系统装进脑子里。</p><h3 id=支撑扩展>支撑扩展</h3><p>Twitter 早年用 Ruby on Rails 构建，但当用户量暴增时，他们花了数年时间重构架构以支撑更大的规模。好的架构在设计之初就考虑到了扩展性，能让系统在流量增长时<strong>从容应对</strong>。</p><h3 id=降低团队协作成本>降低团队协作成本</h3><p>在大型团队中，不同的模块可能由不同的人负责。清晰的架构定义让每个人知道自己负责的边界，接口契约让联调工作有据可依。</p><h3 id=支撑演进>支撑演进</h3><p>业务在变，需求在变，技术也在进步。好的架构让系统能够<strong>渐进式演进</strong>——今天加一个新功能，明天换一个底层组件，都不会牵一发动全身。</p><h2 id=架构不是一成不变的>架构不是一成不变的</h2><p>值得强调的是，<strong>架构不是一劳永逸的</strong>。系统从 0 到 1 的初创期，系统已经成熟的稳定期，以及需要规模化的发展期，需要的架构设计是不同的。</p><p>很多创业公司的第一个版本是"单体架构"——所有东西写在一起，部署简单、快速迭代。随着业务增长，再逐步拆分成微服务架构。这是合理的演进路径，而不是架构错误。</p><h2 id=总结>总结</h2><p>系统架构是对复杂系统的一种<strong>抽象组织方式</strong>。它回答的是"系统由什么组成、它们如何协作"这个根本问题。</p><p>好的架构具备以下特征：</p><ul><li><strong>模块清晰</strong>：每个模块职责单一</li><li><strong>接口明确</strong>：模块之间通过契约通信</li><li><strong>可扩展</strong>：能应对业务增长</li><li><strong>可维护</strong>：出了问题容易定位，修改不影响全局</li><li><strong>支撑团队协作</strong>：不同人负责不同模块，互不干扰</li></ul><p>理解架构，是成为优秀工程师的必经之路。下一篇文章，我们将从 Web2 与 Web3 两个时代的技术架构对比，看看区块链技术给传统系统架构带来了哪些根本性的变化。</p><hr><p><em>系列文章导航：<a href=./02-web2-vs-web3.md>下一篇：Web2 vs Web3 架构对比 →</a></em></p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/architect/02-web2-vs-web3/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

@@ -1,0 +1,208 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='DeFi 核心合约解析：AMM、借贷与收益聚合
+DeFi 的三大支柱
+去中心化金融（DeFi）由三类核心协议构成：去中心化交易所（DEX）、借贷协议和收益聚合器。理解这三类协议的合约设计，是成为 DeFi 开发者的必经之路。
+一、AMM 去中心化交易所
+什么是 AMM
+自动做市商（Automated Market Maker, AMM）用数学公式替代传统订单簿，由流动性池按公式定价。与传统做市商相比，AMM 无需人工报价，任何人都可以向池子注入流动性成为"做市商"。
+恒定乘积公式（Uniswap V2）
+Uniswap V2 采用最经典的 x * y = k 公式：
+// 核心做市逻辑
+function getAmountOut(uint256 amountIn, uint256 reserveIn, uint256 reserveOut) 
+    public pure returns (uint256 amountOut) 
+{
+    require(amountIn > 0, "INSUFFICIENT_INPUT_AMOUNT");
+    require(reserveIn > 0 && reserveOut > 0, "INSUFFICIENT_LIQUIDITY");
+    
+    uint256 amountInWithFee = amountIn * 997; // 0.3% 手续费
+    uint256 numerator = amountInWithFee * reserveOut;
+    uint256 denominator = reserveIn * 1000 + amountInWithFee;
+    amountOut = numerator / denominator;
+}
+核心特性：
+
+  
+      
+          特性
+          说明
+      
+  
+  
+      
+          x * y = k
+          价格公式，k 恒定（忽略手续费时）
+      
+      
+          0.3% 手续费
+          每笔交易扣除，作为流动性提供者收益
+      
+      
+          无常损失
+          流动性提供者的持仓价值可能低于简单持有
+      
+  
+
+恒定乘积曲线的价格特性
+当 x/y = 1 时价格约为 1:1。若大量买入 Token A：'><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/developer/05-defi%E6%A0%B8%E5%BF%83%E5%90%88%E7%BA%A6%E8%A7%A3%E6%9E%90/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/developer/05-defi%E6%A0%B8%E5%BF%83%E5%90%88%E7%BA%A6%E8%A7%A3%E6%9E%90/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='DeFi 核心合约解析：AMM、借贷与收益聚合 DeFi 的三大支柱 去中心化金融（DeFi）由三类核心协议构成：去中心化交易所（DEX）、借贷协议和收益聚合器。理解这三类协议的合约设计，是成为 DeFi 开发者的必经之路。
+一、AMM 去中心化交易所 什么是 AMM 自动做市商（Automated Market Maker, AMM）用数学公式替代传统订单簿，由流动性池按公式定价。与传统做市商相比，AMM 无需人工报价，任何人都可以向池子注入流动性成为"做市商"。
+恒定乘积公式（Uniswap V2） Uniswap V2 采用最经典的 x * y = k 公式：
+// 核心做市逻辑 function getAmountOut(uint256 amountIn, uint256 reserveIn, uint256 reserveOut) public pure returns (uint256 amountOut) { require(amountIn > 0, "INSUFFICIENT_INPUT_AMOUNT"); require(reserveIn > 0 && reserveOut > 0, "INSUFFICIENT_LIQUIDITY"); uint256 amountInWithFee = amountIn * 997; // 0.3% 手续费 uint256 numerator = amountInWithFee * reserveOut; uint256 denominator = reserveIn * 1000 + amountInWithFee; amountOut = numerator / denominator; } 核心特性：
+特性 说明 x * y = k 价格公式，k 恒定（忽略手续费时） 0.3% 手续费 每笔交易扣除，作为流动性提供者收益 无常损失 流动性提供者的持仓价值可能低于简单持有 恒定乘积曲线的价格特性 当 x/y = 1 时价格约为 1:1。若大量买入 Token A：'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='DeFi 核心合约解析：AMM、借贷与收益聚合 DeFi 的三大支柱 去中心化金融（DeFi）由三类核心协议构成：去中心化交易所（DEX）、借贷协议和收益聚合器。理解这三类协议的合约设计，是成为 DeFi 开发者的必经之路。
+一、AMM 去中心化交易所 什么是 AMM 自动做市商（Automated Market Maker, AMM）用数学公式替代传统订单簿，由流动性池按公式定价。与传统做市商相比，AMM 无需人工报价，任何人都可以向池子注入流动性成为"做市商"。
+恒定乘积公式（Uniswap V2） Uniswap V2 采用最经典的 x * y = k 公式：
+// 核心做市逻辑 function getAmountOut(uint256 amountIn, uint256 reserveIn, uint256 reserveOut) public pure returns (uint256 amountOut) { require(amountIn > 0, "INSUFFICIENT_INPUT_AMOUNT"); require(reserveIn > 0 && reserveOut > 0, "INSUFFICIENT_LIQUIDITY"); uint256 amountInWithFee = amountIn * 997; // 0.3% 手续费 uint256 numerator = amountInWithFee * reserveOut; uint256 denominator = reserveIn * 1000 + amountInWithFee; amountOut = numerator / denominator; } 核心特性：
+特性 说明 x * y = k 价格公式，k 恒定（忽略手续费时） 0.3% 手续费 每笔交易扣除，作为流动性提供者收益 无常损失 流动性提供者的持仓价值可能低于简单持有 恒定乘积曲线的价格特性 当 x/y = 1 时价格约为 1:1。若大量买入 Token A：'><meta itemprop=wordCount content="615"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='DeFi 核心合约解析：AMM、借贷与收益聚合 DeFi 的三大支柱 去中心化金融（DeFi）由三类核心协议构成：去中心化交易所（DEX）、借贷协议和收益聚合器。理解这三类协议的合约设计，是成为 DeFi 开发者的必经之路。
+一、AMM 去中心化交易所 什么是 AMM 自动做市商（Automated Market Maker, AMM）用数学公式替代传统订单簿，由流动性池按公式定价。与传统做市商相比，AMM 无需人工报价，任何人都可以向池子注入流动性成为"做市商"。
+恒定乘积公式（Uniswap V2） Uniswap V2 采用最经典的 x * y = k 公式：
+// 核心做市逻辑 function getAmountOut(uint256 amountIn, uint256 reserveIn, uint256 reserveOut) public pure returns (uint256 amountOut) { require(amountIn > 0, "INSUFFICIENT_INPUT_AMOUNT"); require(reserveIn > 0 && reserveOut > 0, "INSUFFICIENT_LIQUIDITY"); uint256 amountInWithFee = amountIn * 997; // 0.3% 手续费 uint256 numerator = amountInWithFee * reserveOut; uint256 denominator = reserveIn * 1000 + amountInWithFee; amountOut = numerator / denominator; } 核心特性：
+特性 说明 x * y = k 价格公式，k 恒定（忽略手续费时） 0.3% 手续费 每笔交易扣除，作为流动性提供者收益 无常损失 流动性提供者的持仓价值可能低于简单持有 恒定乘积曲线的价格特性 当 x/y = 1 时价格约为 1:1。若大量买入 Token A：'><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-05-DeFi核心合约解析"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#defi-的三大支柱>DeFi 的三大支柱</a></li><li><a href=#一amm-去中心化交易所>一、AMM 去中心化交易所</a><ul><li><a href=#什么是-amm>什么是 AMM</a></li><li><a href=#恒定乘积公式uniswap-v2>恒定乘积公式（Uniswap V2）</a></li><li><a href=#恒定乘积曲线的价格特性>恒定乘积曲线的价格特性</a></li><li><a href=#uniswap-v3-流动性集中>Uniswap V3 流动性集中</a></li><li><a href=#添加移除流动性>添加/移除流动性</a></li></ul></li><li><a href=#二借贷协议以-aave-为例>二、借贷协议（以 Aave 为例）</a><ul><li><a href=#核心机制抵押借贷>核心机制：抵押借贷</a></li><li><a href=#健康因子>健康因子</a></li><li><a href=#利率模型>利率模型</a></li></ul></li><li><a href=#三收益聚合器yearnaave-vaults>三、收益聚合器（Yearn/Aave Vaults）</a><ul><li><a href=#为什么需要收益聚合器>为什么需要收益聚合器</a></li><li><a href=#yearn-vault-的工作原理>Yearn Vault 的工作原理</a></li><li><a href=#策略模式>策略模式</a></li></ul></li><li><a href=#defi-合约开发注意事项>DeFi 合约开发注意事项</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>615 字</span></div></header><h1 id=defi-核心合约解析amm借贷与收益聚合>DeFi 核心合约解析：AMM、借贷与收益聚合</h1><h2 id=defi-的三大支柱>DeFi 的三大支柱</h2><p>去中心化金融（DeFi）由三类核心协议构成：<strong>去中心化交易所（DEX）</strong>、<strong>借贷协议</strong>和<strong>收益聚合器</strong>。理解这三类协议的合约设计，是成为 DeFi 开发者的必经之路。</p><h2 id=一amm-去中心化交易所>一、AMM 去中心化交易所</h2><h3 id=什么是-amm>什么是 AMM</h3><p>自动做市商（Automated Market Maker, AMM）用<strong>数学公式</strong>替代传统订单簿，由流动性池按公式定价。与传统做市商相比，AMM 无需人工报价，任何人都可以向池子注入流动性成为"做市商"。</p><h3 id=恒定乘积公式uniswap-v2>恒定乘积公式（Uniswap V2）</h3><p>Uniswap V2 采用最经典的 <code>x * y = k</code> 公式：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 核心做市逻辑
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getAmountOut</span>(<span style=color:#66d9ef>uint256</span> amountIn, <span style=color:#66d9ef>uint256</span> reserveIn, <span style=color:#66d9ef>uint256</span> reserveOut) 
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>pure</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span> amountOut) 
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    require(amountIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>, <span style=color:#e6db74>&#34;INSUFFICIENT_INPUT_AMOUNT&#34;</span>);
+</span></span><span style=display:flex><span>    require(reserveIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>&amp;&amp;</span> reserveOut <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>, <span style=color:#e6db74>&#34;INSUFFICIENT_LIQUIDITY&#34;</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> amountInWithFee <span style=color:#f92672>=</span> amountIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>997</span>; <span style=color:#75715e>// 0.3% 手续费
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> numerator <span style=color:#f92672>=</span> amountInWithFee <span style=color:#f92672>*</span> reserveOut;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> denominator <span style=color:#f92672>=</span> reserveIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>1000</span> <span style=color:#f92672>+</span> amountInWithFee;
+</span></span><span style=display:flex><span>    amountOut <span style=color:#f92672>=</span> numerator <span style=color:#f92672>/</span> denominator;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>核心特性</strong>：</p><table><thead><tr><th>特性</th><th>说明</th></tr></thead><tbody><tr><td><code>x * y = k</code></td><td>价格公式，k 恒定（忽略手续费时）</td></tr><tr><td>0.3% 手续费</td><td>每笔交易扣除，作为流动性提供者收益</td></tr><tr><td>无常损失</td><td>流动性提供者的持仓价值可能低于简单持有</td></tr></tbody></table><h3 id=恒定乘积曲线的价格特性>恒定乘积曲线的价格特性</h3><p>当 <code>x/y = 1</code> 时价格约为 1:1。若大量买入 Token A：</p><pre tabindex=0><code>假设初始：reserveX = 1000, reserveY = 1000, k = 1,000,000
+买入 100 X：
+newReserveX = 1100
+newReserveY = k / 1100 = 909.09
+付出 Y = 1000 - 909.09 = 90.91
+实际价格 = 90.91/100 = 0.909（滑点约9%）
+</code></pre><p>滑点随交易规模增大而急剧上升，这是 AMM 的固有特性。</p><h3 id=uniswap-v3-流动性集中>Uniswap V3 流动性集中</h3><p>Uniswap V3 引入了<strong>流动性集中</strong>概念，允许 LP 将资金部署在特定价格区间内，大幅提升资本效率：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Position</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> tokenId;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> liquidityOwner;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int24</span> tickLower;      <span style=color:#75715e>// 价格区间下界
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>int24</span> tickUpper;      <span style=color:#75715e>// 价格区间上界
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint128</span> liquidity;    <span style=color:#75715e>// 流动性数量
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>// 结算未实现收益用
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> feeGrowthInsideLast;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>集中流动性让 LP 在低波动市场中获得更高收益，但同时也承担了<strong>范围限制风险</strong>——如果价格超出区间，LP 的头寸将变为纯单边持仓。</p><h3 id=添加移除流动性>添加/移除流动性</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>addLiquidity</span>(
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> tokenA,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> tokenB,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> amountADesired,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> amountBDesired,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> amountAMin,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> amountBMin,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> to,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> deadline
+</span></span><span style=display:flex><span>) <span style=color:#66d9ef>external</span> ensure(deadline) <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span> amountA, <span style=color:#66d9ef>uint256</span> amountB, <span style=color:#66d9ef>uint256</span> liquidity) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 计算实际数量（考虑滑点保护）
+</span></span></span><span style=display:flex><span>    (amountA, amountB) <span style=color:#f92672>=</span> _calculateLiquidityAmounts(
+</span></span><span style=display:flex><span>        tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin
+</span></span><span style=display:flex><span>    );
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 安全转账代币
+</span></span></span><span style=display:flex><span>    _safeTransfer(tokenA, <span style=color:#66d9ef>from</span>, to, amountA);
+</span></span><span style=display:flex><span>    _safeTransfer(tokenB, <span style=color:#66d9ef>from</span>, to, amountB);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 铸造流动性份额（类似 LP token）
+</span></span></span><span style=display:flex><span>    liquidity <span style=color:#f92672>=</span> _mintLiquidity(to);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=二借贷协议以-aave-为例>二、借贷协议（以 Aave 为例）</h2><h3 id=核心机制抵押借贷>核心机制：抵押借贷</h3><p>Aave 的核心逻辑：<strong>超额抵押</strong>——用户存入抵押物（ETH/USDC等），借出其他资产。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>AavePool</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 用户存款
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>)) <span style=color:#66d9ef>public</span> supplies;
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 用户借款
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>)) <span style=color:#66d9ef>public</span> borrows;
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 整体利率模型
+</span></span></span><span style=display:flex><span>    InterestRateModel <span style=color:#66d9ef>public</span> interestRateModel;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>supply</span>(<span style=color:#66d9ef>address</span> asset, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 1. 从用户账户划转资产到协议
+</span></span></span><span style=display:flex><span>        IERC20(asset).transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amount);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 2. 记录存款量
+</span></span></span><span style=display:flex><span>        supplies[msg.sender][asset] <span style=color:#f92672>+=</span> amount;
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 3. 按存款量铸造 aToken（1:1 锚定原资产）
+</span></span></span><span style=display:flex><span>        IAToken(asset).mint(msg.sender, amount);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 4. 更新全局利率
+</span></span></span><span style=display:flex><span>        _updateInterestRate(asset);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>borrow</span>(<span style=color:#66d9ef>address</span> asset, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 1. 健康因子检查：抵押物价值 / 借款价值 &gt; 1.5
+</span></span></span><span style=display:flex><span>        require(
+</span></span><span style=display:flex><span>            _calculateHealthFactor(msg.sender) <span style=color:#f92672>&gt;=</span> HEALTH_FACTOR_LIQUIDATION_THRESHOLD,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;Health factor too low&#34;</span>
+</span></span><span style=display:flex><span>        );
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 2. 计算可借额度（考虑借款上限）
+</span></span></span><span style=display:flex><span>        require(getAvailableBorrows(msg.sender, asset) <span style=color:#f92672>&gt;=</span> amount, <span style=color:#e6db74>&#34;Insufficient collateral&#34;</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 3. 转移资产给用户
+</span></span></span><span style=display:flex><span>        IERC20(asset).transfer(msg.sender, amount);
+</span></span><span style=display:flex><span>        borrows[msg.sender][asset] <span style=color:#f92672>+=</span> amount;
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 4. 触发利率累积
+</span></span></span><span style=display:flex><span>        _accrueInterest(asset);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=健康因子>健康因子</h3><p>健康因子（Health Factor）是借贷协议的核心安全指标：</p><pre tabindex=0><code>Health Factor = Σ(抵押物价值 × 清算阈值) / 借款总价值
+
+清算阈值：通常为 0.85（85%）
+清算触发线：HF &lt; 1.0
+</code></pre><p>当 HF 低于 1.0 时，任何人都可以触发<strong>清算流程</strong>——清算人以折扣价买走抵押物，借款人遭受损失。</p><h3 id=利率模型>利率模型</h3><p>利率由市场供需决定——借款利率随利用率上升而上涨：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>calculateInterestRate</span>(<span style=color:#66d9ef>uint256</span> utilizationRate) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>pure</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 分段线性利率模型
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (utilizationRate <span style=color:#f92672>&lt;</span> U_OPTIMAL) {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 低利用率时，低利率鼓励借款
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> R_BASE <span style=color:#f92672>+</span> (utilizationRate <span style=color:#f92672>*</span> R_SLOPE1) <span style=color:#f92672>/</span> R_OPTIMAL;
+</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 高利用率时，高利率抑制借款，保护流动性
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> excess <span style=color:#f92672>=</span> utilizationRate <span style=color:#f92672>-</span> R_OPTIMAL;
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> R_BASE <span style=color:#f92672>+</span> R_SLOPE1 <span style=color:#f92672>+</span> (excess <span style=color:#f92672>*</span> R_SLOPE2) <span style=color:#f92672>/</span> (<span style=color:#ae81ff>1</span>e4 <span style=color:#f92672>-</span> R_OPTIMAL);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=三收益聚合器yearnaave-vaults>三、收益聚合器（Yearn/Aave Vaults）</h2><h3 id=为什么需要收益聚合器>为什么需要收益聚合器</h3><p>DeFi 协议众多，收益率各异且持续变化。普通用户难以判断最优策略，收益聚合器自动帮用户寻找并执行最佳策略。</p><h3 id=yearn-vault-的工作原理>Yearn Vault 的工作原理</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Vault</span> <span style=color:#66d9ef>is</span> IERC4626 {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 策略分配
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(IStrategy <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>) <span style=color:#66d9ef>public</span> strategies;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> totalDebt;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 存款：用户存入 underlying 资产，获得 share（份额代币）
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>deposit</span>(<span style=color:#66d9ef>uint256</span> assets, <span style=color:#66d9ef>address</span> receiver) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span> shares) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> supply <span style=color:#f92672>=</span> totalSupply();
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        shares <span style=color:#f92672>=</span> supply <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> 
+</span></span><span style=display:flex><span>            <span style=color:#f92672>?</span> assets  <span style=color:#75715e>// 第一个存款人直接1:1
+</span></span></span><span style=display:flex><span>            <span style=color:#f92672>:</span> assets <span style=color:#f92672>*</span> supply <span style=color:#f92672>/</span> totalAssets();  <span style=color:#75715e>// 按比例计算
+</span></span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        _mint(receiver, shares);
+</span></span><span style=display:flex><span>        _earn();  <span style=color:#75715e>// 自动投入最佳策略
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 策略切换
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>_earn</span>() <span style=color:#66d9ef>internal</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> want <span style=color:#f92672>=</span> IERC20(underlying).balanceOf(<span style=color:#66d9ef>address</span>(this));
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 分配到各个策略（按预设权重或绩效）
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>uint</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> _strategies.length; i<span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>uint256</span> amount <span style=color:#f92672>=</span> want <span style=color:#f92672>*</span> strategies[_strategies[i]] <span style=color:#f92672>/</span> <span style=color:#ae81ff>10000</span>;
+</span></span><span style=display:flex><span>            IERC20(underlying).transfer(<span style=color:#66d9ef>address</span>(_strategies[i]), amount);
+</span></span><span style=display:flex><span>            _strategies[i].harvest();  <span style=color:#75715e>// 收割收益，重新投资
+</span></span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 年度收益率计算（用于前端展示）
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getEstimatedAPY</span>() <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 汇总各策略历史收益计算年化
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=策略模式>策略模式</h3><p>每个策略负责具体的收益来源：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>IStrategy</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>want</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>address</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>deposit</span>() <span style=color:#66d9ef>external</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>harvest</span>() <span style=color:#66d9ef>external</span>;      <span style=color:#75715e>// 收割收益
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>harvestTrigger</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>);  <span style=color:#75715e>// 判断是否值得收割
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>estimatedTotalAssets</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>常见的策略包括：</p><ul><li><strong>借贷策略</strong>：在 Aave/Compound 中存入抵押物获得借贷收益</li><li><strong>流动性挖矿</strong>：在 DEX 提供流动性获得交易手续费分成</li><li><strong>收益率复利</strong>：自动将收益再投资，最大化复利效应</li></ul><h2 id=defi-合约开发注意事项>DeFi 合约开发注意事项</h2><table><thead><tr><th>方面</th><th>注意事项</th></tr></thead><tbody><tr><td>精度处理</td><td>Solidity 无小数，利率计算需用 <code>Wad</code>（10^18）精度</td></tr><tr><td>重入攻击</td><td>使用 CEI（Checks-Effects-Interactions）模式防重入</td></tr><tr><td>预言机价格</td><td>使用 TWAP（时间加权平均价）防止价格操纵</td></tr><tr><td>权限控制</td><td>多签钱包管理协议参数，定期审计</td></tr><tr><td>紧急暂停</td><td>预留 Circuit Breaker 机制应对极端行情</td></tr></tbody></table><h2 id=总结>总结</h2><p>三大 DeFi 协议类型各有特点：AMM 用数学公式做市，借贷协议靠超额抵押实现去中心化借贷，收益聚合器则将复杂策略自动化。深入理解这些核心机制的设计权衡，是进阶 DeFi 开发的必经之路。下一篇文章我们将讨论智能合约的测试与部署流程。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/developer/06-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%83%A8%E7%BD%B2/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/developer/04-erc20%E4%BB%A3%E5%B8%81%E6%A0%87%E5%87%86%E8%AF%A6%E8%A7%A3/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

@@ -1,0 +1,90 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="AMM 自动做市商核心逻辑
+作者：架构师 Agent
+
+自动做市商（Automated Market Maker, AMM）是 DeFi 最核心的创新之一。它用数学公式替代了传统交易所的订单簿，让任何人都可以成为流动性提供者。本文从架构视角剖析 AMM 的核心机制。
+
+传统做市 vs AMM
+传统做市（Order Book）：做市商在交易所挂出买卖订单，买方出价、卖方要价，当价格匹配时成交。撮合引擎负责找到最佳价格。
+买单队列: [$99.8 (100个), $99.5 (50个), $99.2 (200个)]
+卖单队列: [$100.1 (80个), $100.3 (150个)]
+         ↑ 最佳卖价 = $100.1
+当前价格 = ($99.8 + $100.1) / 2 = $99.95
+AMM：没有订单簿，没有做市商报价。价格由数学公式自动计算。用户把两种 Token 存入流动性池，池子根据公式自动报出价格。
+流动性池: 500 ETH + 1,000,000 USDC
+数学公式: x * y = k（恒定乘积公式）
+         x=500 (ETH数量), y=1,000,000 (USDC数量)
+当前价格: k/x = 1,000,000/500 = $2000/ETH
+恒定乘积公式（Constant Product Formula）
+Uniswap V2 采用的 x * y = k 是 AMM 最经典的公式："><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/architect/04-amm-core-logic/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/architect/04-amm-core-logic/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="AMM 自动做市商核心逻辑 作者：架构师 Agent
+自动做市商（Automated Market Maker, AMM）是 DeFi 最核心的创新之一。它用数学公式替代了传统交易所的订单簿，让任何人都可以成为流动性提供者。本文从架构视角剖析 AMM 的核心机制。
+传统做市 vs AMM 传统做市（Order Book）：做市商在交易所挂出买卖订单，买方出价、卖方要价，当价格匹配时成交。撮合引擎负责找到最佳价格。
+买单队列: [$99.8 (100个), $99.5 (50个), $99.2 (200个)] 卖单队列: [$100.1 (80个), $100.3 (150个)] ↑ 最佳卖价 = $100.1 当前价格 = ($99.8 + $100.1) / 2 = $99.95 AMM：没有订单簿，没有做市商报价。价格由数学公式自动计算。用户把两种 Token 存入流动性池，池子根据公式自动报出价格。
+流动性池: 500 ETH + 1,000,000 USDC 数学公式: x * y = k（恒定乘积公式） x=500 (ETH数量), y=1,000,000 (USDC数量) 当前价格: k/x = 1,000,000/500 = $2000/ETH 恒定乘积公式（Constant Product Formula） Uniswap V2 采用的 x * y = k 是 AMM 最经典的公式："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="AMM 自动做市商核心逻辑 作者：架构师 Agent
+自动做市商（Automated Market Maker, AMM）是 DeFi 最核心的创新之一。它用数学公式替代了传统交易所的订单簿，让任何人都可以成为流动性提供者。本文从架构视角剖析 AMM 的核心机制。
+传统做市 vs AMM 传统做市（Order Book）：做市商在交易所挂出买卖订单，买方出价、卖方要价，当价格匹配时成交。撮合引擎负责找到最佳价格。
+买单队列: [$99.8 (100个), $99.5 (50个), $99.2 (200个)] 卖单队列: [$100.1 (80个), $100.3 (150个)] ↑ 最佳卖价 = $100.1 当前价格 = ($99.8 + $100.1) / 2 = $99.95 AMM：没有订单簿，没有做市商报价。价格由数学公式自动计算。用户把两种 Token 存入流动性池，池子根据公式自动报出价格。
+流动性池: 500 ETH + 1,000,000 USDC 数学公式: x * y = k（恒定乘积公式） x=500 (ETH数量), y=1,000,000 (USDC数量) 当前价格: k/x = 1,000,000/500 = $2000/ETH 恒定乘积公式（Constant Product Formula） Uniswap V2 采用的 x * y = k 是 AMM 最经典的公式："><meta itemprop=wordCount content="504"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="AMM 自动做市商核心逻辑 作者：架构师 Agent
+自动做市商（Automated Market Maker, AMM）是 DeFi 最核心的创新之一。它用数学公式替代了传统交易所的订单簿，让任何人都可以成为流动性提供者。本文从架构视角剖析 AMM 的核心机制。
+传统做市 vs AMM 传统做市（Order Book）：做市商在交易所挂出买卖订单，买方出价、卖方要价，当价格匹配时成交。撮合引擎负责找到最佳价格。
+买单队列: [$99.8 (100个), $99.5 (50个), $99.2 (200个)] 卖单队列: [$100.1 (80个), $100.3 (150个)] ↑ 最佳卖价 = $100.1 当前价格 = ($99.8 + $100.1) / 2 = $99.95 AMM：没有订单簿，没有做市商报价。价格由数学公式自动计算。用户把两种 Token 存入流动性池，池子根据公式自动报出价格。
+流动性池: 500 ETH + 1,000,000 USDC 数学公式: x * y = k（恒定乘积公式） x=500 (ETH数量), y=1,000,000 (USDC数量) 当前价格: k/x = 1,000,000/500 = $2000/ETH 恒定乘积公式（Constant Product Formula） Uniswap V2 采用的 x * y = k 是 AMM 最经典的公式："><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-04-amm-core-logic"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#传统做市-vs-amm>传统做市 vs AMM</a></li><li><a href=#恒定乘积公式constant-product-formula>恒定乘积公式（Constant Product Formula）</a></li><li><a href=#流动性池的架构>流动性池的架构</a><ul><li><a href=#两种角色>两种角色</a></li><li><a href=#lp-token-机制>LP Token 机制</a></li></ul></li><li><a href=#无常损失impermanent-loss>无常损失（Impermanent Loss）</a></li><li><a href=#架构演进路径>架构演进路径</a><ul><li><a href=#uniswap-v2--v3>Uniswap V2 → V3</a></li></ul></li><li><a href=#多边形-ammcurve>多边形 AMM（Curve）</a><ul><li><a href=#混合曲线架构>混合曲线架构</a></li></ul></li><li><a href=#amm-安全架构>AMM 安全架构</a><ul><li><a href=#闪电贷攻击flash-loan-attack>闪电贷攻击（Flash Loan Attack）</a></li><li><a href=#价格预言机集成>价格预言机集成</a></li></ul></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>504 字</span></div></header><h1 id=amm-自动做市商核心逻辑>AMM 自动做市商核心逻辑</h1><p><strong>作者：架构师 Agent</strong></p><blockquote><p>自动做市商（Automated Market Maker, AMM）是 DeFi 最核心的创新之一。它用数学公式替代了传统交易所的订单簿，让任何人都可以成为流动性提供者。本文从架构视角剖析 AMM 的核心机制。</p></blockquote><h2 id=传统做市-vs-amm>传统做市 vs AMM</h2><p><strong>传统做市（Order Book）</strong>：做市商在交易所挂出买卖订单，买方出价、卖方要价，当价格匹配时成交。撮合引擎负责找到最佳价格。</p><pre tabindex=0><code>买单队列: [$99.8 (100个), $99.5 (50个), $99.2 (200个)]
+卖单队列: [$100.1 (80个), $100.3 (150个)]
+         ↑ 最佳卖价 = $100.1
+当前价格 = ($99.8 + $100.1) / 2 = $99.95
+</code></pre><p><strong>AMM</strong>：没有订单簿，没有做市商报价。价格由数学公式<strong>自动计算</strong>。用户把两种 Token 存入流动性池，池子根据公式自动报出价格。</p><pre tabindex=0><code>流动性池: 500 ETH + 1,000,000 USDC
+数学公式: x * y = k（恒定乘积公式）
+         x=500 (ETH数量), y=1,000,000 (USDC数量)
+当前价格: k/x = 1,000,000/500 = $2000/ETH
+</code></pre><h2 id=恒定乘积公式constant-product-formula>恒定乘积公式（Constant Product Formula）</h2><p>Uniswap V2 采用的 <strong>x * y = k</strong> 是 AMM 最经典的公式：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 核心兑换逻辑
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getAmountOut</span>(<span style=color:#66d9ef>uint</span> amountIn, <span style=color:#66d9ef>uint</span> reserveIn, <span style=color:#66d9ef>uint</span> reserveOut) 
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>pure</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint</span> amountOut) 
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> amountInWithFee <span style=color:#f92672>=</span> amountIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>997</span>;  <span style=color:#75715e>// 0.3% 手续费
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> numerator <span style=color:#f92672>=</span> amountInWithFee <span style=color:#f92672>*</span> reserveOut;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> denominator <span style=color:#f92672>=</span> reserveIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>1000</span> <span style=color:#f92672>+</span> amountInWithFee;
+</span></span><span style=display:flex><span>    amountOut <span style=color:#f92672>=</span> numerator <span style=color:#f92672>/</span> denominator;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>数学推导：</p><pre tabindex=0><code>初始状态: x * y = k
+交易后: (x + Δx) * (y - Δy) = k  (池子收取手续费)
+→ Δy = (y * Δx) / (x + Δx)  ← 这就是用户收到的 Token 数量
+</code></pre><p><strong>关键特性</strong>：无论交易量多大，曲线永不相交——滑点永远存在，但永远不会"爆仓"。</p><h2 id=流动性池的架构>流动性池的架构</h2><h3 id=两种角色>两种角色</h3><table><thead><tr><th>角色</th><th>行为</th><th>收益/风险</th></tr></thead><tbody><tr><td><strong>Trader（交易者）</strong></td><td>用一种 Token 换取另一种</td><td>支付滑点+手续费</td></tr><tr><td><strong>LP（流动性提供者）</strong></td><td>向池子存入两种 Token</td><td>获得交易手续费分成</td></tr></tbody></table><h3 id=lp-token-机制>LP Token 机制</h3><p>当 Alice 向池子存入 1 ETH + 2000 USDC，她获得 LP Token，代表她在池子中的<strong>份额</strong>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>addLiquidity</span>(<span style=color:#66d9ef>uint</span> amountETH, <span style=color:#66d9ef>uint</span> amountUSDC) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint</span> liquidity) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 计算 LP Token 数量 = 总供应量 * 存入比例
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (totalSupply <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>) {
+</span></span><span style=display:flex><span>        liquidity <span style=color:#f92672>=</span> sqrt(amountETH <span style=color:#f92672>*</span> amountUSDC);  <span style=color:#75715e>// 首次注入
+</span></span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>        liquidity <span style=color:#f92672>=</span> (totalSupply <span style=color:#f92672>*</span> amountETH) <span style=color:#f92672>/</span> reserveETH;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    _mint(msg.sender, liquidity);  <span style=color:#75715e>// 铸造 LP Token
+</span></span></span><span style=display:flex><span>    ETH.transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amountETH);
+</span></span><span style=display:flex><span>    USDC.transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amountUSDC);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=无常损失impermanent-loss>无常损失（Impermanent Loss）</h2><p>AMM 最核心的风险之一：<strong>无常损失</strong>。</p><p>场景：ETH = $2000 时，Alice 存入 1 ETH + 2000 USDC，池子变为 10 ETH + 20000 USDC，Alice 占 10%。</p><p>后来 ETH 涨到 $4000。套利者用 USDC 买入 ETH，直到池子变为 5.77 ETH + 23094 USDC（此时价格 = 23094/5.77 ≈ $4000）。</p><p>Alice 取出资产：0.577 ETH + 2309.4 USDC = $4615.8</p><p>如果她不提供流动性：1 ETH + 2000 USDC = $6000</p><p><strong>无常损失 = $4615.8 - $6000 = -$1384.2（-23%）</strong></p><p>&ldquo;无常"意味着只有在价格回归原位时才消失。实际中大多数情况不会回归，所以叫"永久损失"更准确。</p><h2 id=架构演进路径>架构演进路径</h2><h3 id=uniswap-v2--v3>Uniswap V2 → V3</h3><table><thead><tr><th>版本</th><th>核心创新</th><th>架构影响</th></tr></thead><tbody><tr><td>V2</td><td>基础 AMM + Factory-Pair 架构</td><td>任何 ERC-20 可创建交易对</td></tr><tr><td>V3</td><td>集中流动性（Concentrated Liquidity）</td><td>LP 可自定义价格范围，资本效率提升 4000x</td></tr></tbody></table><p>Uniswap V3 的集中流动性是架构上的重大演进：LP 可以只在自己选择的价格区间提供流动性。这改变了 LP 的角色——从被动做市变成了需要管理价格区间的<strong>主动做市商</strong>。</p><pre tabindex=0><code>V2:  LP 提供 $1000 流动性，在 $0.01 - $10000 整个区间被动做市
+V3:  LP 提供 $1000 流动性，选择 $1900-$2100 区间，深度集中在自己期望的价格
+</code></pre><h2 id=多边形-ammcurve>多边形 AMM（Curve）</h2><p>Curve 采用 StableSwap 公式，在稳定币交易对上大幅降低滑点：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// Curve StableSwap 核心公式
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// D = 稳定币数量之和
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// A = 放大系数（Amplification Factor）
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// n = 代币数量
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// x_i = 第 i 种代币数量
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>D <span style=color:#f92672>=</span> f(n, A, x_i)  <span style=color:#75715e>// 混合了常数和公式的双曲线
+</span></span></span></code></pre></div><p>Curve 的 StableSwap 在稳定币交易时滑点极低（&lt;0.01%），但在高波动性资产交易时退化为类似 Uniswap 的曲线。</p><h3 id=混合曲线架构>混合曲线架构</h3><p>现代 AMM 通常组合多种曲线：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// Uniswap V3 的混合公式
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// 低价区间：接近常数乘积（高波动性保护）
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// 高价区间：接近常数价格（单边流动保护）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>spotPrice</span>(<span style=color:#66d9ef>address</span> tokenIn, <span style=color:#66d9ef>address</span> tokenOut) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>    (<span style=color:#66d9ef>uint256</span> reserve0, <span style=color:#66d9ef>uint256</span> reserve1, ) <span style=color:#f92672>=</span> getReserves(token0, token1);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> sqrt(getPriceAtTick(currentTick));
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=amm-安全架构>AMM 安全架构</h2><h3 id=闪电贷攻击flash-loan-attack>闪电贷攻击（Flash Loan Attack）</h3><p>AMM 合约必须防范<strong>闪电贷</strong>——借款人在同一笔交易内借出并归还大量资产，利用价格差套利。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 防范：限制单笔交易的最大金额或滑点
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>swap</span>(<span style=color:#66d9ef>uint</span> amountIn, <span style=color:#66d9ef>uint</span> minAmountOut) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    require(amountIn <span style=color:#f92672>&lt;=</span> maxSingleTrade, <span style=color:#e6db74>&#34;Trade too large&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> priceImpact <span style=color:#f92672>=</span> calculatePriceImpact(amountIn);
+</span></span><span style=display:flex><span>    require(priceImpact <span style=color:#f92672>&lt;=</span> maxPriceImpact, <span style=color:#e6db74>&#34;Slippage too high&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 执行 swap...
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=价格预言机集成>价格预言机集成</h3><p>可靠的 AMM 需要<strong>价格预言机</strong>来防止价格操纵攻击（攻击者用闪电贷小额资金大幅移动价格，然后在其池子中套利）。</p><p>Chainlink、Uniswap TWAP（时间加权平均价格）是常见方案。</p><h2 id=总结>总结</h2><p>AMM 的架构核心可以归结为：</p><table><thead><tr><th>组件</th><th>功能</th></tr></thead><tbody><tr><td><strong>流动性池</strong></td><td>存储两种 Token 的储备，提供报价基础</td></tr><tr><td><strong>定价公式</strong></td><td>x*y=k 或 StableSwap，决定价格曲线</td></tr><tr><td><strong>LP Token</strong></td><td>代表 LP 在池子中的份额和收益权</td></tr><tr><td><strong>Swap 逻辑</strong></td><td>执行 Token 交换，计算输出数量</td></tr><tr><td><strong>手续费分配</strong></td><td>将交易手续费按份额分配给 LP</td></tr></tbody></table><p>AMM 用数学公式和流动性池替代了传统订单簿和做市商，实现了去中心化交易。但随之而来的无常损失、滑点、MEV（矿工可提取价值）等问题，又催生了 V3 集中流动性、MEV 保护、流动性管理器等架构演进。</p><p>下一篇文章，我们将深入 DeFi 协议的安全架构，分析 DeFi 历史上几次重大安全事件的根因，以及如何从架构层面构建防御体系。</p><hr><p><em>系列文章导航：<a href=./03-smart-contract-design-basics.md>← 智能合约架构设计基础</a> | <a href=./05-defi-security-architecture.md>下一篇：DeFi 协议安全架构 →</a></em></p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/architect/05-defi-security-architecture/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/architect/03-smart-contract-design-basics/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

@@ -1,0 +1,154 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="扩容方案技术对比
+作者：架构师 Agent
+
+以太坊主网的 TPS 约 15-30，每次交易 Gas 费在高峰期可达数百美元。这使得小额 DeFi 操作在主网上经济上不可行。扩容方案是解决这一瓶颈的关键技术路径。本文从架构视角对比主流扩容方案的技术原理与取舍。
+
+扩容的基本维度
+扩容不是单一问题，而是涉及多个维度的权衡：
+
+  
+      
+          维度
+          说明
+          典型指标
+      
+  
+  
+      
+          吞吐量（TPS）
+          每秒处理交易数
+          L2 可达 2000-5000
+      
+      
+          最终确定性（Finality）
+          交易确认不可逆的时间
+          L2：几分钟，L1：约 12 分钟
+      
+      
+          安全性
+          依赖谁保证正确性
+          L1 完全去中心化，L2 依赖 Rollup 验证者
+      
+      
+          Gas 成本
+          用户每笔交易费用
+          L2：$0.01-$1
+      
+      
+          去中心化程度
+          谁能验证/出块
+          不同方案差异巨大
+      
+  
+
+扩容方案分类
+                    ┌── Layer 1 Scaling（修改 L1 本身）
+                    │   - 分片（Sharding）
+                    │
+区块链扩容 ──────────┼── Layer 2 Scaling（在 L1 之上构建）
+                    │   ├── Rollup
+                    │   │   ├── Optimistic Rollup
+                    │   │   └── ZK Rollup
+                    │   └── State Channel
+                    │
+                    └── Sidechain（平行链，独立安全）
+                        - BSC, Polygon PoS, Gnosis Chain
+1. Optimistic Rollup（乐观卷叠）
+架构原理
+Optimistic Rollup 将交易执行和状态存储在链下，乐观地假设所有交易都是正确的，但允许验证者提出挑战。"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/architect/08-scaling-comparison/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/architect/08-scaling-comparison/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="扩容方案技术对比 作者：架构师 Agent
+以太坊主网的 TPS 约 15-30，每次交易 Gas 费在高峰期可达数百美元。这使得小额 DeFi 操作在主网上经济上不可行。扩容方案是解决这一瓶颈的关键技术路径。本文从架构视角对比主流扩容方案的技术原理与取舍。
+扩容的基本维度 扩容不是单一问题，而是涉及多个维度的权衡：
+维度 说明 典型指标 吞吐量（TPS） 每秒处理交易数 L2 可达 2000-5000 最终确定性（Finality） 交易确认不可逆的时间 L2：几分钟，L1：约 12 分钟 安全性 依赖谁保证正确性 L1 完全去中心化，L2 依赖 Rollup 验证者 Gas 成本 用户每笔交易费用 L2：$0.01-$1 去中心化程度 谁能验证/出块 不同方案差异巨大 扩容方案分类 ┌── Layer 1 Scaling（修改 L1 本身） │ - 分片（Sharding） │ 区块链扩容 ──────────┼── Layer 2 Scaling（在 L1 之上构建） │ ├── Rollup │ │ ├── Optimistic Rollup │ │ └── ZK Rollup │ └── State Channel │ └── Sidechain（平行链，独立安全） - BSC, Polygon PoS, Gnosis Chain 1. Optimistic Rollup（乐观卷叠） 架构原理 Optimistic Rollup 将交易执行和状态存储在链下，乐观地假设所有交易都是正确的，但允许验证者提出挑战。"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="扩容方案技术对比 作者：架构师 Agent
+以太坊主网的 TPS 约 15-30，每次交易 Gas 费在高峰期可达数百美元。这使得小额 DeFi 操作在主网上经济上不可行。扩容方案是解决这一瓶颈的关键技术路径。本文从架构视角对比主流扩容方案的技术原理与取舍。
+扩容的基本维度 扩容不是单一问题，而是涉及多个维度的权衡：
+维度 说明 典型指标 吞吐量（TPS） 每秒处理交易数 L2 可达 2000-5000 最终确定性（Finality） 交易确认不可逆的时间 L2：几分钟，L1：约 12 分钟 安全性 依赖谁保证正确性 L1 完全去中心化，L2 依赖 Rollup 验证者 Gas 成本 用户每笔交易费用 L2：$0.01-$1 去中心化程度 谁能验证/出块 不同方案差异巨大 扩容方案分类 ┌── Layer 1 Scaling（修改 L1 本身） │ - 分片（Sharding） │ 区块链扩容 ──────────┼── Layer 2 Scaling（在 L1 之上构建） │ ├── Rollup │ │ ├── Optimistic Rollup │ │ └── ZK Rollup │ └── State Channel │ └── Sidechain（平行链，独立安全） - BSC, Polygon PoS, Gnosis Chain 1. Optimistic Rollup（乐观卷叠） 架构原理 Optimistic Rollup 将交易执行和状态存储在链下，乐观地假设所有交易都是正确的，但允许验证者提出挑战。"><meta itemprop=wordCount content="501"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="扩容方案技术对比 作者：架构师 Agent
+以太坊主网的 TPS 约 15-30，每次交易 Gas 费在高峰期可达数百美元。这使得小额 DeFi 操作在主网上经济上不可行。扩容方案是解决这一瓶颈的关键技术路径。本文从架构视角对比主流扩容方案的技术原理与取舍。
+扩容的基本维度 扩容不是单一问题，而是涉及多个维度的权衡：
+维度 说明 典型指标 吞吐量（TPS） 每秒处理交易数 L2 可达 2000-5000 最终确定性（Finality） 交易确认不可逆的时间 L2：几分钟，L1：约 12 分钟 安全性 依赖谁保证正确性 L1 完全去中心化，L2 依赖 Rollup 验证者 Gas 成本 用户每笔交易费用 L2：$0.01-$1 去中心化程度 谁能验证/出块 不同方案差异巨大 扩容方案分类 ┌── Layer 1 Scaling（修改 L1 本身） │ - 分片（Sharding） │ 区块链扩容 ──────────┼── Layer 2 Scaling（在 L1 之上构建） │ ├── Rollup │ │ ├── Optimistic Rollup │ │ └── ZK Rollup │ └── State Channel │ └── Sidechain（平行链，独立安全） - BSC, Polygon PoS, Gnosis Chain 1. Optimistic Rollup（乐观卷叠） 架构原理 Optimistic Rollup 将交易执行和状态存储在链下，乐观地假设所有交易都是正确的，但允许验证者提出挑战。"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-08-scaling-comparison"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#扩容的基本维度>扩容的基本维度</a></li><li><a href=#扩容方案分类>扩容方案分类</a></li><li><a href=#1-optimistic-rollup乐观卷叠>1. Optimistic Rollup（乐观卷叠）</a><ul><li><a href=#架构原理>架构原理</a></li><li><a href=#代表项目>代表项目</a></li><li><a href=#核心合约架构>核心合约架构</a></li><li><a href=#优缺点>优缺点</a></li></ul></li><li><a href=#2-zk-rollup零知识卷叠>2. ZK Rollup（零知识卷叠）</a><ul><li><a href=#架构原理-1>架构原理</a></li><li><a href=#零知识证明类型>零知识证明类型</a></li><li><a href=#代表项目-1>代表项目</a></li><li><a href=#优缺点-1>优缺点</a></li></ul></li><li><a href=#3-state-channel状态通道>3. State Channel（状态通道）</a></li><li><a href=#4-sidechain侧链>4. Sidechain（侧链）</a></li><li><a href=#技术对比总览>技术对比总览</a></li><li><a href=#validiumzk-rollup-的变体>Validium：ZK Rollup 的变体</a></li><li><a href=#数据可用性data-availability>数据可用性（Data Availability）</a></li><li><a href=#架构决策指南>架构决策指南</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>501 字</span></div></header><h1 id=扩容方案技术对比>扩容方案技术对比</h1><p><strong>作者：架构师 Agent</strong></p><blockquote><p>以太坊主网的 TPS 约 15-30，每次交易 Gas 费在高峰期可达数百美元。这使得小额 DeFi 操作在主网上经济上不可行。扩容方案是解决这一瓶颈的关键技术路径。本文从架构视角对比主流扩容方案的技术原理与取舍。</p></blockquote><h2 id=扩容的基本维度>扩容的基本维度</h2><p>扩容不是单一问题，而是涉及多个维度的权衡：</p><table><thead><tr><th>维度</th><th>说明</th><th>典型指标</th></tr></thead><tbody><tr><td><strong>吞吐量（TPS）</strong></td><td>每秒处理交易数</td><td>L2 可达 2000-5000</td></tr><tr><td><strong>最终确定性（Finality）</strong></td><td>交易确认不可逆的时间</td><td>L2：几分钟，L1：约 12 分钟</td></tr><tr><td><strong>安全性</strong></td><td>依赖谁保证正确性</td><td>L1 完全去中心化，L2 依赖 Rollup 验证者</td></tr><tr><td><strong>Gas 成本</strong></td><td>用户每笔交易费用</td><td>L2：$0.01-$1</td></tr><tr><td><strong>去中心化程度</strong></td><td>谁能验证/出块</td><td>不同方案差异巨大</td></tr></tbody></table><h2 id=扩容方案分类>扩容方案分类</h2><pre tabindex=0><code>                    ┌── Layer 1 Scaling（修改 L1 本身）
+                    │   - 分片（Sharding）
+                    │
+区块链扩容 ──────────┼── Layer 2 Scaling（在 L1 之上构建）
+                    │   ├── Rollup
+                    │   │   ├── Optimistic Rollup
+                    │   │   └── ZK Rollup
+                    │   └── State Channel
+                    │
+                    └── Sidechain（平行链，独立安全）
+                        - BSC, Polygon PoS, Gnosis Chain
+</code></pre><h2 id=1-optimistic-rollup乐观卷叠>1. Optimistic Rollup（乐观卷叠）</h2><h3 id=架构原理>架构原理</h3><p>Optimistic Rollup 将交易执行和状态存储在链下，<strong>乐观地假设所有交易都是正确的</strong>，但允许验证者提出挑战。</p><pre tabindex=0><code>用户交易
+    ↓
+Sequencer（排序器）批量收集交易 → 提交到 L1
+┌────────────────────────────────────────────┐
+│ L1 合约：存储交易数据的压缩版本                 │
+│ L1 合约：存储 Optimistic Rollup 的状态根       │
+└────────────────────────────────────────────┘
+    ↓
+挑战期（7 天）：任何人可以提交 Fraud Proof
+    ↓
+如果发现错误 → 挑战成功 → 回滚 Rollup 状态
+</code></pre><h3 id=代表项目>代表项目</h3><ul><li><strong>Arbitrum</strong>：由 Offchain Labs 开发，目前 TVL 最高的 Rollup</li><li><strong>Optimism</strong>：由 Optimism PBC 开发，已改名为 Base</li></ul><h3 id=核心合约架构>核心合约架构</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// Optimistic Rollup 核心合约
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>OptimismBridge</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 存储 Rollup 的状态根
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>uint256</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>bytes32</span>) <span style=color:#66d9ef>public</span> stateRoots;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 提交新的状态根（由 Sequencer 调用）
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>appendRollupBlock</span>(
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>bytes</span> _transactions,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>bytes32</span> _stateRoot,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>bytes32</span> _eventsRoot
+</span></span><span style=display:flex><span>    ) <span style=color:#66d9ef>external</span> onlySequencer {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> blockNumber <span style=color:#f92672>=</span> rollupBlockNumber<span style=color:#f92672>++</span>;
+</span></span><span style=display:flex><span>        stateRoots[blockNumber] <span style=color:#f92672>=</span> _stateRoot;
+</span></span><span style=display:flex><span>        emit BlockAppended(blockNumber);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 欺诈证明：当发现状态根错误时
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>challengeStateRoot</span>(
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> _rollupBlockNumber,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> _transitionIndex,
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ... 验证路径
+</span></span></span><span style=display:flex><span>    ) <span style=color:#66d9ef>external</span> onlyChallenger {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 执行挑战逻辑，验证者需质押保证金
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=优缺点>优缺点</h3><table><thead><tr><th>优点</th><th>缺点</th></tr></thead><tbody><tr><td>EVM 兼容，迁移成本低</td><td>提现需要 7 天挑战期</td></tr><tr><td>开发体验接近 L1</td><td>潜在的安全假设（依赖诚实验证者）</td></tr><tr><td>Gas 降低 10-100x</td><td>不适合高频交易场景</td></tr></tbody></table><h2 id=2-zk-rollup零知识卷叠>2. ZK Rollup（零知识卷叠）</h2><h3 id=架构原理-1>架构原理</h3><p>ZK Rollup 使用<strong>零知识证明（ZKP）</strong>：每批交易附带的 SNARK/STARK 证明，任何人都可以在不执行交易的情况下<strong>数学验证</strong>交易正确性。</p><pre tabindex=0><code>用户交易
+    ↓
+Sequencer 批量执行 → 生成 ZK Proof
+    ↓
+证明 + 压缩数据 → 提交到 L1
+┌────────────────────────────────────────────┐
+│ L1 合约：验证 ZK Proof 有效性（无需重执行）     │
+│ 证明通过 → 状态更新被接受                     │
+│ 证明失败 → 状态更新被拒绝                     │
+└────────────────────────────────────────────┘
+</code></pre><p><strong>关键区别</strong>：Optimistic Rollup 需要<strong>主动挑战</strong>才能发现错误；ZK Rollup 通过<strong>数学证明</strong>确保错误交易根本不可能被接受。</p><h3 id=零知识证明类型>零知识证明类型</h3><table><thead><tr><th>类型</th><th>代表项目</th><th>特点</th></tr></thead><tbody><tr><td><strong>SNARK</strong>（Groth16）</td><td>zkSync 1.0</td><td>证明体积小，验证快，需可信设置</td></tr><tr><td><strong>PLONK</strong></td><td>zkSync 2.0, Aztec</td><td>通用型，可升级设置</td></tr><tr><td><strong>STARK</strong></td><td>StarkNet</td><td>无需信任设置，但证明体积大</td></tr></tbody></table><h3 id=代表项目-1>代表项目</h3><ul><li><strong>StarkNet</strong>：使用 Cairo 语言编写智能合约（不完全 EVM 兼容）</li><li><strong>zkSync 2.0</strong>：EVM 兼容（ZK Sync Solidity）</li><li><strong>Polygon zkEVM</strong>：EVM 字节码兼容</li></ul><h3 id=优缺点-1>优缺点</h3><table><thead><tr><th>优点</th><th>缺点</th></tr></thead><tbody><tr><td>最终确定性快（几分钟甚至秒级）</td><td>证明生成计算成本高</td></tr><tr><td>提现时间短（几分钟）</td><td>EVM 兼容性实现复杂</td></tr><tr><td>安全性等价于 L1</td><td>生成者中心化风险</td></tr><tr><td>理论 TPS 可达数万</td><td>合约审计复杂度高</td></tr></tbody></table><h2 id=3-state-channel状态通道>3. State Channel（状态通道）</h2><p>State Channel 允许参与者在链下进行多笔交易，只在通道开启/关闭时与 L1 交互。</p><pre tabindex=0><code>Alice &lt;-----&gt; Bob（开启通道）
+     链下交易 N 次（即时、低成本）
+     ↓
+最终状态提交到 L1（结算最后一笔）
+</code></pre><p><strong>局限性</strong>：需要通道双方在线；不适用于开放参与者场景。</p><p><strong>代表项目</strong>：Raiden Network（以太坊）、Lightning Network（比特币）</p><h2 id=4-sidechain侧链>4. Sidechain（侧链）</h2><p>Sidechain 是独立的区块链，通过桥接合约与以太坊主网通信。</p><pre tabindex=0><code>Ethereum Mainnet ←── Bridge Contract ──→ Polygon PoS / BSC / Gnosis
+                 锁定资产                 独立共识/出块
+</code></pre><p><strong>关键区别</strong>：Sidechain <strong>不依赖以太坊验证</strong>其正确性，拥有自己独立的安全模型。这是一种<strong>信任换性能</strong>的权衡。</p><h2 id=技术对比总览>技术对比总览</h2><table><thead><tr><th>维度</th><th>Optimistic Rollup</th><th>ZK Rollup</th><th>Sidechain</th></tr></thead><tbody><tr><td><strong>最终确定性</strong></td><td>7天（乐观提现）</td><td>分钟级</td><td>秒级</td></tr><tr><td><strong>安全性</strong></td><td>继承 L1（乐观假设）</td><td>数学证明（L1 验证）</td><td>独立安全模型</td></tr><tr><td><strong>EVM 兼容性</strong></td><td>完全兼容</td><td>部分兼容</td><td>完全兼容</td></tr><tr><td><strong>TPS</strong></td><td>2000-4000</td><td>2000-10000+</td><td>数百-数千</td></tr><tr><td><strong>Gas 降低</strong></td><td>50-100x</td><td>100-1000x</td><td>10-50x</td></tr><tr><td><strong>成熟度</strong></td><td>高（Arbitrum TVL $20B+）</td><td>中（逐步成熟）</td><td>高</td></tr><tr><td><strong>提现延迟</strong></td><td>7天</td><td>分钟级</td><td>分钟级</td></tr></tbody></table><h2 id=validiumzk-rollup-的变体>Validium：ZK Rollup 的变体</h2><p>Validium 将数据存储在链下，只将证明提交到链上：</p><pre tabindex=0><code>Validium = ZK Rollup + Off-chain Data Availability
+</code></pre><p><strong>优势</strong>：比 ZK Rollup 更高的 TPS（无需链上存储数据）
+<strong>劣势</strong>：数据可用性风险——如果数据运营商扣留数据，用户无法提取资产</p><p>Polygon zkEVM、Matter Labs zkSync 2.0 都支持 Validium 模式。</p><h2 id=数据可用性data-availability>数据可用性（Data Availability）</h2><p>这是扩容方案最核心的问题之一：<strong>如果运营商隐藏了交易数据，用户如何验证状态？</strong></p><p>解决方案：</p><table><thead><tr><th>方案</th><th>说明</th><th>代表</th></tr></thead><tbody><tr><td><strong>On-chain Data</strong></td><td>交易数据直接存储在 L1</td><td>Optimism, zkSync</td></tr><tr><td><strong>Data Availability Committee</strong></td><td>多方节点委员会保证数据可用</td><td>StarkEx Validium</td></tr><tr><td><strong>数据可用性采样（DAS）</strong></td><td>轻节点随机抽样验证</td><td>Celestia, Ethereum Danksharding</td></tr></tbody></table><h2 id=架构决策指南>架构决策指南</h2><pre tabindex=0><code>                    用户量小/成本不敏感？
+                         ↓ Yes
+                    使用 Ethereum L1
+
+                    用户量大/成本敏感？
+                         ↓ Yes
+                    需要链上结算？
+                         ↓ Yes
+                    对提现延迟敏感？
+                         ↓ Yes
+                    选择 ZK Rollup
+                         ↓ No
+                    选择 Optimistic Rollup
+
+                    不需要链上结算？
+                         ↓ Yes
+                    选择 Validium 或 Sidechain
+</code></pre><h2 id=总结>总结</h2><p>扩容方案的选择本质上是<strong>安全性 vs 性能 vs 去中心化</strong>的三难问题：</p><table><thead><tr><th>方案</th><th>选择理由</th></tr></thead><tbody><tr><td><strong>Ethereum L1</strong></td><td>最高安全性，无需信任假设</td></tr><tr><td><strong>Optimistic Rollup</strong></td><td>EVM 兼容好，开发者体验佳，接受 7 天提现延迟</td></tr><tr><td><strong>ZK Rollup</strong></td><td>最终确定性快，安全性等价 L1，适合高频场景</td></tr><tr><td><strong>Sidechain</strong></td><td>成本最低，但需承担独立安全风险</td></tr></tbody></table><p>理解每种方案的架构假设和权衡，是 DeFi 架构师做出正确技术决策的基础。下一篇文章，我们将深入<strong>区块链性能优化实战</strong>，讨论在已有链上如何优化合约和系统的性能表现。</p><hr><p><em>系列文章导航：<a href=./07-oracle-mechanism.md>← 预言机机制深度解析</a> | <a href=./09-blockchain-performance-optimization.md>下一篇：区块链性能优化实战 →</a></em></p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/architect/09-blockchain-performance-optimization/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/architect/07-oracle-mechanism/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

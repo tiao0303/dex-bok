@@ -1,0 +1,193 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='升级型合约设计模式：代理模式深度解析
+为什么需要可升级合约
+智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将逻辑代码与存储状态分离，实现了合约的"升级"能力。
+代理模式核心原理
+EVM 的 DELEGATECALL
+DELEGATECALL 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文。
+代理模式家族
+1. 透明代理（Transparent Proxy）
+最简单但有限制：管理员可以升级，但不能普通调用。
+2. UUPS 代理（ERC-1967）
+目前最流行的模式，升级逻辑放在实现合约本身：
+abstract contract UUPSUpgradeable is IERC1822Proxiable {
+    function upgradeToAndCall(
+        address newImplementation,
+        bytes memory data
+    ) external payable virtual {
+        _authorizeUpgrade(newImplementation);
+        _upgradeToAndCall(newImplementation, data);
+    }
+}
+UUPS vs 透明代理：
+
+  
+      
+          特性
+          UUPS
+          透明代理
+      
+  
+  
+      
+          升级逻辑位置
+          实现合约
+          代理合约
+      
+      
+          代理合约复杂度
+          简单
+          复杂
+      
+      
+          部署 Gas
+          较低
+          较高
+      
+  
+
+3. 钻石代理（Diamond Pattern，EIP-2535）
+支持多个实现模块，适合大型项目。
+存储布局的挑战
+DELEGATECALL 的最大陷阱：代理合约和实现合约共享同一个存储空间。
+存储槽冲突
+// 实现合约 V1
+contract ImplementationV1 {
+    uint256 public value;  // 槽 0
+}
+
+// 实现合约 V2（错误示例：新增变量导致槽错位）
+contract ImplementationV2Bad {
+    address public owner;  // 槽 0 ← 冲突！覆盖了 V1 的 value
+    uint256 public value;  // 槽 1
+}
+正确做法：继承存储安全基线
+abstract contract Initializable {
+    uint256[49] private __gap; // 保留前50个槽，避免与子合约冲突
+}
+完整开发流程
+1. 安装依赖
+npm install @openzeppelin/contracts @openzeppelin/contracts-upgradeable
+2. 编写可升级合约
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+
+contract MyTokenV1 is Initializable, ERC20Upgradeable {
+    function initialize(uint256 initialSupply) public initializer {
+        __ERC20_init("MyToken", "MTK");
+        _mint(msg.sender, initialSupply);
+    }
+}
+3. 部署与升级脚本
+const { ethers, upgrades } = require("hardhat");
+
+async function main() {
+    // 部署 V1
+    const TokenV1 = await ethers.getContractFactory("MyTokenV1");
+    const tokenV1 = await upgrades.deployProxy(TokenV1, [ethers.parseEther("1000000")]);
+    
+    // 升级到 V2
+    const TokenV2 = await ethers.getContractFactory("MyTokenV2");
+    await upgrades.upgradeProxy(await tokenV1.getAddress(), TokenV2);
+}
+
+main();
+常见陷阱
+
+  
+      
+          陷阱
+          后果
+          解决方案
+      
+  
+  
+      
+          构造函数中使用 immutable
+          升级后值丢失
+          用 initializer 替代
+      
+      
+          修改已有变量顺序
+          存储错位，数据损坏
+          严格遵守存储布局规则
+      
+      
+          忘记 _disableInitializers
+          可被重新初始化
+          在所有实现合约的构造函数中调用
+      
+  
+
+总结
+代理模式让智能合约具备了"升级"能力，但也带来了复杂度：'><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/developer/09-%E5%8D%87%E7%BA%A7%E5%9E%8B%E5%90%88%E7%BA%A6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/developer/09-%E5%8D%87%E7%BA%A7%E5%9E%8B%E5%90%88%E7%BA%A6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='升级型合约设计模式：代理模式深度解析 为什么需要可升级合约 智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将逻辑代码与存储状态分离，实现了合约的"升级"能力。
+代理模式核心原理 EVM 的 DELEGATECALL DELEGATECALL 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文。
+代理模式家族 1. 透明代理（Transparent Proxy） 最简单但有限制：管理员可以升级，但不能普通调用。
+2. UUPS 代理（ERC-1967） 目前最流行的模式，升级逻辑放在实现合约本身：
+abstract contract UUPSUpgradeable is IERC1822Proxiable { function upgradeToAndCall( address newImplementation, bytes memory data ) external payable virtual { _authorizeUpgrade(newImplementation); _upgradeToAndCall(newImplementation, data); } } UUPS vs 透明代理：
+特性 UUPS 透明代理 升级逻辑位置 实现合约 代理合约 代理合约复杂度 简单 复杂 部署 Gas 较低 较高 3. 钻石代理（Diamond Pattern，EIP-2535） 支持多个实现模块，适合大型项目。
+存储布局的挑战 DELEGATECALL 的最大陷阱：代理合约和实现合约共享同一个存储空间。
+存储槽冲突 // 实现合约 V1 contract ImplementationV1 { uint256 public value; // 槽 0 } // 实现合约 V2（错误示例：新增变量导致槽错位） contract ImplementationV2Bad { address public owner; // 槽 0 ← 冲突！覆盖了 V1 的 value uint256 public value; // 槽 1 } 正确做法：继承存储安全基线 abstract contract Initializable { uint256[49] private __gap; // 保留前50个槽，避免与子合约冲突 } 完整开发流程 1. 安装依赖 npm install @openzeppelin/contracts @openzeppelin/contracts-upgradeable 2. 编写可升级合约 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol"; import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol"; contract MyTokenV1 is Initializable, ERC20Upgradeable { function initialize(uint256 initialSupply) public initializer { __ERC20_init("MyToken", "MTK"); _mint(msg.sender, initialSupply); } } 3. 部署与升级脚本 const { ethers, upgrades } = require("hardhat"); async function main() { // 部署 V1 const TokenV1 = await ethers.getContractFactory("MyTokenV1"); const tokenV1 = await upgrades.deployProxy(TokenV1, [ethers.parseEther("1000000")]); // 升级到 V2 const TokenV2 = await ethers.getContractFactory("MyTokenV2"); await upgrades.upgradeProxy(await tokenV1.getAddress(), TokenV2); } main(); 常见陷阱 陷阱 后果 解决方案 构造函数中使用 immutable 升级后值丢失 用 initializer 替代 修改已有变量顺序 存储错位，数据损坏 严格遵守存储布局规则 忘记 _disableInitializers 可被重新初始化 在所有实现合约的构造函数中调用 总结 代理模式让智能合约具备了"升级"能力，但也带来了复杂度：'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="developer"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='升级型合约设计模式：代理模式深度解析 为什么需要可升级合约 智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将逻辑代码与存储状态分离，实现了合约的"升级"能力。
+代理模式核心原理 EVM 的 DELEGATECALL DELEGATECALL 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文。
+代理模式家族 1. 透明代理（Transparent Proxy） 最简单但有限制：管理员可以升级，但不能普通调用。
+2. UUPS 代理（ERC-1967） 目前最流行的模式，升级逻辑放在实现合约本身：
+abstract contract UUPSUpgradeable is IERC1822Proxiable { function upgradeToAndCall( address newImplementation, bytes memory data ) external payable virtual { _authorizeUpgrade(newImplementation); _upgradeToAndCall(newImplementation, data); } } UUPS vs 透明代理：
+特性 UUPS 透明代理 升级逻辑位置 实现合约 代理合约 代理合约复杂度 简单 复杂 部署 Gas 较低 较高 3. 钻石代理（Diamond Pattern，EIP-2535） 支持多个实现模块，适合大型项目。
+存储布局的挑战 DELEGATECALL 的最大陷阱：代理合约和实现合约共享同一个存储空间。
+存储槽冲突 // 实现合约 V1 contract ImplementationV1 { uint256 public value; // 槽 0 } // 实现合约 V2（错误示例：新增变量导致槽错位） contract ImplementationV2Bad { address public owner; // 槽 0 ← 冲突！覆盖了 V1 的 value uint256 public value; // 槽 1 } 正确做法：继承存储安全基线 abstract contract Initializable { uint256[49] private __gap; // 保留前50个槽，避免与子合约冲突 } 完整开发流程 1. 安装依赖 npm install @openzeppelin/contracts @openzeppelin/contracts-upgradeable 2. 编写可升级合约 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol"; import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol"; contract MyTokenV1 is Initializable, ERC20Upgradeable { function initialize(uint256 initialSupply) public initializer { __ERC20_init("MyToken", "MTK"); _mint(msg.sender, initialSupply); } } 3. 部署与升级脚本 const { ethers, upgrades } = require("hardhat"); async function main() { // 部署 V1 const TokenV1 = await ethers.getContractFactory("MyTokenV1"); const tokenV1 = await upgrades.deployProxy(TokenV1, [ethers.parseEther("1000000")]); // 升级到 V2 const TokenV2 = await ethers.getContractFactory("MyTokenV2"); await upgrades.upgradeProxy(await tokenV1.getAddress(), TokenV2); } main(); 常见陷阱 陷阱 后果 解决方案 构造函数中使用 immutable 升级后值丢失 用 initializer 替代 修改已有变量顺序 存储错位，数据损坏 严格遵守存储布局规则 忘记 _disableInitializers 可被重新初始化 在所有实现合约的构造函数中调用 总结 代理模式让智能合约具备了"升级"能力，但也带来了复杂度：'><meta itemprop=wordCount content="212"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='升级型合约设计模式：代理模式深度解析 为什么需要可升级合约 智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将逻辑代码与存储状态分离，实现了合约的"升级"能力。
+代理模式核心原理 EVM 的 DELEGATECALL DELEGATECALL 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文。
+代理模式家族 1. 透明代理（Transparent Proxy） 最简单但有限制：管理员可以升级，但不能普通调用。
+2. UUPS 代理（ERC-1967） 目前最流行的模式，升级逻辑放在实现合约本身：
+abstract contract UUPSUpgradeable is IERC1822Proxiable { function upgradeToAndCall( address newImplementation, bytes memory data ) external payable virtual { _authorizeUpgrade(newImplementation); _upgradeToAndCall(newImplementation, data); } } UUPS vs 透明代理：
+特性 UUPS 透明代理 升级逻辑位置 实现合约 代理合约 代理合约复杂度 简单 复杂 部署 Gas 较低 较高 3. 钻石代理（Diamond Pattern，EIP-2535） 支持多个实现模块，适合大型项目。
+存储布局的挑战 DELEGATECALL 的最大陷阱：代理合约和实现合约共享同一个存储空间。
+存储槽冲突 // 实现合约 V1 contract ImplementationV1 { uint256 public value; // 槽 0 } // 实现合约 V2（错误示例：新增变量导致槽错位） contract ImplementationV2Bad { address public owner; // 槽 0 ← 冲突！覆盖了 V1 的 value uint256 public value; // 槽 1 } 正确做法：继承存储安全基线 abstract contract Initializable { uint256[49] private __gap; // 保留前50个槽，避免与子合约冲突 } 完整开发流程 1. 安装依赖 npm install @openzeppelin/contracts @openzeppelin/contracts-upgradeable 2. 编写可升级合约 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol"; import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol"; contract MyTokenV1 is Initializable, ERC20Upgradeable { function initialize(uint256 initialSupply) public initializer { __ERC20_init("MyToken", "MTK"); _mint(msg.sender, initialSupply); } } 3. 部署与升级脚本 const { ethers, upgrades } = require("hardhat"); async function main() { // 部署 V1 const TokenV1 = await ethers.getContractFactory("MyTokenV1"); const tokenV1 = await upgrades.deployProxy(TokenV1, [ethers.parseEther("1000000")]); // 升级到 V2 const TokenV2 = await ethers.getContractFactory("MyTokenV2"); await upgrades.upgradeProxy(await tokenV1.getAddress(), TokenV2); } main(); 常见陷阱 陷阱 后果 解决方案 构造函数中使用 immutable 升级后值丢失 用 initializer 替代 修改已有变量顺序 存储错位，数据损坏 严格遵守存储布局规则 忘记 _disableInitializers 可被重新初始化 在所有实现合约的构造函数中调用 总结 代理模式让智能合约具备了"升级"能力，但也带来了复杂度：'><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-09-升级型合约设计模式"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#为什么需要可升级合约>为什么需要可升级合约</a></li><li><a href=#代理模式核心原理>代理模式核心原理</a><ul><li><a href=#evm-的-delegatecall>EVM 的 DELEGATECALL</a></li></ul></li><li><a href=#代理模式家族>代理模式家族</a><ul><li><a href=#1-透明代理transparent-proxy>1. 透明代理（Transparent Proxy）</a></li><li><a href=#2-uups-代理erc-1967>2. UUPS 代理（ERC-1967）</a></li><li><a href=#3-钻石代理diamond-patterneip-2535>3. 钻石代理（Diamond Pattern，EIP-2535）</a></li></ul></li><li><a href=#存储布局的挑战>存储布局的挑战</a><ul><li><a href=#存储槽冲突>存储槽冲突</a></li><li><a href=#正确做法继承存储安全基线>正确做法：继承存储安全基线</a></li></ul></li><li><a href=#完整开发流程>完整开发流程</a><ul><li><a href=#1-安装依赖>1. 安装依赖</a></li><li><a href=#2-编写可升级合约>2. 编写可升级合约</a></li><li><a href=#3-部署与升级脚本>3. 部署与升级脚本</a></li></ul></li><li><a href=#常见陷阱>常见陷阱</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>212 字</span></div></header><h1 id=升级型合约设计模式代理模式深度解析>升级型合约设计模式：代理模式深度解析</h1><h2 id=为什么需要可升级合约>为什么需要可升级合约</h2><p>智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将<strong>逻辑代码</strong>与<strong>存储状态</strong>分离，实现了合约的"升级"能力。</p><h2 id=代理模式核心原理>代理模式核心原理</h2><h3 id=evm-的-delegatecall>EVM 的 DELEGATECALL</h3><p><code>DELEGATECALL</code> 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文。</p><h2 id=代理模式家族>代理模式家族</h2><h3 id=1-透明代理transparent-proxy>1. 透明代理（Transparent Proxy）</h3><p>最简单但有限制：管理员可以升级，但不能普通调用。</p><h3 id=2-uups-代理erc-1967>2. UUPS 代理（ERC-1967）</h3><p>目前最流行的模式，升级逻辑放在实现合约本身：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>abstract</span> <span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>UUPSUpgradeable</span> <span style=color:#66d9ef>is</span> IERC1822Proxiable {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>upgradeToAndCall</span>(
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span> newImplementation,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>bytes</span> <span style=color:#66d9ef>memory</span> data
+</span></span><span style=display:flex><span>    ) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>payable</span> <span style=color:#66d9ef>virtual</span> {
+</span></span><span style=display:flex><span>        _authorizeUpgrade(newImplementation);
+</span></span><span style=display:flex><span>        _upgradeToAndCall(newImplementation, data);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>UUPS vs 透明代理</strong>：</p><table><thead><tr><th>特性</th><th>UUPS</th><th>透明代理</th></tr></thead><tbody><tr><td>升级逻辑位置</td><td>实现合约</td><td>代理合约</td></tr><tr><td>代理合约复杂度</td><td>简单</td><td>复杂</td></tr><tr><td>部署 Gas</td><td>较低</td><td>较高</td></tr></tbody></table><h3 id=3-钻石代理diamond-patterneip-2535>3. 钻石代理（Diamond Pattern，EIP-2535）</h3><p>支持多个实现模块，适合大型项目。</p><h2 id=存储布局的挑战>存储布局的挑战</h2><p>DELEGATECALL 的最大陷阱：<strong>代理合约和实现合约共享同一个存储空间</strong>。</p><h3 id=存储槽冲突>存储槽冲突</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 实现合约 V1
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>ImplementationV1</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> value;  <span style=color:#75715e>// 槽 0
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 实现合约 V2（错误示例：新增变量导致槽错位）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>ImplementationV2Bad</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>public</span> owner;  <span style=color:#75715e>// 槽 0 ← 冲突！覆盖了 V1 的 value
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> value;  <span style=color:#75715e>// 槽 1
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=正确做法继承存储安全基线>正确做法：继承存储安全基线</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>abstract</span> <span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Initializable</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span>[<span style=color:#ae81ff>49</span>] <span style=color:#66d9ef>private</span> __gap; <span style=color:#75715e>// 保留前50个槽，避免与子合约冲突
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=完整开发流程>完整开发流程</h2><h3 id=1-安装依赖>1. 安装依赖</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm install @openzeppelin/contracts @openzeppelin/contracts-upgradeable
+</span></span></code></pre></div><h3 id=2-编写可升级合约>2. 编写可升级合约</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol&#34;</span>;
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyTokenV1</span> <span style=color:#66d9ef>is</span> Initializable, ERC20Upgradeable {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>initialize</span>(<span style=color:#66d9ef>uint256</span> initialSupply) <span style=color:#66d9ef>public</span> initializer {
+</span></span><span style=display:flex><span>        __ERC20_init(<span style=color:#e6db74>&#34;MyToken&#34;</span>, <span style=color:#e6db74>&#34;MTK&#34;</span>);
+</span></span><span style=display:flex><span>        _mint(msg.sender, initialSupply);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=3-部署与升级脚本>3. 部署与升级脚本</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>ethers</span>, <span style=color:#a6e22e>upgrades</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#34;hardhat&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 部署 V1
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>TokenV1</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;MyTokenV1&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>tokenV1</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>upgrades</span>.<span style=color:#a6e22e>deployProxy</span>(<span style=color:#a6e22e>TokenV1</span>, [<span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>parseEther</span>(<span style=color:#e6db74>&#34;1000000&#34;</span>)]);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 升级到 V2
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>TokenV2</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;MyTokenV2&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>upgrades</span>.<span style=color:#a6e22e>upgradeProxy</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>tokenV1</span>.<span style=color:#a6e22e>getAddress</span>(), <span style=color:#a6e22e>TokenV2</span>);
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>main</span>();
+</span></span></code></pre></div><h2 id=常见陷阱>常见陷阱</h2><table><thead><tr><th>陷阱</th><th>后果</th><th>解决方案</th></tr></thead><tbody><tr><td>构造函数中使用 immutable</td><td>升级后值丢失</td><td>用 initializer 替代</td></tr><tr><td>修改已有变量顺序</td><td>存储错位，数据损坏</td><td>严格遵守存储布局规则</td></tr><tr><td>忘记 _disableInitializers</td><td>可被重新初始化</td><td>在所有实现合约的构造函数中调用</td></tr></tbody></table><h2 id=总结>总结</h2><p>代理模式让智能合约具备了"升级"能力，但也带来了复杂度：</p><ol><li><strong>UUPS</strong> 是目前最主流的选择</li><li><strong>存储布局</strong>是代理模式的核心风险点</li><li>升级前必须<strong>充分测试</strong>，确保存储正确迁移</li><li>权限控制至关重要，升级权泄露等于资产归零</li></ol><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/developer/10-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/developer/08-gas%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>
