@@ -47,7 +47,7 @@
 &lt;/ol&gt;
 &lt;h2 id="解决方案专用-amm"&gt;解决方案：专用 AMM&lt;/h2&gt;
 &lt;h3 id="1-elasticswap"&gt;1. ElasticSwap&lt;/h3&gt;
-&lt;p&gt;专为弹性供应代币设计的 AMM，能正确感知 Rebase 事件：&lt;/p&gt;</description></item><item><title>ERC721 NFT 标准 - 数字所有权革命</title><link>https://tiao0303.github.io/dex-bok/posts/08-erc721-nft-standard/</link><pubDate>Sat, 21 Mar 2026 11:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/08-erc721-nft-standard/</guid><description>&lt;h2 id="什么是-erc721"&gt;什么是 ERC721&lt;/h2&gt;
+&lt;p&gt;专为弹性供应代币设计的 AMM，能正确感知 Rebase 事件：&lt;/p&gt;</description></item><item><title>ERC721 NFT 标准 - 数字所有权革命</title><link>https://tiao0303.github.io/dex-bok/posts/developer/08-erc721-nft-standard/</link><pubDate>Sat, 21 Mar 2026 11:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/developer/08-erc721-nft-standard/</guid><description>&lt;h2 id="什么是-erc721"&gt;什么是 ERC721&lt;/h2&gt;
 &lt;p&gt;ERC721 是 Ethereum 上**非同质化代币（NFT）**的标准接口，于 2018 年正式标准化（EIP-721）。由 William Entriken 等人提出。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;核心特点&lt;/strong&gt;：每个代币&lt;strong&gt;独一无二&lt;/strong&gt;，不可互换。就像蒙娜丽莎的画作，每一幅都有独特的价值。&lt;/p&gt;
 &lt;h2 id="erc20-vs-erc721"&gt;ERC20 vs ERC721&lt;/h2&gt;
@@ -115,7 +115,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Approval&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; owner, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; approved, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; tokenId);
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ApprovalForAll&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; owner, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; operator, &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; approved);
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="元数据扩展可选"&gt;元数据扩展（可选）&lt;/h2&gt;
-&lt;p&gt;让 NFT 关联外部信息：&lt;/p&gt;</description></item><item><title>ERC4626 金库标准 - 收益代币化的革命</title><link>https://tiao0303.github.io/dex-bok/posts/07-erc4626-vault-standard/</link><pubDate>Sat, 21 Mar 2026 10:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/07-erc4626-vault-standard/</guid><description>&lt;h2 id="什么是-erc4626"&gt;什么是 ERC4626&lt;/h2&gt;
+&lt;p&gt;让 NFT 关联外部信息：&lt;/p&gt;</description></item><item><title>ERC4626 金库标准 - 收益代币化的革命</title><link>https://tiao0303.github.io/dex-bok/posts/developer/07-erc4626-vault-standard/</link><pubDate>Sat, 21 Mar 2026 10:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/developer/07-erc4626-vault-standard/</guid><description>&lt;h2 id="什么是-erc4626"&gt;什么是 ERC4626&lt;/h2&gt;
 &lt;p&gt;ERC4626（Tokenized Vault Standard）是 Ethereum 上&lt;strong&gt;代币化金库&lt;/strong&gt;的标准接口，于 2023 年正式确立。它扩展了 ERC20，使得金库份额成为一种可交易的 ERC20 代币。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;核心价值&lt;/strong&gt;：统一收益聚合协议接口，让不同 DeFi 协议可以无缝互操作。&lt;/p&gt;
 &lt;h2 id="为什么需要-erc4626"&gt;为什么需要 ERC4626&lt;/h2&gt;
@@ -212,7 +212,7 @@
 &lt;/ul&gt;
 &lt;h2 id="安全考虑"&gt;安全考虑&lt;/h2&gt;
 &lt;h3 id="通胀攻击inflation-attack"&gt;通胀攻击（Inflation Attack）&lt;/h3&gt;
-&lt;p&gt;当金库为空时，攻击者可利用第一笔存款操控汇率：&lt;/p&gt;</description></item><item><title>ERC20 代币标准 - DeFi 世界的基石</title><link>https://tiao0303.github.io/dex-bok/posts/06-erc20-token-standard/</link><pubDate>Sat, 21 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/06-erc20-token-standard/</guid><description>&lt;h2 id="什么是-erc20"&gt;什么是 ERC20&lt;/h2&gt;
+&lt;p&gt;当金库为空时，攻击者可利用第一笔存款操控汇率：&lt;/p&gt;</description></item><item><title>ERC20 代币标准 - DeFi 世界的基石</title><link>https://tiao0303.github.io/dex-bok/posts/developer/06-erc20-token-standard/</link><pubDate>Sat, 21 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/developer/06-erc20-token-standard/</guid><description>&lt;h2 id="什么是-erc20"&gt;什么是 ERC20&lt;/h2&gt;
 &lt;p&gt;ERC20 是 Ethereum 上**可替代代币（Fungible Token）**的技术标准，于 2017 年正式标准化（EIP-20）。由 Fabian Vogelsteller 提出，旨在为所有基于 Ethereum 的代币建立一套统一的接口规范。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;核心特点&lt;/strong&gt;：每个代币单元完全相同、可互换 —— 就像美元一样，每一张的价值相等。&lt;/p&gt;
 &lt;h2 id="为什么要用-erc20"&gt;为什么要用 ERC20&lt;/h2&gt;

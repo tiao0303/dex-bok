@@ -1,4 +1,11 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>T2 进阶实战 06：流动性池深度分析 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='流动性池深度分析
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>T2 进阶实战 06：流动性池深度分析 | DEX 学习笔记 | 去中心化交易所实战指南</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="流动性池深度分析
 引言
 流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。
 恒定乘积公式详解
@@ -17,14 +24,14 @@ P = dy/dx = -y/x
 这意味着价格完全由池中的代币比例决定。
 代码实现
 function swap(uint amountIn, bool isTokenA) external {
-    require(amountIn > 0, "Amount must be positive");
+    require(amountIn &gt; 0, &#34;Amount must be positive&#34;);
     
     uint reserveA = IERC20(tokenA).balanceOf(address(this));
     uint reserveB = IERC20(tokenB).balanceOf(address(this));
     
     uint amountOut;
     if (isTokenA) {
-        // 计算输出量：amountOut = reserveB - k / (reserveA + amountIn)
+        // 计算输出量：amountOut = reserveB - k / (reserveA &#43; amountIn)
         amountOut = getAmountOut(amountIn, reserveA, reserveB);
         IERC20(tokenA).transferFrom(msg.sender, address(this), amountIn);
         IERC20(tokenB).transfer(msg.sender, amountOut);
@@ -41,129 +48,456 @@ function swap(uint amountIn, bool isTokenA) external {
 function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) 
     public pure returns (uint amountOut) 
 {
-    require(amountIn > 0 && reserveIn > 0 && reserveOut > 0);
+    require(amountIn &gt; 0 &amp;&amp; reserveIn &gt; 0 &amp;&amp; reserveOut &gt; 0);
     uint amountInWithFee = amountIn * 997; // 0.3% 手续费
     uint numerator = amountInWithFee * reserveOut;
-    uint denominator = (reserveIn * 1000) + amountInWithFee;
+    uint denominator = (reserveIn * 1000) &#43; amountInWithFee;
     amountOut = numerator / denominator;
 }
 资本效率问题
 V2 的资本效率低下
-在 V2 模型中，流动性分布在 0 到 ∞ 的价格范围内，但大部分资金实际上从未被使用。'><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/06-liquidity-pool-deep-dive/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/06-liquidity-pool-deep-dive/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="T2 进阶实战 06：流动性池深度分析"><meta property="og:description" content='流动性池深度分析 引言 流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。
+在 V2 模型中，流动性分布在 0 到 ∞ 的价格范围内，但大部分资金实际上从未被使用。">
+    <meta name="generator" content="Hugo 0.158.0">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="QingHeart Qin">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+  
+    <link rel="stylesheet" href="/css/custom.css">
+  
+
+
+    
+
+
+    
+      
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/posts/06-liquidity-pool-deep-dive/">
+    
+
+    
+    
+    <meta property="og:url" content="http://localhost:1313/posts/06-liquidity-pool-deep-dive/">
+  <meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南">
+  <meta property="og:title" content="T2 进阶实战 06：流动性池深度分析">
+  <meta property="og:description" content="流动性池深度分析 引言 流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。
 恒定乘积公式详解 基础公式 Uniswap V2 采用的恒定乘积公式：
 x * y = k 其中：
 x = 代币 A 的数量 y = 代币 B 的数量 k = 恒定常数 价格发现机制 边际价格由导数得出：
 P = dy/dx = -y/x 这意味着价格完全由池中的代币比例决定。
-代码实现 function swap(uint amountIn, bool isTokenA) external { require(amountIn > 0, "Amount must be positive"); uint reserveA = IERC20(tokenA).balanceOf(address(this)); uint reserveB = IERC20(tokenB).balanceOf(address(this)); uint amountOut; if (isTokenA) { // 计算输出量：amountOut = reserveB - k / (reserveA + amountIn) amountOut = getAmountOut(amountIn, reserveA, reserveB); IERC20(tokenA).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenB).transfer(msg.sender, amountOut); } else { amountOut = getAmountOut(amountIn, reserveB, reserveA); IERC20(tokenB).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenA).transfer(msg.sender, amountOut); } // 验证 k 值未减少 _updateReserves(); } function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) public pure returns (uint amountOut) { require(amountIn > 0 && reserveIn > 0 && reserveOut > 0); uint amountInWithFee = amountIn * 997; // 0.3% 手续费 uint numerator = amountInWithFee * reserveOut; uint denominator = (reserveIn * 1000) + amountInWithFee; amountOut = numerator / denominator; } 资本效率问题 V2 的资本效率低下 在 V2 模型中，流动性分布在 0 到 ∞ 的价格范围内，但大部分资金实际上从未被使用。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-03-19T00:00:00+08:00"><meta property="article:modified_time" content="2026-03-19T00:00:00+08:00"><meta property="article:tag" content="DEX"><meta property="article:tag" content="流动性"><meta property="article:tag" content="AMM"><meta property="article:tag" content="进阶"><meta itemprop=name content="T2 进阶实战 06：流动性池深度分析"><meta itemprop=description content='流动性池深度分析 引言 流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。
+代码实现 function swap(uint amountIn, bool isTokenA) external { require(amountIn &gt; 0, &#34;Amount must be positive&#34;); uint reserveA = IERC20(tokenA).balanceOf(address(this)); uint reserveB = IERC20(tokenB).balanceOf(address(this)); uint amountOut; if (isTokenA) { // 计算输出量：amountOut = reserveB - k / (reserveA &#43; amountIn) amountOut = getAmountOut(amountIn, reserveA, reserveB); IERC20(tokenA).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenB).transfer(msg.sender, amountOut); } else { amountOut = getAmountOut(amountIn, reserveB, reserveA); IERC20(tokenB).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenA).transfer(msg.sender, amountOut); } // 验证 k 值未减少 _updateReserves(); } function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) public pure returns (uint amountOut) { require(amountIn &gt; 0 &amp;&amp; reserveIn &gt; 0 &amp;&amp; reserveOut &gt; 0); uint amountInWithFee = amountIn * 997; // 0.3% 手续费 uint numerator = amountInWithFee * reserveOut; uint denominator = (reserveIn * 1000) &#43; amountInWithFee; amountOut = numerator / denominator; } 资本效率问题 V2 的资本效率低下 在 V2 模型中，流动性分布在 0 到 ∞ 的价格范围内，但大部分资金实际上从未被使用。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-19T00:00:00+08:00">
+    <meta property="article:modified_time" content="2026-03-19T00:00:00+08:00">
+    <meta property="article:tag" content="DEX">
+    <meta property="article:tag" content="流动性">
+    <meta property="article:tag" content="AMM">
+    <meta property="article:tag" content="进阶">
+
+  <meta itemprop="name" content="T2 进阶实战 06：流动性池深度分析">
+  <meta itemprop="description" content="流动性池深度分析 引言 流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。
 恒定乘积公式详解 基础公式 Uniswap V2 采用的恒定乘积公式：
 x * y = k 其中：
 x = 代币 A 的数量 y = 代币 B 的数量 k = 恒定常数 价格发现机制 边际价格由导数得出：
 P = dy/dx = -y/x 这意味着价格完全由池中的代币比例决定。
-代码实现 function swap(uint amountIn, bool isTokenA) external { require(amountIn > 0, "Amount must be positive"); uint reserveA = IERC20(tokenA).balanceOf(address(this)); uint reserveB = IERC20(tokenB).balanceOf(address(this)); uint amountOut; if (isTokenA) { // 计算输出量：amountOut = reserveB - k / (reserveA + amountIn) amountOut = getAmountOut(amountIn, reserveA, reserveB); IERC20(tokenA).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenB).transfer(msg.sender, amountOut); } else { amountOut = getAmountOut(amountIn, reserveB, reserveA); IERC20(tokenB).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenA).transfer(msg.sender, amountOut); } // 验证 k 值未减少 _updateReserves(); } function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) public pure returns (uint amountOut) { require(amountIn > 0 && reserveIn > 0 && reserveOut > 0); uint amountInWithFee = amountIn * 997; // 0.3% 手续费 uint numerator = amountInWithFee * reserveOut; uint denominator = (reserveIn * 1000) + amountInWithFee; amountOut = numerator / denominator; } 资本效率问题 V2 的资本效率低下 在 V2 模型中，流动性分布在 0 到 ∞ 的价格范围内，但大部分资金实际上从未被使用。'><meta itemprop=datePublished content="2026-03-19T00:00:00+08:00"><meta itemprop=dateModified content="2026-03-19T00:00:00+08:00"><meta itemprop=wordCount content="494"><meta itemprop=keywords content="DEX,流动性,AMM,进阶"><meta name=twitter:card content="summary"><meta name=twitter:title content="T2 进阶实战 06：流动性池深度分析"><meta name=twitter:description content='流动性池深度分析 引言 流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。
+代码实现 function swap(uint amountIn, bool isTokenA) external { require(amountIn &gt; 0, &#34;Amount must be positive&#34;); uint reserveA = IERC20(tokenA).balanceOf(address(this)); uint reserveB = IERC20(tokenB).balanceOf(address(this)); uint amountOut; if (isTokenA) { // 计算输出量：amountOut = reserveB - k / (reserveA &#43; amountIn) amountOut = getAmountOut(amountIn, reserveA, reserveB); IERC20(tokenA).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenB).transfer(msg.sender, amountOut); } else { amountOut = getAmountOut(amountIn, reserveB, reserveA); IERC20(tokenB).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenA).transfer(msg.sender, amountOut); } // 验证 k 值未减少 _updateReserves(); } function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) public pure returns (uint amountOut) { require(amountIn &gt; 0 &amp;&amp; reserveIn &gt; 0 &amp;&amp; reserveOut &gt; 0); uint amountInWithFee = amountIn * 997; // 0.3% 手续费 uint numerator = amountInWithFee * reserveOut; uint denominator = (reserveIn * 1000) &#43; amountInWithFee; amountOut = numerator / denominator; } 资本效率问题 V2 的资本效率低下 在 V2 模型中，流动性分布在 0 到 ∞ 的价格范围内，但大部分资金实际上从未被使用。">
+  <meta itemprop="datePublished" content="2026-03-19T00:00:00+08:00">
+  <meta itemprop="dateModified" content="2026-03-19T00:00:00+08:00">
+  <meta itemprop="wordCount" content="494">
+  <meta itemprop="keywords" content="DEX,流动性,AMM,进阶">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="T2 进阶实战 06：流动性池深度分析">
+  <meta name="twitter:description" content="流动性池深度分析 引言 流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。
 恒定乘积公式详解 基础公式 Uniswap V2 采用的恒定乘积公式：
 x * y = k 其中：
 x = 代币 A 的数量 y = 代币 B 的数量 k = 恒定常数 价格发现机制 边际价格由导数得出：
 P = dy/dx = -y/x 这意味着价格完全由池中的代币比例决定。
-代码实现 function swap(uint amountIn, bool isTokenA) external { require(amountIn > 0, "Amount must be positive"); uint reserveA = IERC20(tokenA).balanceOf(address(this)); uint reserveB = IERC20(tokenB).balanceOf(address(this)); uint amountOut; if (isTokenA) { // 计算输出量：amountOut = reserveB - k / (reserveA + amountIn) amountOut = getAmountOut(amountIn, reserveA, reserveB); IERC20(tokenA).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenB).transfer(msg.sender, amountOut); } else { amountOut = getAmountOut(amountIn, reserveB, reserveA); IERC20(tokenB).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenA).transfer(msg.sender, amountOut); } // 验证 k 值未减少 _updateReserves(); } function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) public pure returns (uint amountOut) { require(amountIn > 0 && reserveIn > 0 && reserveOut > 0); uint amountInWithFee = amountIn * 997; // 0.3% 手续费 uint numerator = amountInWithFee * reserveOut; uint denominator = (reserveIn * 1000) + amountInWithFee; amountOut = numerator / denominator; } 资本效率问题 V2 的资本效率低下 在 V2 模型中，流动性分布在 0 到 ∞ 的价格范围内，但大部分资金实际上从未被使用。'><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-06-liquidity-pool-deep-dive"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
-<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#引言>引言</a></li><li><a href=#恒定乘积公式详解>恒定乘积公式详解</a><ul><li><a href=#基础公式>基础公式</a></li><li><a href=#价格发现机制>价格发现机制</a></li><li><a href=#代码实现>代码实现</a></li></ul></li><li><a href=#资本效率问题>资本效率问题</a><ul><li><a href=#v2-的资本效率低下>V2 的资本效率低下</a></li><li><a href=#v3-的集中流动性>V3 的集中流动性</a></li><li><a href=#流动性计算>流动性计算</a></li></ul></li><li><a href=#无常损失分析>无常损失分析</a><ul><li><a href=#定义>定义</a></li><li><a href=#计算公式>计算公式</a></li><li><a href=#无常损失表>无常损失表</a></li><li><a href=#代码模拟>代码模拟</a></li></ul></li><li><a href=#手续费累积机制>手续费累积机制</a><ul><li><a href=#v2-简单模型>V2 简单模型</a></li><li><a href=#v3-复杂模型>V3 复杂模型</a></li></ul></li><li><a href=#实战建议>实战建议</a><ul><li><a href=#1-选择合适的价格区间>1. 选择合适的价格区间</a></li><li><a href=#2-监控与再平衡>2. 监控与再平衡</a></li><li><a href=#3-gas-优化策略>3. Gas 优化策略</a></li></ul></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>T2 进阶实战 06：流动性池深度分析</h1><div class=article-meta><time datetime=2026-03-19>2026-03-19</time>
-<span>•</span>
-<span>494 字</span></div><div class=article-tags><a href=/dex-bok/tags/dex/ class=article-tag>DEX</a>
-<a href=/dex-bok/tags/%E6%B5%81%E5%8A%A8%E6%80%A7/ class=article-tag>流动性</a>
-<a href=/dex-bok/tags/amm/ class=article-tag>AMM</a>
-<a href=/dex-bok/tags/%E8%BF%9B%E9%98%B6/ class=article-tag>进阶</a></div></header><h1 id=流动性池深度分析>流动性池深度分析</h1><h2 id=引言>引言</h2><p>流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。</p><h2 id=恒定乘积公式详解>恒定乘积公式详解</h2><h3 id=基础公式>基础公式</h3><p>Uniswap V2 采用的恒定乘积公式：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span>x <span style=color:#f92672>*</span> y <span style=color:#f92672>=</span> k
-</span></span></code></pre></div><p>其中：</p><ul><li><code>x</code> = 代币 A 的数量</li><li><code>y</code> = 代币 B 的数量</li><li><code>k</code> = 恒定常数</li></ul><h3 id=价格发现机制>价格发现机制</h3><p>边际价格由导数得出：</p><pre tabindex=0><code>P = dy/dx = -y/x
-</code></pre><p>这意味着价格完全由池中的代币比例决定。</p><h3 id=代码实现>代码实现</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>swap</span>(<span style=color:#66d9ef>uint</span> amountIn, <span style=color:#66d9ef>bool</span> isTokenA) <span style=color:#66d9ef>external</span> {
-</span></span><span style=display:flex><span>    require(amountIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>, <span style=color:#e6db74>&#34;Amount must be positive&#34;</span>);
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> reserveA <span style=color:#f92672>=</span> IERC20(tokenA).balanceOf(<span style=color:#66d9ef>address</span>(this));
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> reserveB <span style=color:#f92672>=</span> IERC20(tokenB).balanceOf(<span style=color:#66d9ef>address</span>(this));
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> amountOut;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (isTokenA) {
-</span></span><span style=display:flex><span>        <span style=color:#75715e>// 计算输出量：amountOut = reserveB - k / (reserveA + amountIn)
-</span></span></span><span style=display:flex><span>        amountOut <span style=color:#f92672>=</span> getAmountOut(amountIn, reserveA, reserveB);
-</span></span><span style=display:flex><span>        IERC20(tokenA).transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amountIn);
-</span></span><span style=display:flex><span>        IERC20(tokenB).transfer(msg.sender, amountOut);
-</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>        amountOut <span style=color:#f92672>=</span> getAmountOut(amountIn, reserveB, reserveA);
-</span></span><span style=display:flex><span>        IERC20(tokenB).transferFrom(msg.sender, <span style=color:#66d9ef>address</span>(this), amountIn);
-</span></span><span style=display:flex><span>        IERC20(tokenA).transfer(msg.sender, amountOut);
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 验证 k 值未减少
-</span></span></span><span style=display:flex><span>    _updateReserves();
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getAmountOut</span>(<span style=color:#66d9ef>uint</span> amountIn, <span style=color:#66d9ef>uint</span> reserveIn, <span style=color:#66d9ef>uint</span> reserveOut) 
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>pure</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint</span> amountOut) 
-</span></span><span style=display:flex><span>{
-</span></span><span style=display:flex><span>    require(amountIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>&amp;&amp;</span> reserveIn <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>&amp;&amp;</span> reserveOut <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>);
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> amountInWithFee <span style=color:#f92672>=</span> amountIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>997</span>; <span style=color:#75715e>// 0.3% 手续费
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> numerator <span style=color:#f92672>=</span> amountInWithFee <span style=color:#f92672>*</span> reserveOut;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> denominator <span style=color:#f92672>=</span> (reserveIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>1000</span>) <span style=color:#f92672>+</span> amountInWithFee;
-</span></span><span style=display:flex><span>    amountOut <span style=color:#f92672>=</span> numerator <span style=color:#f92672>/</span> denominator;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=资本效率问题>资本效率问题</h2><h3 id=v2-的资本效率低下>V2 的资本效率低下</h3><p>在 V2 模型中，流动性分布在 <code>0</code> 到 <code>∞</code> 的价格范围内，但大部分资金实际上从未被使用。</p><p><strong>问题示例：</strong></p><ul><li>USDC/USDT 交易对价格始终在 0.99-1.01 之间</li><li>但流动性却分布在 0 到无穷大的范围</li><li>超过 99% 的资本处于闲置状态</li></ul><h3 id=v3-的集中流动性>V3 的集中流动性</h3><p>Uniswap V3 引入集中流动性，LP 可以选择价格区间 <code>[p_a, p_b]</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Position</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int24</span> tickLower;      <span style=color:#75715e>// 下界价格对应的 tick
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>int24</span> tickUpper;      <span style=color:#75715e>// 上界价格对应的 tick
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint128</span> liquidity;    <span style=color:#75715e>// 流动性数量
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> feeGrowthInside0LastX128;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> feeGrowthInside1LastX128;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint128</span> tokensOwed0;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint128</span> tokensOwed1;
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=流动性计算>流动性计算</h3><p>在价格区间 <code>[p_a, p_b]</code> 内提供流动性 <code>L</code>：</p><pre tabindex=0><code>L = Δx * (p_a * p_b) / (p_b - p_a)  (当提供 x 代币)
+代码实现 function swap(uint amountIn, bool isTokenA) external { require(amountIn &gt; 0, &#34;Amount must be positive&#34;); uint reserveA = IERC20(tokenA).balanceOf(address(this)); uint reserveB = IERC20(tokenB).balanceOf(address(this)); uint amountOut; if (isTokenA) { // 计算输出量：amountOut = reserveB - k / (reserveA &#43; amountIn) amountOut = getAmountOut(amountIn, reserveA, reserveB); IERC20(tokenA).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenB).transfer(msg.sender, amountOut); } else { amountOut = getAmountOut(amountIn, reserveB, reserveA); IERC20(tokenB).transferFrom(msg.sender, address(this), amountIn); IERC20(tokenA).transfer(msg.sender, amountOut); } // 验证 k 值未减少 _updateReserves(); } function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) public pure returns (uint amountOut) { require(amountIn &gt; 0 &amp;&amp; reserveIn &gt; 0 &amp;&amp; reserveOut &gt; 0); uint amountInWithFee = amountIn * 997; // 0.3% 手续费 uint numerator = amountInWithFee * reserveOut; uint denominator = (reserveIn * 1000) &#43; amountInWithFee; amountOut = numerator / denominator; } 资本效率问题 V2 的资本效率低下 在 V2 模型中，流动性分布在 0 到 ∞ 的价格范围内，但大部分资金实际上从未被使用。">
+
+	
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head><body class="ma0 bg-dark geek-dark development is-page is-page page-06-liquidity-pool-deep-dive">
+    <header class="geek-header">
+  <nav class="geek-nav container" role="navigation">
+    <div class="geek-nav-inner">
+      <a href="/" class="geek-logo">
+        <span class="logo-icon">🦞</span>
+        <span class="logo-text">DEX 学习笔记 | 去中心化交易所实战指南</span>
+      </a>
+      <div class="geek-nav-links">
+        
+          <ul class="geek-menu">
+            
+            <li>
+              <a href="/posts/" title="文章">文章</a>
+            </li>
+            
+            <li>
+              <a href="/guides/" title="教程">教程</a>
+            </li>
+            
+            <li>
+              <a href="/tools/" title="工具">工具</a>
+            </li>
+            
+            <li>
+              <a href="/about/" title="关于">关于</a>
+            </li>
+            
+            <li>
+              <a href="/" title="首页">首页</a>
+            </li>
+            
+          </ul>
+        
+      </div>
+    </div>
+  </nav>
+</header>
+
+    <main class="pb7" role="main">
+      
+<div class="geek-article-layout">
+  
+  <aside class="geek-article-toc">
+    <h4>目录</h4>
+    
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#恒定乘积公式详解">恒定乘积公式详解</a>
+      <ul>
+        <li><a href="#基础公式">基础公式</a></li>
+        <li><a href="#价格发现机制">价格发现机制</a></li>
+        <li><a href="#代码实现">代码实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#资本效率问题">资本效率问题</a>
+      <ul>
+        <li><a href="#v2-的资本效率低下">V2 的资本效率低下</a></li>
+        <li><a href="#v3-的集中流动性">V3 的集中流动性</a></li>
+        <li><a href="#流动性计算">流动性计算</a></li>
+      </ul>
+    </li>
+    <li><a href="#无常损失分析">无常损失分析</a>
+      <ul>
+        <li><a href="#定义">定义</a></li>
+        <li><a href="#计算公式">计算公式</a></li>
+        <li><a href="#无常损失表">无常损失表</a></li>
+        <li><a href="#代码模拟">代码模拟</a></li>
+      </ul>
+    </li>
+    <li><a href="#手续费累积机制">手续费累积机制</a>
+      <ul>
+        <li><a href="#v2-简单模型">V2 简单模型</a></li>
+        <li><a href="#v3-复杂模型">V3 复杂模型</a></li>
+      </ul>
+    </li>
+    <li><a href="#实战建议">实战建议</a>
+      <ul>
+        <li><a href="#1-选择合适的价格区间">1. 选择合适的价格区间</a></li>
+        <li><a href="#2-监控与再平衡">2. 监控与再平衡</a></li>
+        <li><a href="#3-gas-优化策略">3. Gas 优化策略</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+    
+  </aside>
+
+  
+  <article class="geek-article-content geek-article-main">
+    <header class="geek-article-header">
+      <h1>T2 进阶实战 06：流动性池深度分析</h1>
+      <div class="article-meta">
+        
+        <time datetime="2026-03-19">2026-03-19</time>
+        
+        <span>•</span>
+        <span>494 字</span>
+        
+      </div>
+      
+      <div class="article-tags">
+        
+        <a href="/tags/dex/" class="article-tag">DEX</a>
+        
+        <a href="/tags/%E6%B5%81%E5%8A%A8%E6%80%A7/" class="article-tag">流动性</a>
+        
+        <a href="/tags/amm/" class="article-tag">AMM</a>
+        
+        <a href="/tags/%E8%BF%9B%E9%98%B6/" class="article-tag">进阶</a>
+        
+      </div>
+      
+    </header>
+
+    <h1 id="流动性池深度分析">流动性池深度分析</h1>
+<h2 id="引言">引言</h2>
+<p>流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。</p>
+<h2 id="恒定乘积公式详解">恒定乘积公式详解</h2>
+<h3 id="基础公式">基础公式</h3>
+<p>Uniswap V2 采用的恒定乘积公式：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span>x <span style="color:#f92672">*</span> y <span style="color:#f92672">=</span> k
+</span></span></code></pre></div><p>其中：</p>
+<ul>
+<li><code>x</code> = 代币 A 的数量</li>
+<li><code>y</code> = 代币 B 的数量</li>
+<li><code>k</code> = 恒定常数</li>
+</ul>
+<h3 id="价格发现机制">价格发现机制</h3>
+<p>边际价格由导数得出：</p>
+<pre tabindex="0"><code>P = dy/dx = -y/x
+</code></pre><p>这意味着价格完全由池中的代币比例决定。</p>
+<h3 id="代码实现">代码实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">swap</span>(<span style="color:#66d9ef">uint</span> amountIn, <span style="color:#66d9ef">bool</span> isTokenA) <span style="color:#66d9ef">external</span> {
+</span></span><span style="display:flex;"><span>    require(amountIn <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#34;Amount must be positive&#34;</span>);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> reserveA <span style="color:#f92672">=</span> IERC20(tokenA).balanceOf(<span style="color:#66d9ef">address</span>(this));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> reserveB <span style="color:#f92672">=</span> IERC20(tokenB).balanceOf(<span style="color:#66d9ef">address</span>(this));
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> amountOut;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (isTokenA) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 计算输出量：amountOut = reserveB - k / (reserveA + amountIn)
+</span></span></span><span style="display:flex;"><span>        amountOut <span style="color:#f92672">=</span> getAmountOut(amountIn, reserveA, reserveB);
+</span></span><span style="display:flex;"><span>        IERC20(tokenA).transferFrom(msg.sender, <span style="color:#66d9ef">address</span>(this), amountIn);
+</span></span><span style="display:flex;"><span>        IERC20(tokenB).transfer(msg.sender, amountOut);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        amountOut <span style="color:#f92672">=</span> getAmountOut(amountIn, reserveB, reserveA);
+</span></span><span style="display:flex;"><span>        IERC20(tokenB).transferFrom(msg.sender, <span style="color:#66d9ef">address</span>(this), amountIn);
+</span></span><span style="display:flex;"><span>        IERC20(tokenA).transfer(msg.sender, amountOut);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 验证 k 值未减少
+</span></span></span><span style="display:flex;"><span>    _updateReserves();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getAmountOut</span>(<span style="color:#66d9ef">uint</span> amountIn, <span style="color:#66d9ef">uint</span> reserveIn, <span style="color:#66d9ef">uint</span> reserveOut) 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">pure</span> <span style="color:#66d9ef">returns</span> (<span style="color:#66d9ef">uint</span> amountOut) 
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    require(amountIn <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> reserveIn <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> reserveOut <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> amountInWithFee <span style="color:#f92672">=</span> amountIn <span style="color:#f92672">*</span> <span style="color:#ae81ff">997</span>; <span style="color:#75715e">// 0.3% 手续费
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> numerator <span style="color:#f92672">=</span> amountInWithFee <span style="color:#f92672">*</span> reserveOut;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> denominator <span style="color:#f92672">=</span> (reserveIn <span style="color:#f92672">*</span> <span style="color:#ae81ff">1000</span>) <span style="color:#f92672">+</span> amountInWithFee;
+</span></span><span style="display:flex;"><span>    amountOut <span style="color:#f92672">=</span> numerator <span style="color:#f92672">/</span> denominator;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="资本效率问题">资本效率问题</h2>
+<h3 id="v2-的资本效率低下">V2 的资本效率低下</h3>
+<p>在 V2 模型中，流动性分布在 <code>0</code> 到 <code>∞</code> 的价格范围内，但大部分资金实际上从未被使用。</p>
+<p><strong>问题示例：</strong></p>
+<ul>
+<li>USDC/USDT 交易对价格始终在 0.99-1.01 之间</li>
+<li>但流动性却分布在 0 到无穷大的范围</li>
+<li>超过 99% 的资本处于闲置状态</li>
+</ul>
+<h3 id="v3-的集中流动性">V3 的集中流动性</h3>
+<p>Uniswap V3 引入集中流动性，LP 可以选择价格区间 <code>[p_a, p_b]</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Position</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int24</span> tickLower;      <span style="color:#75715e">// 下界价格对应的 tick
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int24</span> tickUpper;      <span style="color:#75715e">// 上界价格对应的 tick
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint128</span> liquidity;    <span style="color:#75715e">// 流动性数量
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> feeGrowthInside0LastX128;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> feeGrowthInside1LastX128;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint128</span> tokensOwed0;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint128</span> tokensOwed1;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="流动性计算">流动性计算</h3>
+<p>在价格区间 <code>[p_a, p_b]</code> 内提供流动性 <code>L</code>：</p>
+<pre tabindex="0"><code>L = Δx * (p_a * p_b) / (p_b - p_a)  (当提供 x 代币)
 L = Δy / (√p_b - √p_a)              (当提供 y 代币)
-</code></pre><h2 id=无常损失分析>无常损失分析</h2><h3 id=定义>定义</h3><p>无常损失（Impermanent Loss）是指提供流动性相比单纯持有代币的价值损失。</p><h3 id=计算公式>计算公式</h3><pre tabindex=0><code>IL = 2 * √(price_ratio) / (1 + price_ratio) - 1
-</code></pre><h3 id=无常损失表>无常损失表</h3><table><thead><tr><th>价格变化</th><th>无常损失</th></tr></thead><tbody><tr><td>±5%</td><td>0.03%</td></tr><tr><td>±10%</td><td>0.12%</td></tr><tr><td>±20%</td><td>0.48%</td></tr><tr><td>±50%</td><td>2.9%</td></tr><tr><td>±100%</td><td>7.2%</td></tr><tr><td>±200%</td><td>13.4%</td></tr></tbody></table><h3 id=代码模拟>代码模拟</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>calculateImpermanentLoss</span>(
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> initialPrice,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> currentPrice,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> initialLiquidity
-</span></span><span style=display:flex><span>) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>pure</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>int256</span> il) {
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 假设初始提供等值代币
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> sqrtRatioInitial <span style=color:#f92672>=</span> sqrt(initialPrice);
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> sqrtRatioCurrent <span style=color:#f92672>=</span> sqrt(currentPrice);
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 计算当前价值与持有价值的差异
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> holdValue <span style=color:#f92672>=</span> initialLiquidity <span style=color:#f92672>*</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>+</span> currentPrice <span style=color:#f92672>/</span> initialPrice);
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> lpValue <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>*</span> sqrtRatioCurrent <span style=color:#f92672>*</span> initialLiquidity <span style=color:#f92672>/</span> sqrtRatioInitial;
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    il <span style=color:#f92672>=</span> <span style=color:#66d9ef>int256</span>(lpValue) <span style=color:#f92672>-</span> <span style=color:#66d9ef>int256</span>(holdValue);
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=手续费累积机制>手续费累积机制</h2><h3 id=v2-简单模型>V2 简单模型</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 手续费直接加入池子，增加 k 值
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>uint</span> fee <span style=color:#f92672>=</span> amountIn <span style=color:#f92672>*</span> <span style=color:#ae81ff>3</span> <span style=color:#f92672>/</span> <span style=color:#ae81ff>1000</span>; <span style=color:#75715e>// 0.3%
-</span></span></span><span style=display:flex><span><span style=color:#66d9ef>uint</span> amountInAfterFee <span style=color:#f92672>=</span> amountIn <span style=color:#f92672>-</span> fee;
-</span></span></code></pre></div><h3 id=v3-复杂模型>V3 复杂模型</h3><p>V3 中手续费按流动性比例分配给各个位置：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>FeeGrowth</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> feeGrowthGlobal0X128;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> feeGrowthGlobal1X128;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>int24</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>) feeGrowthOutside0X128;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>int24</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>) feeGrowthOutside1X128;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>collectFees</span>(
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int24</span> tickLower,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int24</span> tickUpper,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint128</span> liquidity
-</span></span><span style=display:flex><span>) <span style=color:#66d9ef>internal</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint128</span> amount0, <span style=color:#66d9ef>uint128</span> amount1) {
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 计算位置内的手续费增长
-</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> feeGrowthInside0 <span style=color:#f92672>=</span> getFeeGrowthInside(tickLower, tickUpper, <span style=color:#ae81ff>0</span>);
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> feeGrowthInside1 <span style=color:#f92672>=</span> getFeeGrowthInside(tickLower, tickUpper, <span style=color:#ae81ff>1</span>);
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 应得手续费 = 流动性 * 手续费增长率
-</span></span></span><span style=display:flex><span>    amount0 <span style=color:#f92672>=</span> <span style=color:#66d9ef>uint128</span>((feeGrowthInside0 <span style=color:#f92672>*</span> liquidity) <span style=color:#f92672>/</span> <span style=color:#ae81ff>2</span><span style=color:#f92672>**</span><span style=color:#ae81ff>128</span>);
-</span></span><span style=display:flex><span>    amount1 <span style=color:#f92672>=</span> <span style=color:#66d9ef>uint128</span>((feeGrowthInside1 <span style=color:#f92672>*</span> liquidity) <span style=color:#f92672>/</span> <span style=color:#ae81ff>2</span><span style=color:#f92672>**</span><span style=color:#ae81ff>128</span>);
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=实战建议>实战建议</h2><h3 id=1-选择合适的价格区间>1. 选择合适的价格区间</h3><ul><li><strong>稳定币对</strong>：窄区间（如 0.999-1.001）</li><li><strong>主流交易对</strong>：中等区间（如 ±20%）</li><li><strong>高波动对</strong>：宽区间或 V2 模式</li></ul><h3 id=2-监控与再平衡>2. 监控与再平衡</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>event</span> <span style=color:#a6e22e>PriceMovedOutOfRange</span>(
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> currentPrice,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int24</span> tickLower,
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>int24</span> tickUpper
-</span></span><span style=display:flex><span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>checkPositionStatus</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span> inRange) {
-</span></span><span style=display:flex><span>    (, <span style=color:#66d9ef>int24</span> currentTick, , , , , ) <span style=color:#f92672>=</span> pool.slot0();
-</span></span><span style=display:flex><span>    inRange <span style=color:#f92672>=</span> (currentTick <span style=color:#f92672>&gt;=</span> position.tickLower <span style=color:#f92672>&amp;&amp;</span> 
-</span></span><span style=display:flex><span>               currentTick <span style=color:#f92672>&lt;</span> position.tickUpper);
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=3-gas-优化策略>3. Gas 优化策略</h3><ul><li>批量操作减少交易次数</li><li>使用 Layer 2 降低 Gas 成本</li><li>选择低峰时段调整位置</li></ul><h2 id=总结>总结</h2><p>流动性池是 DEX 的心脏。理解其数学原理和工程实现，能够帮助我们：</p><ol><li>设计更高效的做市策略</li><li>准确评估无常损失风险</li><li>优化资本利用率</li><li>构建更复杂的 DeFi 组合</li></ol><p>下一节我们将深入探讨滑点与价格影响的精确计算和优化策略。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
-<a href=https://tiao0303.github.io/dex-bok/posts/07-slippage-price-impact/>T2 进阶实战 07：滑点与价格影响</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
-<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>
+</code></pre><h2 id="无常损失分析">无常损失分析</h2>
+<h3 id="定义">定义</h3>
+<p>无常损失（Impermanent Loss）是指提供流动性相比单纯持有代币的价值损失。</p>
+<h3 id="计算公式">计算公式</h3>
+<pre tabindex="0"><code>IL = 2 * √(price_ratio) / (1 + price_ratio) - 1
+</code></pre><h3 id="无常损失表">无常损失表</h3>
+<table>
+  <thead>
+      <tr>
+          <th>价格变化</th>
+          <th>无常损失</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>±5%</td>
+          <td>0.03%</td>
+      </tr>
+      <tr>
+          <td>±10%</td>
+          <td>0.12%</td>
+      </tr>
+      <tr>
+          <td>±20%</td>
+          <td>0.48%</td>
+      </tr>
+      <tr>
+          <td>±50%</td>
+          <td>2.9%</td>
+      </tr>
+      <tr>
+          <td>±100%</td>
+          <td>7.2%</td>
+      </tr>
+      <tr>
+          <td>±200%</td>
+          <td>13.4%</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="代码模拟">代码模拟</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">calculateImpermanentLoss</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> initialPrice,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> currentPrice,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> initialLiquidity
+</span></span><span style="display:flex;"><span>) <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">pure</span> <span style="color:#66d9ef">returns</span> (<span style="color:#66d9ef">int256</span> il) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 假设初始提供等值代币
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> sqrtRatioInitial <span style="color:#f92672">=</span> sqrt(initialPrice);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> sqrtRatioCurrent <span style="color:#f92672">=</span> sqrt(currentPrice);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 计算当前价值与持有价值的差异
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> holdValue <span style="color:#f92672">=</span> initialLiquidity <span style="color:#f92672">*</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> currentPrice <span style="color:#f92672">/</span> initialPrice);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint</span> lpValue <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> sqrtRatioCurrent <span style="color:#f92672">*</span> initialLiquidity <span style="color:#f92672">/</span> sqrtRatioInitial;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    il <span style="color:#f92672">=</span> <span style="color:#66d9ef">int256</span>(lpValue) <span style="color:#f92672">-</span> <span style="color:#66d9ef">int256</span>(holdValue);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="手续费累积机制">手续费累积机制</h2>
+<h3 id="v2-简单模型">V2 简单模型</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#75715e">// 手续费直接加入池子，增加 k 值
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">uint</span> fee <span style="color:#f92672">=</span> amountIn <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">1000</span>; <span style="color:#75715e">// 0.3%
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">uint</span> amountInAfterFee <span style="color:#f92672">=</span> amountIn <span style="color:#f92672">-</span> fee;
+</span></span></code></pre></div><h3 id="v3-复杂模型">V3 复杂模型</h3>
+<p>V3 中手续费按流动性比例分配给各个位置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">FeeGrowth</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> feeGrowthGlobal0X128;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> feeGrowthGlobal1X128;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">mapping</span>(<span style="color:#66d9ef">int24</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">uint256</span>) feeGrowthOutside0X128;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">mapping</span>(<span style="color:#66d9ef">int24</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">uint256</span>) feeGrowthOutside1X128;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">collectFees</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int24</span> tickLower,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int24</span> tickUpper,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint128</span> liquidity
+</span></span><span style="display:flex;"><span>) <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">view</span> <span style="color:#66d9ef">returns</span> (<span style="color:#66d9ef">uint128</span> amount0, <span style="color:#66d9ef">uint128</span> amount1) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 计算位置内的手续费增长
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> feeGrowthInside0 <span style="color:#f92672">=</span> getFeeGrowthInside(tickLower, tickUpper, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> feeGrowthInside1 <span style="color:#f92672">=</span> getFeeGrowthInside(tickLower, tickUpper, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 应得手续费 = 流动性 * 手续费增长率
+</span></span></span><span style="display:flex;"><span>    amount0 <span style="color:#f92672">=</span> <span style="color:#66d9ef">uint128</span>((feeGrowthInside0 <span style="color:#f92672">*</span> liquidity) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">**</span><span style="color:#ae81ff">128</span>);
+</span></span><span style="display:flex;"><span>    amount1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">uint128</span>((feeGrowthInside1 <span style="color:#f92672">*</span> liquidity) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">**</span><span style="color:#ae81ff">128</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="实战建议">实战建议</h2>
+<h3 id="1-选择合适的价格区间">1. 选择合适的价格区间</h3>
+<ul>
+<li><strong>稳定币对</strong>：窄区间（如 0.999-1.001）</li>
+<li><strong>主流交易对</strong>：中等区间（如 ±20%）</li>
+<li><strong>高波动对</strong>：宽区间或 V2 模式</li>
+</ul>
+<h3 id="2-监控与再平衡">2. 监控与再平衡</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#66d9ef">event</span> <span style="color:#a6e22e">PriceMovedOutOfRange</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> currentPrice,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int24</span> tickLower,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int24</span> tickUpper
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">checkPositionStatus</span>() <span style="color:#66d9ef">external</span> <span style="color:#66d9ef">view</span> <span style="color:#66d9ef">returns</span> (<span style="color:#66d9ef">bool</span> inRange) {
+</span></span><span style="display:flex;"><span>    (, <span style="color:#66d9ef">int24</span> currentTick, , , , , ) <span style="color:#f92672">=</span> pool.slot0();
+</span></span><span style="display:flex;"><span>    inRange <span style="color:#f92672">=</span> (currentTick <span style="color:#f92672">&gt;=</span> position.tickLower <span style="color:#f92672">&amp;&amp;</span> 
+</span></span><span style="display:flex;"><span>               currentTick <span style="color:#f92672">&lt;</span> position.tickUpper);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="3-gas-优化策略">3. Gas 优化策略</h3>
+<ul>
+<li>批量操作减少交易次数</li>
+<li>使用 Layer 2 降低 Gas 成本</li>
+<li>选择低峰时段调整位置</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>流动性池是 DEX 的心脏。理解其数学原理和工程实现，能够帮助我们：</p>
+<ol>
+<li>设计更高效的做市策略</li>
+<li>准确评估无常损失风险</li>
+<li>优化资本利用率</li>
+<li>构建更复杂的 DeFi 组合</li>
+</ol>
+<p>下一节我们将深入探讨滑点与价格影响的精确计算和优化策略。</p>
+
+
+    
+    
+    <div class="article-nav article-nav-prev">
+      <span class="nav-label">← 上一篇</span>
+      <a href="http://localhost:1313/posts/07-slippage-price-impact/">T2 进阶实战 07：滑点与价格影响</a>
+    </div>
+    
+    
+  </article>
+</div>
+
+    </main>
+    <footer class="geek-footer">
+  <div class="container">
+    <div class="geek-footer-inner">
+      <div class="geek-footer-brand">
+        <a href="http://localhost:1313/" class="geek-footer-logo">
+          <span class="logo-icon">🦞</span>
+          <span>DEX 学习笔记 | 去中心化交易所实战指南</span>
+        </a>
+        <p class="geek-footer-desc">DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p>
+      </div>
+      <div class="geek-footer-links">
+        <div class="geek-footer-col">
+          <h4>导航</h4>
+          <ul>
+            <li><a href="/">首页</a></li>
+            <li><a href="/posts/">文章</a></li>
+            <li><a href="/guides/">教程</a></li>
+            <li><a href="/tools/">工具</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关于</h4>
+          <ul>
+            <li><a href="/about/">关于本站</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关注</h4>
+          <ul>
+            <li><a href="https://github.com/tiao0303" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://x.com/qing87762" target="_blank" rel="noopener">X (Twitter)</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="geek-footer-bottom">
+      <p>&copy; 2026  DEX 学习笔记 | 去中心化交易所实战指南 </p>
+      <p class="geek-footer-tech">Built with Hugo & DeFi ❤️</p>
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

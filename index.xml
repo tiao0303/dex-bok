@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/</link><description>Recent content on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sat, 21 Mar 2026 11:30:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/index.xml" rel="self" type="application/rss+xml"/><item><title>T2 进阶实战 06：流动性池深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/06-liquidity-pool-deep-dive/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/06-liquidity-pool-deep-dive/</guid><description>&lt;h1 id="流动性池深度分析"&gt;流动性池深度分析&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/</link><description>Recent content on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sat, 21 Mar 2026 11:30:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/index.xml" rel="self" type="application/rss+xml"/><item><title>T2 进阶实战 06：流动性池深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/06-liquidity-pool-deep-dive/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/06-liquidity-pool-deep-dive/</guid><description>&lt;h1 id="流动性池深度分析"&gt;流动性池深度分析&lt;/h1&gt;
 &lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。&lt;/p&gt;
 &lt;h2 id="恒定乘积公式详解"&gt;恒定乘积公式详解&lt;/h2&gt;
@@ -49,7 +49,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="资本效率问题"&gt;资本效率问题&lt;/h2&gt;
 &lt;h3 id="v2-的资本效率低下"&gt;V2 的资本效率低下&lt;/h3&gt;
-&lt;p&gt;在 V2 模型中，流动性分布在 &lt;code&gt;0&lt;/code&gt; 到 &lt;code&gt;∞&lt;/code&gt; 的价格范围内，但大部分资金实际上从未被使用。&lt;/p&gt;</description></item><item><title>T2 进阶实战 07：滑点与价格影响</title><link>https://tiao0303.github.io/dex-bok/posts/07-slippage-price-impact/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/07-slippage-price-impact/</guid><description>&lt;h1 id="滑点与价格影响"&gt;滑点与价格影响&lt;/h1&gt;
+&lt;p&gt;在 V2 模型中，流动性分布在 &lt;code&gt;0&lt;/code&gt; 到 &lt;code&gt;∞&lt;/code&gt; 的价格范围内，但大部分资金实际上从未被使用。&lt;/p&gt;</description></item><item><title>T2 进阶实战 07：滑点与价格影响</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/07-slippage-price-impact/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/07-slippage-price-impact/</guid><description>&lt;h1 id="滑点与价格影响"&gt;滑点与价格影响&lt;/h1&gt;
 &lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;滑点（Slippage）是 DEX 交易中最重要的概念之一。理解滑点的来源、计算方法和优化策略，对于构建高效的交易执行系统至关重要。&lt;/p&gt;
 &lt;h2 id="滑点的定义"&gt;滑点的定义&lt;/h2&gt;
@@ -70,7 +70,7 @@
 &lt;p&gt;前端运行（Front-running）和三明治攻击会加剧滑点。&lt;/p&gt;
 &lt;h2 id="价格影响计算"&gt;价格影响计算&lt;/h2&gt;
 &lt;h3 id="精确公式"&gt;精确公式&lt;/h3&gt;
-&lt;p&gt;对于恒定乘积 AMM，买入 &lt;code&gt;Δx&lt;/code&gt; 数量的代币 A：&lt;/p&gt;</description></item><item><title>T2 进阶实战 08：MEV 与前端运行防御</title><link>https://tiao0303.github.io/dex-bok/posts/08-mev-front-running/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/08-mev-front-running/</guid><description>&lt;h1 id="mev-与前端运行防御"&gt;MEV 与前端运行防御&lt;/h1&gt;
+&lt;p&gt;对于恒定乘积 AMM，买入 &lt;code&gt;Δx&lt;/code&gt; 数量的代币 A：&lt;/p&gt;</description></item><item><title>T2 进阶实战 08：MEV 与前端运行防御</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/08-mev-front-running/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/08-mev-front-running/</guid><description>&lt;h1 id="mev-与前端运行防御"&gt;MEV 与前端运行防御&lt;/h1&gt;
 &lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;MEV（Maximal Extractable Value，最大可提取价值）是区块链生态中的重要概念。理解 MEV 的运作机制和防御策略，对于保护 DEX 用户资金安全至关重要。&lt;/p&gt;
 &lt;h2 id="mev-概述"&gt;MEV 概述&lt;/h2&gt;
@@ -204,20 +204,20 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="防御策略"&gt;防御策略&lt;/h2&gt;
 &lt;h3 id="1-提交隐藏交易private-transactions"&gt;1. 提交隐藏交易（Private Transactions）&lt;/h3&gt;
-&lt;p&gt;使用 Flashbots 等私有交易服务：&lt;/p&gt;</description></item><item><title>PancakeSwap 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/09-pancakeswap/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/09-pancakeswap/</guid><description>&lt;h1 id="pancakeswap-深度分析"&gt;PancakeSwap 深度分析&lt;/h1&gt;
+&lt;p&gt;使用 Flashbots 等私有交易服务：&lt;/p&gt;</description></item><item><title>PancakeSwap 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/09-pancakeswap/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/09-pancakeswap/</guid><description>&lt;h1 id="pancakeswap-深度分析"&gt;PancakeSwap 深度分析&lt;/h1&gt;
 &lt;h2 id="项目简介"&gt;项目简介&lt;/h2&gt;
 &lt;p&gt;PancakeSwap 是 BSC（Binance Smart Chain）生态系统中规模最大的去中心化交易所（DEX），于 2020 年 9 月上线。它由匿名团队创建，凭借 Binance 生态的低 Gas 费和快速确认时间，迅速超越以太坊上的许多竞品，成为 BSC 链上 TVL（总锁仓量）最高的 DEX。PancakeSwap 的产品线已从最初的 AMM 兑换扩展至IFO（首次发行农场）、预测市场、NFT 市场、彩票及 DAO 治理等多个方向，构建了一个相对完整的 DeFi 生态矩阵。&lt;/p&gt;
 &lt;h2 id="核心机制"&gt;核心机制&lt;/h2&gt;
 &lt;p&gt;PancakeSwap 基于 AMM（自动做市商）模型，采用恒定乘积算法（x × y = k），用户通过向流动性池注入代币提供流动性，交易手续费为 0.25%，其中 0.17% 分配给流动性提供者，0.03% 用于 CAKE 代币回购销毁，0.05% 用于运营。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;v2 到 v3 的演进：&lt;/strong&gt; PancakeSwap 于 2023 年推出 v3 版本，引入了集中流动性（Concentrated Liquidity）机制，流动性提供者可以将资金部署在特定价格区间内，从而在等额资金下获得更高的资本效率和做市收益。这一设计与 Uniswap V3 类似，但在 BSC 链上实现，为用户提供了更精细化的做市工具。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;IFO（Initial Farm Offering）：&lt;/strong&gt; PancakeSwap 创新性地推出了IFO机制，允许项目方在 PancakeSwap 平台上发行新代币，用户通过质押 CAKE 或其他资产参与认购。这一机制在 2020-2021 年 DeFi summer 期间吸引了大量关注和资金参与。&lt;/p&gt;</description></item><item><title>Balancer 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/10-balancer/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/10-balancer/</guid><description>&lt;h1 id="balancer-深度分析"&gt;Balancer 深度分析&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;IFO（Initial Farm Offering）：&lt;/strong&gt; PancakeSwap 创新性地推出了IFO机制，允许项目方在 PancakeSwap 平台上发行新代币，用户通过质押 CAKE 或其他资产参与认购。这一机制在 2020-2021 年 DeFi summer 期间吸引了大量关注和资金参与。&lt;/p&gt;</description></item><item><title>Balancer 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/10-balancer/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/10-balancer/</guid><description>&lt;h1 id="balancer-深度分析"&gt;Balancer 深度分析&lt;/h1&gt;
 &lt;h2 id="项目简介"&gt;项目简介&lt;/h2&gt;
 &lt;p&gt;Balancer 是一个基于以太坊的去中心化交易所和资产管理协议，由 Fernando Martinelli 和 Blake Rodriguez 于 2018 年底创立，2020 年 3 月正式上线主网。Balancer 最初以「可变比例 AMM」为核心创新点，允许任何人创建包含多达 8 种代币的自定义权重流动性池，彻底改变了传统 AMM 只能采用 50/50 固定比例的限制。2023 年，Balancer 推出 v3 版本，整合了 Boosted Pools（收益增强池）和 veBAL 治理模型，进一步强化了其作为专业做市和资产管理平台的市场定位。&lt;/p&gt;
 &lt;h2 id="核心机制"&gt;核心机制&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;可变权重 AMM（Weighted Pool）：&lt;/strong&gt; Balancer 的核心创新在于将 AMM 的代币权重从固定的 50/50 扩展为任意比例（0-100%）。例如，用户可以创建一个 80% ETH + 20% USDC 的流动性池，交易价格会根据池子权重动态调整。这为专业做市商和量化策略提供了极大的灵活性，使得被动指数投资和主动做市可以在同一个协议内实现。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;加权数学公式：&lt;/strong&gt; Balancer 采用恒定加权乘积公式：∏(x_i)^{w_i} = k，其中 w_i 为第 i 个资产的权重。这与 Uniswap 的恒定乘积公式有本质区别，支持更多样化的资产配置。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Boosted Pools（收益增强池）：&lt;/strong&gt; Balancer 将闲置流动性自动存入 Aave 等借贷协议以获取额外收益，LP 在提供流动性的同时还能获得借出收益，显著提升了资金利用效率。这一机制在 2022-2023 年稳定币和主流资产池中被广泛采用。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;veBAL 治理模型：&lt;/strong&gt; 2022 年 Balancer 引入 veBAL（投票托管 BAL），用户将 BAL 锁定最多一年获得 veBAL，veBAL 持有者可以：1）决定哪些流动性池获得 BAL 挖矿奖励及其权重；2）获得协议手续费分成；3）参与治理投票。这一模型有效对齐了流动性提供者、协议收入和治理权力。&lt;/p&gt;</description></item><item><title>DODO 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/11-dodo/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/11-dodo/</guid><description>&lt;h1 id="dodo-深度分析"&gt;DODO 深度分析&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;veBAL 治理模型：&lt;/strong&gt; 2022 年 Balancer 引入 veBAL（投票托管 BAL），用户将 BAL 锁定最多一年获得 veBAL，veBAL 持有者可以：1）决定哪些流动性池获得 BAL 挖矿奖励及其权重；2）获得协议手续费分成；3）参与治理投票。这一模型有效对齐了流动性提供者、协议收入和治理权力。&lt;/p&gt;</description></item><item><title>DODO 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/11-dodo/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/11-dodo/</guid><description>&lt;h1 id="dodo-深度分析"&gt;DODO 深度分析&lt;/h1&gt;
 &lt;h2 id="项目简介"&gt;项目简介&lt;/h2&gt;
 &lt;p&gt;DODO 是由 New搊学实验室（Cycle Labs）开发的新一代链上流动性协议，于 2020 年 8 月在以太坊主网上线。DODO 团队成员主要来自加密货币行业，创始人 Diane Dai 是前 CoinMarketCap 产品负责人。DODO 的核心定位是「下一代链上流动性基础设施」，主打 PMM（Proactive Market Maker，主动做市商）算法，试图解决传统 AMM 的无常损失、资本效率低下和滑点问题。DODO 已部署至以太坊、BSC、Polygon、Arbitrum、Avalanche 等多条链，并持续迭代其 v2、v3 版本。&lt;/p&gt;
 &lt;h2 id="核心机制"&gt;核心机制&lt;/h2&gt;
@@ -278,7 +278,7 @@
 &lt;/ol&gt;
 &lt;h2 id="解决方案专用-amm"&gt;解决方案：专用 AMM&lt;/h2&gt;
 &lt;h3 id="1-elasticswap"&gt;1. ElasticSwap&lt;/h3&gt;
-&lt;p&gt;专为弹性供应代币设计的 AMM，能正确感知 Rebase 事件：&lt;/p&gt;</description></item><item><title>ERC721 NFT 标准 - 数字所有权革命</title><link>https://tiao0303.github.io/dex-bok/posts/08-erc721-nft-standard/</link><pubDate>Sat, 21 Mar 2026 11:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/08-erc721-nft-standard/</guid><description>&lt;h2 id="什么是-erc721"&gt;什么是 ERC721&lt;/h2&gt;
+&lt;p&gt;专为弹性供应代币设计的 AMM，能正确感知 Rebase 事件：&lt;/p&gt;</description></item><item><title>ERC721 NFT 标准 - 数字所有权革命</title><link>https://tiao0303.github.io/dex-bok/posts/developer/08-erc721-nft-standard/</link><pubDate>Sat, 21 Mar 2026 11:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/developer/08-erc721-nft-standard/</guid><description>&lt;h2 id="什么是-erc721"&gt;什么是 ERC721&lt;/h2&gt;
 &lt;p&gt;ERC721 是 Ethereum 上**非同质化代币（NFT）**的标准接口，于 2018 年正式标准化（EIP-721）。由 William Entriken 等人提出。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;核心特点&lt;/strong&gt;：每个代币&lt;strong&gt;独一无二&lt;/strong&gt;，不可互换。就像蒙娜丽莎的画作，每一幅都有独特的价值。&lt;/p&gt;
 &lt;h2 id="erc20-vs-erc721"&gt;ERC20 vs ERC721&lt;/h2&gt;
@@ -346,7 +346,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Approval&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; owner, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; approved, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; tokenId);
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ApprovalForAll&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; owner, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; operator, &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; approved);
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="元数据扩展可选"&gt;元数据扩展（可选）&lt;/h2&gt;
-&lt;p&gt;让 NFT 关联外部信息：&lt;/p&gt;</description></item><item><title>ERC4626 金库标准 - 收益代币化的革命</title><link>https://tiao0303.github.io/dex-bok/posts/07-erc4626-vault-standard/</link><pubDate>Sat, 21 Mar 2026 10:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/07-erc4626-vault-standard/</guid><description>&lt;h2 id="什么是-erc4626"&gt;什么是 ERC4626&lt;/h2&gt;
+&lt;p&gt;让 NFT 关联外部信息：&lt;/p&gt;</description></item><item><title>ERC4626 金库标准 - 收益代币化的革命</title><link>https://tiao0303.github.io/dex-bok/posts/developer/07-erc4626-vault-standard/</link><pubDate>Sat, 21 Mar 2026 10:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/developer/07-erc4626-vault-standard/</guid><description>&lt;h2 id="什么是-erc4626"&gt;什么是 ERC4626&lt;/h2&gt;
 &lt;p&gt;ERC4626（Tokenized Vault Standard）是 Ethereum 上&lt;strong&gt;代币化金库&lt;/strong&gt;的标准接口，于 2023 年正式确立。它扩展了 ERC20，使得金库份额成为一种可交易的 ERC20 代币。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;核心价值&lt;/strong&gt;：统一收益聚合协议接口，让不同 DeFi 协议可以无缝互操作。&lt;/p&gt;
 &lt;h2 id="为什么需要-erc4626"&gt;为什么需要 ERC4626&lt;/h2&gt;
@@ -443,7 +443,7 @@
 &lt;/ul&gt;
 &lt;h2 id="安全考虑"&gt;安全考虑&lt;/h2&gt;
 &lt;h3 id="通胀攻击inflation-attack"&gt;通胀攻击（Inflation Attack）&lt;/h3&gt;
-&lt;p&gt;当金库为空时，攻击者可利用第一笔存款操控汇率：&lt;/p&gt;</description></item><item><title>ERC20 代币标准 - DeFi 世界的基石</title><link>https://tiao0303.github.io/dex-bok/posts/06-erc20-token-standard/</link><pubDate>Sat, 21 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/06-erc20-token-standard/</guid><description>&lt;h2 id="什么是-erc20"&gt;什么是 ERC20&lt;/h2&gt;
+&lt;p&gt;当金库为空时，攻击者可利用第一笔存款操控汇率：&lt;/p&gt;</description></item><item><title>ERC20 代币标准 - DeFi 世界的基石</title><link>https://tiao0303.github.io/dex-bok/posts/developer/06-erc20-token-standard/</link><pubDate>Sat, 21 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/developer/06-erc20-token-standard/</guid><description>&lt;h2 id="什么是-erc20"&gt;什么是 ERC20&lt;/h2&gt;
 &lt;p&gt;ERC20 是 Ethereum 上**可替代代币（Fungible Token）**的技术标准，于 2017 年正式标准化（EIP-20）。由 Fabian Vogelsteller 提出，旨在为所有基于 Ethereum 的代币建立一套统一的接口规范。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;核心特点&lt;/strong&gt;：每个代币单元完全相同、可互换 —— 就像美元一样，每一张的价值相等。&lt;/p&gt;
 &lt;h2 id="为什么要用-erc20"&gt;为什么要用 ERC20&lt;/h2&gt;
@@ -498,7 +498,7 @@
 &lt;h3 id="常见漏洞"&gt;常见漏洞&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;假充值攻击&lt;/strong&gt;：仅检查返回值而非实际到账&lt;/p&gt;</description></item><item><title>DeFi 量化策略 - 套利与做市实战完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/defi-quant-strategy-arbitrage-market-making/</link><pubDate>Thu, 19 Mar 2026 14:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/defi-quant-strategy-arbitrage-market-making/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;假充值攻击&lt;/strong&gt;：仅检查返回值而非实际到账&lt;/p&gt;</description></item><item><title>DeFi 量化策略 - 套利与做市实战完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/defi-quant-strategy-arbitrage-market-making/</link><pubDate>Thu, 19 Mar 2026 14:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/defi-quant-strategy-arbitrage-market-making/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
 &lt;p&gt;DeFi 市场的低效性为量化交易者创造了大量机会。本文将深入分析主流量化策略，提供可落地的代码实现，并探讨风险控制方法。&lt;/p&gt;
 &lt;h2 id="一套利策略全景图"&gt;一、套利策略全景图&lt;/h2&gt;
 &lt;h3 id="11-主要套利类型"&gt;1.1 主要套利类型&lt;/h3&gt;
@@ -555,7 +555,7 @@
 
 如果：汇率乘积 ≠ 1，则存在利润
 profit = initial_amount × (rate1 × rate2 × rate3 - 1)
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;数学公式&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DeFi 安全实战 - 智能合约攻击与防护完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/defi-security-attack-defense/</link><pubDate>Thu, 19 Mar 2026 13:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/defi-security-attack-defense/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;数学公式&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DeFi 安全实战 - 智能合约攻击与防护完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/security/defi-security-attack-defense/</link><pubDate>Thu, 19 Mar 2026 13:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/defi-security-attack-defense/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
 &lt;p&gt;DeFi 协议累计遭受攻击损失已超过 &lt;strong&gt;60 亿美元&lt;/strong&gt;。本文将从实战角度分析常见攻击手段，并提供可落地的防护方案。&lt;/p&gt;
 &lt;h2 id="一2024-2025-年重大攻击事件"&gt;一、2024-2025 年重大攻击事件&lt;/h2&gt;
 &lt;table&gt;
@@ -644,7 +644,7 @@ profit = initial_amount × (rate1 × rate2 × rate3 - 1)
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="22-euler-finance-攻击详解2023"&gt;2.2 Euler Finance 攻击详解（2023）&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;漏洞原理&lt;/strong&gt;：薄授权（Bent Authorization）允许存款人直接提取协议外的资产：&lt;/p&gt;</description></item><item><title>Uniswap V2/V3/V4 机制对比与深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/uniswap-v2-v3-v4-comparison/</link><pubDate>Thu, 19 Mar 2026 12:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/uniswap-v2-v3-v4-comparison/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;漏洞原理&lt;/strong&gt;：薄授权（Bent Authorization）允许存款人直接提取协议外的资产：&lt;/p&gt;</description></item><item><title>Uniswap V2/V3/V4 机制对比与深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/uniswap-v2-v3-v4-comparison/</link><pubDate>Thu, 19 Mar 2026 12:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/uniswap-v2-v3-v4-comparison/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
 &lt;p&gt;Uniswap 作为 DeFi 生态最重要的 DEX 协议，历经 V2、V3、V4 三个重大版本迭代，每个版本都带来了革命性的创新。本文将从底层机制、资本效率、Gas 优化等维度进行深度对比分析。&lt;/p&gt;
 &lt;h2 id="一版本演进概览"&gt;一、版本演进概览&lt;/h2&gt;
 &lt;table&gt;
@@ -7109,7 +7109,7 @@ Gas 成本 = $50/次
 &lt;li&gt;&lt;strong&gt;外部协作&lt;/strong&gt;：与执法、监管、行业伙伴合作&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id="小结"&gt;小结&lt;/h2&gt;
-&lt;p&gt;应急响应能力是 T3 安全体系的最后一道防线。通过完善的组织架构、清晰的流程、充分的准备和持续的改进，T3 能够在安全事件发生时快速响应、有效控制、迅速恢复，最大程度保护用户利益和平台声誉。&lt;/p&gt;</description></item><item><title>DeFi 税务指南 - 合规报税要点</title><link>https://tiao0303.github.io/dex-bok/posts/15-defi-tax-guide/</link><pubDate>Thu, 19 Mar 2026 00:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/15-defi-tax-guide/</guid><description>&lt;h2 id="defi-税务基础"&gt;DeFi 税务基础&lt;/h2&gt;
+&lt;p&gt;应急响应能力是 T3 安全体系的最后一道防线。通过完善的组织架构、清晰的流程、充分的准备和持续的改进，T3 能够在安全事件发生时快速响应、有效控制、迅速恢复，最大程度保护用户利益和平台声誉。&lt;/p&gt;</description></item><item><title>DeFi 税务指南 - 合规报税要点</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/15-defi-tax-guide/</link><pubDate>Thu, 19 Mar 2026 00:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/15-defi-tax-guide/</guid><description>&lt;h2 id="defi-税务基础"&gt;DeFi 税务基础&lt;/h2&gt;
 &lt;h3 id="应税事件"&gt;应税事件&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -7214,7 +7214,7 @@ Gas 成本 = $50/次
 &lt;/ol&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;strong&gt;作者&lt;/strong&gt;：QingHeart Qin
-&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item><item><title>DAO 治理完全指南 - 参与协议决策</title><link>https://tiao0303.github.io/dex-bok/posts/14-governance-guide/</link><pubDate>Thu, 19 Mar 2026 00:15:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/14-governance-guide/</guid><description>&lt;h2 id="什么是-dao-治理"&gt;什么是 DAO 治理&lt;/h2&gt;
+&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item><item><title>DAO 治理完全指南 - 参与协议决策</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/14-governance-guide/</link><pubDate>Thu, 19 Mar 2026 00:15:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/14-governance-guide/</guid><description>&lt;h2 id="什么是-dao-治理"&gt;什么是 DAO 治理&lt;/h2&gt;
 &lt;p&gt;DAO（去中心化自治组织）让代币持有者参与协议决策：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;费用调整&lt;/li&gt;
@@ -7287,7 +7287,7 @@ Gas 成本 = $50/次
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;strong&gt;作者&lt;/strong&gt;：QingHeart Qin
-&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item><item><title>代币经济学分析 - 识别优质项目</title><link>https://tiao0303.github.io/dex-bok/posts/13-token-economics/</link><pubDate>Thu, 19 Mar 2026 00:10:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/13-token-economics/</guid><description>&lt;h2 id="代币经济学核心要素"&gt;代币经济学核心要素&lt;/h2&gt;
+&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item><item><title>代币经济学分析 - 识别优质项目</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/13-token-economics/</link><pubDate>Thu, 19 Mar 2026 00:10:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/13-token-economics/</guid><description>&lt;h2 id="代币经济学核心要素"&gt;代币经济学核心要素&lt;/h2&gt;
 &lt;h3 id="1-供应量"&gt;1. 供应量&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -7349,7 +7349,7 @@ TGE: 10%
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;strong&gt;作者&lt;/strong&gt;：QingHeart Qin
-&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item><item><title>跨链桥安全指南 - 如何安全转移资产</title><link>https://tiao0303.github.io/dex-bok/posts/12-cross-chain-bridge/</link><pubDate>Thu, 19 Mar 2026 00:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/12-cross-chain-bridge/</guid><description>&lt;h2 id="跨链桥风险"&gt;跨链桥风险&lt;/h2&gt;
+&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item><item><title>跨链桥安全指南 - 如何安全转移资产</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/12-cross-chain-bridge/</link><pubDate>Thu, 19 Mar 2026 00:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/12-cross-chain-bridge/</guid><description>&lt;h2 id="跨链桥风险"&gt;跨链桥风险&lt;/h2&gt;
 &lt;h3 id="历史大案"&gt;历史大案&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -7443,7 +7443,7 @@ TGE: 10%
 &lt;/ol&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;strong&gt;作者&lt;/strong&gt;：QingHeart Qin
-&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item><item><title>DEX 智能合约审计入门 - 避开 90% 的坑</title><link>https://tiao0303.github.io/dex-bok/posts/11-dex-security-audit/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/11-dex-security-audit/</guid><description>&lt;h2 id="为什么需要审计"&gt;为什么需要审计&lt;/h2&gt;
+&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item><item><title>DEX 智能合约审计入门 - 避开 90% 的坑</title><link>https://tiao0303.github.io/dex-bok/posts/security/11-dex-security-audit/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/11-dex-security-audit/</guid><description>&lt;h2 id="为什么需要审计"&gt;为什么需要审计&lt;/h2&gt;
 &lt;p&gt;DEX 合约一旦有漏洞，可能导致：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;资金被盗（如 2022 年 Nomad 桥 $1.9 亿）&lt;/li&gt;

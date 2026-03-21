@@ -206,7 +206,7 @@ Ethereum 轻节点运行在 Arbitrum 上
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="chainlink-ccip-解析"&gt;Chainlink CCIP 解析&lt;/h2&gt;
 &lt;h3 id="什么是-ccip"&gt;什么是 CCIP&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Cross-Chain Interoperability Protocol&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>跨链桥安全指南 - 如何安全转移资产</title><link>https://tiao0303.github.io/dex-bok/posts/12-cross-chain-bridge/</link><pubDate>Thu, 19 Mar 2026 00:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/12-cross-chain-bridge/</guid><description>&lt;h2 id="跨链桥风险"&gt;跨链桥风险&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Cross-Chain Interoperability Protocol&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>跨链桥安全指南 - 如何安全转移资产</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/12-cross-chain-bridge/</link><pubDate>Thu, 19 Mar 2026 00:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/12-cross-chain-bridge/</guid><description>&lt;h2 id="跨链桥风险"&gt;跨链桥风险&lt;/h2&gt;
 &lt;h3 id="历史大案"&gt;历史大案&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>developer | DEX 学习笔记 | 去中心化交易所实战指南</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="DeFi developer 学习路径">
+    <meta name="generator" content="Hugo 0.158.0">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="QingHeart Qin">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+  
+    <link rel="stylesheet" href="/css/custom.css">
+  
+
+
+    
+
+
+    
+      
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+
+    
+
+    
+    
+      <link href="/posts/developer/index.xml" rel="alternate" type="application/rss+xml" title="DEX 学习笔记 | 去中心化交易所实战指南" />
+      <link href="/posts/developer/index.xml" rel="feed" type="application/rss+xml" title="DEX 学习笔记 | 去中心化交易所实战指南" />
+      
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/posts/developer/">
+    
+
+    
+    
+    <meta property="og:url" content="http://localhost:1313/posts/developer/">
+  <meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南">
+  <meta property="og:title" content="developer">
+  <meta property="og:description" content="DeFi developer 学习路径">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="website">
+
+  <meta itemprop="name" content="developer">
+  <meta itemprop="description" content="DeFi developer 学习路径">
+  <meta itemprop="datePublished" content="2026-03-18T21:00:00+08:00">
+  <meta itemprop="dateModified" content="2026-03-18T21:00:00+08:00">
+  <meta itemprop="wordCount" content="6">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="developer">
+  <meta name="twitter:description" content="DeFi developer 学习路径">
+
+	
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head><body class="ma0 bg-dark geek-dark development is-section is-section">
+    <header class="geek-header">
+  <nav class="geek-nav container" role="navigation">
+    <div class="geek-nav-inner">
+      <a href="/" class="geek-logo">
+        <span class="logo-icon">🦞</span>
+        <span class="logo-text">DEX 学习笔记 | 去中心化交易所实战指南</span>
+      </a>
+      <div class="geek-nav-links">
+        
+          <ul class="geek-menu">
+            
+            <li>
+              <a href="/posts/" title="文章">文章</a>
+            </li>
+            
+            <li>
+              <a href="/guides/" title="教程">教程</a>
+            </li>
+            
+            <li>
+              <a href="/tools/" title="工具">工具</a>
+            </li>
+            
+            <li>
+              <a href="/about/" title="关于">关于</a>
+            </li>
+            
+            <li>
+              <a href="/" title="首页">首页</a>
+            </li>
+            
+          </ul>
+        
+      </div>
+    </div>
+  </nav>
+</header>
+
+    <main class="pb7" role="main">
+      
+  <article class="pa3 pa4-ns nested-copy-line-height">
+    <section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"><h2 id="developer-学习路径">developer 学习路径</h2>
+<p>本路径适合 developer 方向的学习者。</p>
+<h3 id="文章列表">文章列表</h3>
+</section>
+    <section class="flex-ns mt5 flex-wrap justify-around">
+      
+        <div class="w-100 w-30-l mb4 relative bg-white">
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">developer</span>
+    <h1 class="f3 near-black">
+      <a href="/posts/developer/08-gas%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/" class="link black dim">
+        
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="gas-优化技巧写出省油的智能合约">Gas 优化技巧：写出省油的智能合约</h1>
+<h2 id="什么是-gas">什么是 Gas</h2>
+<p>Gas 是以太坊网络上执行操作的成本单位。每个 EVM 操作码都有对应的 Gas 消耗：简单的存储读写约 20,000 Gas，复杂的椭圆曲线签名验证可能需要数百万 Gas。</p>
+<p><strong>Gas 优化的目标</strong>：在保持功能正确性和安全性的前提下，最小化 Gas 消耗，降低用户成本并提高合约吞吐量。</p>
+<h2 id="存储优化">存储优化</h2>
+<p>存储是 Gas 消耗最高的部分，一次存储写入约 20,000 Gas，读取约 200-800 Gas。</p>
+<h3 id="使用-events-代替-storage-存储">使用 events 代替 storage 存储</h3>
+<p>如果你只需要记录历史数据而不需要合约后续读取，用 events 更省 Gas：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#75715e">// 高 Gas：存储每笔历史记录
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">mapping</span>(<span style="color:#66d9ef">address</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">uint256</span>[]) <span style="color:#66d9ef">public</span> depositHistory;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">deposit</span>(<span style="color:#66d9ef">uint256</span> amount) <span style="color:#66d9ef">external</span> {
+</span></span><span style="display:flex;"><span>    depositHistory[msg.sender].push(amount); <span style="color:#75715e">// SLOAD + SSTORE，Gas 很高
+</span></span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 低 Gas：仅记录事件
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">event</span> <span style="color:#a6e22e">Deposit</span>(<span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> user, <span style="color:#66d9ef">uint256</span> amount, <span style="color:#66d9ef">uint256</span> timestamp);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">deposit</span>(<span style="color:#66d9ef">uint256</span> amount) <span style="color:#66d9ef">external</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 不存储历史数组，只记录事件
+</span></span></span><span style="display:flex;"><span>    emit Deposit(msg.sender, amount, block.timestamp); <span style="color:#75715e">// 约 1500 Gas
+</span></span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="packing-结构体成员">packing 结构体成员</h3>
+<p>EVM 以 32 字节（256 bits）为单位存储变量。将大小不同的变量紧凑排列可以减少存储槽数：</p>
+    </div>
+    <a href="/posts/developer/08-gas%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        </div>
+      
+        <div class="w-100 w-30-l mb4 relative bg-white">
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">developer</span>
+    <h1 class="f3 near-black">
+      <a href="/posts/developer/09-%E5%8D%87%E7%BA%A7%E5%9E%8B%E5%90%88%E7%BA%A6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="link black dim">
+        
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="升级型合约设计模式代理模式深度解析">升级型合约设计模式：代理模式深度解析</h1>
+<h2 id="为什么需要可升级合约">为什么需要可升级合约</h2>
+<p>智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将<strong>逻辑代码</strong>与<strong>存储状态</strong>分离，实现了合约的&quot;升级&quot;能力。</p>
+<h2 id="代理模式核心原理">代理模式核心原理</h2>
+<h3 id="evm-的-delegatecall">EVM 的 DELEGATECALL</h3>
+<p><code>DELEGATECALL</code> 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文：</p>
+<pre tabindex="0"><code>用户调用 Proxy.transfer()
+     ↓
+Proxy 使用 DELEGATECALL 调用 Implementation.transfer()
+     ↓
+执行 Implementation 的代码
+但所有状态读写发生在 Proxy 的存储中
+</code></pre><p>这意味着：<strong>同一个存储可以承载不同版本的逻辑代码</strong>。</p>
+<h2 id="代理模式家族">代理模式家族</h2>
+<h3 id="1-透明代理transparent-proxy">1. 透明代理（Transparent Proxy）</h3>
+<p>最简单但有限制：管理员可以升级，但不能普通调用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#75715e">// Proxy 合约
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">contract</span> <span style="color:#a6e22e">TransparentUpgradeableProxy</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bytes32</span> <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">constant</span> IMPLEMENTATION_SLOT <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">bytes32</span>(<span style="color:#66d9ef">uint256</span>(keccak256(<span style="color:#e6db74">&#34;eip1967.proxy.implementation&#34;</span>)) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">address</span> <span style="color:#66d9ef">public</span> implementation;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    fallback() <span style="color:#66d9ef">external</span> <span style="color:#66d9ef">payable</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 仅当调用者不是管理员时，才转发到实现合约
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (msg.sender <span style="color:#f92672">!=</span> admin()) {
+</span></span><span style="display:flex;"><span>            _delegate(implementation);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_delegate</span>(<span style="color:#66d9ef">address</span> impl) <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">virtual</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">assembly</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">let</span> ptr <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mload</span>(<span style="color:#ae81ff">0x40</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">calldatacopy</span>(ptr, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">calldatasize</span>())
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">let</span> result <span style="color:#f92672">:=</span> <span style="color:#a6e22e">delegatecall</span>(<span style="color:#a6e22e">gas</span>(), impl, ptr, <span style="color:#a6e22e">calldatasize</span>(), <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">returndatacopy</span>(ptr, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">returndatasize</span>())
+</span></span><span style="display:flex;"><span>            if <span style="color:#a6e22e">iszero</span>(result) { <span style="color:#a6e22e">revert</span>(ptr, <span style="color:#a6e22e">returndatasize</span>()) }
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">return</span>(ptr, <span style="color:#a6e22e">returndatasize</span>())
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="2-uups-代理erc-1967">2. UUPS 代理（ERC-1967）</h3>
+<p>目前最流行的模式，升级逻辑放在实现合约本身：</p>
+    </div>
+    <a href="/posts/developer/09-%E5%8D%87%E7%BA%A7%E5%9E%8B%E5%90%88%E7%BA%A6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        </div>
+      
+        <div class="w-100 w-30-l mb4 relative bg-white">
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">developer</span>
+    <h1 class="f3 near-black">
+      <a href="/posts/developer/10-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/" class="link black dim">
+        
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="智能合约审计实战从自检到专业审计">智能合约审计实战：从自检到专业审计</h1>
+<h2 id="为什么需要审计">为什么需要审计</h2>
+<p>智能合约审计是对合约代码进行系统性安全检查的过程，目的是在部署前发现并修复漏洞。2022 年 Web3 因安全问题损失超过 37 亿美元，<strong>绝大多数损失本可以通过审计避免</strong>。</p>
+<p>本文以一个借贷协议的简化版本为例，演示从自检到专业审计的完整流程。</p>
+<h2 id="目标合约simplelending">目标合约：SimpleLending</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#75715e">// SPDX-License-Identifier: MIT
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">pragma solidity</span> <span style="color:#f92672">^</span><span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">8</span>.<span style="color:#ae81ff">24</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;@openzeppelin/contracts/token/ERC20/IERC20.sol&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;@openzeppelin/contracts/access/Ownable.sol&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;@openzeppelin/contracts/utils/ReentrancyGuard.sol&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">contract</span> <span style="color:#a6e22e">SimpleLending</span> <span style="color:#66d9ef">is</span> Ownable, ReentrancyGuard {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">using</span> SafeERC20 <span style="color:#66d9ef">for</span> IERC20;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 抵押品信息
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Collateral</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> amount;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> borrowedAmount;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> lastUpdateTime;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 资产配置
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">mapping</span>(<span style="color:#66d9ef">address</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">bool</span>) <span style="color:#66d9ef">public</span> supportedCollateral;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">mapping</span>(<span style="color:#66d9ef">address</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">bool</span>) <span style="color:#66d9ef">public</span> supportedBorrow;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">mapping</span>(<span style="color:#66d9ef">address</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">uint256</span>) <span style="color:#66d9ef">public</span> collateralFactor; <span style="color:#75715e">// 抵押率 0-100
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">mapping</span>(<span style="color:#66d9ef">address</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">uint256</span>) <span style="color:#66d9ef">public</span> borrowRate; <span style="color:#75715e">// 借款利率 bps/second
+</span></span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 用户数据
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">mapping</span>(<span style="color:#66d9ef">address</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">mapping</span>(<span style="color:#66d9ef">address</span> <span style="color:#f92672">=&gt;</span> Collateral)) <span style="color:#66d9ef">public</span> userCollateral;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">mapping</span>(<span style="color:#66d9ef">address</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">uint256</span>) <span style="color:#66d9ef">public</span> totalBorrowed;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 全局数据
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">constant</span> BPS <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">constant</span> HEALTH_FACTOR_THRESHOLD <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>e18; <span style="color:#75715e">// 1.0
+</span></span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">address</span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">immutable</span> weth;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">event</span> <span style="color:#a6e22e">Deposit</span>(<span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> user, <span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> token, <span style="color:#66d9ef">uint256</span> amount);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">event</span> <span style="color:#a6e22e">Withdraw</span>(<span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> user, <span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> token, <span style="color:#66d9ef">uint256</span> amount);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">event</span> <span style="color:#a6e22e">Borrow</span>(<span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> user, <span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> token, <span style="color:#66d9ef">uint256</span> amount);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">event</span> <span style="color:#a6e22e">Repay</span>(<span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> user, <span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> token, <span style="color:#66d9ef">uint256</span> amount);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">event</span> <span style="color:#a6e22e">Liquidate</span>(
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> liquidator,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> user,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">address</span> <span style="color:#66d9ef">indexed</span> collateralToken,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> amount
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">constructor</span>(<span style="color:#66d9ef">address</span> _weth) Ownable() {
+</span></span><span style="display:flex;"><span>        weth <span style="color:#f92672">=</span> _weth;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// --- 管理函数 ---
+</span></span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">addSupportedCollateral</span>(<span style="color:#66d9ef">address</span> token, <span style="color:#66d9ef">uint256</span> factor) <span style="color:#66d9ef">external</span> onlyOwner {
+</span></span><span style="display:flex;"><span>        supportedCollateral[token] <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>        collateralFactor[token] <span style="color:#f92672">=</span> factor; <span style="color:#75715e">// factor in BPS (e.g. 8000 = 80%)
+</span></span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">addSupportedBorrow</span>(<span style="color:#66d9ef">address</span> token, <span style="color:#66d9ef">uint256</span> rate) <span style="color:#66d9ef">external</span> onlyOwner {
+</span></span><span style="display:flex;"><span>        supportedBorrow[token] <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>        borrowRate[token] <span style="color:#f92672">=</span> rate; <span style="color:#75715e">// bps per second
+</span></span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// --- 核心业务逻辑 ---
+</span></span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">deposit</span>(<span style="color:#66d9ef">address</span> token, <span style="color:#66d9ef">uint256</span> amount) <span style="color:#66d9ef">external</span> nonReentrant {
+</span></span><span style="display:flex;"><span>        require(supportedCollateral[token], <span style="color:#e6db74">&#34;Unsupported collateral&#34;</span>);
+</span></span><span style="display:flex;"><span>        require(amount <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#34;Amount must be positive&#34;</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        Collateral <span style="color:#66d9ef">storage</span> col <span style="color:#f92672">=</span> userCollateral[msg.sender][token];
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 更新抵押数据
+</span></span></span><span style="display:flex;"><span>        _accrueInterest(msg.sender, token);
+</span></span><span style="display:flex;"><span>        col.amount <span style="color:#f92672">+=</span> amount;
+</span></span><span style="display:flex;"><span>        col.lastUpdateTime <span style="color:#f92672">=</span> block.timestamp;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 转账代币
+</span></span></span><span style="display:flex;"><span>        IERC20(token).safeTransferFrom(msg.sender, <span style="color:#66d9ef">address</span>(this), amount);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        emit Deposit(msg.sender, token, amount);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">withdraw</span>(<span style="color:#66d9ef">address</span> token, <span style="color:#66d9ef">uint256</span> amount) <span style="color:#66d9ef">external</span> nonReentrant {
+</span></span><span style="display:flex;"><span>        require(amount <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#34;Amount must be positive&#34;</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        Collateral <span style="color:#66d9ef">storage</span> col <span style="color:#f92672">=</span> userCollateral[msg.sender][token];
+</span></span><span style="display:flex;"><span>        _accrueInterest(msg.sender, token);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        require(col.amount <span style="color:#f92672">&gt;=</span> amount, <span style="color:#e6db74">&#34;Insufficient balance&#34;</span>);
+</span></span><span style="display:flex;"><span>        col.amount <span style="color:#f92672">-=</span> amount;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 健康检查
+</span></span></span><span style="display:flex;"><span>        require(_getHealthFactor(msg.sender) <span style="color:#f92672">&gt;=</span> HEALTH_FACTOR_THRESHOLD, <span style="color:#e6db74">&#34;Health factor too low&#34;</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        IERC20(token).safeTransfer(msg.sender, amount);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        emit Withdraw(msg.sender, token, amount);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">borrow</span>(<span style="color:#66d9ef">address</span> token, <span style="color:#66d9ef">uint256</span> amount) <span style="color:#66d9ef">external</span> nonReentrant {
+</span></span><span style="display:flex;"><span>        require(supportedBorrow[token], <span style="color:#e6db74">&#34;Unsupported borrow asset&#34;</span>);
+</span></span><span style="display:flex;"><span>        require(amount <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#34;Amount must be positive&#34;</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        Collateral <span style="color:#66d9ef">storage</span> col <span style="color:#f92672">=</span> userCollateral[msg.sender][weth]; <span style="color:#75715e">// 假设只用 WETH 作为抵押
+</span></span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 累计利息
+</span></span></span><span style="display:flex;"><span>        _accrueInterestForUser(msg.sender);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 健康因子检查
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> borrowedValue <span style="color:#f92672">=</span> _getBorrowedValue(msg.sender);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> collateralValue <span style="color:#f92672">=</span> _getCollateralValue(msg.sender);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> maxBorrow <span style="color:#f92672">=</span> collateralValue <span style="color:#f92672">*</span> collateralFactor[weth] <span style="color:#f92672">/</span> BPS;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        require(borrowedValue <span style="color:#f92672">+</span> amount <span style="color:#f92672">&lt;=</span> maxBorrow, <span style="color:#e6db74">&#34;Borrow limit exceeded&#34;</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 更新借款数据
+</span></span></span><span style="display:flex;"><span>        userCollateral[msg.sender][token].borrowedAmount <span style="color:#f92672">+=</span> amount;
+</span></span><span style="display:flex;"><span>        totalBorrowed[token] <span style="color:#f92672">+=</span> amount;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        IERC20(token).safeTransfer(msg.sender, amount);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        emit Borrow(msg.sender, token, amount);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">repay</span>(<span style="color:#66d9ef">address</span> token, <span style="color:#66d9ef">uint256</span> amount) <span style="color:#66d9ef">external</span> nonReentrant {
+</span></span><span style="display:flex;"><span>        require(amount <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#34;Amount must be positive&#34;</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        Collateral <span style="color:#66d9ef">storage</span> col <span style="color:#f92672">=</span> userCollateral[msg.sender][token];
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 先累计利息
+</span></span></span><span style="display:flex;"><span>        _accrueInterest(msg.sender, token);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 转账并更新
+</span></span></span><span style="display:flex;"><span>        IERC20(token).safeTransferFrom(msg.sender, <span style="color:#66d9ef">address</span>(this), amount);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (amount <span style="color:#f92672">&gt;=</span> col.borrowedAmount) {
+</span></span><span style="display:flex;"><span>            col.borrowedAmount <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            col.borrowedAmount <span style="color:#f92672">-=</span> amount;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        totalBorrowed[token] <span style="color:#f92672">-=</span> amount; <span style="color:#75715e">// 潜在问题：未考虑部分还款
+</span></span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        emit Repay(msg.sender, token, amount);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">liquidate</span>(<span style="color:#66d9ef">address</span> user, <span style="color:#66d9ef">address</span> collateral, <span style="color:#66d9ef">uint256</span> repayAmount) 
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">external</span> nonReentrant 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        require(
+</span></span><span style="display:flex;"><span>            _getHealthFactor(user) <span style="color:#f92672">&lt;</span> HEALTH_FACTOR_THRESHOLD, 
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;Health factor OK&#34;</span>
+</span></span><span style="display:flex;"><span>        );
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        Collateral <span style="color:#66d9ef">storage</span> col <span style="color:#f92672">=</span> userCollateral[user][collateral];
+</span></span><span style="display:flex;"><span>        require(col.borrowedAmount <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#34;No debt to liquidate&#34;</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 转账还款
+</span></span></span><span style="display:flex;"><span>        IERC20(weth).safeTransferFrom(msg.sender, <span style="color:#66d9ef">address</span>(this), repayAmount);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 计算清算量
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> collateralToLiquidate <span style="color:#f92672">=</span> repayAmount <span style="color:#f92672">*</span> BPS <span style="color:#f92672">/</span> collateralFactor[collateral];
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 执行清算
+</span></span></span><span style="display:flex;"><span>        col.amount <span style="color:#f92672">-=</span> collateralToLiquidate;
+</span></span><span style="display:flex;"><span>        col.borrowedAmount <span style="color:#f92672">-=</span> repayAmount; <span style="color:#75715e">// 可能为负？
+</span></span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 转给清算人
+</span></span></span><span style="display:flex;"><span>        IERC20(collateral).safeTransfer(msg.sender, collateralToLiquidate);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        emit Liquidate(msg.sender, user, collateral, collateralToLiquidate);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// --- 内部函数 ---
+</span></span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_accrueInterest</span>(<span style="color:#66d9ef">address</span> user, <span style="color:#66d9ef">address</span> token) <span style="color:#66d9ef">internal</span> {
+</span></span><span style="display:flex;"><span>        Collateral <span style="color:#66d9ef">storage</span> col <span style="color:#f92672">=</span> userCollateral[user][token];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (col.lastUpdateTime <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> elapsed <span style="color:#f92672">=</span> block.timestamp <span style="color:#f92672">-</span> col.lastUpdateTime;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (elapsed <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">||</span> col.borrowedAmount <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> borrowRatePerSecond <span style="color:#f92672">=</span> borrowRate[token];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> interest <span style="color:#f92672">=</span> col.borrowedAmount <span style="color:#f92672">*</span> borrowRatePerSecond <span style="color:#f92672">*</span> elapsed <span style="color:#f92672">/</span> BPS;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        col.borrowedAmount <span style="color:#f92672">+=</span> interest;
+</span></span><span style="display:flex;"><span>        col.lastUpdateTime <span style="color:#f92672">=</span> block.timestamp;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_accrueInterestForUser</span>(<span style="color:#66d9ef">address</span> user) <span style="color:#66d9ef">internal</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 简化：假设只借 WETH
+</span></span></span><span style="display:flex;"><span>        _accrueInterest(user, weth);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_getHealthFactor</span>(<span style="color:#66d9ef">address</span> user) <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">view</span> <span style="color:#66d9ef">returns</span> (<span style="color:#66d9ef">uint256</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> borrowedValue <span style="color:#f92672">=</span> _getBorrowedValue(user);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (borrowedValue <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">return</span> type(<span style="color:#a6e22e">uint256</span>).max;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint256</span> collateralValue <span style="color:#f92672">=</span> _getCollateralValue(user);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> collateralValue <span style="color:#f92672">*</span> <span style="color:#ae81ff">1</span>e18 <span style="color:#f92672">/</span> borrowedValue;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_getBorrowedValue</span>(<span style="color:#66d9ef">address</span> user) <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">view</span> <span style="color:#66d9ef">returns</span> (<span style="color:#66d9ef">uint256</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 简化：假设只借一种资产
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> userCollateral[user][weth].borrowedAmount;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_getCollateralValue</span>(<span style="color:#66d9ef">address</span> user) <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">view</span> <span style="color:#66d9ef">returns</span> (<span style="color:#66d9ef">uint256</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 简化：假设只抵押 WETH
+</span></span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> userCollateral[user][weth].amount;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="第一阶段自检清单">第一阶段：自检清单</h2>
+<h3 id="快速检查清单">快速检查清单</h3>
+<p>在提交审计前，先用这个清单自检：</p>
+    </div>
+    <a href="/posts/developer/10-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        </div>
+      
+    </section>
+    
+    <ul class="pagination pagination-default">
+      <li class="page-item">
+        <a href="/posts/developer/" aria-label="First" class="page-link" role="button"><span aria-hidden="true">&laquo;&laquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/posts/developer/" aria-label="Previous" class="page-link" role="button"><span aria-hidden="true">&laquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/posts/developer/" aria-label="Page 1" class="page-link" role="button">1</a>
+      </li>
+      <li class="page-item active">
+        <a aria-current="page" aria-label="Page 2" class="page-link" role="button">2</a>
+      </li>
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="Next" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;</span></a>
+      </li>
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="Last" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;&raquo;</span></a>
+      </li>
+    </ul></article>
+
+    </main>
+    <footer class="geek-footer">
+  <div class="container">
+    <div class="geek-footer-inner">
+      <div class="geek-footer-brand">
+        <a href="http://localhost:1313/" class="geek-footer-logo">
+          <span class="logo-icon">🦞</span>
+          <span>DEX 学习笔记 | 去中心化交易所实战指南</span>
+        </a>
+        <p class="geek-footer-desc">DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p>
+      </div>
+      <div class="geek-footer-links">
+        <div class="geek-footer-col">
+          <h4>导航</h4>
+          <ul>
+            <li><a href="/">首页</a></li>
+            <li><a href="/posts/">文章</a></li>
+            <li><a href="/guides/">教程</a></li>
+            <li><a href="/tools/">工具</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关于</h4>
+          <ul>
+            <li><a href="/about/">关于本站</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关注</h4>
+          <ul>
+            <li><a href="https://github.com/tiao0303" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://x.com/qing87762" target="_blank" rel="noopener">X (Twitter)</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="geek-footer-bottom">
+      <p>&copy; 2026  DEX 学习笔记 | 去中心化交易所实战指南 </p>
+      <p class="geek-footer-tech">Built with Hugo & DeFi ❤️</p>
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

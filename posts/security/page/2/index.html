@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>security | DEX 学习笔记 | 去中心化交易所实战指南</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="DeFi security 学习路径">
+    <meta name="generator" content="Hugo 0.158.0">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="QingHeart Qin">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+  
+    <link rel="stylesheet" href="/css/custom.css">
+  
+
+
+    
+
+
+    
+      
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+
+    
+
+    
+    
+      <link href="/posts/security/index.xml" rel="alternate" type="application/rss+xml" title="DEX 学习笔记 | 去中心化交易所实战指南" />
+      <link href="/posts/security/index.xml" rel="feed" type="application/rss+xml" title="DEX 学习笔记 | 去中心化交易所实战指南" />
+      
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/posts/security/">
+    
+
+    
+    
+    <meta property="og:url" content="http://localhost:1313/posts/security/">
+  <meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南">
+  <meta property="og:title" content="security">
+  <meta property="og:description" content="DeFi security 学习路径">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="website">
+
+  <meta itemprop="name" content="security">
+  <meta itemprop="description" content="DeFi security 学习路径">
+  <meta itemprop="datePublished" content="2026-03-18T21:00:00+08:00">
+  <meta itemprop="dateModified" content="2026-03-18T21:00:00+08:00">
+  <meta itemprop="wordCount" content="6">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="security">
+  <meta name="twitter:description" content="DeFi security 学习路径">
+
+	
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head><body class="ma0 bg-dark geek-dark development is-section is-section">
+    <header class="geek-header">
+  <nav class="geek-nav container" role="navigation">
+    <div class="geek-nav-inner">
+      <a href="/" class="geek-logo">
+        <span class="logo-icon">🦞</span>
+        <span class="logo-text">DEX 学习笔记 | 去中心化交易所实战指南</span>
+      </a>
+      <div class="geek-nav-links">
+        
+          <ul class="geek-menu">
+            
+            <li>
+              <a href="/posts/" title="文章">文章</a>
+            </li>
+            
+            <li>
+              <a href="/guides/" title="教程">教程</a>
+            </li>
+            
+            <li>
+              <a href="/tools/" title="工具">工具</a>
+            </li>
+            
+            <li>
+              <a href="/about/" title="关于">关于</a>
+            </li>
+            
+            <li>
+              <a href="/" title="首页">首页</a>
+            </li>
+            
+          </ul>
+        
+      </div>
+    </div>
+  </nav>
+</header>
+
+    <main class="pb7" role="main">
+      
+  <article class="pa3 pa4-ns nested-copy-line-height">
+    <section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links mid-gray"><h2 id="security-学习路径">security 学习路径</h2>
+<p>本路径适合 security 方向的学习者。</p>
+<h3 id="文章列表">文章列表</h3>
+</section>
+    <section class="flex-ns mt5 flex-wrap justify-around">
+      
+        <div class="w-100 w-30-l mb4 relative bg-white">
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">security</span>
+    <h1 class="f3 near-black">
+      <a href="/posts/security/10-secure-development-best-practices/" class="link black dim">
+        
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="安全开发最佳实践如何从一开始就写出安全的合约">安全开发最佳实践：如何从一开始就写出安全的合约</h1>
+<h2 id="引言">引言</h2>
+<p>安全审计师经常说：最好的安全审计是那些发现很少问题的审计。这说明安全问题最好在编写代码的第一天就预防，而不是留到审计阶段再发现。</p>
+<p>本文作为系列收尾，将开发者视角的安全原则和技术实践整合为一份可操作的清单。无论你是刚入门 Solidity 的新手，还是希望系统化安全流程的团队，都能找到实用的参考。</p>
+<h2 id="左侧优先安全设计原则">左侧优先：安全设计原则</h2>
+<h3 id="原则一最小权限原则principle-of-least-privilege">原则一：最小权限原则（Principle of Least Privilege）</h3>
+<p>每个角色、每个函数、每个调用都应该只拥有完成其任务所需的最小权限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#75715e">// ❌ 过度授权
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">setConfig</span>(<span style="color:#66d9ef">uint256</span> _fee) <span style="color:#66d9ef">external</span> {
+</span></span><span style="display:flex;"><span>    fee <span style="color:#f92672">=</span> _fee;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ✅ 最小权限
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">setFeeRecipient</span>(<span style="color:#66d9ef">address</span> _feeRecipient) <span style="color:#66d9ef">external</span> onlyAdmin {
+</span></span><span style="display:flex;"><span>    feeRecipient <span style="color:#f92672">=</span> _feeRecipient;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">setFee</span>(<span style="color:#66d9ef">uint256</span> _newFee) <span style="color:#66d9ef">external</span> onlyGovernance {
+</span></span><span style="display:flex;"><span>    require(_newFee <span style="color:#f92672">&lt;=</span> MAX_FEE, <span style="color:#e6db74">&#34;Fee too high&#34;</span>);
+</span></span><span style="display:flex;"><span>    fee <span style="color:#f92672">=</span> _newFee;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="原则二防御性编程">原则二：防御性编程</h3>
+<p>假设所有外部输入都是恶意的，假设调用者会尽一切可能破坏你的合约。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-solidity" data-lang="solidity"><span style="display:flex;"><span><span style="color:#75715e">// ❌ 信任外部输入
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">deposit</span>(<span style="color:#66d9ef">uint256</span> amount) <span style="color:#66d9ef">external</span> {
+</span></span><span style="display:flex;"><span>    require(amount <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    balances[msg.sender] <span style="color:#f92672">=</span> amount; <span style="color:#75715e">// 假设 amount 是你想要的值
+</span></span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ✅ 防御性检查
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">deposit</span>(<span style="color:#66d9ef">uint256</span> amount) <span style="color:#66d9ef">external</span> {
+</span></span><span style="display:flex;"><span>    require(amount <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#34;Zero amount&#34;</span>);
+</span></span><span style="display:flex;"><span>    require(amount <span style="color:#f92672">&lt;=</span> MAX_DEPOSIT, <span style="color:#e6db74">&#34;Amount too large&#34;</span>);
+</span></span><span style="display:flex;"><span>    require(amount <span style="color:#f92672">&gt;=</span> MIN_DEPOSIT, <span style="color:#e6db74">&#34;Amount too small&#34;</span>);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> balanceBefore <span style="color:#f92672">=</span> token.balanceOf(<span style="color:#66d9ef">address</span>(this));
+</span></span><span style="display:flex;"><span>    token.transferFrom(msg.sender, <span style="color:#66d9ef">address</span>(this), amount);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint256</span> received <span style="color:#f92672">=</span> token.balanceOf(<span style="color:#66d9ef">address</span>(this)) <span style="color:#f92672">-</span> balanceBefore;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    balances[msg.sender] <span style="color:#f92672">+=</span> received; <span style="color:#75715e">// 使用实际收到的金额
+</span></span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="原则三简单优先">原则三：简单优先</h3>
+<p>复杂的合约更难审计、更容易出错。在安全性和功能性之间，优先选择简单：</p>
+    </div>
+    <a href="/posts/security/10-secure-development-best-practices/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        </div>
+      
+    </section>
+    
+    <ul class="pagination pagination-default">
+      <li class="page-item">
+        <a href="/posts/security/" aria-label="First" class="page-link" role="button"><span aria-hidden="true">&laquo;&laquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/posts/security/" aria-label="Previous" class="page-link" role="button"><span aria-hidden="true">&laquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/posts/security/" aria-label="Page 1" class="page-link" role="button">1</a>
+      </li>
+      <li class="page-item active">
+        <a aria-current="page" aria-label="Page 2" class="page-link" role="button">2</a>
+      </li>
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="Next" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;</span></a>
+      </li>
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="Last" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;&raquo;</span></a>
+      </li>
+    </ul></article>
+
+    </main>
+    <footer class="geek-footer">
+  <div class="container">
+    <div class="geek-footer-inner">
+      <div class="geek-footer-brand">
+        <a href="http://localhost:1313/" class="geek-footer-logo">
+          <span class="logo-icon">🦞</span>
+          <span>DEX 学习笔记 | 去中心化交易所实战指南</span>
+        </a>
+        <p class="geek-footer-desc">DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p>
+      </div>
+      <div class="geek-footer-links">
+        <div class="geek-footer-col">
+          <h4>导航</h4>
+          <ul>
+            <li><a href="/">首页</a></li>
+            <li><a href="/posts/">文章</a></li>
+            <li><a href="/guides/">教程</a></li>
+            <li><a href="/tools/">工具</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关于</h4>
+          <ul>
+            <li><a href="/about/">关于本站</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关注</h4>
+          <ul>
+            <li><a href="https://github.com/tiao0303" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://x.com/qing87762" target="_blank" rel="noopener">X (Twitter)</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="geek-footer-bottom">
+      <p>&copy; 2026  DEX 学习笔记 | 去中心化交易所实战指南 </p>
+      <p class="geek-footer-tech">Built with Hugo & DeFi ❤️</p>
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>
