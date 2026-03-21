@@ -7,10 +7,13 @@
     {{ end }}
   </header>
 
-  {{/* 判断是否为分类页面 */}}
-  {{ $isCategory := false }}
-  {{ if .Data.Terms }}
-    {{ $isCategory = true }}
+  {{/* 先判断页面类型 */}}
+  {{ $isSection := false }}
+  {{ $isTaxonomy := false }}
+  {{ if .Pages }}
+    {{ $isSection = true }}
+  {{ else if .Data.Terms }}
+    {{ $isTaxonomy = true }}
   {{ end }}
 
   {{/* 只有普通列表页面显示标签过滤 */}}
@@ -34,15 +37,6 @@
   {{ end }}
 
   <div class="geek-posts-grid">
-    {{/* 判断是Section还是Taxonomy还是普通列表 */}}
-    {{ $isSection := false }}
-    {{ $isTaxonomy := false }}
-    {{ if .Pages }}
-      {{ $isSection = true }}
-    {{ else if .Data.Terms }}
-      {{ $isTaxonomy = true }}
-    {{ end }}
-
     {{/* Section页面：直接显示.pages */}}
     {{ if $isSection }}
       {{ range .Pages }}
