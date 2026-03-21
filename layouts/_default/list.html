@@ -7,7 +7,14 @@
     {{ end }}
   </header>
 
-  {{/* 获取所有标签用于过滤 */}}
+  {{/* 判断是否为分类页面 */}}
+  {{ $isCategory := false }}
+  {{ if .Data.Terms }}
+    {{ $isCategory = true }}
+  {{ end }}
+
+  {{/* 获取所有标签用于过滤（非分类页面时显示） */}}
+  {{ if not $isCategory }}
   {{ $tags := slice }}
   {{ range .Site.RegularPages }}
     {{ range .Params.tags }}
@@ -24,25 +31,48 @@
     {{ end }}
   </div>
   {{ end }}
+  {{ end }}
 
   <div class="geek-posts-grid">
-    {{ range .Paginator.Pages }}
-    <article class="geek-post-card" data-tags="{{ range .Params.tags }}{{ . }} {{ end }}">
-      <div class="post-card-inner">
-        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-        <p class="post-meta">
-          <span>{{ .Date.Format "2006-01-02" }}</span>
-          <span class="meta-sep">•</span>
-          <span>{{ .WordCount }}字</span>
-        </p>
-        <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
-        <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
-      </div>
-    </article>
+    {{/* 分类页面：显示该分类下的文章 */}}
+    {{ if $isCategory }}
+      {{ range .Data.Terms.ByCount }}
+        {{ range .Pages }}
+        <article class="geek-post-card">
+          <div class="post-card-inner">
+            <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+            <p class="post-meta">
+              <span>{{ .Date.Format "2006-01-02" }}</span>
+              <span class="meta-sep">•</span>
+              <span>{{ .WordCount }}字</span>
+            </p>
+            <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
+            <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
+          </div>
+        </article>
+        {{ end }}
+      {{ end }}
+    {{/* 普通列表页面：使用分页 */}}
+    {{ else }}
+      {{ range .Paginator.Pages }}
+      <article class="geek-post-card" data-tags="{{ range .Params.tags }}{{ . }} {{ end }}">
+        <div class="post-card-inner">
+          <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+          <p class="post-meta">
+            <span>{{ .Date.Format "2006-01-02" }}</span>
+            <span class="meta-sep">•</span>
+            <span>{{ .WordCount }}字</span>
+          </p>
+          <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
+          <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+      {{ end }}
     {{ end }}
   </div>
 
-  {{ if gt .Paginator.TotalPages 1 }}
+  {{/* 分类页面不显示分页，非分类页面根据总页数判断 */}}
+  {{ if and (not $isCategory) (gt .Paginator.TotalPages 1) }}
   <nav class="geek-pagination">
     {{ if .Paginator.HasPrev }}
     <a href="{{ .Paginator.Prev.URL }}">上一页</a>
