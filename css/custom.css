@@ -1293,3 +1293,436 @@ body.geek-dark {
     text-align: center;
   }
 }
+
+/* ============================================
+   移动端优化增强 - Mobile Optimization
+   ============================================ */
+
+/* 移动端导航菜单 */
+@media (max-width: 768px) {
+  /* 导航容器 */
+  .geek-nav {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  /* Logo 调整 */
+  .geek-logo {
+    font-size: 1rem;
+  }
+
+  .logo-icon {
+    font-size: 1.3rem;
+  }
+
+  /* 菜单项调整 */
+  .geek-menu {
+    gap: 0;
+  }
+
+  .geek-menu li a {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.85rem;
+  }
+
+  /* Hero 区域 */
+  .geek-hero {
+    min-height: 50vh;
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .geek-hero-title {
+    font-size: 1.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .geek-hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .geek-hero-stats {
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+
+  .geek-stat {
+    font-size: 0.9rem;
+  }
+
+  /* Section 标题 */
+  .geek-section {
+    padding: var(--space-2xl) 0;
+  }
+
+  .geek-section-title {
+    font-size: 1.5rem;
+  }
+
+  .geek-section-desc {
+    font-size: 0.9rem;
+  }
+
+  /* 学习路径卡片 */
+  .geek-stages-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .geek-stage-card {
+    padding: var(--space-md);
+  }
+
+  .stage-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  /* 角色卡片 */
+  .geek-roles-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .geek-role-card {
+    padding: var(--space-md);
+  }
+
+  .role-icon {
+    font-size: 2rem;
+  }
+
+  /* 文章卡片 */
+  .geek-posts-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .geek-post-card {
+    border-radius: var(--radius-sm);
+  }
+
+  .post-card-inner {
+    padding: var(--space-md);
+  }
+
+  .geek-post-card h3 {
+    font-size: 1rem;
+  }
+
+  .post-meta {
+    font-size: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .post-excerpt {
+    font-size: 0.85rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* 工具卡片 */
+  .geek-tools-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .geek-tool-card {
+    padding: var(--space-lg);
+  }
+
+  /* 页脚 */
+  .geek-footer {
+    padding: var(--space-2xl) 0 var(--space-lg);
+  }
+
+  .geek-footer-col h4 {
+    font-size: 0.85rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .geek-footer-col a {
+    font-size: 0.85rem;
+  }
+
+  /* Newsletter */
+  .geek-newsletter-inner {
+    padding: var(--space-lg);
+    margin: 0 var(--space-md);
+  }
+
+  .newsletter-title {
+    font-size: 1.25rem;
+  }
+
+  .geek-newsletter-form {
+    flex-direction: column;
+  }
+
+  .geek-newsletter-form input {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .geek-newsletter-form .btn {
+    width: 100%;
+  }
+
+  /* 列表页 */
+  .geek-list-layout {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .geek-list-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .geek-tag-filter {
+    gap: var(--space-xs);
+  }
+
+  .geek-tag-filter .tag-btn {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.75rem;
+  }
+
+  /* 文章页 */
+  .geek-article-layout {
+    padding: var(--space-md);
+  }
+
+  .geek-article-header {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-lg);
+  }
+
+  .geek-article-header h1 {
+    font-size: 1.35rem;
+    line-height: 1.4;
+  }
+
+  .article-meta {
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    gap: var(--space-xs);
+  }
+
+  .article-tags {
+    margin-top: var(--space-sm);
+  }
+
+  .article-tag {
+    font-size: 0.7rem;
+    padding: 2px var(--space-xs);
+  }
+
+  /* 文章内容 */
+  .geek-article-content h2 {
+    font-size: 1.25rem;
+    margin: var(--space-xl) 0 var(--space-md);
+  }
+
+  .geek-article-content h3 {
+    font-size: 1.1rem;
+    margin: var(--space-lg) 0 var(--space-sm);
+  }
+
+  .geek-article-content h4 {
+    font-size: 1rem;
+  }
+
+  .geek-article-content p {
+    font-size: 0.95rem;
+  }
+
+  /* 表格移动端处理 */
+  .geek-article-content table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.85rem;
+    border: none;
+  }
+
+  .geek-article-content th,
+  .geek-article-content td {
+    white-space: nowrap;
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.8rem;
+  }
+
+  /* 代码块移动端 */
+  .geek-article-content pre {
+    padding: var(--space-md);
+    margin: var(--space-md) calc(-1 * var(--space-md));
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    font-size: 0.8rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .geek-article-content pre code {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  /* 区块引用 */
+  .geek-article-content blockquote {
+    margin: var(--space-md) 0;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.9rem;
+  }
+
+  /* 上下篇导航 */
+  .article-nav {
+    padding: var(--space-md);
+    margin-top: var(--space-xl);
+  }
+
+  .article-nav a {
+    font-size: 0.9rem;
+  }
+
+  /* 分页 */
+  .geek-pagination {
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .geek-pagination a,
+  .geek-pagination span {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.8rem;
+  }
+
+  /* 图片移动端 */
+  .geek-article-content img {
+    max-width: calc(100% + var(--space-md) * 2);
+    margin-left: calc(-1 * var(--space-md));
+    margin-right: calc(-1 * var(--space-md));
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  /* 列表 */
+  .geek-article-content ul,
+  .geek-article-content ol {
+    padding-left: 1.2em;
+    font-size: 0.95rem;
+  }
+
+  .geek-article-content li {
+    margin-bottom: var(--space-xs);
+  }
+
+  /* 隐藏非必要元素 */
+  .geek-view-all {
+    margin-top: var(--space-xl);
+  }
+
+  .btn-outline {
+    padding: var(--space-sm) var(--space-md);
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 360px) {
+  .geek-hero-title {
+    font-size: 1.5rem;
+  }
+
+  .geek-hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .geek-section-title {
+    font-size: 1.25rem;
+  }
+
+  .geek-article-header h1 {
+    font-size: 1.2rem;
+  }
+
+  /* 减少内边距 */
+  .geek-stage-card,
+  .geek-post-card,
+  .geek-tool-card,
+  .geek-role-card {
+    padding: var(--space-sm) var(--space-md);
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  /* 增大触摸目标 */
+  .geek-menu li a,
+  .tag-btn,
+  .read-more,
+  .stage-link,
+  .tool-link,
+  .article-tag,
+  .geek-pagination a {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 移除悬停效果 */
+  .geek-stage-card:hover,
+  .geek-post-card:hover,
+  .geek-tool-card:hover,
+  .geek-role-card:hover {
+    transform: none;
+  }
+
+  .btn:hover {
+    transform: none;
+  }
+}
+
+/* 安全区域支持 - iPhone X+ */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .geek-footer {
+    padding-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom));
+  }
+
+  .geek-nav {
+    padding-top: calc(var(--space-sm) + env(safe-area-inset-top));
+    padding-bottom: calc(var(--space-sm) + env(safe-area-inset-bottom));
+    padding-left: calc(var(--space-lg) + env(safe-area-inset-left));
+    padding-right: calc(var(--space-lg) + env(safe-area-inset-right));
+  }
+
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* 暗色模式媒体查询（可选） */
+@media (prefers-color-scheme: dark) {
+  /* 已经在暗色主题中，保持不变 */
+}
+
+/* 浅色模式（可选） */
+@media (prefers-color-scheme: light) {
+  body.geek-dark {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f6f8fa;
+    --bg-tertiary: #eaeef2;
+    --bg-card: #ffffff;
+    --text-primary: #1f2328;
+    --text-secondary: #656d76;
+    --text-muted: #8b949e;
+    --border: #d0d7de;
+    --border-muted: #eaeef2;
+  }
+}
