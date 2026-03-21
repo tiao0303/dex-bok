@@ -224,7 +224,7 @@
       <p class="geek-section-desc">近期更新与精选</p>
     </header>
     <div class="geek-posts-grid">
-      {{ range first 6 .Site.RegularPages }}
+      {{ range first 6 (sort .Site.RegularPages "Date" "desc") }}
       <article class="geek-post-card">
         <div class="post-card-inner">
           <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
