@@ -57,7 +57,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;/&lt;/span&gt; denominator;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数学推导&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>Uniswap V2 vs V3 深度对比 - 选哪个版本？</title><link>https://tiao0303.github.io/dex-bok/posts/03-uniswap-v2-v3/</link><pubDate>Wed, 18 Mar 2026 21:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/03-uniswap-v2-v3/</guid><description>&lt;h2 id="核心差异一览"&gt;核心差异一览&lt;/h2&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数学推导&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>Uniswap V2 vs V3 深度对比 - 选哪个版本？</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/03-uniswap-v2-v3/</link><pubDate>Wed, 18 Mar 2026 21:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/03-uniswap-v2-v3/</guid><description>&lt;h2 id="核心差异一览"&gt;核心差异一览&lt;/h2&gt;
 &lt;table&gt;
  &lt;thead&gt;
  &lt;tr&gt;
@@ -379,7 +379,7 @@
 &lt;li&gt;用 Gas 追踪工具（etherscan/gastracker）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;下一步&lt;/strong&gt;：&lt;a href="https://tiao0303.github.io/dex-bok/guides/first-lp/"&gt;第一次提供流动性&lt;/a&gt;&lt;/p&gt;</description></item><item><title>AMM 原理详解 - 自动做市商核心机制</title><link>https://tiao0303.github.io/dex-bok/posts/01-amm-principles/</link><pubDate>Wed, 18 Mar 2026 21:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/01-amm-principles/</guid><description>&lt;h2 id="什么是-amm"&gt;什么是 AMM&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;下一步&lt;/strong&gt;：&lt;a href="https://tiao0303.github.io/dex-bok/guides/first-lp/"&gt;第一次提供流动性&lt;/a&gt;&lt;/p&gt;</description></item><item><title>AMM 原理详解 - 自动做市商核心机制</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/01-amm-principles/</link><pubDate>Wed, 18 Mar 2026 21:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/01-amm-principles/</guid><description>&lt;h2 id="什么是-amm"&gt;什么是 AMM&lt;/h2&gt;
 &lt;p&gt;自动做市商（Automated Market Maker）是去中心化交易所（DEX）的核心机制，用数学公式代替传统订单簿来实现资产交易。&lt;/p&gt;
 &lt;h2 id="核心公式恒定乘积"&gt;核心公式：恒定乘积&lt;/h2&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;x * y = k

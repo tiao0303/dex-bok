@@ -1,14 +1,234 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>治理攻击案例研究 - 投票操纵与贿赂市场 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="分析 DAO 治理攻击案例，学习识别和防范投票操纵、贿赂等风险"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/24-governance-attack-cases/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/24-governance-attack-cases/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="治理攻击案例研究 - 投票操纵与贿赂市场"><meta property="og:description" content="分析 DAO 治理攻击案例，学习识别和防范投票操纵、贿赂等风险"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-03-19T01:15:00+08:00"><meta property="article:modified_time" content="2026-03-19T01:15:00+08:00"><meta property="article:tag" content="治理"><meta property="article:tag" content="DAO"><meta property="article:tag" content="安全"><meta itemprop=name content="治理攻击案例研究 - 投票操纵与贿赂市场"><meta itemprop=description content="分析 DAO 治理攻击案例，学习识别和防范投票操纵、贿赂等风险"><meta itemprop=datePublished content="2026-03-19T01:15:00+08:00"><meta itemprop=dateModified content="2026-03-19T01:15:00+08:00"><meta itemprop=wordCount content="514"><meta itemprop=keywords content="治理,DAO,安全"><meta name=twitter:card content="summary"><meta name=twitter:title content="治理攻击案例研究 - 投票操纵与贿赂市场"><meta name=twitter:description content="分析 DAO 治理攻击案例，学习识别和防范投票操纵、贿赂等风险"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-24-governance-attack-cases"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
-<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#什么是治理攻击>什么是治理攻击</a><ul><li><a href=#定义>定义</a></li><li><a href=#攻击类型>攻击类型</a></li></ul></li><li><a href=#经典案例复盘>经典案例复盘</a><ul><li><a href=#案例一beanstalk-闪电贷治理攻击-202204->案例一：Beanstalk 闪电贷治理攻击 (2022.04) 🔴</a></li><li><a href=#案例二curve-贿赂战争-2022-2023->案例二：Curve 贿赂战争 (2022-2023) 🟡</a></li><li><a href=#案例三uniswap-治理冷漠-2021-2023->案例三：Uniswap 治理冷漠 (2021-2023) 🟠</a></li><li><a href=#案例四optimism-空投猎人治理-2023->案例四：Optimism 空投猎人治理 (2023) 🟢</a></li></ul></li><li><a href=#治理攻击防范>治理攻击防范</a><ul><li><a href=#1-技术防范->1. 技术防范 ⭐⭐⭐⭐⭐</a></li><li><a href=#2-经济防范->2. 经济防范 ⭐⭐⭐⭐</a></li><li><a href=#3-社区防范->3. 社区防范 ⭐⭐⭐⭐</a></li></ul></li><li><a href=#治理参与策略>治理参与策略</a><ul><li><a href=#个人参与者>个人参与者</a></li><li><a href=#机构投资者>机构投资者</a></li></ul></li><li><a href=#我的治理参与>我的治理参与</a><ul><li><a href=#持仓协议治理>持仓协议治理</a></li><li><a href=#投票原则>投票原则</a></li><li><a href=#时间分配>时间分配</a></li></ul></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>治理攻击案例研究 - 投票操纵与贿赂市场</h1><div class=article-meta><time datetime=2026-03-19>2026-03-19</time>
-<span>•</span>
-<span>514 字</span>
-<span>•</span>
-<span>机构视角</span></div><div class=article-tags><a href=/dex-bok/tags/%E6%B2%BB%E7%90%86/ class=article-tag>治理</a>
-<a href=/dex-bok/tags/dao/ class=article-tag>DAO</a>
-<a href=/dex-bok/tags/%E5%AE%89%E5%85%A8/ class=article-tag>安全</a></div></header><h2 id=什么是治理攻击>什么是治理攻击</h2><h3 id=定义>定义</h3><p><strong>治理攻击</strong> = 通过操纵投票机制，获取不当利益或破坏协议</p><h3 id=攻击类型>攻击类型</h3><table><thead><tr><th>类型</th><th>手段</th><th>影响</th></tr></thead><tbody><tr><td>投票操纵</td><td>集中代币投票</td><td>通过恶意提案</td></tr><tr><td>贿赂</td><td>收买投票权</td><td>扭曲治理结果</td></tr><tr><td>闪电贷攻击</td><td>借用代币投票</td><td>临时控制治理</td></tr><tr><td>提案攻击</td><td>恶意提案</td><td>盗取资金/破坏协议</td></tr></tbody></table><hr><h2 id=经典案例复盘>经典案例复盘</h2><h3 id=案例一beanstalk-闪电贷治理攻击-202204->案例一：Beanstalk 闪电贷治理攻击 (2022.04) 🔴</h3><h4 id=事件回顾>事件回顾</h4><pre tabindex=0><code>时间：2022.04.17
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=54297&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>治理攻击案例研究 - 投票操纵与贿赂市场 | DEX 学习笔记 | 去中心化交易所实战指南</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="分析 DAO 治理攻击案例，学习识别和防范投票操纵、贿赂等风险">
+    <meta name="generator" content="Hugo 0.158.0">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="QingHeart Qin">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+  
+    <link rel="stylesheet" href="/css/custom.css">
+  
+
+
+    
+
+
+    
+      
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:54297/posts/24-governance-attack-cases/">
+    
+
+    
+    
+    <meta property="og:url" content="http://localhost:54297/posts/24-governance-attack-cases/">
+  <meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南">
+  <meta property="og:title" content="治理攻击案例研究 - 投票操纵与贿赂市场">
+  <meta property="og:description" content="分析 DAO 治理攻击案例，学习识别和防范投票操纵、贿赂等风险">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-19T01:15:00+08:00">
+    <meta property="article:modified_time" content="2026-03-19T01:15:00+08:00">
+    <meta property="article:tag" content="治理">
+    <meta property="article:tag" content="DAO">
+    <meta property="article:tag" content="安全">
+
+  <meta itemprop="name" content="治理攻击案例研究 - 投票操纵与贿赂市场">
+  <meta itemprop="description" content="分析 DAO 治理攻击案例，学习识别和防范投票操纵、贿赂等风险">
+  <meta itemprop="datePublished" content="2026-03-19T01:15:00+08:00">
+  <meta itemprop="dateModified" content="2026-03-19T01:15:00+08:00">
+  <meta itemprop="wordCount" content="514">
+  <meta itemprop="keywords" content="治理,DAO,安全">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="治理攻击案例研究 - 投票操纵与贿赂市场">
+  <meta name="twitter:description" content="分析 DAO 治理攻击案例，学习识别和防范投票操纵、贿赂等风险">
+
+	
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head><body class="ma0 bg-dark geek-dark development is-page is-page page-24-governance-attack-cases">
+    <header class="geek-header">
+  <nav class="geek-nav container" role="navigation">
+    <div class="geek-nav-inner">
+      <a href="/" class="geek-logo">
+        <span class="logo-icon">🦞</span>
+        <span class="logo-text">DEX 学习笔记 | 去中心化交易所实战指南</span>
+      </a>
+      <div class="geek-nav-links">
+        
+          <ul class="geek-menu">
+            
+            <li>
+              <a href="/posts/" title="文章">文章</a>
+            </li>
+            
+            <li>
+              <a href="/guides/" title="教程">教程</a>
+            </li>
+            
+            <li>
+              <a href="/tools/" title="工具">工具</a>
+            </li>
+            
+            <li>
+              <a href="/about/" title="关于">关于</a>
+            </li>
+            
+            <li>
+              <a href="/" title="首页">首页</a>
+            </li>
+            
+          </ul>
+        
+      </div>
+    </div>
+  </nav>
+</header>
+
+    <main class="pb7" role="main">
+      
+<div class="geek-article-layout">
+  
+  <aside class="geek-article-toc">
+    <h4>目录</h4>
+    
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#什么是治理攻击">什么是治理攻击</a>
+      <ul>
+        <li><a href="#定义">定义</a></li>
+        <li><a href="#攻击类型">攻击类型</a></li>
+      </ul>
+    </li>
+    <li><a href="#经典案例复盘">经典案例复盘</a>
+      <ul>
+        <li><a href="#案例一beanstalk-闪电贷治理攻击-202204-">案例一：Beanstalk 闪电贷治理攻击 (2022.04) 🔴</a></li>
+        <li><a href="#案例二curve-贿赂战争-2022-2023-">案例二：Curve 贿赂战争 (2022-2023) 🟡</a></li>
+        <li><a href="#案例三uniswap-治理冷漠-2021-2023-">案例三：Uniswap 治理冷漠 (2021-2023) 🟠</a></li>
+        <li><a href="#案例四optimism-空投猎人治理-2023-">案例四：Optimism 空投猎人治理 (2023) 🟢</a></li>
+      </ul>
+    </li>
+    <li><a href="#治理攻击防范">治理攻击防范</a>
+      <ul>
+        <li><a href="#1-技术防范-">1. 技术防范 ⭐⭐⭐⭐⭐</a></li>
+        <li><a href="#2-经济防范-">2. 经济防范 ⭐⭐⭐⭐</a></li>
+        <li><a href="#3-社区防范-">3. 社区防范 ⭐⭐⭐⭐</a></li>
+      </ul>
+    </li>
+    <li><a href="#治理参与策略">治理参与策略</a>
+      <ul>
+        <li><a href="#个人参与者">个人参与者</a></li>
+        <li><a href="#机构投资者">机构投资者</a></li>
+      </ul>
+    </li>
+    <li><a href="#我的治理参与">我的治理参与</a>
+      <ul>
+        <li><a href="#持仓协议治理">持仓协议治理</a></li>
+        <li><a href="#投票原则">投票原则</a></li>
+        <li><a href="#时间分配">时间分配</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+    
+  </aside>
+
+  
+  <article class="geek-article-content geek-article-main">
+    <header class="geek-article-header">
+      <h1>治理攻击案例研究 - 投票操纵与贿赂市场</h1>
+      <div class="article-meta">
+        
+        <time datetime="2026-03-19">2026-03-19</time>
+        
+        <span>•</span>
+        <span>514 字</span>
+        
+        <span>•</span>
+        <span>机构视角</span>
+        
+      </div>
+      
+      <div class="article-tags">
+        
+        <a href="/tags/%E6%B2%BB%E7%90%86/" class="article-tag">治理</a>
+        
+        <a href="/tags/dao/" class="article-tag">DAO</a>
+        
+        <a href="/tags/%E5%AE%89%E5%85%A8/" class="article-tag">安全</a>
+        
+      </div>
+      
+    </header>
+
+    <h2 id="什么是治理攻击">什么是治理攻击</h2>
+<h3 id="定义">定义</h3>
+<p><strong>治理攻击</strong> = 通过操纵投票机制，获取不当利益或破坏协议</p>
+<h3 id="攻击类型">攻击类型</h3>
+<table>
+  <thead>
+      <tr>
+          <th>类型</th>
+          <th>手段</th>
+          <th>影响</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>投票操纵</td>
+          <td>集中代币投票</td>
+          <td>通过恶意提案</td>
+      </tr>
+      <tr>
+          <td>贿赂</td>
+          <td>收买投票权</td>
+          <td>扭曲治理结果</td>
+      </tr>
+      <tr>
+          <td>闪电贷攻击</td>
+          <td>借用代币投票</td>
+          <td>临时控制治理</td>
+      </tr>
+      <tr>
+          <td>提案攻击</td>
+          <td>恶意提案</td>
+          <td>盗取资金/破坏协议</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="经典案例复盘">经典案例复盘</h2>
+<h3 id="案例一beanstalk-闪电贷治理攻击-202204-">案例一：Beanstalk 闪电贷治理攻击 (2022.04) 🔴</h3>
+<h4 id="事件回顾">事件回顾</h4>
+<pre tabindex="0"><code>时间：2022.04.17
 损失：$1.8 亿
 攻击者：匿名
-</code></pre><h4 id=攻击步骤>攻击步骤</h4><pre tabindex=0><code>1. 闪电贷借入 13,000 ETH（价值$3600 万）
+</code></pre><h4 id="攻击步骤">攻击步骤</h4>
+<pre tabindex="0"><code>1. 闪电贷借入 13,000 ETH（价值$3600 万）
 2. 用 ETH 购买 Beanstalk 治理代币
 3. 获得足够投票权（&gt;50%）
 4. 提交恶意提案：将国库资金转给自己
@@ -16,7 +236,8 @@
 6. 执行提案，转走$1.8 亿
 7. 归还闪电贷
 8. 净利润：$1.4 亿
-</code></pre><h4 id=漏洞分析>漏洞分析</h4><pre tabindex=0><code>1. 无投票锁定期
+</code></pre><h4 id="漏洞分析">漏洞分析</h4>
+<pre tabindex="0"><code>1. 无投票锁定期
    - 买入代币立即可投票
    - 闪电贷可利用
 
@@ -27,15 +248,54 @@
 3. 投票门槛低
    - 只需简单多数
    - 无最低参与度要求
-</code></pre><h4 id=教训>教训</h4><ul><li>✅ 必须设置投票锁定期（Timelock）</li><li>✅ 提案通过后延迟执行</li><li>✅ 设置最低投票率</li><li>✅ 闪电贷无法借入治理代币</li></ul><hr><h3 id=案例二curve-贿赂战争-2022-2023->案例二：Curve 贿赂战争 (2022-2023) 🟡</h3><h4 id=背景>背景</h4><pre tabindex=0><code>Curve 有 3pool（DAI/USDC/USDT）
+</code></pre><h4 id="教训">教训</h4>
+<ul>
+<li>✅ 必须设置投票锁定期（Timelock）</li>
+<li>✅ 提案通过后延迟执行</li>
+<li>✅ 设置最低投票率</li>
+<li>✅ 闪电贷无法借入治理代币</li>
+</ul>
+<hr>
+<h3 id="案例二curve-贿赂战争-2022-2023-">案例二：Curve 贿赂战争 (2022-2023) 🟡</h3>
+<h4 id="背景">背景</h4>
+<pre tabindex="0"><code>Curve 有 3pool（DAI/USDC/USDT）
 不同稳定币项目方希望自己的币获得更高权重
 → 引发贿赂竞争
-</code></pre><h4 id=运作机制>运作机制</h4><pre tabindex=0><code>1. Curve 治理决定池子权重
+</code></pre><h4 id="运作机制">运作机制</h4>
+<pre tabindex="0"><code>1. Curve 治理决定池子权重
 2. veCRV 持有者投票
 3. 项目方贿赂 veCRV 持有者
 4. 投票给自家池子
 5. 获得更高权重 → 更多流动性
-</code></pre><h4 id=贿赂平台>贿赂平台</h4><table><thead><tr><th>平台</th><th>总贿赂金额</th><th>特点</th></tr></thead><tbody><tr><td>VoteLocker</td><td>$5000 万+</td><td>Curve 官方</td></tr><tr><td>Votium</td><td>$3000 万+</td><td>匿名</td></tr><tr><td>Hidden Hand</td><td>$2000 万+</td><td>多链支持</td></tr></tbody></table><h4 id=案例分析>案例分析</h4><pre tabindex=0><code>正面：
+</code></pre><h4 id="贿赂平台">贿赂平台</h4>
+<table>
+  <thead>
+      <tr>
+          <th>平台</th>
+          <th>总贿赂金额</th>
+          <th>特点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>VoteLocker</td>
+          <td>$5000 万+</td>
+          <td>Curve 官方</td>
+      </tr>
+      <tr>
+          <td>Votium</td>
+          <td>$3000 万+</td>
+          <td>匿名</td>
+      </tr>
+      <tr>
+          <td>Hidden Hand</td>
+          <td>$2000 万+</td>
+          <td>多链支持</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="案例分析">案例分析</h4>
+<pre tabindex="0"><code>正面：
 - 市场化分配权重
 - veCRV 持有者获得额外收益
 - 透明度较高
@@ -44,10 +304,20 @@
 - 小 holder 被边缘化
 - 项目方成本转嫁用户
 - 可能形成垄断
-</code></pre><h4 id=教训-1>教训</h4><ul><li>⚠️ 贿赂是双刃剑</li><li>⚠️ 需要透明披露</li><li>⚠️ 防止单一项目垄断</li></ul><hr><h3 id=案例三uniswap-治理冷漠-2021-2023->案例三：Uniswap 治理冷漠 (2021-2023) 🟠</h3><h4 id=问题>问题</h4><pre tabindex=0><code>UNI 代币持有者：30 万+
+</code></pre><h4 id="教训-1">教训</h4>
+<ul>
+<li>⚠️ 贿赂是双刃剑</li>
+<li>⚠️ 需要透明披露</li>
+<li>⚠️ 防止单一项目垄断</li>
+</ul>
+<hr>
+<h3 id="案例三uniswap-治理冷漠-2021-2023-">案例三：Uniswap 治理冷漠 (2021-2023) 🟠</h3>
+<h4 id="问题">问题</h4>
+<pre tabindex="0"><code>UNI 代币持有者：30 万+
 实际投票率：&lt;5%
 提案通过率：低
-</code></pre><h4 id=原因分析>原因分析</h4><pre tabindex=0><code>1. 投票成本高
+</code></pre><h4 id="原因分析">原因分析</h4>
+<pre tabindex="0"><code>1. 投票成本高
    - 链上投票 Gas 贵
    - 小 holder 不划算
 
@@ -62,15 +332,27 @@
 4. 鲸鱼控制
    - 前 10 地址持币 60%
    - 小户投票无影响
-</code></pre><h4 id=影响>影响</h4><pre tabindex=0><code>- 治理效率低
+</code></pre><h4 id="影响">影响</h4>
+<pre tabindex="0"><code>- 治理效率低
 - 重要提案难通过
 - 社区分裂
 - 竞争力下降（vs Sushi 等）
-</code></pre><h4 id=改进建议>改进建议</h4><ul><li>✅ 链下投票（Snapshot）</li><li>✅ 投票奖励</li><li>✅ 简化提案流程</li><li>✅ 委托投票机制</li></ul><hr><h3 id=案例四optimism-空投猎人治理-2023->案例四：Optimism 空投猎人治理 (2023) 🟢</h3><h4 id=背景-1>背景</h4><pre tabindex=0><code>OP 空投后：
+</code></pre><h4 id="改进建议">改进建议</h4>
+<ul>
+<li>✅ 链下投票（Snapshot）</li>
+<li>✅ 投票奖励</li>
+<li>✅ 简化提案流程</li>
+<li>✅ 委托投票机制</li>
+</ul>
+<hr>
+<h3 id="案例四optimism-空投猎人治理-2023-">案例四：Optimism 空投猎人治理 (2023) 🟢</h3>
+<h4 id="背景-1">背景</h4>
+<pre tabindex="0"><code>OP 空投后：
 - 大量空投猎人持币
 - 短期抛售压力大
 - 治理参与度低
-</code></pre><h4 id=解决方案>解决方案</h4><pre tabindex=0><code>1. 公民屋（Citizens&#39; House）
+</code></pre><h4 id="解决方案">解决方案</h4>
+<pre tabindex="0"><code>1. 公民屋（Citizens&#39; House）
    - 长期贡献者特殊投票权
    - 对抗短期投机者
 
@@ -81,10 +363,15 @@
 3. 委托投票
    - 可委托给活跃代表
    - 降低参与门槛
-</code></pre><h4 id=效果>效果</h4><pre tabindex=0><code>- 投票率提升至 15%+
+</code></pre><h4 id="效果">效果</h4>
+<pre tabindex="0"><code>- 投票率提升至 15%+
 - 提案质量提高
 - 社区更活跃
-</code></pre><hr><h2 id=治理攻击防范>治理攻击防范</h2><h3 id=1-技术防范->1. 技术防范 ⭐⭐⭐⭐⭐</h3><h4 id=投票锁定期>投票锁定期</h4><pre tabindex=0><code>要求：
+</code></pre><hr>
+<h2 id="治理攻击防范">治理攻击防范</h2>
+<h3 id="1-技术防范-">1. 技术防范 ⭐⭐⭐⭐⭐</h3>
+<h4 id="投票锁定期">投票锁定期</h4>
+<pre tabindex="0"><code>要求：
 - 投票前锁仓至少 3-7 天
 - 防止闪电贷攻击
 
@@ -93,18 +380,23 @@ function vote(uint256 proposalId, bool support) {
     require(block.timestamp - lockTime &gt;= 7 days, &#34;Too new&#34;);
     ...
 }
-</code></pre><h4 id=时间锁timelock>时间锁（Timelock）</h4><pre tabindex=0><code>要求：
+</code></pre><h4 id="时间锁timelock">时间锁（Timelock）</h4>
+<pre tabindex="0"><code>要求：
 - 提案通过后延迟执行
 - 给用户反应时间
 
 实现：
 - 延迟 2-7 天
 - 紧急情况下可暂停
-</code></pre><h4 id=投票门槛>投票门槛</h4><pre tabindex=0><code>建议设置：
+</code></pre><h4 id="投票门槛">投票门槛</h4>
+<pre tabindex="0"><code>建议设置：
 - 最低投票率：10-20%
 - 通过门槛：&gt;50% 或&gt;67%
 - 反对门槛：可触发二次投票
-</code></pre><hr><h3 id=2-经济防范->2. 经济防范 ⭐⭐⭐⭐</h3><h4 id=投票权设计>投票权设计</h4><pre tabindex=0><code>方案：
+</code></pre><hr>
+<h3 id="2-经济防范-">2. 经济防范 ⭐⭐⭐⭐</h3>
+<h4 id="投票权设计">投票权设计</h4>
+<pre tabindex="0"><code>方案：
 - 锁仓时间越长，投票权越大
 - 防止短期操纵
 
@@ -116,46 +408,63 @@ function vote(uint256 proposalId, bool support) {
 30 天 = 2x
 90 天 = 3x
 365 天 = 4x
-</code></pre><h4 id=反贿赂机制>反贿赂机制</h4><pre tabindex=0><code>方案：
+</code></pre><h4 id="反贿赂机制">反贿赂机制</h4>
+<pre tabindex="0"><code>方案：
 - 投票保密（直到结束）
 - 增加贿赂难度
 - 披露大额投票
-</code></pre><h4 id=质押要求>质押要求</h4><pre tabindex=0><code>提案门槛：
+</code></pre><h4 id="质押要求">质押要求</h4>
+<pre tabindex="0"><code>提案门槛：
 - 质押一定数量代币
 - 提案失败则没收
 - 防止垃圾提案
-</code></pre><hr><h3 id=3-社区防范->3. 社区防范 ⭐⭐⭐⭐</h3><h4 id=多签治理>多签治理</h4><pre tabindex=0><code>关键决策：
+</code></pre><hr>
+<h3 id="3-社区防范-">3. 社区防范 ⭐⭐⭐⭐</h3>
+<h4 id="多签治理">多签治理</h4>
+<pre tabindex="0"><code>关键决策：
 - 需要多签钱包执行
 - 5/9 或 7/11 签名
 - 分散权力
-</code></pre><h4 id=社区监督>社区监督</h4><pre tabindex=0><code>机制：
+</code></pre><h4 id="社区监督">社区监督</h4>
+<pre tabindex="0"><code>机制：
 - 论坛充分讨论
 - 第三方审计提案
 - 媒体监督
-</code></pre><h4 id=紧急暂停>紧急暂停</h4><pre tabindex=0><code>权限：
+</code></pre><h4 id="紧急暂停">紧急暂停</h4>
+<pre tabindex="0"><code>权限：
 - 社区可投票暂停治理
 - 发现攻击时紧急响应
 - 多签也可触发
-</code></pre><hr><h2 id=治理参与策略>治理参与策略</h2><h3 id=个人参与者>个人参与者</h3><h4 id=小-holder1-万代币>小 holder（&lt;1 万代币）</h4><pre tabindex=0><code>建议：
+</code></pre><hr>
+<h2 id="治理参与策略">治理参与策略</h2>
+<h3 id="个人参与者">个人参与者</h3>
+<h4 id="小-holder1-万代币">小 holder（&lt;1 万代币）</h4>
+<pre tabindex="0"><code>建议：
 1. 委托投票给信任的代表
 2. 关注核心提案
 3. 参与论坛讨论
 4. 不要盲目投票
-</code></pre><h4 id=中-holder1-10-万代币>中 holder（1-10 万代币）</h4><pre tabindex=0><code>建议：
+</code></pre><h4 id="中-holder1-10-万代币">中 holder（1-10 万代币）</h4>
+<pre tabindex="0"><code>建议：
 1. 直接参与投票
 2. 加入治理委员会
 3. 提出改进建议
 4. 联合其他 holder
-</code></pre><h4 id=大-holder10-万代币>大 holder（>10 万代币）</h4><pre tabindex=0><code>建议：
+</code></pre><h4 id="大-holder10-万代币">大 holder（&gt;10 万代币）</h4>
+<pre tabindex="0"><code>建议：
 1. 积极参与所有投票
 2. 提出高质量提案
 3. 承担社区责任
 4. 避免权力滥用
-</code></pre><hr><h3 id=机构投资者>机构投资者</h3><h4 id=治理策略>治理策略</h4><pre tabindex=0><code>1. 专业团队分析提案
+</code></pre><hr>
+<h3 id="机构投资者">机构投资者</h3>
+<h4 id="治理策略">治理策略</h4>
+<pre tabindex="0"><code>1. 专业团队分析提案
 2. 建立投票框架
 3. 与其他机构协调
 4. 长期参与治理
-</code></pre><h4 id=利益冲突管理>利益冲突管理</h4><pre tabindex=0><code>披露：
+</code></pre><h4 id="利益冲突管理">利益冲突管理</h4>
+<pre tabindex="0"><code>披露：
 - 持仓情况
 - 关联项目
 - 投票理由
@@ -163,12 +472,53 @@ function vote(uint256 proposalId, bool support) {
 回避：
 - 利益相关提案回避投票
 - 保持独立性
-</code></pre><hr><h2 id=我的治理参与>我的治理参与</h2><h3 id=持仓协议治理>持仓协议治理</h3><table><thead><tr><th>协议</th><th>持仓</th><th>参与度</th><th>策略</th></tr></thead><tbody><tr><td>Aave</td><td>$50k</td><td>每案必投</td><td>支持稳健提案</td></tr><tr><td>Uniswap</td><td>$30k</td><td>选择性</td><td>关注费用开关</td></tr><tr><td>Curve</td><td>$20k</td><td>委托投票</td><td>委托给活跃代表</td></tr><tr><td>Optimism</td><td>$10k</td><td>观察</td><td>学习为主</td></tr></tbody></table><h3 id=投票原则>投票原则</h3><pre tabindex=0><code>1. 仔细阅读提案全文
+</code></pre><hr>
+<h2 id="我的治理参与">我的治理参与</h2>
+<h3 id="持仓协议治理">持仓协议治理</h3>
+<table>
+  <thead>
+      <tr>
+          <th>协议</th>
+          <th>持仓</th>
+          <th>参与度</th>
+          <th>策略</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Aave</td>
+          <td>$50k</td>
+          <td>每案必投</td>
+          <td>支持稳健提案</td>
+      </tr>
+      <tr>
+          <td>Uniswap</td>
+          <td>$30k</td>
+          <td>选择性</td>
+          <td>关注费用开关</td>
+      </tr>
+      <tr>
+          <td>Curve</td>
+          <td>$20k</td>
+          <td>委托投票</td>
+          <td>委托给活跃代表</td>
+      </tr>
+      <tr>
+          <td>Optimism</td>
+          <td>$10k</td>
+          <td>观察</td>
+          <td>学习为主</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="投票原则">投票原则</h3>
+<pre tabindex="0"><code>1. 仔细阅读提案全文
 2. 查看论坛讨论
 3. 评估风险和收益
 4. 考虑长期影响
 5. 不盲目跟随大 V
-</code></pre><h3 id=时间分配>时间分配</h3><pre tabindex=0><code>每周：
+</code></pre><h3 id="时间分配">时间分配</h3>
+<pre tabindex="0"><code>每周：
 - 阅读提案：2 小时
 - 论坛讨论：1 小时
 - 投票决策：1 小时
@@ -176,8 +526,83 @@ function vote(uint256 proposalId, bool support) {
 每月：
 - 深度研究：4 小时
 - 社区互动：2 小时
-</code></pre><hr><h2 id=总结>总结</h2><p>治理攻击防范：</p><ol><li><strong>技术层面</strong>：锁定期、时间锁、门槛</li><li><strong>经济层面</strong>：投票权设计、反贿赂</li><li><strong>社区层面</strong>：监督、多签、紧急机制</li></ol><p><strong>参与治理</strong>：</p><ul><li>小户：委托投票</li><li>中户：积极参与</li><li>大户：承担责任</li></ul><hr><p><strong>作者</strong>：QingHeart Qin
-<strong>邮箱</strong>：qingxin0919@gmail.com</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
-<a href=https://tiao0303.github.io/dex-bok/posts/23-protocol-revenue-analysis/>协议收入分析框架 - Token Terminal 深度使用</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
-<a href=https://tiao0303.github.io/dex-bok/posts/25-cross-chain-liquidity/>跨链流动性网络 - LayerZero 与 CCIP 架构</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
-<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>
+</code></pre><hr>
+<h2 id="总结">总结</h2>
+<p>治理攻击防范：</p>
+<ol>
+<li><strong>技术层面</strong>：锁定期、时间锁、门槛</li>
+<li><strong>经济层面</strong>：投票权设计、反贿赂</li>
+<li><strong>社区层面</strong>：监督、多签、紧急机制</li>
+</ol>
+<p><strong>参与治理</strong>：</p>
+<ul>
+<li>小户：委托投票</li>
+<li>中户：积极参与</li>
+<li>大户：承担责任</li>
+</ul>
+<hr>
+<p><strong>作者</strong>：QingHeart Qin
+<strong>邮箱</strong>：qingxin0919@gmail.com</p>
+
+
+    
+    
+    <div class="article-nav article-nav-prev">
+      <span class="nav-label">← 上一篇</span>
+      <a href="http://localhost:54297/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/23-protocol-revenue-analysis/">协议收入分析框架 - Token Terminal 深度使用</a>
+    </div>
+    
+    
+    <div class="article-nav article-nav-next">
+      <span class="nav-label">下一篇 →</span>
+      <a href="http://localhost:54297/posts/25-cross-chain-liquidity/">跨链流动性网络 - LayerZero 与 CCIP 架构</a>
+    </div>
+    
+  </article>
+</div>
+
+    </main>
+    <footer class="geek-footer">
+  <div class="container">
+    <div class="geek-footer-inner">
+      <div class="geek-footer-brand">
+        <a href="http://localhost:54297/" class="geek-footer-logo">
+          <span class="logo-icon">🦞</span>
+          <span>DEX 学习笔记 | 去中心化交易所实战指南</span>
+        </a>
+        <p class="geek-footer-desc">DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p>
+      </div>
+      <div class="geek-footer-links">
+        <div class="geek-footer-col">
+          <h4>导航</h4>
+          <ul>
+            <li><a href="/">首页</a></li>
+            <li><a href="/posts/">文章</a></li>
+            <li><a href="/guides/">教程</a></li>
+            <li><a href="/tools/">工具</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关于</h4>
+          <ul>
+            <li><a href="/about/">关于本站</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关注</h4>
+          <ul>
+            <li><a href="https://github.com/tiao0303" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://x.com/qing87762" target="_blank" rel="noopener">X (Twitter)</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="geek-footer-bottom">
+      <p>&copy; 2026  DEX 学习笔记 | 去中心化交易所实战指南 </p>
+      <p class="geek-footer-tech">Built with Hugo & DeFi ❤️</p>
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

@@ -55,7 +55,7 @@
 
 如果：汇率乘积 ≠ 1，则存在利润
 profit = initial_amount × (rate1 × rate2 × rate3 - 1)
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;数学公式&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;数学公式&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;套利&lt;/strong&gt; = 利用价格差异，低买高卖，赚取无风险收益&lt;/p&gt;
 &lt;h3 id="套利特点"&gt;套利特点&lt;/h3&gt;
 &lt;ul&gt;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>收益 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%94%B6%E7%9B%8A/</link><description>Recent content in 收益 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:35:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%94%B6%E7%9B%8A/index.xml" rel="self" type="application/rss+xml"/><item><title>流动性挖矿收益优化 - 让 APY 翻倍技巧</title><link>https://tiao0303.github.io/dex-bok/posts/17-liquidity-mining-optimization/</link><pubDate>Thu, 19 Mar 2026 00:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/17-liquidity-mining-optimization/</guid><description>&lt;h2 id="收益构成分析"&gt;收益构成分析&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>收益 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%94%B6%E7%9B%8A/</link><description>Recent content in 收益 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:35:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%94%B6%E7%9B%8A/index.xml" rel="self" type="application/rss+xml"/><item><title>流动性挖矿收益优化 - 让 APY 翻倍技巧</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/17-liquidity-mining-optimization/</link><pubDate>Thu, 19 Mar 2026 00:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/17-liquidity-mining-optimization/</guid><description>&lt;h2 id="收益构成分析"&gt;收益构成分析&lt;/h2&gt;
 &lt;h3 id="三大来源"&gt;三大来源&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -248,7 +248,7 @@ Gas 成本 = $50/次
 &lt;hr&gt;
 &lt;h2 id="优化策略五杠杆挖矿-"&gt;优化策略五：杠杆挖矿 ⭐⭐⭐&lt;/h2&gt;
 &lt;h3 id="原理"&gt;原理&lt;/h3&gt;
-&lt;p&gt;借币→提供流动性→赚取利差&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
+&lt;p&gt;借币→提供流动性→赚取利差&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;套利&lt;/strong&gt; = 利用价格差异，低买高卖，赚取无风险收益&lt;/p&gt;
 &lt;h3 id="套利特点"&gt;套利特点&lt;/h3&gt;
 &lt;ul&gt;
@@ -291,7 +291,7 @@ Gas 成本 = $50/次
 &lt;hr&gt;
 &lt;h2 id="策略二跨所套利-"&gt;策略二：跨所套利 ⭐⭐⭐⭐&lt;/h2&gt;
 &lt;h3 id="原理-1"&gt;原理&lt;/h3&gt;
-&lt;p&gt;同一资产在不同 DEX 价格不同&lt;/p&gt;</description></item><item><title>DeFi 收益 farming 完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/09-defi-yield/</link><pubDate>Wed, 18 Mar 2026 21:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/09-defi-yield/</guid><description>&lt;h2 id="defi-收益来源"&gt;DeFi 收益来源&lt;/h2&gt;
+&lt;p&gt;同一资产在不同 DEX 价格不同&lt;/p&gt;</description></item><item><title>DeFi 收益 farming 完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/09-defi-yield/</link><pubDate>Wed, 18 Mar 2026 21:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/09-defi-yield/</guid><description>&lt;h2 id="defi-收益来源"&gt;DeFi 收益来源&lt;/h2&gt;
 &lt;h3 id="1-交易手续费-"&gt;1. 交易手续费 ⭐⭐⭐⭐⭐&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;来源&lt;/strong&gt;：用户 swap 支付的费用
 &lt;strong&gt;分配&lt;/strong&gt;：按 LP 份额比例分配

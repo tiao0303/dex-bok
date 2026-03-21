@@ -62,7 +62,7 @@
 &lt;p&gt;&lt;strong&gt;可变权重 AMM（Weighted Pool）：&lt;/strong&gt; Balancer 的核心创新在于将 AMM 的代币权重从固定的 50/50 扩展为任意比例（0-100%）。例如，用户可以创建一个 80% ETH + 20% USDC 的流动性池，交易价格会根据池子权重动态调整。这为专业做市商和量化策略提供了极大的灵活性，使得被动指数投资和主动做市可以在同一个协议内实现。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;加权数学公式：&lt;/strong&gt; Balancer 采用恒定加权乘积公式：∏(x_i)^{w_i} = k，其中 w_i 为第 i 个资产的权重。这与 Uniswap 的恒定乘积公式有本质区别，支持更多样化的资产配置。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Boosted Pools（收益增强池）：&lt;/strong&gt; Balancer 将闲置流动性自动存入 Aave 等借贷协议以获取额外收益，LP 在提供流动性的同时还能获得借出收益，显著提升了资金利用效率。这一机制在 2022-2023 年稳定币和主流资产池中被广泛采用。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;veBAL 治理模型：&lt;/strong&gt; 2022 年 Balancer 引入 veBAL（投票托管 BAL），用户将 BAL 锁定最多一年获得 veBAL，veBAL 持有者可以：1）决定哪些流动性池获得 BAL 挖矿奖励及其权重；2）获得协议手续费分成；3）参与治理投票。这一模型有效对齐了流动性提供者、协议收入和治理权力。&lt;/p&gt;</description></item><item><title>Rebasing 池子是什么？弹性供应代币的 AMM 挑战</title><link>https://tiao0303.github.io/dex-bok/posts/29-rebasing-pools/</link><pubDate>Sat, 21 Mar 2026 11:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/29-rebasing-pools/</guid><description>&lt;h2 id="什么是-rebasing-代币"&gt;什么是 Rebasing 代币&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;veBAL 治理模型：&lt;/strong&gt; 2022 年 Balancer 引入 veBAL（投票托管 BAL），用户将 BAL 锁定最多一年获得 veBAL，veBAL 持有者可以：1）决定哪些流动性池获得 BAL 挖矿奖励及其权重；2）获得协议手续费分成；3）参与治理投票。这一模型有效对齐了流动性提供者、协议收入和治理权力。&lt;/p&gt;</description></item><item><title>Rebasing 池子是什么？弹性供应代币的 AMM 挑战</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/29-rebasing-pools/</link><pubDate>Sat, 21 Mar 2026 11:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/29-rebasing-pools/</guid><description>&lt;h2 id="什么是-rebasing-代币"&gt;什么是 Rebasing 代币&lt;/h2&gt;
 &lt;p&gt;Rebasing（弹性供应）代币是一种&lt;strong&gt;供应量会自动调整&lt;/strong&gt;的加密货币机制。通过算法定期调整总流通量，以达到目标价格或分配奖励。&lt;/p&gt;
 &lt;h3 id="核心机制"&gt;核心机制&lt;/h3&gt;
 &lt;table&gt;
@@ -170,7 +170,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;/&lt;/span&gt; denominator;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数学推导&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>AMM 数学原理深究 - 曲线设计与资本效率</title><link>https://tiao0303.github.io/dex-bok/posts/26-amm-math-deep-dive/</link><pubDate>Thu, 19 Mar 2026 01:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/26-amm-math-deep-dive/</guid><description>&lt;h2 id="amm-核心公式推导"&gt;AMM 核心公式推导&lt;/h2&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数学推导&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>AMM 数学原理深究 - 曲线设计与资本效率</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/26-amm-math-deep-dive/</link><pubDate>Thu, 19 Mar 2026 01:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/26-amm-math-deep-dive/</guid><description>&lt;h2 id="amm-核心公式推导"&gt;AMM 核心公式推导&lt;/h2&gt;
 &lt;h3 id="恒定乘积公式uniswap-v2"&gt;恒定乘积公式（Uniswap V2）&lt;/h3&gt;
 &lt;h4 id="基本公式"&gt;基本公式&lt;/h4&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;x * y = k
@@ -510,7 +510,7 @@ TWAP = Σ(price_i × time_i) / Σtime_i
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#f92672"&gt;/&lt;/span&gt; (&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; volume_elasticity)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;AMM 数学核心：&lt;/p&gt;</description></item><item><title>AMM 原理详解 - 自动做市商核心机制</title><link>https://tiao0303.github.io/dex-bok/posts/01-amm-principles/</link><pubDate>Wed, 18 Mar 2026 21:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/01-amm-principles/</guid><description>&lt;h2 id="什么是-amm"&gt;什么是 AMM&lt;/h2&gt;
+&lt;p&gt;AMM 数学核心：&lt;/p&gt;</description></item><item><title>AMM 原理详解 - 自动做市商核心机制</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/01-amm-principles/</link><pubDate>Wed, 18 Mar 2026 21:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/01-amm-principles/</guid><description>&lt;h2 id="什么是-amm"&gt;什么是 AMM&lt;/h2&gt;
 &lt;p&gt;自动做市商（Automated Market Maker）是去中心化交易所（DEX）的核心机制，用数学公式代替传统订单簿来实现资产交易。&lt;/p&gt;
 &lt;h2 id="核心公式恒定乘积"&gt;核心公式：恒定乘积&lt;/h2&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;x * y = k

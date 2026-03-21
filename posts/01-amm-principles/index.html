@@ -1,17 +1,338 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>AMM 原理详解 - 自动做市商核心机制 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="深入理解 AMM 的恒定乘积公式、流动性池工作原理，以及 LP 收益与风险"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/01-amm-principles/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/01-amm-principles/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="AMM 原理详解 - 自动做市商核心机制"><meta property="og:description" content="深入理解 AMM 的恒定乘积公式、流动性池工作原理，以及 LP 收益与风险"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-03-18T21:00:00+08:00"><meta property="article:modified_time" content="2026-03-18T21:00:00+08:00"><meta property="article:tag" content="AMM"><meta property="article:tag" content="Uniswap"><meta property="article:tag" content="基础"><meta itemprop=name content="AMM 原理详解 - 自动做市商核心机制"><meta itemprop=description content="深入理解 AMM 的恒定乘积公式、流动性池工作原理，以及 LP 收益与风险"><meta itemprop=datePublished content="2026-03-18T21:00:00+08:00"><meta itemprop=dateModified content="2026-03-18T21:00:00+08:00"><meta itemprop=wordCount content="168"><meta itemprop=keywords content="AMM,Uniswap,基础"><meta name=twitter:card content="summary"><meta name=twitter:title content="AMM 原理详解 - 自动做市商核心机制"><meta name=twitter:description content="深入理解 AMM 的恒定乘积公式、流动性池工作原理，以及 LP 收益与风险"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-01-amm-principles"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
-<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#什么是-amm>什么是 AMM</a></li><li><a href=#核心公式恒定乘积>核心公式：恒定乘积</a><ul><li><a href=#公式含义>公式含义</a></li></ul></li><li><a href=#amm-工作流程>AMM 工作流程</a></li><li><a href=#关键概念>关键概念</a></li><li><a href=#实战要点>实战要点</a><ul><li><a href=#小额交易1000-usd>小额交易（&lt;1000 USD）</a></li><li><a href=#大额交易10000-usd>大额交易（>10000 USD）</a></li><li><a href=#选择池子>选择池子</a></li></ul></li><li><a href=#无常损失详解>无常损失详解</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>AMM 原理详解 - 自动做市商核心机制</h1><div class=article-meta><time datetime=2026-03-18>2026-03-18</time>
-<span>•</span>
-<span>168 字</span>
-<span>•</span>
-<span>基础理论</span></div><div class=article-tags><a href=/dex-bok/tags/amm/ class=article-tag>AMM</a>
-<a href=/dex-bok/tags/uniswap/ class=article-tag>Uniswap</a>
-<a href=/dex-bok/tags/%E5%9F%BA%E7%A1%80/ class=article-tag>基础</a></div></header><h2 id=什么是-amm>什么是 AMM</h2><p>自动做市商（Automated Market Maker）是去中心化交易所（DEX）的核心机制，用数学公式代替传统订单簿来实现资产交易。</p><h2 id=核心公式恒定乘积>核心公式：恒定乘积</h2><pre tabindex=0><code>x * y = k
-</code></pre><ul><li><strong>x</strong> = Token A 的数量</li><li><strong>y</strong> = Token B 的数量</li><li><strong>k</strong> = 常数（流动性总量保持不变）</li></ul><h3 id=公式含义>公式含义</h3><p>无论交易如何进行，池中两种 token 的乘积始终保持不变。这导致：</p><ul><li>买入 Token A → A 减少，B 增加 → A 价格上涨</li><li>卖出 Token A → A 增加，B 减少 → A 价格下跌</li></ul><h2 id=amm-工作流程>AMM 工作流程</h2><pre tabindex=0><code class=language-mermaid data-lang=mermaid>graph LR
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>AMM 原理详解 - 自动做市商核心机制 | DEX 学习笔记 | 去中心化交易所实战指南</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="深入理解 AMM 的恒定乘积公式、流动性池工作原理，以及 LP 收益与风险">
+    <meta name="generator" content="Hugo 0.158.0">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="QingHeart Qin">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+  
+    <link rel="stylesheet" href="/css/custom.css">
+  
+
+
+    
+
+
+    
+      
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/posts/01-amm-principles/">
+    
+
+    
+    
+    <meta property="og:url" content="http://localhost:1313/posts/01-amm-principles/">
+  <meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南">
+  <meta property="og:title" content="AMM 原理详解 - 自动做市商核心机制">
+  <meta property="og:description" content="深入理解 AMM 的恒定乘积公式、流动性池工作原理，以及 LP 收益与风险">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-18T21:00:00+08:00">
+    <meta property="article:modified_time" content="2026-03-18T21:00:00+08:00">
+    <meta property="article:tag" content="AMM">
+    <meta property="article:tag" content="Uniswap">
+    <meta property="article:tag" content="基础">
+
+  <meta itemprop="name" content="AMM 原理详解 - 自动做市商核心机制">
+  <meta itemprop="description" content="深入理解 AMM 的恒定乘积公式、流动性池工作原理，以及 LP 收益与风险">
+  <meta itemprop="datePublished" content="2026-03-18T21:00:00+08:00">
+  <meta itemprop="dateModified" content="2026-03-18T21:00:00+08:00">
+  <meta itemprop="wordCount" content="168">
+  <meta itemprop="keywords" content="AMM,Uniswap,基础">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="AMM 原理详解 - 自动做市商核心机制">
+  <meta name="twitter:description" content="深入理解 AMM 的恒定乘积公式、流动性池工作原理，以及 LP 收益与风险">
+
+	
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head><body class="ma0 bg-dark geek-dark development is-page is-page page-01-amm-principles">
+    <header class="geek-header">
+  <nav class="geek-nav container" role="navigation">
+    <div class="geek-nav-inner">
+      <a href="/" class="geek-logo">
+        <span class="logo-icon">🦞</span>
+        <span class="logo-text">DEX 学习笔记 | 去中心化交易所实战指南</span>
+      </a>
+      <div class="geek-nav-links">
+        
+          <ul class="geek-menu">
+            
+            <li>
+              <a href="/posts/" title="文章">文章</a>
+            </li>
+            
+            <li>
+              <a href="/guides/" title="教程">教程</a>
+            </li>
+            
+            <li>
+              <a href="/tools/" title="工具">工具</a>
+            </li>
+            
+            <li>
+              <a href="/about/" title="关于">关于</a>
+            </li>
+            
+            <li>
+              <a href="/" title="首页">首页</a>
+            </li>
+            
+          </ul>
+        
+      </div>
+    </div>
+  </nav>
+</header>
+
+    <main class="pb7" role="main">
+      
+<div class="geek-article-layout">
+  
+  <aside class="geek-article-toc">
+    <h4>目录</h4>
+    
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#什么是-amm">什么是 AMM</a></li>
+    <li><a href="#核心公式恒定乘积">核心公式：恒定乘积</a>
+      <ul>
+        <li><a href="#公式含义">公式含义</a></li>
+      </ul>
+    </li>
+    <li><a href="#amm-工作流程">AMM 工作流程</a></li>
+    <li><a href="#关键概念">关键概念</a></li>
+    <li><a href="#实战要点">实战要点</a>
+      <ul>
+        <li><a href="#小额交易1000-usd">小额交易（&lt;1000 USD）</a></li>
+        <li><a href="#大额交易10000-usd">大额交易（&gt;10000 USD）</a></li>
+        <li><a href="#选择池子">选择池子</a></li>
+      </ul>
+    </li>
+    <li><a href="#无常损失详解">无常损失详解</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+    
+  </aside>
+
+  
+  <article class="geek-article-content geek-article-main">
+    <header class="geek-article-header">
+      <h1>AMM 原理详解 - 自动做市商核心机制</h1>
+      <div class="article-meta">
+        
+        <time datetime="2026-03-18">2026-03-18</time>
+        
+        <span>•</span>
+        <span>168 字</span>
+        
+        <span>•</span>
+        <span>基础理论</span>
+        
+      </div>
+      
+      <div class="article-tags">
+        
+        <a href="/tags/amm/" class="article-tag">AMM</a>
+        
+        <a href="/tags/uniswap/" class="article-tag">Uniswap</a>
+        
+        <a href="/tags/%E5%9F%BA%E7%A1%80/" class="article-tag">基础</a>
+        
+      </div>
+      
+    </header>
+
+    <h2 id="什么是-amm">什么是 AMM</h2>
+<p>自动做市商（Automated Market Maker）是去中心化交易所（DEX）的核心机制，用数学公式代替传统订单簿来实现资产交易。</p>
+<h2 id="核心公式恒定乘积">核心公式：恒定乘积</h2>
+<pre tabindex="0"><code>x * y = k
+</code></pre><ul>
+<li><strong>x</strong> = Token A 的数量</li>
+<li><strong>y</strong> = Token B 的数量</li>
+<li><strong>k</strong> = 常数（流动性总量保持不变）</li>
+</ul>
+<h3 id="公式含义">公式含义</h3>
+<p>无论交易如何进行，池中两种 token 的乘积始终保持不变。这导致：</p>
+<ul>
+<li>买入 Token A → A 减少，B 增加 → A 价格上涨</li>
+<li>卖出 Token A → A 增加，B 减少 → A 价格下跌</li>
+</ul>
+<h2 id="amm-工作流程">AMM 工作流程</h2>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph LR
     A[用户存入双币] --&gt; B[成为 LP]
     B --&gt; C[获得 LP Token]
     C --&gt; D[交易产生手续费]
     D --&gt; E[LP 获得收益]
-</code></pre><ol><li><strong>提供流动性</strong>：用户存入等值的双币（如 1 ETH + 1800 USDC）</li><li><strong>获得凭证</strong>：收到 LP Token，代表池子份额</li><li><strong>交易发生</strong>：其他用户 swap，支付手续费（通常 0.3%）</li><li><strong>收益分配</strong>：手续费累积到池中，LP 按比例分享</li></ol><h2 id=关键概念>关键概念</h2><table><thead><tr><th>术语</th><th>说明</th><th>重要性</th></tr></thead><tbody><tr><td>流动性池</td><td>存放交易对的智能合约</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>LP Token</td><td>流动性凭证，可随时赎回</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>滑点</td><td>大额交易导致的价格偏移</td><td>⭐⭐⭐⭐</td></tr><tr><td>无常损失</td><td>币价波动导致的相对损失</td><td>⭐⭐⭐⭐⭐</td></tr></tbody></table><h2 id=实战要点>实战要点</h2><h3 id=小额交易1000-usd>小额交易（&lt;1000 USD）</h3><ul><li>滑点可忽略不计</li><li>直接用 Uniswap/Sushiswap</li></ul><h3 id=大额交易10000-usd>大额交易（>10000 USD）</h3><ul><li>分多笔执行</li><li>使用聚合器（1inch、Matcha）</li><li>考虑使用 Flashbots 避免 MEV</li></ul><h3 id=选择池子>选择池子</h3><ul><li><strong>看深度</strong> > 看 APY</li><li>深度不足时，高 APY 可能是陷阱</li><li>检查历史 TVL 稳定性</li></ul><h2 id=无常损失详解>无常损失详解</h2><p>无常损失（Impermanent Loss）是 LP 最常见的风险：</p><p><strong>场景</strong>：ETH 从 1800 涨到 3600（翻倍）</p><table><thead><tr><th>策略</th><th>最终价值</th><th>对比持有</th></tr></thead><tbody><tr><td>持有 1 ETH + 1800 USDC</td><td>5400 USDC</td><td>基准</td></tr><tr><td>提供流动性</td><td>4242 USDC</td><td>-21.5%</td></tr></tbody></table><p><strong>结论</strong>：币价波动越大，无常损失越严重。</p><h2 id=总结>总结</h2><p>AMM 是 DEX 的基石，理解其原理是成为合格 LP 的第一步。记住：</p><ol><li>公式简单但影响深远</li><li>无常损失是真实风险</li><li>长期持有 + 低波动 = 最佳 LP 场景</li></ol><hr><p><strong>下一步阅读</strong>：<a href=/dex-bok/posts/02-liquidity-strategies/>流动性管理策略</a></p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
-<a href=https://tiao0303.github.io/dex-bok/posts/t1-05-advanced-tips/>T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
-<a href=https://tiao0303.github.io/dex-bok/posts/02-liquidity-strategies/>流动性管理策略 - 从被动 LP 到主动管理</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
-<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>
+</code></pre><ol>
+<li><strong>提供流动性</strong>：用户存入等值的双币（如 1 ETH + 1800 USDC）</li>
+<li><strong>获得凭证</strong>：收到 LP Token，代表池子份额</li>
+<li><strong>交易发生</strong>：其他用户 swap，支付手续费（通常 0.3%）</li>
+<li><strong>收益分配</strong>：手续费累积到池中，LP 按比例分享</li>
+</ol>
+<h2 id="关键概念">关键概念</h2>
+<table>
+  <thead>
+      <tr>
+          <th>术语</th>
+          <th>说明</th>
+          <th>重要性</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>流动性池</td>
+          <td>存放交易对的智能合约</td>
+          <td>⭐⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>LP Token</td>
+          <td>流动性凭证，可随时赎回</td>
+          <td>⭐⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>滑点</td>
+          <td>大额交易导致的价格偏移</td>
+          <td>⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>无常损失</td>
+          <td>币价波动导致的相对损失</td>
+          <td>⭐⭐⭐⭐⭐</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="实战要点">实战要点</h2>
+<h3 id="小额交易1000-usd">小额交易（&lt;1000 USD）</h3>
+<ul>
+<li>滑点可忽略不计</li>
+<li>直接用 Uniswap/Sushiswap</li>
+</ul>
+<h3 id="大额交易10000-usd">大额交易（&gt;10000 USD）</h3>
+<ul>
+<li>分多笔执行</li>
+<li>使用聚合器（1inch、Matcha）</li>
+<li>考虑使用 Flashbots 避免 MEV</li>
+</ul>
+<h3 id="选择池子">选择池子</h3>
+<ul>
+<li><strong>看深度</strong> &gt; 看 APY</li>
+<li>深度不足时，高 APY 可能是陷阱</li>
+<li>检查历史 TVL 稳定性</li>
+</ul>
+<h2 id="无常损失详解">无常损失详解</h2>
+<p>无常损失（Impermanent Loss）是 LP 最常见的风险：</p>
+<p><strong>场景</strong>：ETH 从 1800 涨到 3600（翻倍）</p>
+<table>
+  <thead>
+      <tr>
+          <th>策略</th>
+          <th>最终价值</th>
+          <th>对比持有</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>持有 1 ETH + 1800 USDC</td>
+          <td>5400 USDC</td>
+          <td>基准</td>
+      </tr>
+      <tr>
+          <td>提供流动性</td>
+          <td>4242 USDC</td>
+          <td>-21.5%</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>结论</strong>：币价波动越大，无常损失越严重。</p>
+<h2 id="总结">总结</h2>
+<p>AMM 是 DEX 的基石，理解其原理是成为合格 LP 的第一步。记住：</p>
+<ol>
+<li>公式简单但影响深远</li>
+<li>无常损失是真实风险</li>
+<li>长期持有 + 低波动 = 最佳 LP 场景</li>
+</ol>
+<hr>
+<p><strong>下一步阅读</strong>：<a href="/dex-bok/posts/02-liquidity-strategies/">流动性管理策略</a></p>
+
+
+    
+    
+    
+    <div class="article-nav article-nav-next">
+      <span class="nav-label">下一篇 →</span>
+      <a href="http://localhost:1313/posts/02-liquidity-strategies/">流动性管理策略 - 从被动 LP 到主动管理</a>
+    </div>
+    
+  </article>
+</div>
+
+    </main>
+    <footer class="geek-footer">
+  <div class="container">
+    <div class="geek-footer-inner">
+      <div class="geek-footer-brand">
+        <a href="http://localhost:1313/" class="geek-footer-logo">
+          <span class="logo-icon">🦞</span>
+          <span>DEX 学习笔记 | 去中心化交易所实战指南</span>
+        </a>
+        <p class="geek-footer-desc">DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p>
+      </div>
+      <div class="geek-footer-links">
+        <div class="geek-footer-col">
+          <h4>导航</h4>
+          <ul>
+            <li><a href="/">首页</a></li>
+            <li><a href="/posts/">文章</a></li>
+            <li><a href="/guides/">教程</a></li>
+            <li><a href="/tools/">工具</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关于</h4>
+          <ul>
+            <li><a href="/about/">关于本站</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关注</h4>
+          <ul>
+            <li><a href="https://github.com/tiao0303" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://x.com/qing87762" target="_blank" rel="noopener">X (Twitter)</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="geek-footer-bottom">
+      <p>&copy; 2026  DEX 学习笔记 | 去中心化交易所实战指南 </p>
+      <p class="geek-footer-tech">Built with Hugo & DeFi ❤️</p>
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

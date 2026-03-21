@@ -87,7 +87,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="22-euler-finance-攻击详解2023"&gt;2.2 Euler Finance 攻击详解（2023）&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;漏洞原理&lt;/strong&gt;：薄授权（Bent Authorization）允许存款人直接提取协议外的资产：&lt;/p&gt;</description></item><item><title>黑客攻击技术复盘 - 重入、预言机操纵详解</title><link>https://tiao0303.github.io/dex-bok/posts/29-hack-attack-technical-analysis/</link><pubDate>Thu, 19 Mar 2026 01:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/29-hack-attack-technical-analysis/</guid><description>&lt;h2 id="defi-黑客攻击概览"&gt;DeFi 黑客攻击概览&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;漏洞原理&lt;/strong&gt;：薄授权（Bent Authorization）允许存款人直接提取协议外的资产：&lt;/p&gt;</description></item><item><title>黑客攻击技术复盘 - 重入、预言机操纵详解</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/29-hack-attack-technical-analysis/</link><pubDate>Thu, 19 Mar 2026 01:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/29-hack-attack-technical-analysis/</guid><description>&lt;h2 id="defi-黑客攻击概览"&gt;DeFi 黑客攻击概览&lt;/h2&gt;
 &lt;h3 id="损失统计"&gt;损失统计&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>大师级 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/%E5%A4%A7%E5%B8%88%E7%BA%A7/</link><description>Recent content in 大师级 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:50:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/%E5%A4%A7%E5%B8%88%E7%BA%A7/index.xml" rel="self" type="application/rss+xml"/><item><title>DeFi 未来趋势预测 - RWA、真实收益与全链生态</title><link>https://tiao0303.github.io/dex-bok/posts/30-defi-future-trends/</link><pubDate>Thu, 19 Mar 2026 01:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/30-defi-future-trends/</guid><description>&lt;h2 id="defi-发展历程回顾"&gt;DeFi 发展历程回顾&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>大师级 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/%E5%A4%A7%E5%B8%88%E7%BA%A7/</link><description>Recent content in 大师级 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:50:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/%E5%A4%A7%E5%B8%88%E7%BA%A7/index.xml" rel="self" type="application/rss+xml"/><item><title>DeFi 未来趋势预测 - RWA、真实收益与全链生态</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/30-defi-future-trends/</link><pubDate>Thu, 19 Mar 2026 01:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/30-defi-future-trends/</guid><description>&lt;h2 id="defi-发展历程回顾"&gt;DeFi 发展历程回顾&lt;/h2&gt;
 &lt;h3 id="阶段一defi-夏天2020"&gt;阶段一：DeFi 夏天（2020）&lt;/h3&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;标志事件：
 - Compound 流动性挖矿启动
@@ -401,7 +401,7 @@ vs 名义收益：
 - 严格止损
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;DeFi 未来核心趋势：&lt;/p&gt;</description></item><item><title>黑客攻击技术复盘 - 重入、预言机操纵详解</title><link>https://tiao0303.github.io/dex-bok/posts/29-hack-attack-technical-analysis/</link><pubDate>Thu, 19 Mar 2026 01:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/29-hack-attack-technical-analysis/</guid><description>&lt;h2 id="defi-黑客攻击概览"&gt;DeFi 黑客攻击概览&lt;/h2&gt;
+&lt;p&gt;DeFi 未来核心趋势：&lt;/p&gt;</description></item><item><title>黑客攻击技术复盘 - 重入、预言机操纵详解</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/29-hack-attack-technical-analysis/</link><pubDate>Thu, 19 Mar 2026 01:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/29-hack-attack-technical-analysis/</guid><description>&lt;h2 id="defi-黑客攻击概览"&gt;DeFi 黑客攻击概览&lt;/h2&gt;
 &lt;h3 id="损失统计"&gt;损失统计&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -770,7 +770,7 @@ function withdraw(uint amount) {
 □ 保险覆盖
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;黑客攻击防范：&lt;/p&gt;</description></item><item><title>DEX 经济模型设计 - 代币排放与激励机制</title><link>https://tiao0303.github.io/dex-bok/posts/28-dex-tokenomics-design/</link><pubDate>Thu, 19 Mar 2026 01:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/28-dex-tokenomics-design/</guid><description>&lt;h2 id="代币经济核心要素"&gt;代币经济核心要素&lt;/h2&gt;
+&lt;p&gt;黑客攻击防范：&lt;/p&gt;</description></item><item><title>DEX 经济模型设计 - 代币排放与激励机制</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/28-dex-tokenomics-design/</link><pubDate>Thu, 19 Mar 2026 01:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/28-dex-tokenomics-design/</guid><description>&lt;h2 id="代币经济核心要素"&gt;代币经济核心要素&lt;/h2&gt;
 &lt;h3 id="1-代币用途utility"&gt;1. 代币用途（Utility）&lt;/h3&gt;
 &lt;h4 id="基本用途"&gt;基本用途&lt;/h4&gt;
 &lt;table&gt;
@@ -1178,7 +1178,7 @@ TGE: 1000 万（10%）
 总分 &amp;lt;40：避免
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;代币经济设计核心：&lt;/p&gt;</description></item><item><title>智能合约形式化验证 - Certora 与 Spec 语言</title><link>https://tiao0303.github.io/dex-bok/posts/27-formal-verification/</link><pubDate>Thu, 19 Mar 2026 01:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/27-formal-verification/</guid><description>&lt;h2 id="什么是形式化验证"&gt;什么是形式化验证&lt;/h2&gt;
+&lt;p&gt;代币经济设计核心：&lt;/p&gt;</description></item><item><title>智能合约形式化验证 - Certora 与 Spec 语言</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/27-formal-verification/</link><pubDate>Thu, 19 Mar 2026 01:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/27-formal-verification/</guid><description>&lt;h2 id="什么是形式化验证"&gt;什么是形式化验证&lt;/h2&gt;
 &lt;h3 id="定义"&gt;定义&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;形式化验证&lt;/strong&gt; = 用数学方法证明代码符合规范&lt;/p&gt;
 &lt;h3 id="与传统测试对比"&gt;与传统测试对比&lt;/h3&gt;
@@ -1532,7 +1532,7 @@ Layer 3：复杂场景组合
 3. 建立验证框架
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;形式化验证核心：&lt;/p&gt;</description></item><item><title>AMM 数学原理深究 - 曲线设计与资本效率</title><link>https://tiao0303.github.io/dex-bok/posts/26-amm-math-deep-dive/</link><pubDate>Thu, 19 Mar 2026 01:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/26-amm-math-deep-dive/</guid><description>&lt;h2 id="amm-核心公式推导"&gt;AMM 核心公式推导&lt;/h2&gt;
+&lt;p&gt;形式化验证核心：&lt;/p&gt;</description></item><item><title>AMM 数学原理深究 - 曲线设计与资本效率</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/26-amm-math-deep-dive/</link><pubDate>Thu, 19 Mar 2026 01:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/26-amm-math-deep-dive/</guid><description>&lt;h2 id="amm-核心公式推导"&gt;AMM 核心公式推导&lt;/h2&gt;
 &lt;h3 id="恒定乘积公式uniswap-v2"&gt;恒定乘积公式（Uniswap V2）&lt;/h3&gt;
 &lt;h4 id="基本公式"&gt;基本公式&lt;/h4&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;x * y = k

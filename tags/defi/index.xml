@@ -23,7 +23,7 @@
 &lt;li&gt;&lt;strong&gt;DODO Classic（恒定乘积池）：&lt;/strong&gt; 兼容标准 AMM 逻辑，保留了对 Uniswap 用户的兼容性&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;DODO Vending Machine：&lt;/strong&gt; 项目方一键发币并创建初始流动性的工具，降低了项目启动门槛&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;DODO v3 — 众筹建池（Crowdpooling）：&lt;/strong&gt; v3 版本引入了 Crowdpooling 机制，实现了零滑点、无风险溢价的新资产发行方式。项目方设置起始价格和募集规模，用户以该价格无滑点认购，募集结束后形成初始流动性。这一机制结合了 ICO 的公平性和 DEX 的去中心化特点。&lt;/p&gt;</description></item><item><title>Rebasing 池子是什么？弹性供应代币的 AMM 挑战</title><link>https://tiao0303.github.io/dex-bok/posts/29-rebasing-pools/</link><pubDate>Sat, 21 Mar 2026 11:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/29-rebasing-pools/</guid><description>&lt;h2 id="什么是-rebasing-代币"&gt;什么是 Rebasing 代币&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;DODO v3 — 众筹建池（Crowdpooling）：&lt;/strong&gt; v3 版本引入了 Crowdpooling 机制，实现了零滑点、无风险溢价的新资产发行方式。项目方设置起始价格和募集规模，用户以该价格无滑点认购，募集结束后形成初始流动性。这一机制结合了 ICO 的公平性和 DEX 的去中心化特点。&lt;/p&gt;</description></item><item><title>Rebasing 池子是什么？弹性供应代币的 AMM 挑战</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/29-rebasing-pools/</link><pubDate>Sat, 21 Mar 2026 11:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/29-rebasing-pools/</guid><description>&lt;h2 id="什么是-rebasing-代币"&gt;什么是 Rebasing 代币&lt;/h2&gt;
 &lt;p&gt;Rebasing（弹性供应）代币是一种&lt;strong&gt;供应量会自动调整&lt;/strong&gt;的加密货币机制。通过算法定期调整总流通量，以达到目标价格或分配奖励。&lt;/p&gt;
 &lt;h3 id="核心机制"&gt;核心机制&lt;/h3&gt;
 &lt;table&gt;
@@ -429,7 +429,7 @@ profit = initial_amount × (rate1 × rate2 × rate3 - 1)
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;/&lt;/span&gt; denominator;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数学推导&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DeFi 收益 farming 完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/09-defi-yield/</link><pubDate>Wed, 18 Mar 2026 21:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/09-defi-yield/</guid><description>&lt;h2 id="defi-收益来源"&gt;DeFi 收益来源&lt;/h2&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数学推导&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DeFi 收益 farming 完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/09-defi-yield/</link><pubDate>Wed, 18 Mar 2026 21:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/09-defi-yield/</guid><description>&lt;h2 id="defi-收益来源"&gt;DeFi 收益来源&lt;/h2&gt;
 &lt;h3 id="1-交易手续费-"&gt;1. 交易手续费 ⭐⭐⭐⭐⭐&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;来源&lt;/strong&gt;：用户 swap 支付的费用
 &lt;strong&gt;分配&lt;/strong&gt;：按 LP 份额比例分配

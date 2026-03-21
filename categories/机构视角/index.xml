@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>机构视角 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/</link><description>Recent content in 机构视角 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:20:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/index.xml" rel="self" type="application/rss+xml"/><item><title>跨链流动性网络 - LayerZero 与 CCIP 架构</title><link>https://tiao0303.github.io/dex-bok/posts/25-cross-chain-liquidity/</link><pubDate>Thu, 19 Mar 2026 01:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/25-cross-chain-liquidity/</guid><description>&lt;h2 id="为什么需要跨链"&gt;为什么需要跨链&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>机构视角 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/</link><description>Recent content in 机构视角 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:20:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/index.xml" rel="self" type="application/rss+xml"/><item><title>跨链流动性网络 - LayerZero 与 CCIP 架构</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/25-cross-chain-liquidity/</link><pubDate>Thu, 19 Mar 2026 01:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/25-cross-chain-liquidity/</guid><description>&lt;h2 id="为什么需要跨链"&gt;为什么需要跨链&lt;/h2&gt;
 &lt;h3 id="多链现状"&gt;多链现状&lt;/h3&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;2026 年主要公链：
 - Ethereum（TVL $500 亿）
@@ -206,7 +206,7 @@ Ethereum 轻节点运行在 Arbitrum 上
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="chainlink-ccip-解析"&gt;Chainlink CCIP 解析&lt;/h2&gt;
 &lt;h3 id="什么是-ccip"&gt;什么是 CCIP&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Cross-Chain Interoperability Protocol&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>治理攻击案例研究 - 投票操纵与贿赂市场</title><link>https://tiao0303.github.io/dex-bok/posts/24-governance-attack-cases/</link><pubDate>Thu, 19 Mar 2026 01:15:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/24-governance-attack-cases/</guid><description>&lt;h2 id="什么是治理攻击"&gt;什么是治理攻击&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Cross-Chain Interoperability Protocol&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>治理攻击案例研究 - 投票操纵与贿赂市场</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/24-governance-attack-cases/</link><pubDate>Thu, 19 Mar 2026 01:15:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/24-governance-attack-cases/</guid><description>&lt;h2 id="什么是治理攻击"&gt;什么是治理攻击&lt;/h2&gt;
 &lt;h3 id="定义"&gt;定义&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;治理攻击&lt;/strong&gt; = 通过操纵投票机制，获取不当利益或破坏协议&lt;/p&gt;
 &lt;h3 id="攻击类型"&gt;攻击类型&lt;/h3&gt;
@@ -549,7 +549,7 @@ function vote(uint256 proposalId, bool support) {
 - 社区互动：2 小时
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;治理攻击防范：&lt;/p&gt;</description></item><item><title>协议收入分析框架 - Token Terminal 深度使用</title><link>https://tiao0303.github.io/dex-bok/posts/23-protocol-revenue-analysis/</link><pubDate>Thu, 19 Mar 2026 01:10:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/23-protocol-revenue-analysis/</guid><description>&lt;h2 id="为什么分析协议收入"&gt;为什么分析协议收入&lt;/h2&gt;
+&lt;p&gt;治理攻击防范：&lt;/p&gt;</description></item><item><title>协议收入分析框架 - Token Terminal 深度使用</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/23-protocol-revenue-analysis/</link><pubDate>Thu, 19 Mar 2026 01:10:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/23-protocol-revenue-analysis/</guid><description>&lt;h2 id="为什么分析协议收入"&gt;为什么分析协议收入&lt;/h2&gt;
 &lt;h3 id="传统金融-vs-defi"&gt;传统金融 vs DeFi&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -646,7 +646,7 @@ LP 分成 = 70%
 &lt;hr&gt;
 &lt;h3 id="2-费用fees"&gt;2. 费用（Fees）⭐⭐⭐⭐&lt;/h3&gt;
 &lt;h4 id="定义-1"&gt;定义&lt;/h4&gt;
-&lt;p&gt;&lt;strong&gt;总费用&lt;/strong&gt; = 用户为使用协议支付的全部费用&lt;/p&gt;</description></item><item><title>MEV 搜索者实战手册 - Flashbots 与私有节点</title><link>https://tiao0303.github.io/dex-bok/posts/22-mev-searcher-guide/</link><pubDate>Thu, 19 Mar 2026 01:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/22-mev-searcher-guide/</guid><description>&lt;h2 id="什么是-mev-搜索者"&gt;什么是 MEV 搜索者&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;总费用&lt;/strong&gt; = 用户为使用协议支付的全部费用&lt;/p&gt;</description></item><item><title>MEV 搜索者实战手册 - Flashbots 与私有节点</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/22-mev-searcher-guide/</link><pubDate>Thu, 19 Mar 2026 01:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/22-mev-searcher-guide/</guid><description>&lt;h2 id="什么是-mev-搜索者"&gt;什么是 MEV 搜索者&lt;/h2&gt;
 &lt;h3 id="定义"&gt;定义&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;MEV 搜索者&lt;/strong&gt; = 专门寻找和提取链上可提取价值的交易者&lt;/p&gt;
 &lt;h3 id="收益规模"&gt;收益规模&lt;/h3&gt;
@@ -939,7 +939,7 @@ Sushiswap: ETH = $1810
 &lt;hr&gt;
 &lt;h3 id="策略三三明治攻击-"&gt;策略三：三明治攻击 ⭐⭐⭐⭐⭐&lt;/h3&gt;
 &lt;h4 id="-道德警示"&gt;⚠️ 道德警示&lt;/h4&gt;
-&lt;p&gt;三明治攻击是有争议的策略，可能被视为对普通用户的剥削。本文仅作技术说明，不鼓励使用。&lt;/p&gt;</description></item><item><title>做市商内部运作揭秘 - Wintermute、Jump 模式解析</title><link>https://tiao0303.github.io/dex-bok/posts/21-market-maker-insider/</link><pubDate>Thu, 19 Mar 2026 01:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/21-market-maker-insider/</guid><description>&lt;h2 id="什么是专业做市商"&gt;什么是专业做市商&lt;/h2&gt;
+&lt;p&gt;三明治攻击是有争议的策略，可能被视为对普通用户的剥削。本文仅作技术说明，不鼓励使用。&lt;/p&gt;</description></item><item><title>做市商内部运作揭秘 - Wintermute、Jump 模式解析</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/21-market-maker-insider/</link><pubDate>Thu, 19 Mar 2026 01:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/21-market-maker-insider/</guid><description>&lt;h2 id="什么是专业做市商"&gt;什么是专业做市商&lt;/h2&gt;
 &lt;h3 id="核心职能"&gt;核心职能&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;提供买卖双边报价&lt;/li&gt;

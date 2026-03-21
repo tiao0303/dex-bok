@@ -55,7 +55,7 @@
 
 如果：汇率乘积 ≠ 1，则存在利润
 profit = initial_amount × (rate1 × rate2 × rate3 - 1)
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;数学公式&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>做市商内部运作揭秘 - Wintermute、Jump 模式解析</title><link>https://tiao0303.github.io/dex-bok/posts/21-market-maker-insider/</link><pubDate>Thu, 19 Mar 2026 01:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/21-market-maker-insider/</guid><description>&lt;h2 id="什么是专业做市商"&gt;什么是专业做市商&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;数学公式&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>做市商内部运作揭秘 - Wintermute、Jump 模式解析</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/21-market-maker-insider/</link><pubDate>Thu, 19 Mar 2026 01:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/21-market-maker-insider/</guid><description>&lt;h2 id="什么是专业做市商"&gt;什么是专业做市商&lt;/h2&gt;
 &lt;h3 id="核心职能"&gt;核心职能&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;提供买卖双边报价&lt;/li&gt;
@@ -158,7 +158,7 @@ profit = initial_amount × (rate1 × rate2 × rate3 - 1)
 &lt;hr&gt;
 &lt;h3 id="策略二统计套利-"&gt;策略二：统计套利 ⭐⭐⭐⭐&lt;/h3&gt;
 &lt;h4 id="原理-1"&gt;原理&lt;/h4&gt;
-&lt;p&gt;利用历史统计规律，寻找价格偏离&lt;/p&gt;</description></item><item><title>期权+DEX 组合策略 - 对冲风险增强收益</title><link>https://tiao0303.github.io/dex-bok/posts/19-options-dex-combo/</link><pubDate>Thu, 19 Mar 2026 00:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/19-options-dex-combo/</guid><description>&lt;h2 id="为什么需要期权对冲"&gt;为什么需要期权对冲&lt;/h2&gt;
+&lt;p&gt;利用历史统计规律，寻找价格偏离&lt;/p&gt;</description></item><item><title>期权+DEX 组合策略 - 对冲风险增强收益</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/19-options-dex-combo/</link><pubDate>Thu, 19 Mar 2026 00:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/19-options-dex-combo/</guid><description>&lt;h2 id="为什么需要期权对冲"&gt;为什么需要期权对冲&lt;/h2&gt;
 &lt;h3 id="lp-的痛点"&gt;LP 的痛点&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -243,7 +243,7 @@ profit = initial_amount × (rate1 × rate2 × rate3 - 1)
 卖出：Call 期权（行权价高于当前价）
 收入：权利金
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实战案例-1"&gt;实战案例&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：持有 10 ETH，当前$1800&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：持有 10 ETH，当前$1800&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;套利&lt;/strong&gt; = 利用价格差异，低买高卖，赚取无风险收益&lt;/p&gt;
 &lt;h3 id="套利特点"&gt;套利特点&lt;/h3&gt;
 &lt;ul&gt;
@@ -286,7 +286,7 @@ profit = initial_amount × (rate1 × rate2 × rate3 - 1)
 &lt;hr&gt;
 &lt;h2 id="策略二跨所套利-"&gt;策略二：跨所套利 ⭐⭐⭐⭐&lt;/h2&gt;
 &lt;h3 id="原理-1"&gt;原理&lt;/h3&gt;
-&lt;p&gt;同一资产在不同 DEX 价格不同&lt;/p&gt;</description></item><item><title>流动性管理策略 - 从被动 LP 到主动管理</title><link>https://tiao0303.github.io/dex-bok/posts/02-liquidity-strategies/</link><pubDate>Wed, 18 Mar 2026 21:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/02-liquidity-strategies/</guid><description>&lt;h2 id="三种-lp-策略对比"&gt;三种 LP 策略对比&lt;/h2&gt;
+&lt;p&gt;同一资产在不同 DEX 价格不同&lt;/p&gt;</description></item><item><title>流动性管理策略 - 从被动 LP 到主动管理</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/02-liquidity-strategies/</link><pubDate>Wed, 18 Mar 2026 21:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/02-liquidity-strategies/</guid><description>&lt;h2 id="三种-lp-策略对比"&gt;三种 LP 策略对比&lt;/h2&gt;
 &lt;table&gt;
  &lt;thead&gt;
  &lt;tr&gt;

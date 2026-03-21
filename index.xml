@@ -229,7 +229,7 @@
 &lt;li&gt;&lt;strong&gt;DODO Classic（恒定乘积池）：&lt;/strong&gt; 兼容标准 AMM 逻辑，保留了对 Uniswap 用户的兼容性&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;DODO Vending Machine：&lt;/strong&gt; 项目方一键发币并创建初始流动性的工具，降低了项目启动门槛&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;DODO v3 — 众筹建池（Crowdpooling）：&lt;/strong&gt; v3 版本引入了 Crowdpooling 机制，实现了零滑点、无风险溢价的新资产发行方式。项目方设置起始价格和募集规模，用户以该价格无滑点认购，募集结束后形成初始流动性。这一机制结合了 ICO 的公平性和 DEX 的去中心化特点。&lt;/p&gt;</description></item><item><title>Rebasing 池子是什么？弹性供应代币的 AMM 挑战</title><link>https://tiao0303.github.io/dex-bok/posts/29-rebasing-pools/</link><pubDate>Sat, 21 Mar 2026 11:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/29-rebasing-pools/</guid><description>&lt;h2 id="什么是-rebasing-代币"&gt;什么是 Rebasing 代币&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;DODO v3 — 众筹建池（Crowdpooling）：&lt;/strong&gt; v3 版本引入了 Crowdpooling 机制，实现了零滑点、无风险溢价的新资产发行方式。项目方设置起始价格和募集规模，用户以该价格无滑点认购，募集结束后形成初始流动性。这一机制结合了 ICO 的公平性和 DEX 的去中心化特点。&lt;/p&gt;</description></item><item><title>Rebasing 池子是什么？弹性供应代币的 AMM 挑战</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/29-rebasing-pools/</link><pubDate>Sat, 21 Mar 2026 11:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/29-rebasing-pools/</guid><description>&lt;h2 id="什么是-rebasing-代币"&gt;什么是 Rebasing 代币&lt;/h2&gt;
 &lt;p&gt;Rebasing（弹性供应）代币是一种&lt;strong&gt;供应量会自动调整&lt;/strong&gt;的加密货币机制。通过算法定期调整总流通量，以达到目标价格或分配奖励。&lt;/p&gt;
 &lt;h3 id="核心机制"&gt;核心机制&lt;/h3&gt;
 &lt;table&gt;
@@ -703,7 +703,7 @@ profit = initial_amount × (rate1 × rate2 × rate3 - 1)
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;/&lt;/span&gt; denominator;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数学推导&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>编辑器</title><link>https://tiao0303.github.io/dex-bok/editor/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/editor/</guid><description/></item><item><title>DeFi 未来趋势预测 - RWA、真实收益与全链生态</title><link>https://tiao0303.github.io/dex-bok/posts/30-defi-future-trends/</link><pubDate>Thu, 19 Mar 2026 01:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/30-defi-future-trends/</guid><description>&lt;h2 id="defi-发展历程回顾"&gt;DeFi 发展历程回顾&lt;/h2&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数学推导&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>编辑器</title><link>https://tiao0303.github.io/dex-bok/editor/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/editor/</guid><description/></item><item><title>DeFi 未来趋势预测 - RWA、真实收益与全链生态</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/30-defi-future-trends/</link><pubDate>Thu, 19 Mar 2026 01:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/30-defi-future-trends/</guid><description>&lt;h2 id="defi-发展历程回顾"&gt;DeFi 发展历程回顾&lt;/h2&gt;
 &lt;h3 id="阶段一defi-夏天2020"&gt;阶段一：DeFi 夏天（2020）&lt;/h3&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;标志事件：
 - Compound 流动性挖矿启动
@@ -1106,7 +1106,7 @@ vs 名义收益：
 - 严格止损
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;DeFi 未来核心趋势：&lt;/p&gt;</description></item><item><title>黑客攻击技术复盘 - 重入、预言机操纵详解</title><link>https://tiao0303.github.io/dex-bok/posts/29-hack-attack-technical-analysis/</link><pubDate>Thu, 19 Mar 2026 01:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/29-hack-attack-technical-analysis/</guid><description>&lt;h2 id="defi-黑客攻击概览"&gt;DeFi 黑客攻击概览&lt;/h2&gt;
+&lt;p&gt;DeFi 未来核心趋势：&lt;/p&gt;</description></item><item><title>黑客攻击技术复盘 - 重入、预言机操纵详解</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/29-hack-attack-technical-analysis/</link><pubDate>Thu, 19 Mar 2026 01:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/29-hack-attack-technical-analysis/</guid><description>&lt;h2 id="defi-黑客攻击概览"&gt;DeFi 黑客攻击概览&lt;/h2&gt;
 &lt;h3 id="损失统计"&gt;损失统计&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -1475,7 +1475,7 @@ function withdraw(uint amount) {
 □ 保险覆盖
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;黑客攻击防范：&lt;/p&gt;</description></item><item><title>DEX 经济模型设计 - 代币排放与激励机制</title><link>https://tiao0303.github.io/dex-bok/posts/28-dex-tokenomics-design/</link><pubDate>Thu, 19 Mar 2026 01:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/28-dex-tokenomics-design/</guid><description>&lt;h2 id="代币经济核心要素"&gt;代币经济核心要素&lt;/h2&gt;
+&lt;p&gt;黑客攻击防范：&lt;/p&gt;</description></item><item><title>DEX 经济模型设计 - 代币排放与激励机制</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/28-dex-tokenomics-design/</link><pubDate>Thu, 19 Mar 2026 01:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/28-dex-tokenomics-design/</guid><description>&lt;h2 id="代币经济核心要素"&gt;代币经济核心要素&lt;/h2&gt;
 &lt;h3 id="1-代币用途utility"&gt;1. 代币用途（Utility）&lt;/h3&gt;
 &lt;h4 id="基本用途"&gt;基本用途&lt;/h4&gt;
 &lt;table&gt;
@@ -1883,7 +1883,7 @@ TGE: 1000 万（10%）
 总分 &amp;lt;40：避免
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;代币经济设计核心：&lt;/p&gt;</description></item><item><title>智能合约形式化验证 - Certora 与 Spec 语言</title><link>https://tiao0303.github.io/dex-bok/posts/27-formal-verification/</link><pubDate>Thu, 19 Mar 2026 01:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/27-formal-verification/</guid><description>&lt;h2 id="什么是形式化验证"&gt;什么是形式化验证&lt;/h2&gt;
+&lt;p&gt;代币经济设计核心：&lt;/p&gt;</description></item><item><title>智能合约形式化验证 - Certora 与 Spec 语言</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/27-formal-verification/</link><pubDate>Thu, 19 Mar 2026 01:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/27-formal-verification/</guid><description>&lt;h2 id="什么是形式化验证"&gt;什么是形式化验证&lt;/h2&gt;
 &lt;h3 id="定义"&gt;定义&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;形式化验证&lt;/strong&gt; = 用数学方法证明代码符合规范&lt;/p&gt;
 &lt;h3 id="与传统测试对比"&gt;与传统测试对比&lt;/h3&gt;
@@ -2237,7 +2237,7 @@ Layer 3：复杂场景组合
 3. 建立验证框架
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;形式化验证核心：&lt;/p&gt;</description></item><item><title>AMM 数学原理深究 - 曲线设计与资本效率</title><link>https://tiao0303.github.io/dex-bok/posts/26-amm-math-deep-dive/</link><pubDate>Thu, 19 Mar 2026 01:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/26-amm-math-deep-dive/</guid><description>&lt;h2 id="amm-核心公式推导"&gt;AMM 核心公式推导&lt;/h2&gt;
+&lt;p&gt;形式化验证核心：&lt;/p&gt;</description></item><item><title>AMM 数学原理深究 - 曲线设计与资本效率</title><link>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/26-amm-math-deep-dive/</link><pubDate>Thu, 19 Mar 2026 01:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6-%E5%A4%A7%E5%B8%88%E7%BA%A7/26-amm-math-deep-dive/</guid><description>&lt;h2 id="amm-核心公式推导"&gt;AMM 核心公式推导&lt;/h2&gt;
 &lt;h3 id="恒定乘积公式uniswap-v2"&gt;恒定乘积公式（Uniswap V2）&lt;/h3&gt;
 &lt;h4 id="基本公式"&gt;基本公式&lt;/h4&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;x * y = k
@@ -2577,7 +2577,7 @@ TWAP = Σ(price_i × time_i) / Σtime_i
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#f92672"&gt;/&lt;/span&gt; (&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; volume_elasticity)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;AMM 数学核心：&lt;/p&gt;</description></item><item><title>跨链流动性网络 - LayerZero 与 CCIP 架构</title><link>https://tiao0303.github.io/dex-bok/posts/25-cross-chain-liquidity/</link><pubDate>Thu, 19 Mar 2026 01:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/25-cross-chain-liquidity/</guid><description>&lt;h2 id="为什么需要跨链"&gt;为什么需要跨链&lt;/h2&gt;
+&lt;p&gt;AMM 数学核心：&lt;/p&gt;</description></item><item><title>跨链流动性网络 - LayerZero 与 CCIP 架构</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/25-cross-chain-liquidity/</link><pubDate>Thu, 19 Mar 2026 01:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/25-cross-chain-liquidity/</guid><description>&lt;h2 id="为什么需要跨链"&gt;为什么需要跨链&lt;/h2&gt;
 &lt;h3 id="多链现状"&gt;多链现状&lt;/h3&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;2026 年主要公链：
 - Ethereum（TVL $500 亿）
@@ -2785,7 +2785,7 @@ Ethereum 轻节点运行在 Arbitrum 上
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="chainlink-ccip-解析"&gt;Chainlink CCIP 解析&lt;/h2&gt;
 &lt;h3 id="什么是-ccip"&gt;什么是 CCIP&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Cross-Chain Interoperability Protocol&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>治理攻击案例研究 - 投票操纵与贿赂市场</title><link>https://tiao0303.github.io/dex-bok/posts/24-governance-attack-cases/</link><pubDate>Thu, 19 Mar 2026 01:15:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/24-governance-attack-cases/</guid><description>&lt;h2 id="什么是治理攻击"&gt;什么是治理攻击&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Cross-Chain Interoperability Protocol&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>治理攻击案例研究 - 投票操纵与贿赂市场</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/24-governance-attack-cases/</link><pubDate>Thu, 19 Mar 2026 01:15:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/24-governance-attack-cases/</guid><description>&lt;h2 id="什么是治理攻击"&gt;什么是治理攻击&lt;/h2&gt;
 &lt;h3 id="定义"&gt;定义&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;治理攻击&lt;/strong&gt; = 通过操纵投票机制，获取不当利益或破坏协议&lt;/p&gt;
 &lt;h3 id="攻击类型"&gt;攻击类型&lt;/h3&gt;
@@ -3128,7 +3128,7 @@ function vote(uint256 proposalId, bool support) {
 - 社区互动：2 小时
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;治理攻击防范：&lt;/p&gt;</description></item><item><title>协议收入分析框架 - Token Terminal 深度使用</title><link>https://tiao0303.github.io/dex-bok/posts/23-protocol-revenue-analysis/</link><pubDate>Thu, 19 Mar 2026 01:10:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/23-protocol-revenue-analysis/</guid><description>&lt;h2 id="为什么分析协议收入"&gt;为什么分析协议收入&lt;/h2&gt;
+&lt;p&gt;治理攻击防范：&lt;/p&gt;</description></item><item><title>协议收入分析框架 - Token Terminal 深度使用</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/23-protocol-revenue-analysis/</link><pubDate>Thu, 19 Mar 2026 01:10:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/23-protocol-revenue-analysis/</guid><description>&lt;h2 id="为什么分析协议收入"&gt;为什么分析协议收入&lt;/h2&gt;
 &lt;h3 id="传统金融-vs-defi"&gt;传统金融 vs DeFi&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -3225,7 +3225,7 @@ LP 分成 = 70%
 &lt;hr&gt;
 &lt;h3 id="2-费用fees"&gt;2. 费用（Fees）⭐⭐⭐⭐&lt;/h3&gt;
 &lt;h4 id="定义-1"&gt;定义&lt;/h4&gt;
-&lt;p&gt;&lt;strong&gt;总费用&lt;/strong&gt; = 用户为使用协议支付的全部费用&lt;/p&gt;</description></item><item><title>MEV 搜索者实战手册 - Flashbots 与私有节点</title><link>https://tiao0303.github.io/dex-bok/posts/22-mev-searcher-guide/</link><pubDate>Thu, 19 Mar 2026 01:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/22-mev-searcher-guide/</guid><description>&lt;h2 id="什么是-mev-搜索者"&gt;什么是 MEV 搜索者&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;总费用&lt;/strong&gt; = 用户为使用协议支付的全部费用&lt;/p&gt;</description></item><item><title>MEV 搜索者实战手册 - Flashbots 与私有节点</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/22-mev-searcher-guide/</link><pubDate>Thu, 19 Mar 2026 01:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/22-mev-searcher-guide/</guid><description>&lt;h2 id="什么是-mev-搜索者"&gt;什么是 MEV 搜索者&lt;/h2&gt;
 &lt;h3 id="定义"&gt;定义&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;MEV 搜索者&lt;/strong&gt; = 专门寻找和提取链上可提取价值的交易者&lt;/p&gt;
 &lt;h3 id="收益规模"&gt;收益规模&lt;/h3&gt;
@@ -3518,7 +3518,7 @@ Sushiswap: ETH = $1810
 &lt;hr&gt;
 &lt;h3 id="策略三三明治攻击-"&gt;策略三：三明治攻击 ⭐⭐⭐⭐⭐&lt;/h3&gt;
 &lt;h4 id="-道德警示"&gt;⚠️ 道德警示&lt;/h4&gt;
-&lt;p&gt;三明治攻击是有争议的策略，可能被视为对普通用户的剥削。本文仅作技术说明，不鼓励使用。&lt;/p&gt;</description></item><item><title>做市商内部运作揭秘 - Wintermute、Jump 模式解析</title><link>https://tiao0303.github.io/dex-bok/posts/21-market-maker-insider/</link><pubDate>Thu, 19 Mar 2026 01:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/21-market-maker-insider/</guid><description>&lt;h2 id="什么是专业做市商"&gt;什么是专业做市商&lt;/h2&gt;
+&lt;p&gt;三明治攻击是有争议的策略，可能被视为对普通用户的剥削。本文仅作技术说明，不鼓励使用。&lt;/p&gt;</description></item><item><title>做市商内部运作揭秘 - Wintermute、Jump 模式解析</title><link>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/21-market-maker-insider/</link><pubDate>Thu, 19 Mar 2026 01:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5-%E6%9C%BA%E6%9E%84%E8%A7%86%E8%A7%92/21-market-maker-insider/</guid><description>&lt;h2 id="什么是专业做市商"&gt;什么是专业做市商&lt;/h2&gt;
 &lt;h3 id="核心职能"&gt;核心职能&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;提供买卖双边报价&lt;/li&gt;
@@ -3621,7 +3621,7 @@ Sushiswap: ETH = $1810
 &lt;hr&gt;
 &lt;h3 id="策略二统计套利-"&gt;策略二：统计套利 ⭐⭐⭐⭐&lt;/h3&gt;
 &lt;h4 id="原理-1"&gt;原理&lt;/h4&gt;
-&lt;p&gt;利用历史统计规律，寻找价格偏离&lt;/p&gt;</description></item><item><title>链上数据分析实战 - 像侦探一样追踪资金</title><link>https://tiao0303.github.io/dex-bok/posts/20-onchain-analysis-tutorial/</link><pubDate>Thu, 19 Mar 2026 00:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/20-onchain-analysis-tutorial/</guid><description>&lt;h2 id="为什么需要链上分析"&gt;为什么需要链上分析&lt;/h2&gt;
+&lt;p&gt;利用历史统计规律，寻找价格偏离&lt;/p&gt;</description></item><item><title>链上数据分析实战 - 像侦探一样追踪资金</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/20-onchain-analysis-tutorial/</link><pubDate>Thu, 19 Mar 2026 00:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/20-onchain-analysis-tutorial/</guid><description>&lt;h2 id="为什么需要链上分析"&gt;为什么需要链上分析&lt;/h2&gt;
 &lt;h3 id="区块链的优势"&gt;区块链的优势&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;✅ 所有交易公开透明&lt;/li&gt;
@@ -3991,7 +3991,7 @@ Sushiswap: ETH = $1810
 □ 社交媒体情绪
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;链上分析核心：&lt;/p&gt;</description></item><item><title>期权+DEX 组合策略 - 对冲风险增强收益</title><link>https://tiao0303.github.io/dex-bok/posts/19-options-dex-combo/</link><pubDate>Thu, 19 Mar 2026 00:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/19-options-dex-combo/</guid><description>&lt;h2 id="为什么需要期权对冲"&gt;为什么需要期权对冲&lt;/h2&gt;
+&lt;p&gt;链上分析核心：&lt;/p&gt;</description></item><item><title>期权+DEX 组合策略 - 对冲风险增强收益</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/19-options-dex-combo/</link><pubDate>Thu, 19 Mar 2026 00:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/19-options-dex-combo/</guid><description>&lt;h2 id="为什么需要期权对冲"&gt;为什么需要期权对冲&lt;/h2&gt;
 &lt;h3 id="lp-的痛点"&gt;LP 的痛点&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -4076,7 +4076,7 @@ Sushiswap: ETH = $1810
 卖出：Call 期权（行权价高于当前价）
 收入：权利金
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实战案例-1"&gt;实战案例&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：持有 10 ETH，当前$1800&lt;/p&gt;</description></item><item><title>稳定币脱锚历史复盘 - 血泪教训总结</title><link>https://tiao0303.github.io/dex-bok/posts/18-stablecoin-depeg-history/</link><pubDate>Thu, 19 Mar 2026 00:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/18-stablecoin-depeg-history/</guid><description>&lt;h2 id="什么是脱锚"&gt;什么是脱锚&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：持有 10 ETH，当前$1800&lt;/p&gt;</description></item><item><title>稳定币脱锚历史复盘 - 血泪教训总结</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/18-stablecoin-depeg-history/</link><pubDate>Thu, 19 Mar 2026 00:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/18-stablecoin-depeg-history/</guid><description>&lt;h2 id="什么是脱锚"&gt;什么是脱锚&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;脱锚&lt;/strong&gt; = 稳定币价格偏离 1 USD&lt;/p&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -4143,7 +4143,7 @@ Sushiswap: ETH = $1810
 &lt;h3 id="崩盘原因"&gt;崩盘原因&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;算法机制缺陷&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>流动性挖矿收益优化 - 让 APY 翻倍技巧</title><link>https://tiao0303.github.io/dex-bok/posts/17-liquidity-mining-optimization/</link><pubDate>Thu, 19 Mar 2026 00:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/17-liquidity-mining-optimization/</guid><description>&lt;h2 id="收益构成分析"&gt;收益构成分析&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;算法机制缺陷&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>流动性挖矿收益优化 - 让 APY 翻倍技巧</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/17-liquidity-mining-optimization/</link><pubDate>Thu, 19 Mar 2026 00:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/17-liquidity-mining-optimization/</guid><description>&lt;h2 id="收益构成分析"&gt;收益构成分析&lt;/h2&gt;
 &lt;h3 id="三大来源"&gt;三大来源&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -4393,7 +4393,7 @@ Gas 成本 = $50/次
 &lt;hr&gt;
 &lt;h2 id="优化策略五杠杆挖矿-"&gt;优化策略五：杠杆挖矿 ⭐⭐⭐&lt;/h2&gt;
 &lt;h3 id="原理"&gt;原理&lt;/h3&gt;
-&lt;p&gt;借币→提供流动性→赚取利差&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
+&lt;p&gt;借币→提供流动性→赚取利差&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;套利&lt;/strong&gt; = 利用价格差异，低买高卖，赚取无风险收益&lt;/p&gt;
 &lt;h3 id="套利特点"&gt;套利特点&lt;/h3&gt;
 &lt;ul&gt;
@@ -4436,7 +4436,7 @@ Gas 成本 = $50/次
 &lt;hr&gt;
 &lt;h2 id="策略二跨所套利-"&gt;策略二：跨所套利 ⭐⭐⭐⭐&lt;/h2&gt;
 &lt;h3 id="原理-1"&gt;原理&lt;/h3&gt;
-&lt;p&gt;同一资产在不同 DEX 价格不同&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (11/15)：链上交易监控与异常检测</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-11/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-11/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;同一资产在不同 DEX 价格不同&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (11/15)：链上交易监控与异常检测</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-11/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-11/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;在去中心化交易所的运营中，实时监控链上交易并识别异常行为是安全合规的核心环节。本文介绍 T3 如何构建高效的链上监控体系，实现毫秒级异常检测与响应。&lt;/p&gt;
 &lt;h2 id="监控架构设计"&gt;监控架构设计&lt;/h2&gt;
 &lt;h3 id="三层监控体系"&gt;三层监控体系&lt;/h3&gt;
@@ -4484,7 +4484,7 @@ Gas 成本 = $50/次
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;ETH&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;50000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; }
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;];
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-可疑地址交互"&gt;3. 可疑地址交互&lt;/h3&gt;
-&lt;p&gt;T3 维护多层地址黑名单：&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (12/15)：KYC/AML 合规流程实现</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-12/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-12/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;T3 维护多层地址黑名单：&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (12/15)：KYC/AML 合规流程实现</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-12/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-12/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;KYC（了解你的客户）和 AML（反洗钱）是加密货币交易所合规运营的基础要求。本文详细介绍 T3 如何设计和实现符合全球监管标准的 KYC/AML 流程，在保障合规的同时优化用户体验。&lt;/p&gt;
 &lt;h2 id="监管框架概览"&gt;监管框架概览&lt;/h2&gt;
 &lt;h3 id="主要司法管辖区要求"&gt;主要司法管辖区要求&lt;/h3&gt;
@@ -4984,7 +4984,7 @@ Gas 成本 = $50/次
 &lt;li&gt;&lt;strong&gt;审计追踪&lt;/strong&gt;：所有决策可追溯&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id="小结"&gt;小结&lt;/h2&gt;
-&lt;p&gt;KYC/AML 合规是 T3 全球运营的基础。通过三级验证体系、智能风险评分、自动化监控和完善的报告机制，T3 在满足监管要求的同时，为用户提供流畅的验证体验。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (13/15)：智能合约安全审计流程</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-13/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-13/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;KYC/AML 合规是 T3 全球运营的基础。通过三级验证体系、智能风险评分、自动化监控和完善的报告机制，T3 在满足监管要求的同时，为用户提供流畅的验证体验。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (13/15)：智能合约安全审计流程</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-13/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-13/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;智能合约是去中心化交易所的核心基础设施，其安全性直接关系到用户资产安全。本文详细介绍 T3 的智能合约安全审计流程，包括代码审查、自动化分析、形式化验证和漏洞赏金计划。&lt;/p&gt;
 &lt;h2 id="审计流程概览"&gt;审计流程概览&lt;/h2&gt;
 &lt;h3 id="五层审计体系"&gt;五层审计体系&lt;/h3&gt;
@@ -5575,7 +5575,7 @@ Gas 成本 = $50/次
 &lt;li&gt;&lt;strong&gt;文档完整&lt;/strong&gt;：所有决策和修复可追溯&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id="小结"&gt;小结&lt;/h2&gt;
-&lt;p&gt;智能合约安全审计是 T3 安全体系的基石。通过自动化工具、人工审查、形式化验证和漏洞赏金的多层审计体系，T3 确保合约代码的安全性和可靠性，为用户提供可信赖的交易环境。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (14/15)：数据隐私与保护机制</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-14/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-14/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;智能合约安全审计是 T3 安全体系的基石。通过自动化工具、人工审查、形式化验证和漏洞赏金的多层审计体系，T3 确保合约代码的安全性和可靠性，为用户提供可信赖的交易环境。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (14/15)：数据隐私与保护机制</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-14/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-14/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;在去中心化金融时代，数据隐私保护既是用户权利，也是合规要求。本文详细介绍 T3 如何构建全面的数据隐私保护体系，在保障透明性的同时保护用户隐私，满足 GDPR、CCPA 等全球隐私法规要求。&lt;/p&gt;
 &lt;h2 id="隐私保护原则"&gt;隐私保护原则&lt;/h2&gt;
 &lt;h3 id="数据最小化"&gt;数据最小化&lt;/h3&gt;
@@ -6279,7 +6279,7 @@ Gas 成本 = $50/次
 &lt;li&gt;&lt;strong&gt;快速响应&lt;/strong&gt;：建立隐私事件响应流程&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id="小结"&gt;小结&lt;/h2&gt;
-&lt;p&gt;数据隐私保护是 T3 对用户的基本承诺。通过加密体系、隐私增强技术、用户权利保障和严格的访问控制，T3 在保障功能的同时最大程度保护用户隐私，满足全球隐私法规要求。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (15/15)：应急响应与事件管理</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-15/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-15/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;数据隐私保护是 T3 对用户的基本承诺。通过加密体系、隐私增强技术、用户权利保障和严格的访问控制，T3 在保障功能的同时最大程度保护用户隐私，满足全球隐私法规要求。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (15/15)：应急响应与事件管理</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-15/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-15/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;即使有最完善的安全措施，安全事件仍可能发生。本文介绍 T3 的应急响应体系和事件管理流程，确保在安全事件发生时能够快速检测、响应和恢复，最大程度减少损失和影响。&lt;/p&gt;
 &lt;h2 id="应急响应组织架构"&gt;应急响应组织架构&lt;/h2&gt;
 &lt;h3 id="安全事件响应团队-sirt"&gt;安全事件响应团队 (SIRT)&lt;/h3&gt;
@@ -7482,7 +7482,7 @@ TGE: 10%
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;p&gt;&lt;strong&gt;作者&lt;/strong&gt;：QingHeart Qin
-&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item><item><title>DeFi 风险管理 - 保住本金的 10 条铁律</title><link>https://tiao0303.github.io/dex-bok/posts/10-risk-management/</link><pubDate>Wed, 18 Mar 2026 21:28:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/10-risk-management/</guid><description>&lt;h2 id="血泪教训"&gt;血泪教训&lt;/h2&gt;
+&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item><item><title>DeFi 风险管理 - 保住本金的 10 条铁律</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/10-risk-management/</link><pubDate>Wed, 18 Mar 2026 21:28:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/10-risk-management/</guid><description>&lt;h2 id="血泪教训"&gt;血泪教训&lt;/h2&gt;
 &lt;p&gt;3 年 DeFi 经历，见过太多：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;百万仓位一夜归零&lt;/li&gt;
@@ -7524,7 +7524,7 @@ TGE: 10%
 - 20% 借贷（Aave）
 - 15% 质押（Lido）
 - 10% 高风险 Farm
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;效果&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DeFi 收益 farming 完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/09-defi-yield/</link><pubDate>Wed, 18 Mar 2026 21:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/09-defi-yield/</guid><description>&lt;h2 id="defi-收益来源"&gt;DeFi 收益来源&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;效果&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DeFi 收益 farming 完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/09-defi-yield/</link><pubDate>Wed, 18 Mar 2026 21:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/09-defi-yield/</guid><description>&lt;h2 id="defi-收益来源"&gt;DeFi 收益来源&lt;/h2&gt;
 &lt;h3 id="1-交易手续费-"&gt;1. 交易手续费 ⭐⭐⭐⭐⭐&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;来源&lt;/strong&gt;：用户 swap 支付的费用
 &lt;strong&gt;分配&lt;/strong&gt;：按 LP 份额比例分配
@@ -7612,7 +7612,7 @@ TGE: 10%
 &lt;hr&gt;
 &lt;h2 id="热门-farm-策略"&gt;热门 Farm 策略&lt;/h2&gt;
 &lt;h3 id="1-curve-3pool--convex-"&gt;1. Curve 3pool + Convex ⭐⭐⭐⭐⭐&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;流程&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>无常损失详解 - LP 最大的隐形成本</title><link>https://tiao0303.github.io/dex-bok/posts/08-impermanent-loss/</link><pubDate>Wed, 18 Mar 2026 21:26:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/08-impermanent-loss/</guid><description>&lt;h2 id="什么是无常损失"&gt;什么是无常损失&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;流程&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>无常损失详解 - LP 最大的隐形成本</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/08-impermanent-loss/</link><pubDate>Wed, 18 Mar 2026 21:26:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/08-impermanent-loss/</guid><description>&lt;h2 id="什么是无常损失"&gt;什么是无常损失&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;无常损失&lt;/strong&gt;（Impermanent Loss, IL）= 提供流动性 vs 持有 的价值差异&lt;/p&gt;
 &lt;p&gt;简单说：币价波动时，LP 可能比直接持有亏钱。&lt;/p&gt;
 &lt;hr&gt;
@@ -7685,7 +7685,7 @@ price_ratio = 新价格 / 原价格
  &lt;/tr&gt;
  &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;strong&gt;规律&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DEX 聚合器对比 - 如何获得最优价格</title><link>https://tiao0303.github.io/dex-bok/posts/07-dex-aggregators/</link><pubDate>Wed, 18 Mar 2026 21:25:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/07-dex-aggregators/</guid><description>&lt;h2 id="为什么需要聚合器"&gt;为什么需要聚合器&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;规律&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DEX 聚合器对比 - 如何获得最优价格</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/07-dex-aggregators/</link><pubDate>Wed, 18 Mar 2026 21:25:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/07-dex-aggregators/</guid><description>&lt;h2 id="为什么需要聚合器"&gt;为什么需要聚合器&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;问题&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;不同 DEX 价格不同&lt;/li&gt;
@@ -7788,7 +7788,7 @@ price_ratio = 新价格 / 原价格
 &lt;li&gt;主流 token&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="网址-1"&gt;网址&lt;/h3&gt;
-&lt;p&gt;&lt;a href="https://matcha.xyz"&gt;matcha.xyz&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Layer2 DEX 完全指南 - Gas 费节省 90%</title><link>https://tiao0303.github.io/dex-bok/posts/06-layer2-dex/</link><pubDate>Wed, 18 Mar 2026 21:24:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/06-layer2-dex/</guid><description>&lt;h2 id="为什么需要-layer2"&gt;为什么需要 Layer2&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://matcha.xyz"&gt;matcha.xyz&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Layer2 DEX 完全指南 - Gas 费节省 90%</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/06-layer2-dex/</link><pubDate>Wed, 18 Mar 2026 21:24:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/06-layer2-dex/</guid><description>&lt;h2 id="为什么需要-layer2"&gt;为什么需要 Layer2&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;以太坊主网问题&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Gas 费高：swap 一次 $10-50&lt;/li&gt;
@@ -8110,7 +8110,7 @@ price_ratio = 新价格 / 原价格
 &lt;/ol&gt;
 &lt;hr&gt;
 &lt;h2 id="第三步设置价格区间v3"&gt;第三步：设置价格区间（V3）&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;保守策略&lt;/strong&gt;（推荐新手）：&lt;/p&gt;</description></item><item><title>MEV 防护指南 - 避免被机器人收割</title><link>https://tiao0303.github.io/dex-bok/posts/05-mev-protection/</link><pubDate>Wed, 18 Mar 2026 21:22:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/05-mev-protection/</guid><description>&lt;h2 id="什么是-mev"&gt;什么是 MEV&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;保守策略&lt;/strong&gt;（推荐新手）：&lt;/p&gt;</description></item><item><title>MEV 防护指南 - 避免被机器人收割</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/05-mev-protection/</link><pubDate>Wed, 18 Mar 2026 21:22:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/05-mev-protection/</guid><description>&lt;h2 id="什么是-mev"&gt;什么是 MEV&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;MEV&lt;/strong&gt;（Maximal Extractable Value）= 矿工/验证者可提取价值&lt;/p&gt;
 &lt;p&gt;简单说：机器人监控公开交易池，通过特殊手段从你的交易中获利。&lt;/p&gt;
 &lt;hr&gt;
@@ -8152,7 +8152,7 @@ MetaMask 设置：
 1. 添加新网络
 2. 输入上述 RPC
 3. 切换到 Flashbots 网络交易
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;效果&lt;/strong&gt;：免疫 99% MEV 攻击&lt;/p&gt;</description></item><item><title>Curve StableSwap 解析 - 稳定币交换的王者</title><link>https://tiao0303.github.io/dex-bok/posts/04-curve-stableswap/</link><pubDate>Wed, 18 Mar 2026 21:21:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/04-curve-stableswap/</guid><description>&lt;h2 id="为什么需要-curve"&gt;为什么需要 Curve&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;效果&lt;/strong&gt;：免疫 99% MEV 攻击&lt;/p&gt;</description></item><item><title>Curve StableSwap 解析 - 稳定币交换的王者</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/04-curve-stableswap/</link><pubDate>Wed, 18 Mar 2026 21:21:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/04-curve-stableswap/</guid><description>&lt;h2 id="为什么需要-curve"&gt;为什么需要 Curve&lt;/h2&gt;
 &lt;p&gt;传统 AMM（如 Uniswap）对稳定币效率极低：&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;问题&lt;/strong&gt;：USDC 和 DAI 价格应该始终≈1:1，但 Uniswap 的 &lt;code&gt;x * y = k&lt;/code&gt; 公式会导致不必要的滑点。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;例子&lt;/strong&gt;：&lt;/p&gt;
@@ -8300,7 +8300,7 @@ A 越小 → 越接近恒定积 → 流动性越安全
  &lt;/tr&gt;
  &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;strong&gt;建议&lt;/strong&gt;：新手先锁 1-3 个月试试水。&lt;/p&gt;</description></item><item><title>Uniswap V2 vs V3 深度对比 - 选哪个版本？</title><link>https://tiao0303.github.io/dex-bok/posts/03-uniswap-v2-v3/</link><pubDate>Wed, 18 Mar 2026 21:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/03-uniswap-v2-v3/</guid><description>&lt;h2 id="核心差异一览"&gt;核心差异一览&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;建议&lt;/strong&gt;：新手先锁 1-3 个月试试水。&lt;/p&gt;</description></item><item><title>Uniswap V2 vs V3 深度对比 - 选哪个版本？</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/03-uniswap-v2-v3/</link><pubDate>Wed, 18 Mar 2026 21:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/03-uniswap-v2-v3/</guid><description>&lt;h2 id="核心差异一览"&gt;核心差异一览&lt;/h2&gt;
 &lt;table&gt;
  &lt;thead&gt;
  &lt;tr&gt;
@@ -8622,7 +8622,7 @@ A 越小 → 越接近恒定积 → 流动性越安全
 &lt;li&gt;用 Gas 追踪工具（etherscan/gastracker）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;下一步&lt;/strong&gt;：&lt;a href="https://tiao0303.github.io/dex-bok/guides/first-lp/"&gt;第一次提供流动性&lt;/a&gt;&lt;/p&gt;</description></item><item><title>流动性管理策略 - 从被动 LP 到主动管理</title><link>https://tiao0303.github.io/dex-bok/posts/02-liquidity-strategies/</link><pubDate>Wed, 18 Mar 2026 21:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/02-liquidity-strategies/</guid><description>&lt;h2 id="三种-lp-策略对比"&gt;三种 LP 策略对比&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;下一步&lt;/strong&gt;：&lt;a href="https://tiao0303.github.io/dex-bok/guides/first-lp/"&gt;第一次提供流动性&lt;/a&gt;&lt;/p&gt;</description></item><item><title>流动性管理策略 - 从被动 LP 到主动管理</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/02-liquidity-strategies/</link><pubDate>Wed, 18 Mar 2026 21:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/02-liquidity-strategies/</guid><description>&lt;h2 id="三种-lp-策略对比"&gt;三种 LP 策略对比&lt;/h2&gt;
 &lt;table&gt;
  &lt;thead&gt;
  &lt;tr&gt;
@@ -8713,7 +8713,7 @@ A 越小 → 越接近恒定积 → 流动性越安全
 &lt;hr&gt;
 &lt;h2 id="策略三集中流动性uniswap-v3"&gt;策略三：集中流动性（Uniswap V3）&lt;/h2&gt;
 &lt;h3 id="革命性创新"&gt;革命性创新&lt;/h3&gt;
-&lt;p&gt;V3 允许自定义价格区间，资金效率提升 10-100 倍。&lt;/p&gt;</description></item><item><title>AMM 原理详解 - 自动做市商核心机制</title><link>https://tiao0303.github.io/dex-bok/posts/01-amm-principles/</link><pubDate>Wed, 18 Mar 2026 21:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/01-amm-principles/</guid><description>&lt;h2 id="什么是-amm"&gt;什么是 AMM&lt;/h2&gt;
+&lt;p&gt;V3 允许自定义价格区间，资金效率提升 10-100 倍。&lt;/p&gt;</description></item><item><title>AMM 原理详解 - 自动做市商核心机制</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/01-amm-principles/</link><pubDate>Wed, 18 Mar 2026 21:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/01-amm-principles/</guid><description>&lt;h2 id="什么是-amm"&gt;什么是 AMM&lt;/h2&gt;
 &lt;p&gt;自动做市商（Automated Market Maker）是去中心化交易所（DEX）的核心机制，用数学公式代替传统订单簿来实现资产交易。&lt;/p&gt;
 &lt;h2 id="核心公式恒定乘积"&gt;核心公式：恒定乘积&lt;/h2&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;x * y = k
@@ -8840,7 +8840,7 @@ A 越小 → 越接近恒定积 → 流动性越安全
 &lt;/ol&gt;
 &lt;hr&gt;
 &lt;h2 id="赞助本站"&gt;赞助本站&lt;/h2&gt;
-&lt;p&gt;如果本站内容对你有帮助，欢迎赞助：&lt;/p&gt;</description></item><item><title>T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平</title><link>https://tiao0303.github.io/dex-bok/posts/t1-05-advanced-tips/</link><pubDate>Wed, 18 Mar 2026 14:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-05-advanced-tips/</guid><description>&lt;h1 id="t1-新手入门-05---进阶技巧提升你的-dex-交易水平"&gt;T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平&lt;/h1&gt;
+&lt;p&gt;如果本站内容对你有帮助，欢迎赞助：&lt;/p&gt;</description></item><item><title>T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-05-advanced-tips/</link><pubDate>Wed, 18 Mar 2026 14:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-05-advanced-tips/</guid><description>&lt;h1 id="t1-新手入门-05---进阶技巧提升你的-dex-交易水平"&gt;T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平&lt;/h1&gt;
 &lt;p&gt;恭喜你完成 T1 新手入门系列！这是最后一篇，我们将学习进阶技巧。&lt;/p&gt;
 &lt;h2 id="限价单交易"&gt;限价单交易&lt;/h2&gt;
 &lt;h3 id="什么是限价单"&gt;什么是限价单？&lt;/h3&gt;
@@ -8921,7 +8921,7 @@ A 越小 → 越接近恒定积 → 流动性越安全
 设置：当价格跌到$80 时自动卖出
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id="dca定投策略"&gt;DCA（定投策略）&lt;/h2&gt;
 &lt;h3 id="什么是-dca"&gt;什么是 DCA？&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Dollar-Cost Averaging&lt;/strong&gt;：定期定额投资。&lt;/p&gt;</description></item><item><title>T1 新手入门 04 - 代币安全：如何识别假币和土狗项目</title><link>https://tiao0303.github.io/dex-bok/posts/t1-04-token-safety/</link><pubDate>Wed, 18 Mar 2026 13:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-04-token-safety/</guid><description>&lt;h1 id="t1-新手入门-04---代币安全如何识别假币和土狗项目"&gt;T1 新手入门 04 - 代币安全：如何识别假币和土狗项目&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Dollar-Cost Averaging&lt;/strong&gt;：定期定额投资。&lt;/p&gt;</description></item><item><title>T1 新手入门 04 - 代币安全：如何识别假币和土狗项目</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-04-token-safety/</link><pubDate>Wed, 18 Mar 2026 13:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-04-token-safety/</guid><description>&lt;h1 id="t1-新手入门-04---代币安全如何识别假币和土狗项目"&gt;T1 新手入门 04 - 代币安全：如何识别假币和土狗项目&lt;/h1&gt;
 &lt;p&gt;DEX 上任何人都可以发币，这意味着&lt;strong&gt;假币和诈骗项目泛滥&lt;/strong&gt;。学会识别安全代币是生存技能！&lt;/p&gt;
 &lt;h2 id="常见骗局类型"&gt;常见骗局类型&lt;/h2&gt;
 &lt;h3 id="-假代币fake-token"&gt;🎭 假代币（Fake Token）&lt;/h3&gt;
@@ -8985,7 +8985,7 @@ A 越小 → 越接近恒定积 → 流动性越安全
 &lt;li&gt;项目官方 Twitter（蓝 V 认证）&lt;/li&gt;
 &lt;li&gt;项目官网（从 Twitter 跳转）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;不可靠来源&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>T1 新手入门 03 - 第一笔交易：从充值到完成兑换</title><link>https://tiao0303.github.io/dex-bok/posts/t1-03-first-trade/</link><pubDate>Wed, 18 Mar 2026 12:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-03-first-trade/</guid><description>&lt;h1 id="t1-新手入门-03---第一笔交易从充值到完成兑换"&gt;T1 新手入门 03 - 第一笔交易：从充值到完成兑换&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;不可靠来源&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>T1 新手入门 03 - 第一笔交易：从充值到完成兑换</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-03-first-trade/</link><pubDate>Wed, 18 Mar 2026 12:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-03-first-trade/</guid><description>&lt;h1 id="t1-新手入门-03---第一笔交易从充值到完成兑换"&gt;T1 新手入门 03 - 第一笔交易：从充值到完成兑换&lt;/h1&gt;
 &lt;p&gt;准备好了吗？这是你第一次在 DEX 上交易的完整教程！&lt;/p&gt;
 &lt;h2 id="准备工作"&gt;准备工作&lt;/h2&gt;
 &lt;h3 id="必需物品"&gt;必需物品&lt;/h3&gt;
@@ -9049,7 +9049,7 @@ A 越小 → 越接近恒定积 → 流动性越安全
 &lt;li&gt;&lt;a href="https://layerzero.network"&gt;LayerZero&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4 id="方法-3朋友转账"&gt;方法 3：朋友转账&lt;/h4&gt;
-&lt;p&gt;让有 crypto 的朋友直接转给你一些 Gas 费。&lt;/p&gt;</description></item><item><title>T1 新手入门 02 - 创建钱包：安全保管你的加密资产</title><link>https://tiao0303.github.io/dex-bok/posts/t1-02-wallet-setup/</link><pubDate>Wed, 18 Mar 2026 11:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-02-wallet-setup/</guid><description>&lt;h1 id="t1-新手入门-02---创建钱包安全保管你的加密资产"&gt;T1 新手入门 02 - 创建钱包：安全保管你的加密资产&lt;/h1&gt;
+&lt;p&gt;让有 crypto 的朋友直接转给你一些 Gas 费。&lt;/p&gt;</description></item><item><title>T1 新手入门 02 - 创建钱包：安全保管你的加密资产</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-02-wallet-setup/</link><pubDate>Wed, 18 Mar 2026 11:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-02-wallet-setup/</guid><description>&lt;h1 id="t1-新手入门-02---创建钱包安全保管你的加密资产"&gt;T1 新手入门 02 - 创建钱包：安全保管你的加密资产&lt;/h1&gt;
 &lt;p&gt;在开始使用 DEX 之前，你需要一个加密钱包。这是你在 Web3 世界的身份和保险箱。&lt;/p&gt;
 &lt;h2 id="什么是加密钱包"&gt;什么是加密钱包？&lt;/h2&gt;
 &lt;p&gt;加密钱包不是&amp;quot;装&amp;quot;币的容器，而是&lt;strong&gt;管理私钥的工具&lt;/strong&gt;：&lt;/p&gt;
@@ -9121,7 +9121,7 @@ A 越小 → 越接近恒定积 → 流动性越安全
  &lt;/tr&gt;
  &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;strong&gt;建议&lt;/strong&gt;：新手从热钱包开始，资产超过$1000 后考虑冷钱包。&lt;/p&gt;</description></item><item><title>T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念</title><link>https://tiao0303.github.io/dex-bok/posts/t1-01-dex-basics/</link><pubDate>Wed, 18 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-01-dex-basics/</guid><description>&lt;h1 id="t1-新手入门-01---什么是-dex去中心化交易所基础概念"&gt;T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;建议&lt;/strong&gt;：新手从热钱包开始，资产超过$1000 后考虑冷钱包。&lt;/p&gt;</description></item><item><title>T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-01-dex-basics/</link><pubDate>Wed, 18 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-01-dex-basics/</guid><description>&lt;h1 id="t1-新手入门-01---什么是-dex去中心化交易所基础概念"&gt;T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念&lt;/h1&gt;
 &lt;p&gt;欢迎来到 T1 新手入门系列！这是专为刚接触 DeFi 和去中心化交易所的新手准备的入门指南。&lt;/p&gt;
 &lt;h2 id="什么是-dex"&gt;什么是 DEX？&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;DEX&lt;/strong&gt;（Decentralized Exchange，去中心化交易所）是一种不需要中介机构、基于智能合约运行的加密货币交易平台。&lt;/p&gt;

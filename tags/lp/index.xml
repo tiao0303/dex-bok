@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LP on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/lp/</link><description>Recent content in LP on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 18 Mar 2026 21:26:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/lp/index.xml" rel="self" type="application/rss+xml"/><item><title>无常损失详解 - LP 最大的隐形成本</title><link>https://tiao0303.github.io/dex-bok/posts/08-impermanent-loss/</link><pubDate>Wed, 18 Mar 2026 21:26:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/08-impermanent-loss/</guid><description>&lt;h2 id="什么是无常损失"&gt;什么是无常损失&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>LP on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/lp/</link><description>Recent content in LP on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 18 Mar 2026 21:26:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/lp/index.xml" rel="self" type="application/rss+xml"/><item><title>无常损失详解 - LP 最大的隐形成本</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/08-impermanent-loss/</link><pubDate>Wed, 18 Mar 2026 21:26:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/08-impermanent-loss/</guid><description>&lt;h2 id="什么是无常损失"&gt;什么是无常损失&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;无常损失&lt;/strong&gt;（Impermanent Loss, IL）= 提供流动性 vs 持有 的价值差异&lt;/p&gt;
 &lt;p&gt;简单说：币价波动时，LP 可能比直接持有亏钱。&lt;/p&gt;
 &lt;hr&gt;
@@ -148,7 +148,7 @@ price_ratio = 新价格 / 原价格
 &lt;/ol&gt;
 &lt;hr&gt;
 &lt;h2 id="第三步设置价格区间v3"&gt;第三步：设置价格区间（V3）&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;保守策略&lt;/strong&gt;（推荐新手）：&lt;/p&gt;</description></item><item><title>流动性管理策略 - 从被动 LP 到主动管理</title><link>https://tiao0303.github.io/dex-bok/posts/02-liquidity-strategies/</link><pubDate>Wed, 18 Mar 2026 21:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/02-liquidity-strategies/</guid><description>&lt;h2 id="三种-lp-策略对比"&gt;三种 LP 策略对比&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;保守策略&lt;/strong&gt;（推荐新手）：&lt;/p&gt;</description></item><item><title>流动性管理策略 - 从被动 LP 到主动管理</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/02-liquidity-strategies/</link><pubDate>Wed, 18 Mar 2026 21:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/02-liquidity-strategies/</guid><description>&lt;h2 id="三种-lp-策略对比"&gt;三种 LP 策略对比&lt;/h2&gt;
 &lt;table&gt;
  &lt;thead&gt;
  &lt;tr&gt;

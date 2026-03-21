@@ -1,50 +1,691 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>期权+DEX 组合策略 - 对冲风险增强收益 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="学习如何用期权对冲 LP 无常损失，构建低风险高收益组合"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/19-options-dex-combo/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/19-options-dex-combo/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="期权+DEX 组合策略 - 对冲风险增强收益"><meta property="og:description" content="学习如何用期权对冲 LP 无常损失，构建低风险高收益组合"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-03-19T00:45:00+08:00"><meta property="article:modified_time" content="2026-03-19T00:45:00+08:00"><meta property="article:tag" content="期权"><meta property="article:tag" content="对冲"><meta property="article:tag" content="策略"><meta itemprop=name content="期权+DEX 组合策略 - 对冲风险增强收益"><meta itemprop=description content="学习如何用期权对冲 LP 无常损失，构建低风险高收益组合"><meta itemprop=datePublished content="2026-03-19T00:45:00+08:00"><meta itemprop=dateModified content="2026-03-19T00:45:00+08:00"><meta itemprop=wordCount content="414"><meta itemprop=keywords content="期权,对冲,策略"><meta name=twitter:card content="summary"><meta name=twitter:title content="期权+DEX 组合策略 - 对冲风险增强收益"><meta name=twitter:description content="学习如何用期权对冲 LP 无常损失，构建低风险高收益组合"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-page is-page page-19-options-dex-combo"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
-<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#为什么需要期权对冲>为什么需要期权对冲</a><ul><li><a href=#lp-的痛点>LP 的痛点</a></li></ul></li><li><a href=#策略一lpput-期权保护->策略一：LP+Put 期权保护 ⭐⭐⭐⭐⭐</a><ul><li><a href=#原理>原理</a></li><li><a href=#实战案例>实战案例</a></li><li><a href=#推荐平台>推荐平台</a></li></ul></li><li><a href=#策略二covered-call-增强收益->策略二：Covered Call 增强收益 ⭐⭐⭐⭐</a><ul><li><a href=#原理-1>原理</a></li><li><a href=#实战案例-1>实战案例</a></li><li><a href=#优点>优点</a></li><li><a href=#缺点>缺点</a></li><li><a href=#适用场景>适用场景</a></li></ul></li><li><a href=#策略三protective-put-保底->策略三：Protective Put 保底 ⭐⭐⭐⭐</a><ul><li><a href=#原理-2>原理</a></li><li><a href=#实战案例-2>实战案例</a></li><li><a href=#适用场景-1>适用场景</a></li></ul></li><li><a href=#策略四collar-零成本对冲->策略四：Collar 零成本对冲 ⭐⭐⭐</a><ul><li><a href=#原理-3>原理</a></li><li><a href=#实战案例-3>实战案例</a></li><li><a href=#优点-1>优点</a></li><li><a href=#缺点-1>缺点</a></li></ul></li><li><a href=#策略五lp-期权组合->策略五：LP+ 期权组合 ⭐⭐⭐⭐⭐</a><ul><li><a href=#完整策略>完整策略</a></li><li><a href=#预期收益>预期收益</a></li><li><a href=#风险控制>风险控制</a></li></ul></li><li><a href=#期权平台对比>期权平台对比</a></li><li><a href=#我的期权配置>我的期权配置</a></li><li><a href=#期权入门建议>期权入门建议</a><ul><li><a href=#新手起步>新手起步</a></li><li><a href=#风险管理>风险管理</a></li><li><a href=#学习资源>学习资源</a></li></ul></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>期权+DEX 组合策略 - 对冲风险增强收益</h1><div class=article-meta><time datetime=2026-03-19>2026-03-19</time>
-<span>•</span>
-<span>414 字</span>
-<span>•</span>
-<span>进阶实战</span></div><div class=article-tags><a href=/dex-bok/tags/%E6%9C%9F%E6%9D%83/ class=article-tag>期权</a>
-<a href=/dex-bok/tags/%E5%AF%B9%E5%86%B2/ class=article-tag>对冲</a>
-<a href=/dex-bok/tags/%E7%AD%96%E7%95%A5/ class=article-tag>策略</a></div></header><h2 id=为什么需要期权对冲>为什么需要期权对冲</h2><h3 id=lp-的痛点>LP 的痛点</h3><table><thead><tr><th>问题</th><th>影响</th><th>期权解决方案</th></tr></thead><tbody><tr><td>无常损失</td><td>币价波动亏损</td><td>Put 期权保护</td></tr><tr><td>踏空风险</td><td>币价上涨少赚</td><td>Call 期权参与</td></tr><tr><td>收益不稳定</td><td>APY 波动大</td><td>期权权利金收入</td></tr></tbody></table><hr><h2 id=策略一lpput-期权保护->策略一：LP+Put 期权保护 ⭐⭐⭐⭐⭐</h2><h3 id=原理>原理</h3><pre tabindex=0><code>持有：ETH + USDC 做 LP
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=54297&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>期权&#43;DEX 组合策略 - 对冲风险增强收益 | DEX 学习笔记 | 去中心化交易所实战指南</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="学习如何用期权对冲 LP 无常损失，构建低风险高收益组合">
+    <meta name="generator" content="Hugo 0.158.0">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="QingHeart Qin">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+  
+    <link rel="stylesheet" href="/css/custom.css">
+  
+
+
+    
+
+
+    
+      
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:54297/posts/19-options-dex-combo/">
+    
+
+    
+    
+    <meta property="og:url" content="http://localhost:54297/posts/19-options-dex-combo/">
+  <meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南">
+  <meta property="og:title" content="期权&#43;DEX 组合策略 - 对冲风险增强收益">
+  <meta property="og:description" content="学习如何用期权对冲 LP 无常损失，构建低风险高收益组合">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-19T00:45:00+08:00">
+    <meta property="article:modified_time" content="2026-03-19T00:45:00+08:00">
+    <meta property="article:tag" content="期权">
+    <meta property="article:tag" content="对冲">
+    <meta property="article:tag" content="策略">
+
+  <meta itemprop="name" content="期权&#43;DEX 组合策略 - 对冲风险增强收益">
+  <meta itemprop="description" content="学习如何用期权对冲 LP 无常损失，构建低风险高收益组合">
+  <meta itemprop="datePublished" content="2026-03-19T00:45:00+08:00">
+  <meta itemprop="dateModified" content="2026-03-19T00:45:00+08:00">
+  <meta itemprop="wordCount" content="414">
+  <meta itemprop="keywords" content="期权,对冲,策略">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="期权&#43;DEX 组合策略 - 对冲风险增强收益">
+  <meta name="twitter:description" content="学习如何用期权对冲 LP 无常损失，构建低风险高收益组合">
+
+	
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head><body class="ma0 bg-dark geek-dark development is-page is-page page-19-options-dex-combo">
+    <header class="geek-header">
+  <nav class="geek-nav container" role="navigation">
+    <div class="geek-nav-inner">
+      <a href="/" class="geek-logo">
+        <span class="logo-icon">🦞</span>
+        <span class="logo-text">DEX 学习笔记 | 去中心化交易所实战指南</span>
+      </a>
+      <div class="geek-nav-links">
+        
+          <ul class="geek-menu">
+            
+            <li>
+              <a href="/posts/" title="文章">文章</a>
+            </li>
+            
+            <li>
+              <a href="/guides/" title="教程">教程</a>
+            </li>
+            
+            <li>
+              <a href="/tools/" title="工具">工具</a>
+            </li>
+            
+            <li>
+              <a href="/about/" title="关于">关于</a>
+            </li>
+            
+            <li>
+              <a href="/" title="首页">首页</a>
+            </li>
+            
+          </ul>
+        
+      </div>
+    </div>
+  </nav>
+</header>
+
+    <main class="pb7" role="main">
+      
+<div class="geek-article-layout">
+  
+  <aside class="geek-article-toc">
+    <h4>目录</h4>
+    
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么需要期权对冲">为什么需要期权对冲</a>
+      <ul>
+        <li><a href="#lp-的痛点">LP 的痛点</a></li>
+      </ul>
+    </li>
+    <li><a href="#策略一lpput-期权保护-">策略一：LP+Put 期权保护 ⭐⭐⭐⭐⭐</a>
+      <ul>
+        <li><a href="#原理">原理</a></li>
+        <li><a href="#实战案例">实战案例</a></li>
+        <li><a href="#推荐平台">推荐平台</a></li>
+      </ul>
+    </li>
+    <li><a href="#策略二covered-call-增强收益-">策略二：Covered Call 增强收益 ⭐⭐⭐⭐</a>
+      <ul>
+        <li><a href="#原理-1">原理</a></li>
+        <li><a href="#实战案例-1">实战案例</a></li>
+        <li><a href="#优点">优点</a></li>
+        <li><a href="#缺点">缺点</a></li>
+        <li><a href="#适用场景">适用场景</a></li>
+      </ul>
+    </li>
+    <li><a href="#策略三protective-put-保底-">策略三：Protective Put 保底 ⭐⭐⭐⭐</a>
+      <ul>
+        <li><a href="#原理-2">原理</a></li>
+        <li><a href="#实战案例-2">实战案例</a></li>
+        <li><a href="#适用场景-1">适用场景</a></li>
+      </ul>
+    </li>
+    <li><a href="#策略四collar-零成本对冲-">策略四：Collar 零成本对冲 ⭐⭐⭐</a>
+      <ul>
+        <li><a href="#原理-3">原理</a></li>
+        <li><a href="#实战案例-3">实战案例</a></li>
+        <li><a href="#优点-1">优点</a></li>
+        <li><a href="#缺点-1">缺点</a></li>
+      </ul>
+    </li>
+    <li><a href="#策略五lp-期权组合-">策略五：LP+ 期权组合 ⭐⭐⭐⭐⭐</a>
+      <ul>
+        <li><a href="#完整策略">完整策略</a></li>
+        <li><a href="#预期收益">预期收益</a></li>
+        <li><a href="#风险控制">风险控制</a></li>
+      </ul>
+    </li>
+    <li><a href="#期权平台对比">期权平台对比</a></li>
+    <li><a href="#我的期权配置">我的期权配置</a></li>
+    <li><a href="#期权入门建议">期权入门建议</a>
+      <ul>
+        <li><a href="#新手起步">新手起步</a></li>
+        <li><a href="#风险管理">风险管理</a></li>
+        <li><a href="#学习资源">学习资源</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+    
+  </aside>
+
+  
+  <article class="geek-article-content geek-article-main">
+    <header class="geek-article-header">
+      <h1>期权&#43;DEX 组合策略 - 对冲风险增强收益</h1>
+      <div class="article-meta">
+        
+        <time datetime="2026-03-19">2026-03-19</time>
+        
+        <span>•</span>
+        <span>414 字</span>
+        
+        <span>•</span>
+        <span>进阶实战</span>
+        
+      </div>
+      
+      <div class="article-tags">
+        
+        <a href="/tags/%E6%9C%9F%E6%9D%83/" class="article-tag">期权</a>
+        
+        <a href="/tags/%E5%AF%B9%E5%86%B2/" class="article-tag">对冲</a>
+        
+        <a href="/tags/%E7%AD%96%E7%95%A5/" class="article-tag">策略</a>
+        
+      </div>
+      
+    </header>
+
+    <h2 id="为什么需要期权对冲">为什么需要期权对冲</h2>
+<h3 id="lp-的痛点">LP 的痛点</h3>
+<table>
+  <thead>
+      <tr>
+          <th>问题</th>
+          <th>影响</th>
+          <th>期权解决方案</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>无常损失</td>
+          <td>币价波动亏损</td>
+          <td>Put 期权保护</td>
+      </tr>
+      <tr>
+          <td>踏空风险</td>
+          <td>币价上涨少赚</td>
+          <td>Call 期权参与</td>
+      </tr>
+      <tr>
+          <td>收益不稳定</td>
+          <td>APY 波动大</td>
+          <td>期权权利金收入</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="策略一lpput-期权保护-">策略一：LP+Put 期权保护 ⭐⭐⭐⭐⭐</h2>
+<h3 id="原理">原理</h3>
+<pre tabindex="0"><code>持有：ETH + USDC 做 LP
 买入：ETH Put 期权（行权价低于当前价）
 
 效果：
 - ETH 下跌：Put 期权盈利，对冲 LP 损失
 - ETH 上涨：LP 收益增加，仅损失权利金
-</code></pre><h3 id=实战案例>实战案例</h3><p><strong>场景</strong>：ETH = $1800，做 LP $10,000</p><p><strong>操作</strong>：</p><pre tabindex=0><code>1. $5,000 ETH + $5,000 USDC → Uniswap LP
+</code></pre><h3 id="实战案例">实战案例</h3>
+<p><strong>场景</strong>：ETH = $1800，做 LP $10,000</p>
+<p><strong>操作</strong>：</p>
+<pre tabindex="0"><code>1. $5,000 ETH + $5,000 USDC → Uniswap LP
 2. 买入 ETH Put 期权
    - 行权价：$1600
    - 到期：30 天
    - 权利金：2% ($100)
-</code></pre><p><strong>结果对比</strong>：</p><table><thead><tr><th>ETH 价格</th><th>无对冲 LP</th><th>有对冲 LP</th></tr></thead><tbody><tr><td>$1500 (-17%)</td><td>$8,500</td><td>$9,400 ✅</td></tr><tr><td>$1800 (0%)</td><td>$10,000</td><td>$9,900</td></tr><tr><td>$2100 (+17%)</td><td>$11,200</td><td>$11,100 ✅</td></tr></tbody></table><h3 id=推荐平台>推荐平台</h3><ul><li><strong>Ribbon Finance</strong>：自动化对冲</li><li><strong>Hegic</strong>：自定义期权</li><li><strong>Lyra</strong>：低费用</li></ul><hr><h2 id=策略二covered-call-增强收益->策略二：Covered Call 增强收益 ⭐⭐⭐⭐</h2><h3 id=原理-1>原理</h3><pre tabindex=0><code>持有：ETH
+</code></pre><p><strong>结果对比</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>ETH 价格</th>
+          <th>无对冲 LP</th>
+          <th>有对冲 LP</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>$1500 (-17%)</td>
+          <td>$8,500</td>
+          <td>$9,400 ✅</td>
+      </tr>
+      <tr>
+          <td>$1800 (0%)</td>
+          <td>$10,000</td>
+          <td>$9,900</td>
+      </tr>
+      <tr>
+          <td>$2100 (+17%)</td>
+          <td>$11,200</td>
+          <td>$11,100 ✅</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="推荐平台">推荐平台</h3>
+<ul>
+<li><strong>Ribbon Finance</strong>：自动化对冲</li>
+<li><strong>Hegic</strong>：自定义期权</li>
+<li><strong>Lyra</strong>：低费用</li>
+</ul>
+<hr>
+<h2 id="策略二covered-call-增强收益-">策略二：Covered Call 增强收益 ⭐⭐⭐⭐</h2>
+<h3 id="原理-1">原理</h3>
+<pre tabindex="0"><code>持有：ETH
 卖出：Call 期权（行权价高于当前价）
 收入：权利金
-</code></pre><h3 id=实战案例-1>实战案例</h3><p><strong>场景</strong>：持有 10 ETH，当前$1800</p><p><strong>操作</strong>：</p><pre tabindex=0><code>卖出 Call 期权：
+</code></pre><h3 id="实战案例-1">实战案例</h3>
+<p><strong>场景</strong>：持有 10 ETH，当前$1800</p>
+<p><strong>操作</strong>：</p>
+<pre tabindex="0"><code>卖出 Call 期权：
 - 行权价：$2000 (+11%)
 - 到期：30 天
 - 权利金：3% ($540)
-</code></pre><p><strong>结果</strong>：</p><table><thead><tr><th>ETH 价格</th><th>仅持有</th><th>Covered Call</th></tr></thead><tbody><tr><td>$1700</td><td>$17,000</td><td>$17,540 ✅</td></tr><tr><td>$1900</td><td>$19,000</td><td>$19,540 ✅</td></tr><tr><td>$2100</td><td>$21,000</td><td>$20,540 (被行权)</td></tr></tbody></table><h3 id=优点>优点</h3><ul><li>✅ 额外收入 2-5%/月</li><li>✅ 熊市保护</li><li>✅ 适合震荡市</li></ul><h3 id=缺点>缺点</h3><ul><li>❌ 上涨空间有限</li><li>❌ 大涨时踏空</li></ul><h3 id=适用场景>适用场景</h3><ul><li>震荡市（$1600-2000 区间）</li><li>不指望大涨</li><li>追求稳定收益</li></ul><hr><h2 id=策略三protective-put-保底->策略三：Protective Put 保底 ⭐⭐⭐⭐</h2><h3 id=原理-2>原理</h3><pre tabindex=0><code>持有：ETH
+</code></pre><p><strong>结果</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>ETH 价格</th>
+          <th>仅持有</th>
+          <th>Covered Call</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>$1700</td>
+          <td>$17,000</td>
+          <td>$17,540 ✅</td>
+      </tr>
+      <tr>
+          <td>$1900</td>
+          <td>$19,000</td>
+          <td>$19,540 ✅</td>
+      </tr>
+      <tr>
+          <td>$2100</td>
+          <td>$21,000</td>
+          <td>$20,540 (被行权)</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="优点">优点</h3>
+<ul>
+<li>✅ 额外收入 2-5%/月</li>
+<li>✅ 熊市保护</li>
+<li>✅ 适合震荡市</li>
+</ul>
+<h3 id="缺点">缺点</h3>
+<ul>
+<li>❌ 上涨空间有限</li>
+<li>❌ 大涨时踏空</li>
+</ul>
+<h3 id="适用场景">适用场景</h3>
+<ul>
+<li>震荡市（$1600-2000 区间）</li>
+<li>不指望大涨</li>
+<li>追求稳定收益</li>
+</ul>
+<hr>
+<h2 id="策略三protective-put-保底-">策略三：Protective Put 保底 ⭐⭐⭐⭐</h2>
+<h3 id="原理-2">原理</h3>
+<pre tabindex="0"><code>持有：ETH
 买入：Put 期权（行权价低于当前价）
 效果：锁定最低卖出价
-</code></pre><h3 id=实战案例-2>实战案例</h3><p><strong>场景</strong>：持有 10 ETH @ $1800，担心下跌</p><p><strong>操作</strong>：</p><pre tabindex=0><code>买入 Put 期权：
+</code></pre><h3 id="实战案例-2">实战案例</h3>
+<p><strong>场景</strong>：持有 10 ETH @ $1800，担心下跌</p>
+<p><strong>操作</strong>：</p>
+<pre tabindex="0"><code>买入 Put 期权：
 - 行权价：$1600 (-11%)
 - 到期：60 天
 - 权利金：4% ($720)
-</code></pre><p><strong>保底效果</strong>：</p><table><thead><tr><th>ETH 价格</th><th>仅持有</th><th>Protective Put</th></tr></thead><tbody><tr><td>$1400</td><td>$14,000</td><td>$15,280 ✅</td></tr><tr><td>$1600</td><td>$16,000</td><td>$15,280</td></tr><tr><td>$1800</td><td>$18,000</td><td>$17,280</td></tr><tr><td>$2000</td><td>$20,000</td><td>$19,280 ✅</td></tr></tbody></table><p><strong>最大损失</strong>：锁定在$15,280（无论跌多少）</p><h3 id=适用场景-1>适用场景</h3><ul><li>熊市预期</li><li>重大事件前（如 FOMC）</li><li>不想卖出但怕暴跌</li></ul><hr><h2 id=策略四collar-零成本对冲->策略四：Collar 零成本对冲 ⭐⭐⭐</h2><h3 id=原理-3>原理</h3><pre tabindex=0><code>持有：ETH
+</code></pre><p><strong>保底效果</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>ETH 价格</th>
+          <th>仅持有</th>
+          <th>Protective Put</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>$1400</td>
+          <td>$14,000</td>
+          <td>$15,280 ✅</td>
+      </tr>
+      <tr>
+          <td>$1600</td>
+          <td>$16,000</td>
+          <td>$15,280</td>
+      </tr>
+      <tr>
+          <td>$1800</td>
+          <td>$18,000</td>
+          <td>$17,280</td>
+      </tr>
+      <tr>
+          <td>$2000</td>
+          <td>$20,000</td>
+          <td>$19,280 ✅</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>最大损失</strong>：锁定在$15,280（无论跌多少）</p>
+<h3 id="适用场景-1">适用场景</h3>
+<ul>
+<li>熊市预期</li>
+<li>重大事件前（如 FOMC）</li>
+<li>不想卖出但怕暴跌</li>
+</ul>
+<hr>
+<h2 id="策略四collar-零成本对冲-">策略四：Collar 零成本对冲 ⭐⭐⭐</h2>
+<h3 id="原理-3">原理</h3>
+<pre tabindex="0"><code>持有：ETH
 卖出：Call 期权（高行权价）
 买入：Put 期权（低行权价）
 
 目标：权利金收支相抵
-</code></pre><h3 id=实战案例-3>实战案例</h3><p><strong>场景</strong>：持有 10 ETH @ $1800</p><p><strong>操作</strong>：</p><pre tabindex=0><code>卖出 Call: 行权价$2000，收入$500
+</code></pre><h3 id="实战案例-3">实战案例</h3>
+<p><strong>场景</strong>：持有 10 ETH @ $1800</p>
+<p><strong>操作</strong>：</p>
+<pre tabindex="0"><code>卖出 Call: 行权价$2000，收入$500
 买入 Put: 行权价$1600，支出$500
 净成本：$0
-</code></pre><p><strong>结果</strong>：</p><table><thead><tr><th>ETH 价格</th><th>仅持有</th><th>Collar</th></tr></thead><tbody><tr><td>$1400</td><td>$14,000</td><td>$15,500 ✅</td></tr><tr><td>$1600</td><td>$16,000</td><td>$15,500</td></tr><tr><td>$1800</td><td>$18,000</td><td>$17,500</td></tr><tr><td>$2000</td><td>$20,000</td><td>$19,500</td></tr><tr><td>$2200</td><td>$22,000</td><td>$19,500 (封顶)</td></tr></tbody></table><h3 id=优点-1>优点</h3><ul><li>✅ 零成本对冲</li><li>✅ 下跌有保护</li><li>✅ 适合长期持有</li></ul><h3 id=缺点-1>缺点</h3><ul><li>❌ 上涨收益封顶</li><li>❌ 需要期权知识</li></ul><hr><h2 id=策略五lp-期权组合->策略五：LP+ 期权组合 ⭐⭐⭐⭐⭐</h2><h3 id=完整策略>完整策略</h3><pre tabindex=0><code>资金分配：
+</code></pre><p><strong>结果</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>ETH 价格</th>
+          <th>仅持有</th>
+          <th>Collar</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>$1400</td>
+          <td>$14,000</td>
+          <td>$15,500 ✅</td>
+      </tr>
+      <tr>
+          <td>$1600</td>
+          <td>$16,000</td>
+          <td>$15,500</td>
+      </tr>
+      <tr>
+          <td>$1800</td>
+          <td>$18,000</td>
+          <td>$17,500</td>
+      </tr>
+      <tr>
+          <td>$2000</td>
+          <td>$20,000</td>
+          <td>$19,500</td>
+      </tr>
+      <tr>
+          <td>$2200</td>
+          <td>$22,000</td>
+          <td>$19,500 (封顶)</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="优点-1">优点</h3>
+<ul>
+<li>✅ 零成本对冲</li>
+<li>✅ 下跌有保护</li>
+<li>✅ 适合长期持有</li>
+</ul>
+<h3 id="缺点-1">缺点</h3>
+<ul>
+<li>❌ 上涨收益封顶</li>
+<li>❌ 需要期权知识</li>
+</ul>
+<hr>
+<h2 id="策略五lp-期权组合-">策略五：LP+ 期权组合 ⭐⭐⭐⭐⭐</h2>
+<h3 id="完整策略">完整策略</h3>
+<pre tabindex="0"><code>资金分配：
 - 60% DEX LP (赚取手续费)
 - 20% ETH 持有 (长期)
 - 10% Put 期权 (对冲 LP 风险)
 - 10% Covered Call (增强收益)
-</code></pre><h3 id=预期收益>预期收益</h3><table><thead><tr><th>来源</th><th>预期 APY</th></tr></thead><tbody><tr><td>LP 手续费</td><td>15%</td></tr><tr><td>LP 奖励</td><td>5%</td></tr><tr><td>Covered Call</td><td>10%</td></tr><tr><td>期权对冲成本</td><td>-3%</td></tr><tr><td><strong>净 APY</strong></td><td><strong>27%</strong></td></tr></tbody></table><h3 id=风险控制>风险控制</h3><ul><li>最大回撤：&lt;15%</li><li>夏普比率：>2</li><li>胜率：>70%</li></ul><hr><h2 id=期权平台对比>期权平台对比</h2><table><thead><tr><th>平台</th><th>链</th><th>费用</th><th>流动性</th><th>推荐度</th></tr></thead><tbody><tr><td>Ribbon</td><td>Ethereum</td><td>中</td><td>高</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>Lyra</td><td>Optimism</td><td>低</td><td>中</td><td>⭐⭐⭐⭐</td></tr><tr><td>Hegic</td><td>Arbitrum</td><td>低</td><td>中</td><td>⭐⭐⭐⭐</td></tr><tr><td>Premia</td><td>多链</td><td>低</td><td>低</td><td>⭐⭐⭐</td></tr><tr><td>Dopex</td><td>Arbitrum</td><td>中</td><td>中</td><td>⭐⭐⭐⭐</td></tr></tbody></table><hr><h2 id=我的期权配置>我的期权配置</h2><p><strong>总资金</strong>：$100,000</p><table><thead><tr><th>策略</th><th>金额</th><th>目的</th></tr></thead><tbody><tr><td>Uniswap LP</td><td>$40k</td><td>基础收益</td></tr><tr><td>ETH 持有</td><td>$20k</td><td>长期增值</td></tr><tr><td>Put 期权</td><td>$10k</td><td>下行保护</td></tr><tr><td>Covered Call</td><td>$10k</td><td>收益增强</td></tr><tr><td>现金储备</td><td>$20k</td><td>抄底备用</td></tr></tbody></table><p><strong>预期</strong>：</p><ul><li>年化收益：25-30%</li><li>最大回撤：&lt;15%</li><li>夏普比率：>2</li></ul><hr><h2 id=期权入门建议>期权入门建议</h2><h3 id=新手起步>新手起步</h3><ol><li>先学习期权基础（行权价、到期日等）</li><li>小额试水（&lt;$1000）</li><li>从 Covered Call 开始（最简单）</li><li>逐步学习复杂策略</li></ol><h3 id=风险管理>风险管理</h3><ul><li>期权仓位&lt;总资金 20%</li><li>单一策略&lt;10%</li><li>设置止损线</li><li>定期复盘</li></ul><h3 id=学习资源>学习资源</h3><ul><li><a href=https://optionalpha.com>Option Alpha</a></li><li><a href=https://cmegroup.com>CME 期权学院</a></li><li><a href=https://ribbon.finance>Ribbon 文档</a></li></ul><hr><h2 id=总结>总结</h2><p>期权+DEX 组合优势：</p><ol><li><strong>对冲风险</strong>：Put 保护 LP</li><li><strong>增强收益</strong>：Covered Call 额外收入</li><li><strong>灵活配置</strong>：根据市场调整</li><li><strong>专业工具</strong>：机构也在用</li></ol><hr><p><strong>作者</strong>：QingHeart Qin
-<strong>邮箱</strong>：qingxin0919@gmail.com</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
-<a href=https://tiao0303.github.io/dex-bok/posts/18-stablecoin-depeg-history/>稳定币脱锚历史复盘 - 血泪教训总结</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
-<a href=https://tiao0303.github.io/dex-bok/posts/20-onchain-analysis-tutorial/>链上数据分析实战 - 像侦探一样追踪资金</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
-<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>
+</code></pre><h3 id="预期收益">预期收益</h3>
+<table>
+  <thead>
+      <tr>
+          <th>来源</th>
+          <th>预期 APY</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>LP 手续费</td>
+          <td>15%</td>
+      </tr>
+      <tr>
+          <td>LP 奖励</td>
+          <td>5%</td>
+      </tr>
+      <tr>
+          <td>Covered Call</td>
+          <td>10%</td>
+      </tr>
+      <tr>
+          <td>期权对冲成本</td>
+          <td>-3%</td>
+      </tr>
+      <tr>
+          <td><strong>净 APY</strong></td>
+          <td><strong>27%</strong></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="风险控制">风险控制</h3>
+<ul>
+<li>最大回撤：&lt;15%</li>
+<li>夏普比率：&gt;2</li>
+<li>胜率：&gt;70%</li>
+</ul>
+<hr>
+<h2 id="期权平台对比">期权平台对比</h2>
+<table>
+  <thead>
+      <tr>
+          <th>平台</th>
+          <th>链</th>
+          <th>费用</th>
+          <th>流动性</th>
+          <th>推荐度</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Ribbon</td>
+          <td>Ethereum</td>
+          <td>中</td>
+          <td>高</td>
+          <td>⭐⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>Lyra</td>
+          <td>Optimism</td>
+          <td>低</td>
+          <td>中</td>
+          <td>⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>Hegic</td>
+          <td>Arbitrum</td>
+          <td>低</td>
+          <td>中</td>
+          <td>⭐⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>Premia</td>
+          <td>多链</td>
+          <td>低</td>
+          <td>低</td>
+          <td>⭐⭐⭐</td>
+      </tr>
+      <tr>
+          <td>Dopex</td>
+          <td>Arbitrum</td>
+          <td>中</td>
+          <td>中</td>
+          <td>⭐⭐⭐⭐</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="我的期权配置">我的期权配置</h2>
+<p><strong>总资金</strong>：$100,000</p>
+<table>
+  <thead>
+      <tr>
+          <th>策略</th>
+          <th>金额</th>
+          <th>目的</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Uniswap LP</td>
+          <td>$40k</td>
+          <td>基础收益</td>
+      </tr>
+      <tr>
+          <td>ETH 持有</td>
+          <td>$20k</td>
+          <td>长期增值</td>
+      </tr>
+      <tr>
+          <td>Put 期权</td>
+          <td>$10k</td>
+          <td>下行保护</td>
+      </tr>
+      <tr>
+          <td>Covered Call</td>
+          <td>$10k</td>
+          <td>收益增强</td>
+      </tr>
+      <tr>
+          <td>现金储备</td>
+          <td>$20k</td>
+          <td>抄底备用</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>预期</strong>：</p>
+<ul>
+<li>年化收益：25-30%</li>
+<li>最大回撤：&lt;15%</li>
+<li>夏普比率：&gt;2</li>
+</ul>
+<hr>
+<h2 id="期权入门建议">期权入门建议</h2>
+<h3 id="新手起步">新手起步</h3>
+<ol>
+<li>先学习期权基础（行权价、到期日等）</li>
+<li>小额试水（&lt;$1000）</li>
+<li>从 Covered Call 开始（最简单）</li>
+<li>逐步学习复杂策略</li>
+</ol>
+<h3 id="风险管理">风险管理</h3>
+<ul>
+<li>期权仓位&lt;总资金 20%</li>
+<li>单一策略&lt;10%</li>
+<li>设置止损线</li>
+<li>定期复盘</li>
+</ul>
+<h3 id="学习资源">学习资源</h3>
+<ul>
+<li><a href="https://optionalpha.com">Option Alpha</a></li>
+<li><a href="https://cmegroup.com">CME 期权学院</a></li>
+<li><a href="https://ribbon.finance">Ribbon 文档</a></li>
+</ul>
+<hr>
+<h2 id="总结">总结</h2>
+<p>期权+DEX 组合优势：</p>
+<ol>
+<li><strong>对冲风险</strong>：Put 保护 LP</li>
+<li><strong>增强收益</strong>：Covered Call 额外收入</li>
+<li><strong>灵活配置</strong>：根据市场调整</li>
+<li><strong>专业工具</strong>：机构也在用</li>
+</ol>
+<hr>
+<p><strong>作者</strong>：QingHeart Qin
+<strong>邮箱</strong>：qingxin0919@gmail.com</p>
+
+
+    
+    
+    <div class="article-nav article-nav-prev">
+      <span class="nav-label">← 上一篇</span>
+      <a href="http://localhost:54297/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/18-stablecoin-depeg-history/">稳定币脱锚历史复盘 - 血泪教训总结</a>
+    </div>
+    
+    
+    <div class="article-nav article-nav-next">
+      <span class="nav-label">下一篇 →</span>
+      <a href="http://localhost:54297/posts/20-onchain-analysis-tutorial/">链上数据分析实战 - 像侦探一样追踪资金</a>
+    </div>
+    
+  </article>
+</div>
+
+    </main>
+    <footer class="geek-footer">
+  <div class="container">
+    <div class="geek-footer-inner">
+      <div class="geek-footer-brand">
+        <a href="http://localhost:54297/" class="geek-footer-logo">
+          <span class="logo-icon">🦞</span>
+          <span>DEX 学习笔记 | 去中心化交易所实战指南</span>
+        </a>
+        <p class="geek-footer-desc">DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p>
+      </div>
+      <div class="geek-footer-links">
+        <div class="geek-footer-col">
+          <h4>导航</h4>
+          <ul>
+            <li><a href="/">首页</a></li>
+            <li><a href="/posts/">文章</a></li>
+            <li><a href="/guides/">教程</a></li>
+            <li><a href="/tools/">工具</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关于</h4>
+          <ul>
+            <li><a href="/about/">关于本站</a></li>
+          </ul>
+        </div>
+        <div class="geek-footer-col">
+          <h4>关注</h4>
+          <ul>
+            <li><a href="https://github.com/tiao0303" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://x.com/qing87762" target="_blank" rel="noopener">X (Twitter)</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="geek-footer-bottom">
+      <p>&copy; 2026  DEX 学习笔记 | 去中心化交易所实战指南 </p>
+      <p class="geek-footer-tech">Built with Hugo & DeFi ❤️</p>
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

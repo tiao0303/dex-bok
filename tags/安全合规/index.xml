@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>安全合规 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/</link><description>Recent content in 安全合规 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:27:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/index.xml" rel="self" type="application/rss+xml"/><item><title>T3 安全合规系列 (11/15)：链上交易监控与异常检测</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-11/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-11/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>安全合规 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/</link><description>Recent content in 安全合规 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:27:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/index.xml" rel="self" type="application/rss+xml"/><item><title>T3 安全合规系列 (11/15)：链上交易监控与异常检测</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-11/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-11/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;在去中心化交易所的运营中，实时监控链上交易并识别异常行为是安全合规的核心环节。本文介绍 T3 如何构建高效的链上监控体系，实现毫秒级异常检测与响应。&lt;/p&gt;
 &lt;h2 id="监控架构设计"&gt;监控架构设计&lt;/h2&gt;
 &lt;h3 id="三层监控体系"&gt;三层监控体系&lt;/h3&gt;
@@ -46,7 +46,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;ETH&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;50000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; }
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;];
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-可疑地址交互"&gt;3. 可疑地址交互&lt;/h3&gt;
-&lt;p&gt;T3 维护多层地址黑名单：&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (12/15)：KYC/AML 合规流程实现</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-12/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-12/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;T3 维护多层地址黑名单：&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (12/15)：KYC/AML 合规流程实现</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-12/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-12/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;KYC（了解你的客户）和 AML（反洗钱）是加密货币交易所合规运营的基础要求。本文详细介绍 T3 如何设计和实现符合全球监管标准的 KYC/AML 流程，在保障合规的同时优化用户体验。&lt;/p&gt;
 &lt;h2 id="监管框架概览"&gt;监管框架概览&lt;/h2&gt;
 &lt;h3 id="主要司法管辖区要求"&gt;主要司法管辖区要求&lt;/h3&gt;
@@ -546,7 +546,7 @@
 &lt;li&gt;&lt;strong&gt;审计追踪&lt;/strong&gt;：所有决策可追溯&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id="小结"&gt;小结&lt;/h2&gt;
-&lt;p&gt;KYC/AML 合规是 T3 全球运营的基础。通过三级验证体系、智能风险评分、自动化监控和完善的报告机制，T3 在满足监管要求的同时，为用户提供流畅的验证体验。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (13/15)：智能合约安全审计流程</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-13/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-13/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;KYC/AML 合规是 T3 全球运营的基础。通过三级验证体系、智能风险评分、自动化监控和完善的报告机制，T3 在满足监管要求的同时，为用户提供流畅的验证体验。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (13/15)：智能合约安全审计流程</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-13/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-13/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;智能合约是去中心化交易所的核心基础设施，其安全性直接关系到用户资产安全。本文详细介绍 T3 的智能合约安全审计流程，包括代码审查、自动化分析、形式化验证和漏洞赏金计划。&lt;/p&gt;
 &lt;h2 id="审计流程概览"&gt;审计流程概览&lt;/h2&gt;
 &lt;h3 id="五层审计体系"&gt;五层审计体系&lt;/h3&gt;
@@ -1137,7 +1137,7 @@
 &lt;li&gt;&lt;strong&gt;文档完整&lt;/strong&gt;：所有决策和修复可追溯&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id="小结"&gt;小结&lt;/h2&gt;
-&lt;p&gt;智能合约安全审计是 T3 安全体系的基石。通过自动化工具、人工审查、形式化验证和漏洞赏金的多层审计体系，T3 确保合约代码的安全性和可靠性，为用户提供可信赖的交易环境。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (14/15)：数据隐私与保护机制</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-14/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-14/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;智能合约安全审计是 T3 安全体系的基石。通过自动化工具、人工审查、形式化验证和漏洞赏金的多层审计体系，T3 确保合约代码的安全性和可靠性，为用户提供可信赖的交易环境。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (14/15)：数据隐私与保护机制</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-14/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-14/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;在去中心化金融时代，数据隐私保护既是用户权利，也是合规要求。本文详细介绍 T3 如何构建全面的数据隐私保护体系，在保障透明性的同时保护用户隐私，满足 GDPR、CCPA 等全球隐私法规要求。&lt;/p&gt;
 &lt;h2 id="隐私保护原则"&gt;隐私保护原则&lt;/h2&gt;
 &lt;h3 id="数据最小化"&gt;数据最小化&lt;/h3&gt;
@@ -1841,7 +1841,7 @@
 &lt;li&gt;&lt;strong&gt;快速响应&lt;/strong&gt;：建立隐私事件响应流程&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id="小结"&gt;小结&lt;/h2&gt;
-&lt;p&gt;数据隐私保护是 T3 对用户的基本承诺。通过加密体系、隐私增强技术、用户权利保障和严格的访问控制，T3 在保障功能的同时最大程度保护用户隐私，满足全球隐私法规要求。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (15/15)：应急响应与事件管理</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-15/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-15/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;数据隐私保护是 T3 对用户的基本承诺。通过加密体系、隐私增强技术、用户权利保障和严格的访问控制，T3 在保障功能的同时最大程度保护用户隐私，满足全球隐私法规要求。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (15/15)：应急响应与事件管理</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-15/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-15/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;即使有最完善的安全措施，安全事件仍可能发生。本文介绍 T3 的应急响应体系和事件管理流程，确保在安全事件发生时能够快速检测、响应和恢复，最大程度减少损失和影响。&lt;/p&gt;
 &lt;h2 id="应急响应组织架构"&gt;应急响应组织架构&lt;/h2&gt;
 &lt;h3 id="安全事件响应团队-sirt"&gt;安全事件响应团队 (SIRT)&lt;/h3&gt;

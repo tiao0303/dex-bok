@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>新手入门 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/</link><description>Recent content in 新手入门 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 18 Mar 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/index.xml" rel="self" type="application/rss+xml"/><item><title>T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平</title><link>https://tiao0303.github.io/dex-bok/posts/t1-05-advanced-tips/</link><pubDate>Wed, 18 Mar 2026 14:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-05-advanced-tips/</guid><description>&lt;h1 id="t1-新手入门-05---进阶技巧提升你的-dex-交易水平"&gt;T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>新手入门 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/</link><description>Recent content in 新手入门 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 18 Mar 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/index.xml" rel="self" type="application/rss+xml"/><item><title>T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-05-advanced-tips/</link><pubDate>Wed, 18 Mar 2026 14:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-05-advanced-tips/</guid><description>&lt;h1 id="t1-新手入门-05---进阶技巧提升你的-dex-交易水平"&gt;T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平&lt;/h1&gt;
 &lt;p&gt;恭喜你完成 T1 新手入门系列！这是最后一篇，我们将学习进阶技巧。&lt;/p&gt;
 &lt;h2 id="限价单交易"&gt;限价单交易&lt;/h2&gt;
 &lt;h3 id="什么是限价单"&gt;什么是限价单？&lt;/h3&gt;
@@ -79,7 +79,7 @@
 设置：当价格跌到$80 时自动卖出
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id="dca定投策略"&gt;DCA（定投策略）&lt;/h2&gt;
 &lt;h3 id="什么是-dca"&gt;什么是 DCA？&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;Dollar-Cost Averaging&lt;/strong&gt;：定期定额投资。&lt;/p&gt;</description></item><item><title>T1 新手入门 04 - 代币安全：如何识别假币和土狗项目</title><link>https://tiao0303.github.io/dex-bok/posts/t1-04-token-safety/</link><pubDate>Wed, 18 Mar 2026 13:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-04-token-safety/</guid><description>&lt;h1 id="t1-新手入门-04---代币安全如何识别假币和土狗项目"&gt;T1 新手入门 04 - 代币安全：如何识别假币和土狗项目&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Dollar-Cost Averaging&lt;/strong&gt;：定期定额投资。&lt;/p&gt;</description></item><item><title>T1 新手入门 04 - 代币安全：如何识别假币和土狗项目</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-04-token-safety/</link><pubDate>Wed, 18 Mar 2026 13:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-04-token-safety/</guid><description>&lt;h1 id="t1-新手入门-04---代币安全如何识别假币和土狗项目"&gt;T1 新手入门 04 - 代币安全：如何识别假币和土狗项目&lt;/h1&gt;
 &lt;p&gt;DEX 上任何人都可以发币，这意味着&lt;strong&gt;假币和诈骗项目泛滥&lt;/strong&gt;。学会识别安全代币是生存技能！&lt;/p&gt;
 &lt;h2 id="常见骗局类型"&gt;常见骗局类型&lt;/h2&gt;
 &lt;h3 id="-假代币fake-token"&gt;🎭 假代币（Fake Token）&lt;/h3&gt;
@@ -143,7 +143,7 @@
 &lt;li&gt;项目官方 Twitter（蓝 V 认证）&lt;/li&gt;
 &lt;li&gt;项目官网（从 Twitter 跳转）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;不可靠来源&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>T1 新手入门 03 - 第一笔交易：从充值到完成兑换</title><link>https://tiao0303.github.io/dex-bok/posts/t1-03-first-trade/</link><pubDate>Wed, 18 Mar 2026 12:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-03-first-trade/</guid><description>&lt;h1 id="t1-新手入门-03---第一笔交易从充值到完成兑换"&gt;T1 新手入门 03 - 第一笔交易：从充值到完成兑换&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;不可靠来源&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>T1 新手入门 03 - 第一笔交易：从充值到完成兑换</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-03-first-trade/</link><pubDate>Wed, 18 Mar 2026 12:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-03-first-trade/</guid><description>&lt;h1 id="t1-新手入门-03---第一笔交易从充值到完成兑换"&gt;T1 新手入门 03 - 第一笔交易：从充值到完成兑换&lt;/h1&gt;
 &lt;p&gt;准备好了吗？这是你第一次在 DEX 上交易的完整教程！&lt;/p&gt;
 &lt;h2 id="准备工作"&gt;准备工作&lt;/h2&gt;
 &lt;h3 id="必需物品"&gt;必需物品&lt;/h3&gt;
@@ -207,7 +207,7 @@
 &lt;li&gt;&lt;a href="https://layerzero.network"&gt;LayerZero&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4 id="方法-3朋友转账"&gt;方法 3：朋友转账&lt;/h4&gt;
-&lt;p&gt;让有 crypto 的朋友直接转给你一些 Gas 费。&lt;/p&gt;</description></item><item><title>T1 新手入门 02 - 创建钱包：安全保管你的加密资产</title><link>https://tiao0303.github.io/dex-bok/posts/t1-02-wallet-setup/</link><pubDate>Wed, 18 Mar 2026 11:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-02-wallet-setup/</guid><description>&lt;h1 id="t1-新手入门-02---创建钱包安全保管你的加密资产"&gt;T1 新手入门 02 - 创建钱包：安全保管你的加密资产&lt;/h1&gt;
+&lt;p&gt;让有 crypto 的朋友直接转给你一些 Gas 费。&lt;/p&gt;</description></item><item><title>T1 新手入门 02 - 创建钱包：安全保管你的加密资产</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-02-wallet-setup/</link><pubDate>Wed, 18 Mar 2026 11:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-02-wallet-setup/</guid><description>&lt;h1 id="t1-新手入门-02---创建钱包安全保管你的加密资产"&gt;T1 新手入门 02 - 创建钱包：安全保管你的加密资产&lt;/h1&gt;
 &lt;p&gt;在开始使用 DEX 之前，你需要一个加密钱包。这是你在 Web3 世界的身份和保险箱。&lt;/p&gt;
 &lt;h2 id="什么是加密钱包"&gt;什么是加密钱包？&lt;/h2&gt;
 &lt;p&gt;加密钱包不是&amp;quot;装&amp;quot;币的容器，而是&lt;strong&gt;管理私钥的工具&lt;/strong&gt;：&lt;/p&gt;
@@ -279,7 +279,7 @@
  &lt;/tr&gt;
  &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;strong&gt;建议&lt;/strong&gt;：新手从热钱包开始，资产超过$1000 后考虑冷钱包。&lt;/p&gt;</description></item><item><title>T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念</title><link>https://tiao0303.github.io/dex-bok/posts/t1-01-dex-basics/</link><pubDate>Wed, 18 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-01-dex-basics/</guid><description>&lt;h1 id="t1-新手入门-01---什么是-dex去中心化交易所基础概念"&gt;T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;建议&lt;/strong&gt;：新手从热钱包开始，资产超过$1000 后考虑冷钱包。&lt;/p&gt;</description></item><item><title>T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-01-dex-basics/</link><pubDate>Wed, 18 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-01-dex-basics/</guid><description>&lt;h1 id="t1-新手入门-01---什么是-dex去中心化交易所基础概念"&gt;T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念&lt;/h1&gt;
 &lt;p&gt;欢迎来到 T1 新手入门系列！这是专为刚接触 DeFi 和去中心化交易所的新手准备的入门指南。&lt;/p&gt;
 &lt;h2 id="什么是-dex"&gt;什么是 DEX？&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;DEX&lt;/strong&gt;（Decentralized Exchange，去中心化交易所）是一种不需要中介机构、基于智能合约运行的加密货币交易平台。&lt;/p&gt;

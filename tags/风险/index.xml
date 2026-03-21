@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>风险 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E9%A3%8E%E9%99%A9/</link><description>Recent content in 风险 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:40:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E9%A3%8E%E9%99%A9/index.xml" rel="self" type="application/rss+xml"/><item><title>稳定币脱锚历史复盘 - 血泪教训总结</title><link>https://tiao0303.github.io/dex-bok/posts/18-stablecoin-depeg-history/</link><pubDate>Thu, 19 Mar 2026 00:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/18-stablecoin-depeg-history/</guid><description>&lt;h2 id="什么是脱锚"&gt;什么是脱锚&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>风险 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E9%A3%8E%E9%99%A9/</link><description>Recent content in 风险 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:40:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E9%A3%8E%E9%99%A9/index.xml" rel="self" type="application/rss+xml"/><item><title>稳定币脱锚历史复盘 - 血泪教训总结</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/18-stablecoin-depeg-history/</link><pubDate>Thu, 19 Mar 2026 00:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/18-stablecoin-depeg-history/</guid><description>&lt;h2 id="什么是脱锚"&gt;什么是脱锚&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;脱锚&lt;/strong&gt; = 稳定币价格偏离 1 USD&lt;/p&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -65,7 +65,7 @@
 &lt;h3 id="崩盘原因"&gt;崩盘原因&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;算法机制缺陷&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>DeFi 风险管理 - 保住本金的 10 条铁律</title><link>https://tiao0303.github.io/dex-bok/posts/10-risk-management/</link><pubDate>Wed, 18 Mar 2026 21:28:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/10-risk-management/</guid><description>&lt;h2 id="血泪教训"&gt;血泪教训&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;算法机制缺陷&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>DeFi 风险管理 - 保住本金的 10 条铁律</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/10-risk-management/</link><pubDate>Wed, 18 Mar 2026 21:28:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/10-risk-management/</guid><description>&lt;h2 id="血泪教训"&gt;血泪教训&lt;/h2&gt;
 &lt;p&gt;3 年 DeFi 经历，见过太多：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;百万仓位一夜归零&lt;/li&gt;
@@ -107,7 +107,7 @@
 - 20% 借贷（Aave）
 - 15% 质押（Lido）
 - 10% 高风险 Farm
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;效果&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>无常损失详解 - LP 最大的隐形成本</title><link>https://tiao0303.github.io/dex-bok/posts/08-impermanent-loss/</link><pubDate>Wed, 18 Mar 2026 21:26:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/08-impermanent-loss/</guid><description>&lt;h2 id="什么是无常损失"&gt;什么是无常损失&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;效果&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>无常损失详解 - LP 最大的隐形成本</title><link>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/08-impermanent-loss/</link><pubDate>Wed, 18 Mar 2026 21:26:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/08-impermanent-loss/</guid><description>&lt;h2 id="什么是无常损失"&gt;什么是无常损失&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;无常损失&lt;/strong&gt;（Impermanent Loss, IL）= 提供流动性 vs 持有 的价值差异&lt;/p&gt;
 &lt;p&gt;简单说：币价波动时，LP 可能比直接持有亏钱。&lt;/p&gt;
 &lt;hr&gt;

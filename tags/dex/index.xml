@@ -229,7 +229,7 @@
 &lt;li&gt;&lt;strong&gt;DODO Classic（恒定乘积池）：&lt;/strong&gt; 兼容标准 AMM 逻辑，保留了对 Uniswap 用户的兼容性&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;DODO Vending Machine：&lt;/strong&gt; 项目方一键发币并创建初始流动性的工具，降低了项目启动门槛&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;DODO v3 — 众筹建池（Crowdpooling）：&lt;/strong&gt; v3 版本引入了 Crowdpooling 机制，实现了零滑点、无风险溢价的新资产发行方式。项目方设置起始价格和募集规模，用户以该价格无滑点认购，募集结束后形成初始流动性。这一机制结合了 ICO 的公平性和 DEX 的去中心化特点。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (11/15)：链上交易监控与异常检测</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-11/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-11/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;DODO v3 — 众筹建池（Crowdpooling）：&lt;/strong&gt; v3 版本引入了 Crowdpooling 机制，实现了零滑点、无风险溢价的新资产发行方式。项目方设置起始价格和募集规模，用户以该价格无滑点认购，募集结束后形成初始流动性。这一机制结合了 ICO 的公平性和 DEX 的去中心化特点。&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (11/15)：链上交易监控与异常检测</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-11/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-11/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;在去中心化交易所的运营中，实时监控链上交易并识别异常行为是安全合规的核心环节。本文介绍 T3 如何构建高效的链上监控体系，实现毫秒级异常检测与响应。&lt;/p&gt;
 &lt;h2 id="监控架构设计"&gt;监控架构设计&lt;/h2&gt;
 &lt;h3 id="三层监控体系"&gt;三层监控体系&lt;/h3&gt;
@@ -277,7 +277,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;ETH&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;minAmountUSD&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;50000&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;requireAdditionalVerification&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; }
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;];
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-可疑地址交互"&gt;3. 可疑地址交互&lt;/h3&gt;
-&lt;p&gt;T3 维护多层地址黑名单：&lt;/p&gt;</description></item><item><title>T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念</title><link>https://tiao0303.github.io/dex-bok/posts/t1-01-dex-basics/</link><pubDate>Wed, 18 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-01-dex-basics/</guid><description>&lt;h1 id="t1-新手入门-01---什么是-dex去中心化交易所基础概念"&gt;T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念&lt;/h1&gt;
+&lt;p&gt;T3 维护多层地址黑名单：&lt;/p&gt;</description></item><item><title>T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念</title><link>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-01-dex-basics/</link><pubDate>Wed, 18 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1-%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8/t1-01-dex-basics/</guid><description>&lt;h1 id="t1-新手入门-01---什么是-dex去中心化交易所基础概念"&gt;T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念&lt;/h1&gt;
 &lt;p&gt;欢迎来到 T1 新手入门系列！这是专为刚接触 DeFi 和去中心化交易所的新手准备的入门指南。&lt;/p&gt;
 &lt;h2 id="什么是-dex"&gt;什么是 DEX？&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;DEX&lt;/strong&gt;（Decentralized Exchange，去中心化交易所）是一种不需要中介机构、基于智能合约运行的加密货币交易平台。&lt;/p&gt;

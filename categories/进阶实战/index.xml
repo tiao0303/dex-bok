@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>进阶实战 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/</link><description>Recent content in 进阶实战 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:50:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/index.xml" rel="self" type="application/rss+xml"/><item><title>链上数据分析实战 - 像侦探一样追踪资金</title><link>https://tiao0303.github.io/dex-bok/posts/20-onchain-analysis-tutorial/</link><pubDate>Thu, 19 Mar 2026 00:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/20-onchain-analysis-tutorial/</guid><description>&lt;h2 id="为什么需要链上分析"&gt;为什么需要链上分析&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>进阶实战 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/</link><description>Recent content in 进阶实战 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:50:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/index.xml" rel="self" type="application/rss+xml"/><item><title>链上数据分析实战 - 像侦探一样追踪资金</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/20-onchain-analysis-tutorial/</link><pubDate>Thu, 19 Mar 2026 00:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/20-onchain-analysis-tutorial/</guid><description>&lt;h2 id="为什么需要链上分析"&gt;为什么需要链上分析&lt;/h2&gt;
 &lt;h3 id="区块链的优势"&gt;区块链的优势&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;✅ 所有交易公开透明&lt;/li&gt;
@@ -368,7 +368,7 @@
 □ 社交媒体情绪
 &lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
 &lt;h2 id="总结"&gt;总结&lt;/h2&gt;
-&lt;p&gt;链上分析核心：&lt;/p&gt;</description></item><item><title>期权+DEX 组合策略 - 对冲风险增强收益</title><link>https://tiao0303.github.io/dex-bok/posts/19-options-dex-combo/</link><pubDate>Thu, 19 Mar 2026 00:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/19-options-dex-combo/</guid><description>&lt;h2 id="为什么需要期权对冲"&gt;为什么需要期权对冲&lt;/h2&gt;
+&lt;p&gt;链上分析核心：&lt;/p&gt;</description></item><item><title>期权+DEX 组合策略 - 对冲风险增强收益</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/19-options-dex-combo/</link><pubDate>Thu, 19 Mar 2026 00:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/19-options-dex-combo/</guid><description>&lt;h2 id="为什么需要期权对冲"&gt;为什么需要期权对冲&lt;/h2&gt;
 &lt;h3 id="lp-的痛点"&gt;LP 的痛点&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -453,7 +453,7 @@
 卖出：Call 期权（行权价高于当前价）
 收入：权利金
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实战案例-1"&gt;实战案例&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：持有 10 ETH，当前$1800&lt;/p&gt;</description></item><item><title>流动性挖矿收益优化 - 让 APY 翻倍技巧</title><link>https://tiao0303.github.io/dex-bok/posts/17-liquidity-mining-optimization/</link><pubDate>Thu, 19 Mar 2026 00:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/17-liquidity-mining-optimization/</guid><description>&lt;h2 id="收益构成分析"&gt;收益构成分析&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：持有 10 ETH，当前$1800&lt;/p&gt;</description></item><item><title>流动性挖矿收益优化 - 让 APY 翻倍技巧</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/17-liquidity-mining-optimization/</link><pubDate>Thu, 19 Mar 2026 00:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/17-liquidity-mining-optimization/</guid><description>&lt;h2 id="收益构成分析"&gt;收益构成分析&lt;/h2&gt;
 &lt;h3 id="三大来源"&gt;三大来源&lt;/h3&gt;
 &lt;table&gt;
  &lt;thead&gt;
@@ -703,7 +703,7 @@ Gas 成本 = $50/次
 &lt;hr&gt;
 &lt;h2 id="优化策略五杠杆挖矿-"&gt;优化策略五：杠杆挖矿 ⭐⭐⭐&lt;/h2&gt;
 &lt;h3 id="原理"&gt;原理&lt;/h3&gt;
-&lt;p&gt;借币→提供流动性→赚取利差&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
+&lt;p&gt;借币→提供流动性→赚取利差&lt;/p&gt;</description></item><item><title>DEX 套利策略详解 - 从零开始赚无风险收益</title><link>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/16-dex-arbitrage-strategies/</link><pubDate>Thu, 19 Mar 2026 00:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4-%E9%AB%98%E7%BA%A7%E7%AD%96%E7%95%A5/16-dex-arbitrage-strategies/</guid><description>&lt;h2 id="什么是套利"&gt;什么是套利&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;套利&lt;/strong&gt; = 利用价格差异，低买高卖，赚取无风险收益&lt;/p&gt;
 &lt;h3 id="套利特点"&gt;套利特点&lt;/h3&gt;
 &lt;ul&gt;

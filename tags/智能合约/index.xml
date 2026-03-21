@@ -87,7 +87,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="22-euler-finance-攻击详解2023"&gt;2.2 Euler Finance 攻击详解（2023）&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;漏洞原理&lt;/strong&gt;：薄授权（Bent Authorization）允许存款人直接提取协议外的资产：&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (13/15)：智能合约安全审计流程</title><link>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-13/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-security-compliance-13/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;漏洞原理&lt;/strong&gt;：薄授权（Bent Authorization）允许存款人直接提取协议外的资产：&lt;/p&gt;</description></item><item><title>T3 安全合规系列 (13/15)：智能合约安全审计流程</title><link>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-13/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-security-compliance-13/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
 &lt;p&gt;智能合约是去中心化交易所的核心基础设施，其安全性直接关系到用户资产安全。本文详细介绍 T3 的智能合约安全审计流程，包括代码审查、自动化分析、形式化验证和漏洞赏金计划。&lt;/p&gt;
 &lt;h2 id="审计流程概览"&gt;审计流程概览&lt;/h2&gt;
 &lt;h3 id="五层审计体系"&gt;五层审计体系&lt;/h3&gt;
