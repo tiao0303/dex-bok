@@ -1,155 +1,23 @@
 <!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>developer | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="DeFi developer 学习路径"><meta name=generator content="Hugo 0.158.0"><meta name=robots content="index, follow"><meta name=author content="QingHeart Qin"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/developer/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/developer/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/developer/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/developer/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="developer"><meta property="og:description" content="DeFi developer 学习路径"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="website"><meta itemprop=name content="developer"><meta itemprop=description content="DeFi developer 学习路径"><meta itemprop=datePublished content="2026-03-18T21:00:00+08:00"><meta itemprop=dateModified content="2026-03-18T21:00:00+08:00"><meta itemprop=wordCount content="6"><meta name=twitter:card content="summary"><meta name=twitter:title content="developer"><meta name=twitter:description content="DeFi developer 学习路径"><link rel=stylesheet href=/dex-bok/css/custom.css></head><body class="ma0 bg-dark geek-dark production is-section is-section"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
-<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-list-layout><header class=geek-list-header><h1>developer</h1><p>DeFi developer 学习路径</p></header><div class=geek-tag-filter><button class="tag-btn active" data-tag=all>全部</button>
-<button class=tag-btn data-tag=1inch>1inch</button>
-<button class=tag-btn data-tag=AML>AML</button>
-<button class=tag-btn data-tag=AMM>AMM</button>
-<button class=tag-btn data-tag=Arbitrum>Arbitrum</button>
-<button class=tag-btn data-tag=BSC>BSC</button>
-<button class=tag-btn data-tag=Curve>Curve</button>
-<button class=tag-btn data-tag=DAO>DAO</button>
-<button class=tag-btn data-tag=DCA>DCA</button>
-<button class=tag-btn data-tag=DeFi>DeFi</button>
-<button class=tag-btn data-tag=DEX>DEX</button>
-<button class=tag-btn data-tag=ERC20>ERC20</button>
-<button class=tag-btn data-tag=ERC4626>ERC4626</button>
-<button class=tag-btn data-tag=ERC721>ERC721</button>
-<button class=tag-btn data-tag=Ethereum>Ethereum</button>
-<button class=tag-btn data-tag=Gas>Gas</button>
-<button class=tag-btn data-tag="Gas 费">Gas 费</button>
-<button class=tag-btn data-tag=GDPR>GDPR</button>
-<button class=tag-btn data-tag=KYC>KYC</button>
-<button class=tag-btn data-tag=Layer2>Layer2</button>
-<button class=tag-btn data-tag=LayerZero>LayerZero</button>
-<button class=tag-btn data-tag=LP>LP</button>
-<button class=tag-btn data-tag=Matcha>Matcha</button>
-<button class=tag-btn data-tag=MEV>MEV</button>
-<button class=tag-btn data-tag=NFT>NFT</button>
-<button class=tag-btn data-tag=Optimism>Optimism</button>
-<button class=tag-btn data-tag=PMM>PMM</button>
-<button class=tag-btn data-tag=Rebasing>Rebasing</button>
-<button class=tag-btn data-tag=StableSwap>StableSwap</button>
-<button class=tag-btn data-tag=T3>T3</button>
-<button class=tag-btn data-tag=Uniswap>Uniswap</button>
-<button class=tag-btn data-tag=V2>V2</button>
-<button class=tag-btn data-tag=V3>V3</button>
-<button class=tag-btn data-tag=V4>V4</button>
-<button class=tag-btn data-tag="Yield Farming">Yield Farming</button>
-<button class=tag-btn data-tag=主动做市商>主动做市商</button>
-<button class=tag-btn data-tag=事件管理>事件管理</button>
-<button class=tag-btn data-tag=交易>交易</button>
-<button class=tag-btn data-tag=交易优化>交易优化</button>
-<button class=tag-btn data-tag=交易工具>交易工具</button>
-<button class=tag-btn data-tag=代币>代币</button>
-<button class=tag-btn data-tag=代币安全>代币安全</button>
-<button class=tag-btn data-tag=代币标准>代币标准</button>
-<button class=tag-btn data-tag=代码审查>代码审查</button>
-<button class=tag-btn data-tag=以太坊>以太坊</button>
-<button class=tag-btn data-tag=价格影响>价格影响</button>
-<button class=tag-btn data-tag=优化>优化</button>
-<button class=tag-btn data-tag=估值>估值</button>
-<button class=tag-btn data-tag=假币识别>假币识别</button>
-<button class=tag-btn data-tag=做市>做市</button>
-<button class=tag-btn data-tag=做市商>做市商</button>
-<button class=tag-btn data-tag=充值>充值</button>
-<button class=tag-btn data-tag=前端运行>前端运行</button>
-<button class=tag-btn data-tag=加密>加密</button>
-<button class=tag-btn data-tag=加密货币>加密货币</button>
-<button class=tag-btn data-tag=助记词>助记词</button>
-<button class=tag-btn data-tag=原理>原理</button>
-<button class=tag-btn data-tag=去中心化交易所>去中心化交易所</button>
-<button class=tag-btn data-tag=可变权重池>可变权重池</button>
-<button class=tag-btn data-tag=合约验证>合约验证</button>
-<button class=tag-btn data-tag=合规>合规</button>
-<button class=tag-btn data-tag=土狗币>土狗币</button>
-<button class=tag-btn data-tag=基础>基础</button>
-<button class=tag-btn data-tag=多链>多链</button>
-<button class=tag-btn data-tag=套利>套利</button>
-<button class=tag-btn data-tag=安全>安全</button>
-<button class=tag-btn data-tag=安全合规>安全合规</button>
-<button class=tag-btn data-tag=安全审计>安全审计</button>
-<button class=tag-btn data-tag=审计>审计</button>
-<button class=tag-btn data-tag=对冲>对冲</button>
-<button class=tag-btn data-tag=对比>对比</button>
-<button class=tag-btn data-tag=工具>工具</button>
-<button class=tag-btn data-tag=应急响应>应急响应</button>
-<button class=tag-btn data-tag=异常检测>异常检测</button>
-<button class=tag-btn data-tag=弹性供应>弹性供应</button>
-<button class=tag-btn data-tag=形式化>形式化</button>
-<button class=tag-btn data-tag=技术>技术</button>
-<button class=tag-btn data-tag=投票>投票</button>
-<button class=tag-btn data-tag=投资>投资</button>
-<button class=tag-btn data-tag=投资组合>投资组合</button>
-<button class=tag-btn data-tag=报税>报税</button>
-<button class=tag-btn data-tag=挖矿>挖矿</button>
-<button class=tag-btn data-tag=搜索者>搜索者</button>
-<button class=tag-btn data-tag=收入分析>收入分析</button>
-<button class=tag-btn data-tag=收益>收益</button>
-<button class=tag-btn data-tag=收益聚合>收益聚合</button>
-<button class=tag-btn data-tag=攻击>攻击</button>
-<button class=tag-btn data-tag=教程>教程</button>
-<button class=tag-btn data-tag=数字收藏>数字收藏</button>
-<button class=tag-btn data-tag=数学>数学</button>
-<button class=tag-btn data-tag=数据>数据</button>
-<button class=tag-btn data-tag=数据隐私>数据隐私</button>
-<button class=tag-btn data-tag=新手>新手</button>
-<button class=tag-btn data-tag=新手入门>新手入门</button>
-<button class=tag-btn data-tag=无常损失>无常损失</button>
-<button class=tag-btn data-tag=智能合约>智能合约</button>
-<button class=tag-btn data-tag=期权>期权</button>
-<button class=tag-btn data-tag=未来>未来</button>
-<button class=tag-btn data-tag=本金>本金</button>
-<button class=tag-btn data-tag=机构>机构</button>
-<button class=tag-btn data-tag=架构>架构</button>
-<button class=tag-btn data-tag=桥>桥</button>
-<button class=tag-btn data-tag=比价>比价</button>
-<button class=tag-btn data-tag=治理>治理</button>
-<button class=tag-btn data-tag=流动性>流动性</button>
-<button class=tag-btn data-tag=滑点>滑点</button>
-<button class=tag-btn data-tag=灾难恢复>灾难恢复</button>
-<button class=tag-btn data-tag=私钥>私钥</button>
-<button class=tag-btn data-tag=税务>税务</button>
-<button class=tag-btn data-tag=稳定币>稳定币</button>
-<button class=tag-btn data-tag=策略>策略</button>
-<button class=tag-btn data-tag=经济>经济</button>
-<button class=tag-btn data-tag=经济模型>经济模型</button>
-<button class=tag-btn data-tag=聚合器>聚合器</button>
-<button class=tag-btn data-tag=脱锚>脱锚</button>
-<button class=tag-btn data-tag=设计>设计</button>
-<button class=tag-btn data-tag=趋势>趋势</button>
-<button class=tag-btn data-tag=跨链>跨链</button>
-<button class=tag-btn data-tag=身份验证>身份验证</button>
-<button class=tag-btn data-tag=进阶>进阶</button>
-<button class=tag-btn data-tag=量化>量化</button>
-<button class=tag-btn data-tag=金库标准>金库标准</button>
-<button class=tag-btn data-tag=钱包>钱包</button>
-<button class=tag-btn data-tag=链上分析>链上分析</button>
-<button class=tag-btn data-tag=链上监控>链上监控</button>
-<button class=tag-btn data-tag=防护>防护</button>
-<button class=tag-btn data-tag=限价单>限价单</button>
-<button class=tag-btn data-tag=集中流动性>集中流动性</button>
-<button class=tag-btn data-tag=非同质化代币>非同质化代币</button>
-<button class=tag-btn data-tag=预测>预测</button>
-<button class=tag-btn data-tag=风险>风险</button>
-<button class=tag-btn data-tag=验证>验证</button>
-<button class=tag-btn data-tag=黑客>黑客</button></div><div class=geek-posts-grid><article class=geek-post-card data-tags><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/01-%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E8%B7%AF%E5%BE%84/></a></h3><p class=post-meta><span>0001-01-01</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-list-layout><header class=geek-list-header><h1>developer</h1><p>DeFi developer 学习路径</p></header><div class=geek-posts-grid><article class=geek-post-card><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/01-%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E8%B7%AF%E5%BE%84/></a></h3><p class=post-meta><span>0001-01-01</span>
 <span class=meta-sep>•</span>
-<span>214字</span></p><p class=post-excerpt><h1 id=编程入门到精通区块链开发者的学习路径>编程入门到精通：区块链开发者的学习路径</h1><h2 id=前言>前言</h2><p>如果你想成为一名区块链开发者，学习路径其实很清晰：先掌握编程基础，再深入智能合约世界。区块链开发本质上是<strong>后端开发 + 密码学 + 经济机制设计</strong>的结合。本文将为你规划一条从零到精通的学习路线。</p><h2 id=第一阶段编程基础1-3个月>第 …</h2></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/01-%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E8%B7%AF%E5%BE%84/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/02-solidity%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/></a></h3><p class=post-meta><span>0001-01-01</span>
+<span>214字</span></p><p class=post-excerpt><h1 id=编程入门到精通区块链开发者的学习路径>编程入门到精通：区块链开发者的学习路径</h1><h2 id=前言>前言</h2><p>如果你想成为一名区块链开发者，学习路径其实很清晰：先掌握编程基础，再深入智能合约世界。区块链开发本质上是<strong>后端开发 + 密码学 + 经济机制设计</strong>的结合。本文将为你规划一条从零到精通的学习路线。</p><h2 id=第一阶段编程基础1-3个月>第 …</h2></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/01-%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E8%B7%AF%E5%BE%84/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/02-solidity%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/></a></h3><p class=post-meta><span>0001-01-01</span>
 <span class=meta-sep>•</span>
-<span>529字</span></p><p class=post-excerpt><h1 id=solidity-基础语法从变量到函数>Solidity 基础语法：从变量到函数</h1><h2 id=概述>概述</h2><p>Solidity 是以太坊智能合约开发的首选语言，语法融合了 JavaScript 的简洁与 Java 的强类型特性。本文将系统讲解 Solidity 的基础语法，帮助你快速上手智能合约编写。 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/02-solidity%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/03-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/></a></h3><p class=post-meta><span>0001-01-01</span>
+<span>529字</span></p><p class=post-excerpt><h1 id=solidity-基础语法从变量到函数>Solidity 基础语法：从变量到函数</h1><h2 id=概述>概述</h2><p>Solidity 是以太坊智能合约开发的首选语言，语法融合了 JavaScript 的简洁与 Java 的强类型特性。本文将系统讲解 Solidity 的基础语法，帮助你快速上手智能合约编写。 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/02-solidity%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/03-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/></a></h3><p class=post-meta><span>0001-01-01</span>
 <span class=meta-sep>•</span>
-<span>597字</span></p><p class=post-excerpt><h1 id=智能合约开发环境搭建工具链全景指南>智能合约开发环境搭建：工具链全景指南</h1><h2 id=前言>前言</h2><p>在编写第一个 Solidity 合约之前，我们需要一套完整的开发环境。与传统 Web 开发不同，智能合约开发涉及区块链本地测试、Gas 模拟、部署脚本等特殊需求。本文将详细介绍从零搭建专业级开发环 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/03-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/04-erc20%E4%BB%A3%E5%B8%81%E6%A0%87%E5%87%86%E8%AF%A6%E8%A7%A3/></a></h3><p class=post-meta><span>0001-01-01</span>
+<span>597字</span></p><p class=post-excerpt><h1 id=智能合约开发环境搭建工具链全景指南>智能合约开发环境搭建：工具链全景指南</h1><h2 id=前言>前言</h2><p>在编写第一个 Solidity 合约之前，我们需要一套完整的开发环境。与传统 Web 开发不同，智能合约开发涉及区块链本地测试、Gas 模拟、部署脚本等特殊需求。本文将详细介绍从零搭建专业级开发环 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/03-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/04-erc20%E4%BB%A3%E5%B8%81%E6%A0%87%E5%87%86%E8%AF%A6%E8%A7%A3/></a></h3><p class=post-meta><span>0001-01-01</span>
 <span class=meta-sep>•</span>
-<span>700字</span></p><p class=post-excerpt><h1 id=erc-20-代币标准详解理解-defi-的基石>ERC-20 代币标准详解：理解 DeFi 的基石</h1><h2 id=什么是-erc-20>什么是 ERC-20</h2><p>ERC-20 是以太坊上**同质化代币（ Fungible Token ）**的标准接口规范。2017 年通过 EIP-20 正式确立，成为以太坊生态中发行代币的统一 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/04-erc20%E4%BB%A3%E5%B8%81%E6%A0%87%E5%87%86%E8%AF%A6%E8%A7%A3/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/05-defi%E6%A0%B8%E5%BF%83%E5%90%88%E7%BA%A6%E8%A7%A3%E6%9E%90/></a></h3><p class=post-meta><span>0001-01-01</span>
+<span>700字</span></p><p class=post-excerpt><h1 id=erc-20-代币标准详解理解-defi-的基石>ERC-20 代币标准详解：理解 DeFi 的基石</h1><h2 id=什么是-erc-20>什么是 ERC-20</h2><p>ERC-20 是以太坊上**同质化代币（ Fungible Token ）**的标准接口规范。2017 年通过 EIP-20 正式确立，成为以太坊生态中发行代币的统一 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/04-erc20%E4%BB%A3%E5%B8%81%E6%A0%87%E5%87%86%E8%AF%A6%E8%A7%A3/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/05-defi%E6%A0%B8%E5%BF%83%E5%90%88%E7%BA%A6%E8%A7%A3%E6%9E%90/></a></h3><p class=post-meta><span>0001-01-01</span>
 <span class=meta-sep>•</span>
-<span>615字</span></p><p class=post-excerpt><h1 id=defi-核心合约解析amm借贷与收益聚合>DeFi 核心合约解析：AMM、借贷与收益聚合</h1><h2 id=defi-的三大支柱>DeFi 的三大支柱</h2><p>去中心化金融（DeFi）由三类核心协议构成：<strong>去中心化交易所（DEX）</strong>、<strong>借贷协议</strong>和<strong>收益聚合器</strong>。理解这三类协议的合约设计，是成为 DeFi 开发者的必经之路。</p><h2 id=一amm-去中心化交易所>一、AMM 去 …</h2></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/05-defi%E6%A0%B8%E5%BF%83%E5%90%88%E7%BA%A6%E8%A7%A3%E6%9E%90/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/06-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%83%A8%E7%BD%B2/></a></h3><p class=post-meta><span>0001-01-01</span>
+<span>615字</span></p><p class=post-excerpt><h1 id=defi-核心合约解析amm借贷与收益聚合>DeFi 核心合约解析：AMM、借贷与收益聚合</h1><h2 id=defi-的三大支柱>DeFi 的三大支柱</h2><p>去中心化金融（DeFi）由三类核心协议构成：<strong>去中心化交易所（DEX）</strong>、<strong>借贷协议</strong>和<strong>收益聚合器</strong>。理解这三类协议的合约设计，是成为 DeFi 开发者的必经之路。</p><h2 id=一amm-去中心化交易所>一、AMM 去 …</h2></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/05-defi%E6%A0%B8%E5%BF%83%E5%90%88%E7%BA%A6%E8%A7%A3%E6%9E%90/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/06-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%83%A8%E7%BD%B2/></a></h3><p class=post-meta><span>0001-01-01</span>
 <span class=meta-sep>•</span>
-<span>782字</span></p><p class=post-excerpt><h1 id=智能合约测试与部署从测试网到主网>智能合约测试与部署：从测试网到主网</h1><h2 id=为什么测试至关重要>为什么测试至关重要</h2><p>智能合约一旦部署就无法修改（除非使用代理模式），任何漏洞都可能导致不可逆的资产损失。2021 年 Poly Network 被盗 6.11 亿美元，2022 年 Ronin …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/06-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%83%A8%E7%BD%B2/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/07-%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E4%B8%8E%E9%98%B2%E8%8C%83/></a></h3><p class=post-meta><span>0001-01-01</span>
+<span>782字</span></p><p class=post-excerpt><h1 id=智能合约测试与部署从测试网到主网>智能合约测试与部署：从测试网到主网</h1><h2 id=为什么测试至关重要>为什么测试至关重要</h2><p>智能合约一旦部署就无法修改（除非使用代理模式），任何漏洞都可能导致不可逆的资产损失。2021 年 Poly Network 被盗 6.11 亿美元，2022 年 Ronin …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/06-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%83%A8%E7%BD%B2/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/07-%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E4%B8%8E%E9%98%B2%E8%8C%83/></a></h3><p class=post-meta><span>0001-01-01</span>
 <span class=meta-sep>•</span>
-<span>711字</span></p><p class=post-excerpt><h1 id=智能合约常见安全漏洞与防范>智能合约常见安全漏洞与防范</h1><h2 id=安全是-defi-的生命线>安全是 DeFi 的生命线</h2><p>智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。本文中我们将系统梳理最常见的安全漏洞及防御方法。 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/07-%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E4%B8%8E%E9%98%B2%E8%8C%83/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/08-gas%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/></a></h3><p class=post-meta><span>0001-01-01</span>
+<span>711字</span></p><p class=post-excerpt><h1 id=智能合约常见安全漏洞与防范>智能合约常见安全漏洞与防范</h1><h2 id=安全是-defi-的生命线>安全是 DeFi 的生命线</h2><p>智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。本文中我们将系统梳理最常见的安全漏洞及防御方法。 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/07-%E5%B8%B8%E8%A7%81%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E4%B8%8E%E9%98%B2%E8%8C%83/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/08-gas%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/></a></h3><p class=post-meta><span>0001-01-01</span>
 <span class=meta-sep>•</span>
-<span>763字</span></p><p class=post-excerpt><h1 id=gas-优化技巧写出省油的智能合约>Gas 优化技巧：写出省油的智能合约</h1><h2 id=什么是-gas>什么是 Gas</h2><p>Gas 是以太坊网络上执行操作的成本单位。每个 EVM 操作码都有对应的 Gas 消耗：简单的存储读写约 20,000 Gas，复杂的椭圆曲线签名验证可能需要数百万 Gas。</p><p><strong>Gas 优 …</strong></p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/08-gas%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/09-%E5%8D%87%E7%BA%A7%E5%9E%8B%E5%90%88%E7%BA%A6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/></a></h3><p class=post-meta><span>0001-01-01</span>
+<span>763字</span></p><p class=post-excerpt><h1 id=gas-优化技巧写出省油的智能合约>Gas 优化技巧：写出省油的智能合约</h1><h2 id=什么是-gas>什么是 Gas</h2><p>Gas 是以太坊网络上执行操作的成本单位。每个 EVM 操作码都有对应的 Gas 消耗：简单的存储读写约 20,000 Gas，复杂的椭圆曲线签名验证可能需要数百万 Gas。</p><p><strong>Gas 优 …</strong></p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/08-gas%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/09-%E5%8D%87%E7%BA%A7%E5%9E%8B%E5%90%88%E7%BA%A6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/></a></h3><p class=post-meta><span>0001-01-01</span>
 <span class=meta-sep>•</span>
-<span>690字</span></p><p class=post-excerpt><h1 id=升级型合约设计模式代理模式深度解析>升级型合约设计模式：代理模式深度解析</h1><h2 id=为什么需要可升级合约>为什么需要可升级合约</h2><p>智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将<strong>逻辑代码</strong>与<strong>存储状态</strong>分离，实现了合约的 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/09-%E5%8D%87%E7%BA%A7%E5%9E%8B%E5%90%88%E7%BA%A6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card data-tags><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/10-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/></a></h3><p class=post-meta><span>0001-01-01</span>
+<span>690字</span></p><p class=post-excerpt><h1 id=升级型合约设计模式代理模式深度解析>升级型合约设计模式：代理模式深度解析</h1><h2 id=为什么需要可升级合约>为什么需要可升级合约</h2><p>智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将<strong>逻辑代码</strong>与<strong>存储状态</strong>分离，实现了合约的 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/09-%E5%8D%87%E7%BA%A7%E5%9E%8B%E5%90%88%E7%BA%A6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/ class=read-more>阅读全文 →</a></div></article><article class=geek-post-card><div class=post-card-inner><h3><a href=https://tiao0303.github.io/dex-bok/posts/developer/10-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/></a></h3><p class=post-meta><span>0001-01-01</span>
 <span class=meta-sep>•</span>
 <span>908字</span></p><p class=post-excerpt><h1 id=智能合约审计实战从自检到专业审计>智能合约审计实战：从自检到专业审计</h1><h2 id=为什么需要审计>为什么需要审计</h2><p>智能合约审计是对合约代码进行系统性安全检查的过程，目的是在部署前发现并修复漏洞。2022 年 Web3 因安全问题损失超过 37 亿美元，<strong>绝大多数损失本可以通过审计避免</strong>。</p><p>本文以一个借贷协 …</p></p><a href=https://tiao0303.github.io/dex-bok/posts/developer/10-%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%A1%E8%AE%A1%E5%AE%9E%E6%88%98/ class=read-more>阅读全文 →</a></div></article></div></div><script>document.addEventListener("DOMContentLoaded",function(){const e=document.querySelectorAll(".tag-btn"),t=document.querySelectorAll(".geek-post-card");e.forEach(n=>{n.addEventListener("click",function(){const n=this.dataset.tag;e.forEach(e=>e.classList.remove("active")),this.classList.add("active"),t.forEach(e=>{if(n==="all")e.style.display="";else{const t=e.dataset.tags||"";t.includes(n)?e.style.display="":e.style.display="none"}})})})})</script></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
 <span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>
