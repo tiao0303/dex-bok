@@ -1689,6 +1689,35 @@ body.geek-dark {
   }
 }
 
+/* 最新文章特别展示 */
+.geek-posts-featured {
+  margin-bottom: 2rem;
+}
+
+.geek-post-featured {
+  border: 2px solid var(--primary);
+  box-shadow: var(--glow-blue);
+  position: relative;
+}
+
+.featured-badge {
+  position: absolute;
+  top: -12px;
+  right: 16px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.geek-post-featured .post-card-inner {
+  padding-top: 1.5rem;
+}
+
 /* 安全区域支持 - iPhone X+ */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .geek-footer {
