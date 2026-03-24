@@ -1,3 +1,12 @@
+---
+title: "OpenClaw 记忆系统：让 AI 拥有持续进化的记忆"
+date: 2026-03-24
+draft: false
+tags: ["OpenClaw", "AI", "记忆系统"]
+categories: ["OpenClaw 深度探索"]
+slug: "06_openclaw_memory_system"
+---
+
 # OpenClaw 记忆系统：让 AI 拥有持续进化的记忆
 
 > **标签**：OpenClaw / 记忆系统 / 深度 / AI  
