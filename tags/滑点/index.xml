@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>滑点 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%BB%91%E7%82%B9/</link><description>Recent content in 滑点 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%BB%91%E7%82%B9/index.xml" rel="self" type="application/rss+xml"/><item><title>T2 进阶实战 07：滑点与价格影响</title><link>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/07_slippage_price_impact/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/07_slippage_price_impact/</guid><description>&lt;h1 id="滑点与价格影响"&gt;滑点与价格影响&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;滑点（Slippage）是 DEX 交易中最重要的概念之一。理解滑点的来源、计算方法和优化策略，对于构建高效的交易执行系统至关重要。&lt;/p&gt;
+&lt;h2 id="滑点的定义"&gt;滑点的定义&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;滑点&lt;/strong&gt; = 预期价格与实际成交价格的差异&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;滑点百分比 = (预期价格 - 实际价格) / 预期价格 × 100%
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="滑点的来源"&gt;滑点的来源&lt;/h2&gt;
+&lt;h3 id="1-价格影响price-impact"&gt;1. 价格影响（Price Impact）&lt;/h3&gt;
+&lt;p&gt;由于 AMM 的定价机制，大额交易会改变池子的价格。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;恒定乘积模型下的价格影响：&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;给定：x * y = k
+买入 Δx 的代币 A：
+- 新价格 P&amp;#39; = (y - Δy) / (x + Δx)
+- 原价格 P = y / x
+- 价格影响 = (P - P&amp;#39;) / P
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="2-外部市场波动"&gt;2. 外部市场波动&lt;/h3&gt;
+&lt;p&gt;在交易确认期间，外部市场价格可能发生变化。&lt;/p&gt;
+&lt;h3 id="3-mev-攻击"&gt;3. MEV 攻击&lt;/h3&gt;
+&lt;p&gt;前端运行（Front-running）和三明治攻击会加剧滑点。&lt;/p&gt;
+&lt;h2 id="价格影响计算"&gt;价格影响计算&lt;/h2&gt;
+&lt;h3 id="精确公式"&gt;精确公式&lt;/h3&gt;
+&lt;p&gt;对于恒定乘积 AMM，买入 &lt;code&gt;Δx&lt;/code&gt; 数量的代币 A：&lt;/p&gt;</description></item><item><title>T1 新手入门 03 - 第一笔交易：从充值到完成兑换</title><link>https://tiao0303.github.io/dex-bok/posts/t1_beginner/t1_03_first_trade/</link><pubDate>Wed, 18 Mar 2026 12:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1_beginner/t1_03_first_trade/</guid><description>&lt;h1 id="t1-新手入门-03---第一笔交易从充值到完成兑换"&gt;T1 新手入门 03 - 第一笔交易：从充值到完成兑换&lt;/h1&gt;
+&lt;p&gt;准备好了吗？这是你第一次在 DEX 上交易的完整教程！&lt;/p&gt;
+&lt;h2 id="准备工作"&gt;准备工作&lt;/h2&gt;
+&lt;h3 id="必需物品"&gt;必需物品&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;✅ 已创建的钱包（参考 T1-02）&lt;/li&gt;
+&lt;li&gt;✅ 钱包里有 Gas 费（ETH/BNB 等）&lt;/li&gt;
+&lt;li&gt;✅ 想要交易的 USDT/USDC&lt;/li&gt;
+&lt;li&gt;✅ 知道要交易的代币合约地址&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="第一步获取-gas-费"&gt;第一步：获取 Gas 费&lt;/h2&gt;
+&lt;p&gt;DEX 交易需要支付链上 Gas 费，不同链需要不同的原生代币：&lt;/p&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;链&lt;/th&gt;
+ &lt;th&gt;Gas 代币&lt;/th&gt;
+ &lt;th&gt;建议准备&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Ethereum&lt;/td&gt;
+ &lt;td&gt;ETH&lt;/td&gt;
+ &lt;td&gt;$50-100&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;BSC&lt;/td&gt;
+ &lt;td&gt;BNB&lt;/td&gt;
+ &lt;td&gt;$20-50&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Arbitrum&lt;/td&gt;
+ &lt;td&gt;ETH&lt;/td&gt;
+ &lt;td&gt;$10-20&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Solana&lt;/td&gt;
+ &lt;td&gt;SOL&lt;/td&gt;
+ &lt;td&gt;$5-10&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Polygon&lt;/td&gt;
+ &lt;td&gt;MATIC&lt;/td&gt;
+ &lt;td&gt;$5-10&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="如何获取"&gt;如何获取？&lt;/h3&gt;
+&lt;h4 id="方法-1从-cex-提现推荐新手"&gt;方法 1：从 CEX 提现（推荐新手）&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;在币安/OKX 等交易所购买 ETH/BNB&lt;/li&gt;
+&lt;li&gt;提现到你的钱包地址&lt;/li&gt;
+&lt;li&gt;选择正确的网络（ERC20/BEP20）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;注意&lt;/strong&gt;：提现地址必须是你钱包的地址，网络必须匹配！&lt;/p&gt;
+&lt;h4 id="方法-2使用跨链桥"&gt;方法 2：使用跨链桥&lt;/h4&gt;
+&lt;p&gt;如果你在其他链有资产，可以使用跨链桥：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://stargate.finance"&gt;Stargate&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://hop.exchange"&gt;Hop Protocol&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://layerzero.network"&gt;LayerZero&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="方法-3朋友转账"&gt;方法 3：朋友转账&lt;/h4&gt;
+&lt;p&gt;让有 crypto 的朋友直接转给你一些 Gas 费。&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,103 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手
+
+标签：OpenClaw / 工具 / 入门
+日期：2026-03-23
+专题：OpenClaw 深度探索
+
+
+为什么需要 OpenClaw
+在 AI 时代，我们每天在不同的聊天应用中切换：Telegram 处理工作、Discord 参与社区、WhatsApp 联系家人。但 AI 助手呢？ChatGPT 在网页里，Claude 在单独窗口，Copilot 在 VS Code 里。
+问题：AI 助手和你的日常聊天工具是割裂的。
+OpenClaw 解决的就是这个问题：它是一个自托管网关，桥接你的聊天应用（Telegram、Discord、WhatsApp、飞书等）和 AI 智能体，让你在任何一个常用聊天软件里，都能召唤你的私人 AI 助手。
+
+什么是 OpenClaw
+核心定义
+OpenClaw 是一个运行在你本地机器（或服务器）上的网关进程，它同时连接多个聊天平台和多个 AI 模型/智能体。
+你的手机/电脑
+    ├── Telegram ──┐
+    ├── Discord   ──┼──▶ OpenClaw Gateway ──▶ AI Agent (Claude/GPT/MiniMax...)
+    ├── 飞书       ──┤          │
+    └── WhatsApp  ──┘          ▼
+                         本地文件系统
+                         (你的数据)
+关键特性
+
+  
+      
+          特性
+          说明
+      
+  
+  
+      
+          自托管
+          数据留在你自己的机器上，不经过第三方服务器
+      
+      
+          多渠道
+          同时支持 Telegram、Discord、WhatsApp、飞书、iMessage 等
+      
+      
+          多智能体
+          可以运行多个专业角色（研究员、架构师、开发者等）
+      
+      
+          插件生态
+          支持 Skills 扩展，可自定义工作流
+      
+      
+          跨平台
+          macOS、Linux、树莓派都能跑
+      
+  
+
+
+5 分钟快速上手
+第一步：安装
+npm install -g openclaw
+第二步：启动网关
+openclaw gateway start
+第三步：配置聊天渠道
+以 Telegram 为例："><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/openclaw-series/01_openclaw_getting_started/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/openclaw-series/01_openclaw_getting_started/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/openclaw-series/01_openclaw_getting_started/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/openclaw-series/01_openclaw_getting_started/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手"><meta property="og:description" content="OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手 标签：OpenClaw / 工具 / 入门
+日期：2026-03-23
+专题：OpenClaw 深度探索
+为什么需要 OpenClaw 在 AI 时代，我们每天在不同的聊天应用中切换：Telegram 处理工作、Discord 参与社区、WhatsApp 联系家人。但 AI 助手呢？ChatGPT 在网页里，Claude 在单独窗口，Copilot 在 VS Code 里。
+问题：AI 助手和你的日常聊天工具是割裂的。
+OpenClaw 解决的就是这个问题：它是一个自托管网关，桥接你的聊天应用（Telegram、Discord、WhatsApp、飞书等）和 AI 智能体，让你在任何一个常用聊天软件里，都能召唤你的私人 AI 助手。
+什么是 OpenClaw 核心定义 OpenClaw 是一个运行在你本地机器（或服务器）上的网关进程，它同时连接多个聊天平台和多个 AI 模型/智能体。
+你的手机/电脑 ├── Telegram ──┐ ├── Discord ──┼──▶ OpenClaw Gateway ──▶ AI Agent (Claude/GPT/MiniMax...) ├── 飞书 ──┤ │ └── WhatsApp ──┘ ▼ 本地文件系统 (你的数据) 关键特性 特性 说明 自托管 数据留在你自己的机器上，不经过第三方服务器 多渠道 同时支持 Telegram、Discord、WhatsApp、飞书、iMessage 等 多智能体 可以运行多个专业角色（研究员、架构师、开发者等） 插件生态 支持 Skills 扩展，可自定义工作流 跨平台 macOS、Linux、树莓派都能跑 5 分钟快速上手 第一步：安装 npm install -g openclaw 第二步：启动网关 openclaw gateway start 第三步：配置聊天渠道 以 Telegram 为例："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="openclaw-series"><meta property="article:published_time" content="2026-03-23T00:00:00+00:00"><meta property="article:modified_time" content="2026-03-23T00:00:00+00:00"><meta property="article:tag" content="OpenClaw"><meta property="article:tag" content="AI"><meta property="article:tag" content="工具"><meta itemprop=name content="OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手"><meta itemprop=description content="OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手 标签：OpenClaw / 工具 / 入门
+日期：2026-03-23
+专题：OpenClaw 深度探索
+为什么需要 OpenClaw 在 AI 时代，我们每天在不同的聊天应用中切换：Telegram 处理工作、Discord 参与社区、WhatsApp 联系家人。但 AI 助手呢？ChatGPT 在网页里，Claude 在单独窗口，Copilot 在 VS Code 里。
+问题：AI 助手和你的日常聊天工具是割裂的。
+OpenClaw 解决的就是这个问题：它是一个自托管网关，桥接你的聊天应用（Telegram、Discord、WhatsApp、飞书等）和 AI 智能体，让你在任何一个常用聊天软件里，都能召唤你的私人 AI 助手。
+什么是 OpenClaw 核心定义 OpenClaw 是一个运行在你本地机器（或服务器）上的网关进程，它同时连接多个聊天平台和多个 AI 模型/智能体。
+你的手机/电脑 ├── Telegram ──┐ ├── Discord ──┼──▶ OpenClaw Gateway ──▶ AI Agent (Claude/GPT/MiniMax...) ├── 飞书 ──┤ │ └── WhatsApp ──┘ ▼ 本地文件系统 (你的数据) 关键特性 特性 说明 自托管 数据留在你自己的机器上，不经过第三方服务器 多渠道 同时支持 Telegram、Discord、WhatsApp、飞书、iMessage 等 多智能体 可以运行多个专业角色（研究员、架构师、开发者等） 插件生态 支持 Skills 扩展，可自定义工作流 跨平台 macOS、Linux、树莓派都能跑 5 分钟快速上手 第一步：安装 npm install -g openclaw 第二步：启动网关 openclaw gateway start 第三步：配置聊天渠道 以 Telegram 为例："><meta itemprop=datePublished content="2026-03-23T00:00:00+00:00"><meta itemprop=dateModified content="2026-03-23T00:00:00+00:00"><meta itemprop=wordCount content="181"><meta itemprop=keywords content="OpenClaw,AI,工具"><meta name=twitter:card content="summary"><meta name=twitter:title content="OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手"><meta name=twitter:description content="OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手 标签：OpenClaw / 工具 / 入门
+日期：2026-03-23
+专题：OpenClaw 深度探索
+为什么需要 OpenClaw 在 AI 时代，我们每天在不同的聊天应用中切换：Telegram 处理工作、Discord 参与社区、WhatsApp 联系家人。但 AI 助手呢？ChatGPT 在网页里，Claude 在单独窗口，Copilot 在 VS Code 里。
+问题：AI 助手和你的日常聊天工具是割裂的。
+OpenClaw 解决的就是这个问题：它是一个自托管网关，桥接你的聊天应用（Telegram、Discord、WhatsApp、飞书等）和 AI 智能体，让你在任何一个常用聊天软件里，都能召唤你的私人 AI 助手。
+什么是 OpenClaw 核心定义 OpenClaw 是一个运行在你本地机器（或服务器）上的网关进程，它同时连接多个聊天平台和多个 AI 模型/智能体。
+你的手机/电脑 ├── Telegram ──┐ ├── Discord ──┼──▶ OpenClaw Gateway ──▶ AI Agent (Claude/GPT/MiniMax...) ├── 飞书 ──┤ │ └── WhatsApp ──┘ ▼ 本地文件系统 (你的数据) 关键特性 特性 说明 自托管 数据留在你自己的机器上，不经过第三方服务器 多渠道 同时支持 Telegram、Discord、WhatsApp、飞书、iMessage 等 多智能体 可以运行多个专业角色（研究员、架构师、开发者等） 插件生态 支持 Skills 扩展，可自定义工作流 跨平台 macOS、Linux、树莓派都能跑 5 分钟快速上手 第一步：安装 npm install -g openclaw 第二步：启动网关 openclaw gateway start 第三步：配置聊天渠道 以 Telegram 为例："><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-01_openclaw_getting_started"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#为什么需要-openclaw>为什么需要 OpenClaw</a></li><li><a href=#什么是-openclaw>什么是 OpenClaw</a><ul><li><a href=#核心定义>核心定义</a></li><li><a href=#关键特性>关键特性</a></li></ul></li><li><a href=#5-分钟快速上手>5 分钟快速上手</a><ul><li><a href=#第一步安装>第一步：安装</a></li><li><a href=#第二步启动网关>第二步：启动网关</a></li><li><a href=#第三步配置聊天渠道>第三步：配置聊天渠道</a></li><li><a href=#第四步配对你的账号>第四步：配对你的账号</a></li><li><a href=#第五步开始对话>第五步：开始对话</a></li></ul></li><li><a href=#openclaw-vs-其他方案>OpenClaw vs 其他方案</a></li><li><a href=#谁适合用-openclaw>谁适合用 OpenClaw</a></li><li><a href=#下一步>下一步</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手</h1><div class=article-meta><time datetime=2026-03-23>2026-03-23</time>
+<span>•</span>
+<span>181 字</span>
+<span>•</span>
+<span>OpenClaw 深度探索</span></div><div class=article-tags><a href=/dex-bok/tags/openclaw/ class=article-tag>OpenClaw</a>
+<a href=/dex-bok/tags/ai/ class=article-tag>AI</a>
+<a href=/dex-bok/tags/%E5%B7%A5%E5%85%B7/ class=article-tag>工具</a></div></header><h1 id=openclaw-入门指南自托管-ai-网关让任何聊天应用都变成你的私人助手>OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手</h1><blockquote><p><strong>标签</strong>：OpenClaw / 工具 / 入门<br><strong>日期</strong>：2026-03-23<br><strong>专题</strong>：OpenClaw 深度探索</p></blockquote><hr><h2 id=为什么需要-openclaw>为什么需要 OpenClaw</h2><p>在 AI 时代，我们每天在不同的聊天应用中切换：Telegram 处理工作、Discord 参与社区、WhatsApp 联系家人。但 AI 助手呢？ChatGPT 在网页里，Claude 在单独窗口，Copilot 在 VS Code 里。</p><p><strong>问题</strong>：AI 助手和你的日常聊天工具是割裂的。</p><p>OpenClaw 解决的就是这个问题：它是一个<strong>自托管网关</strong>，桥接你的聊天应用（Telegram、Discord、WhatsApp、飞书等）和 AI 智能体，让你在任何一个常用聊天软件里，都能召唤你的私人 AI 助手。</p><hr><h2 id=什么是-openclaw>什么是 OpenClaw</h2><h3 id=核心定义>核心定义</h3><p>OpenClaw 是一个运行在你本地机器（或服务器）上的<strong>网关进程</strong>，它同时连接多个聊天平台和多个 AI 模型/智能体。</p><pre tabindex=0><code>你的手机/电脑
+    ├── Telegram ──┐
+    ├── Discord   ──┼──▶ OpenClaw Gateway ──▶ AI Agent (Claude/GPT/MiniMax...)
+    ├── 飞书       ──┤          │
+    └── WhatsApp  ──┘          ▼
+                         本地文件系统
+                         (你的数据)
+</code></pre><h3 id=关键特性>关键特性</h3><table><thead><tr><th>特性</th><th>说明</th></tr></thead><tbody><tr><td><strong>自托管</strong></td><td>数据留在你自己的机器上，不经过第三方服务器</td></tr><tr><td><strong>多渠道</strong></td><td>同时支持 Telegram、Discord、WhatsApp、飞书、iMessage 等</td></tr><tr><td><strong>多智能体</strong></td><td>可以运行多个专业角色（研究员、架构师、开发者等）</td></tr><tr><td><strong>插件生态</strong></td><td>支持 Skills 扩展，可自定义工作流</td></tr><tr><td><strong>跨平台</strong></td><td>macOS、Linux、树莓派都能跑</td></tr></tbody></table><hr><h2 id=5-分钟快速上手>5 分钟快速上手</h2><h3 id=第一步安装>第一步：安装</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm install -g openclaw
+</span></span></code></pre></div><h3 id=第二步启动网关>第二步：启动网关</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>openclaw gateway start
+</span></span></code></pre></div><h3 id=第三步配置聊天渠道>第三步：配置聊天渠道</h3><p>以 Telegram 为例：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>openclaw channels add --channel telegram --token &lt;YOUR_BOT_TOKEN&gt;
+</span></span></code></pre></div><h3 id=第四步配对你的账号>第四步：配对你的账号</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>openclaw channels login --channel telegram
+</span></span></code></pre></div><h3 id=第五步开始对话>第五步：开始对话</h3><p>向你的 Bot 发送消息，OpenClaw 会自动路由到配置的 AI 智能体。</p><hr><h2 id=openclaw-vs-其他方案>OpenClaw vs 其他方案</h2><table><thead><tr><th>方案</th><th>自托管</th><th>多聊天渠道</th><th>多智能体</th><th>扩展性</th></tr></thead><tbody><tr><td>ChatGPT App</td><td>❌</td><td>❌</td><td>❌</td><td>差</td></tr><tr><td>Claude App</td><td>❌</td><td>❌</td><td>❌</td><td>差</td></tr><tr><td>自建 Telegram Bot</td><td>✅</td><td>✅</td><td>❌</td><td>一般</td></tr><tr><td><strong>OpenClaw</strong></td><td>✅</td><td>✅</td><td>✅</td><td>强</td></tr></tbody></table><hr><h2 id=谁适合用-openclaw>谁适合用 OpenClaw</h2><ul><li><strong>开发者</strong>：需要一个随时可用的 AI 编程助手</li><li><strong>自托管爱好者</strong>：不想把数据交给第三方</li><li><strong>多角色协同</strong>：需要研究员、架构师、开发者多个 AI 同时工作</li><li><strong>团队协作</strong>：通过飞书等平台构建 AI 工作流</li></ul><hr><h2 id=下一步>下一步</h2><p>本专题后续文章将深入：</p><ul><li><strong>第二篇</strong>：OpenClaw 架构解析（Gateway / Agent / Channel 三层）</li><li><strong>第三篇</strong>：用 OpenClaw 构建多智能体团队</li><li><strong>第四篇</strong>：Skills 插件系统实战</li><li><strong>第五篇</strong>：OpenClaw 安全实践与数据控制</li></ul><hr><p><em>系列下一篇文章：<a href=../openclaw-series/02-architecture.md>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析</a></em></p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/openclaw-series/05_openclaw_local_deployment/>OpenClaw 安全实践：自托管数据控制与权限管理</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/>OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>形式化 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E5%BD%A2%E5%BC%8F%E5%8C%96/</link><description>Recent content in 形式化 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:35:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E5%BD%A2%E5%BC%8F%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>智能合约形式化验证 - Certora 与 Spec 语言</title><link>https://tiao0303.github.io/dex-bok/posts/t6_master/27_formal_verification/</link><pubDate>Thu, 19 Mar 2026 01:35:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6_master/27_formal_verification/</guid><description>&lt;h2 id="什么是形式化验证"&gt;什么是形式化验证&lt;/h2&gt;
+&lt;h3 id="定义"&gt;定义&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;形式化验证&lt;/strong&gt; = 用数学方法证明代码符合规范&lt;/p&gt;
+&lt;h3 id="与传统测试对比"&gt;与传统测试对比&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;方法&lt;/th&gt;
+ &lt;th&gt;覆盖率&lt;/th&gt;
+ &lt;th&gt;可靠性&lt;/th&gt;
+ &lt;th&gt;成本&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;单元测试&lt;/td&gt;
+ &lt;td&gt;部分路径&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;模糊测试&lt;/td&gt;
+ &lt;td&gt;大量路径&lt;/td&gt;
+ &lt;td&gt;中高&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;形式化验证&lt;/td&gt;
+ &lt;td&gt;所有路径&lt;/td&gt;
+ &lt;td&gt;极高 ✅&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="为什么需要"&gt;为什么需要&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;智能合约特点：
+- 一旦部署无法修改
+- 管理大量资金
+- 攻击者动机强
+
+传统测试不足：
+- 无法覆盖所有情况
+- 边界条件易遗漏
+- 逻辑漏洞难发现
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="形式化验证原理"&gt;形式化验证原理&lt;/h2&gt;
+&lt;h3 id="核心概念"&gt;核心概念&lt;/h3&gt;
+&lt;h4 id="1-规范specification"&gt;1. 规范（Specification）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用形式化语言描述合约应该满足的性质
+
+示例（代币合约）：
+- 总供应量恒定
+- 余额之和 = 总供应量
+- 无法凭空增发
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="2-不变量invariant"&gt;2. 不变量（Invariant）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;在任何状态下都必须为真的条件
+
+示例（AMM）：
+- x * y &amp;gt;= k（恒定乘积）
+- 余额非负
+- 手续费正确计算
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="3-断言assertion"&gt;3. 断言（Assertion）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;在特定条件下必须成立的陈述
+
+示例：
+assert balance[user] &amp;gt;= 0
+assert totalSupply == SUM(balance[all_users])
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="certora-验证工具"&gt;Certora 验证工具&lt;/h2&gt;
+&lt;h3 id="certora-架构"&gt;Certora 架构&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;组成：
+1. CVL（Certora Verification Language）
+ - 编写规范的语言
+ 
+2. Prover
+ - 数学证明引擎
+ 
+3. 报告生成器
+ - 输出验证结果
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="cvl-语言基础"&gt;CVL 语言基础&lt;/h3&gt;
+&lt;h4 id="基本语法"&gt;基本语法&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-cvl" data-lang="cvl"&gt;// 定义规则
+rule balanceOfInvariant(address user) {
+ // 前置条件
+ require user != address(0);
+ 
+ // 不变量
+ assert token.balanceOf(user) &amp;gt;= 0;
+}
+
+// 定义属性
+property totalSupplyConstant() {
+ // 总供应量在转账前后不变
+ env e;
+ address from, to;
+ uint256 amount;
+ 
+ require e.msg.sender == from;
+ require token.balanceOf(from) &amp;gt;= amount;
+ 
+ token.transfer(e, to, amount);
+ 
+ assert token.totalSupply() == old(token.totalSupply());
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="常用断言"&gt;常用断言&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-cvl" data-lang="cvl"&gt;// 余额非负
+assert token.balanceOf(user) &amp;gt;= 0;
+
+// 总供应量不变
+assert token.totalSupply() == old(token.totalSupply());
+
+// 授权不被修改
+assert token.allowance(owner, spender) == old(token.allowance(owner, spender));
+
+// 事件正确发射
+emit Transfer(from, to, amount);
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="实战验证-erc20"&gt;实战：验证 ERC20&lt;/h3&gt;
+&lt;h4 id="完整-cvl-规范"&gt;完整 CVL 规范&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-cvl" data-lang="cvl"&gt;// SPDX-License-Identifier: MIT
+pragma cvl 0.1;
+
+import &amp;#34;./IERC20.sol&amp;#34;;
+
+contract ERC20Spec {
+ IERC20 token;
+ 
+ // 不变量：总供应量恒定
+ invariant totalSupplyInvariant() {
+ token.totalSupply() == INITIAL_SUPPLY;
+ }
+ 
+ // 不变量：余额之和等于总供应量
+ invariant balanceSumInvariant() {
+ uint256 sum = 0;
+ for (address user : all_users) {
+ sum += token.balanceOf(user);
+ }
+ sum == token.totalSupply();
+ }
+ 
+ // 规则：转账后余额正确更新
+ rule transferUpdatesBalances(address from, address to, uint256 amount) {
+ require token.balanceOf(from) &amp;gt;= amount;
+ require to != address(0);
+ 
+ uint256 balanceFromBefore = token.balanceOf(from);
+ uint256 balanceToBefore = token.balanceOf(to);
+ 
+ token.transfer(msg.sender, to, amount);
+ 
+ assert token.balanceOf(from) == balanceFromBefore - amount;
+ assert token.balanceOf(to) == balanceToBefore + amount;
+ }
+ 
+ // 规则：授权不能被滥用
+ rule allowanceNotAbused(address owner, address spender, uint256 amount) {
+ require token.allowance(owner, spender) == 0;
+ require msg.sender != spender;
+ 
+ token.transferFrom(msg.sender, owner, amount);
+ 
+ assert token.allowance(owner, spender) == 0;
+ }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="常见验证模式"&gt;常见验证模式&lt;/h2&gt;
+&lt;h3 id="模式一访问控制"&gt;模式一：访问控制&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-cvl" data-lang="cvl"&gt;rule onlyOwnerCanPause() {
+ require !contract.isPaused();
+ require msg.sender != contract.owner();
+ 
+ contract.pause(msg.sender);
+ 
+ assert contract.isPaused() == false; // 应该失败
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="模式二重入保护"&gt;模式二：重入保护&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-cvl" data-lang="cvl"&gt;rule noReentrancy() {
+ require contract.balanceOf(msg.sender) &amp;gt; 0;
+ 
+ // 模拟恶意合约
+ contract.withdraw(msg.sender);
+ 
+ // 验证余额在调用期间未被修改
+ assert contract.balanceOf(msg.sender) == old(contract.balanceOf(msg.sender));
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="模式三价格操纵防护"&gt;模式三：价格操纵防护&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-cvl" data-lang="cvl"&gt;rule priceNotManipulable() {
+ uint256 priceBefore = contract.getPrice();
+ 
+ // 尝试大额交易操纵价格
+ contract.swap(hugeAmount);
+ 
+ uint256 priceAfter = contract.getPrice();
+ 
+ // 价格变化应在合理范围内
+ assert abs(priceAfter - priceBefore) / priceBefore &amp;lt; 0.05; // &amp;lt;5%
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="验证流程"&gt;验证流程&lt;/h2&gt;
+&lt;h3 id="步骤一编写规范"&gt;步骤一：编写规范&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 阅读合约代码
+2. 识别关键不变量
+3. 编写 CVL 规范
+4. 同行评审规范
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="步骤二运行验证"&gt;步骤二：运行验证&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 安装 Certora CLI&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pip install certora-cli
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 运行验证&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;certoraRun Token.sol:Token ERC20Spec.spec &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; --rule balanceOfInvariant,totalSupplyInvariant &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; --msg_sender attacker &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; --verify Token:ERC20Spec
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="步骤三分析结果"&gt;步骤三：分析结果&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;验证结果：
+✅ PASS: balanceOfInvariant
+✅ PASS: totalSupplyInvariant
+❌ FAIL: transferUpdatesBalances
+
+失败分析：
+- 查看反例（Counterexample）
+- 定位代码问题
+- 修复后重新验证
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="步骤四修复与迭代"&gt;步骤四：修复与迭代&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;循环：
+1. 修复代码
+2. 重新验证
+3. 直到所有规则通过
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="真实案例分析"&gt;真实案例分析&lt;/h2&gt;
+&lt;h3 id="案例一compound-利率计算验证"&gt;案例一：Compound 利率计算验证&lt;/h3&gt;
+&lt;h4 id="问题"&gt;问题&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Compound 的利率计算涉及复杂数学：
+- 指数增长
+- 精度舍入
+- 边界条件
+
+传统测试难以覆盖所有情况
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="验证规范"&gt;验证规范&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-cvl" data-lang="cvl"&gt;rule interestAccruesCorrectly() {
+ uint256 balanceBefore = contract.balanceOf(user);
+ uint256 timeElapsed = 1 days;
+ 
+ fastForward(timeElapsed);
+ 
+ uint256 balanceAfter = contract.balanceOf(user);
+ 
+ // 利息应按年利率正确计算
+ assert balanceAfter &amp;gt;= balanceBefore * (1 + ANNUAL_RATE / 365);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="发现的问题"&gt;发现的问题&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Bug：
+- 闰年处理错误
+- 精度损失累积
+- 极端利率下溢出
+
+修复后重新验证通过
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="案例二uniswap-v3-流动性验证"&gt;案例二：Uniswap V3 流动性验证&lt;/h3&gt;
+&lt;h4 id="挑战"&gt;挑战&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Uniswap V3 集中流动性：
+- 价格区间复杂
+- 虚拟储备计算
+- 边界条件多
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="关键不变量"&gt;关键不变量&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-cvl" data-lang="cvl"&gt;invariant liquidityInRange() {
+ // 流动性只在价格区间内有效
+ if (price &amp;lt; lowerTick || price &amp;gt; upperTick) {
+ assert position.liquidity == 0;
+ }
+}
+
+invariant feesAccrueCorrectly() {
+ // 手续费正确累积
+ assert position.feesOwed == calculateFees(position, time);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="验证最佳实践"&gt;验证最佳实践&lt;/h2&gt;
+&lt;h3 id="1-从简单开始"&gt;1. 从简单开始&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;先验证基础属性：
+- 余额非负
+- 总供应量恒定
+- 访问控制
+
+再验证复杂逻辑：
+- 利率计算
+- 价格预言机
+- 治理机制
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="2-分层验证"&gt;2. 分层验证&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;Layer 1：基本不变量
+Layer 2：业务逻辑规则
+Layer 3：复杂场景组合
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="3-组合测试"&gt;3. 组合测试&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;形式化验证 + 单元测试 + 模糊测试
+
+覆盖率：
+- 形式化：100% 逻辑路径
+- 单元测试：关键路径
+- 模糊测试：边界情况
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="工具对比"&gt;工具对比&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;工具&lt;/th&gt;
+ &lt;th&gt;语言&lt;/th&gt;
+ &lt;th&gt;特点&lt;/th&gt;
+ &lt;th&gt;价格&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Certora&lt;/td&gt;
+ &lt;td&gt;CVL&lt;/td&gt;
+ &lt;td&gt;易用，文档好&lt;/td&gt;
+ &lt;td&gt;$10k+/年&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;K Framework&lt;/td&gt;
+ &lt;td&gt;K&lt;/td&gt;
+ &lt;td&gt;学术级，强大&lt;/td&gt;
+ &lt;td&gt;开源&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Isabelle/HOL&lt;/td&gt;
+ &lt;td&gt;Isabelle&lt;/td&gt;
+ &lt;td&gt;最严格&lt;/td&gt;
+ &lt;td&gt;开源&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Coq&lt;/td&gt;
+ &lt;td&gt;Gallina&lt;/td&gt;
+ &lt;td&gt;证明辅助&lt;/td&gt;
+ &lt;td&gt;开源&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="学习路线"&gt;学习路线&lt;/h2&gt;
+&lt;h3 id="阶段一基础1-2-月"&gt;阶段一：基础（1-2 月）&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 学习离散数学
+2. 理解逻辑与证明
+3. 阅读形式化验证论文
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="阶段二工具2-3-月"&gt;阶段二：工具（2-3 月）&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 学习 CVL 语法
+2. 练习简单合约验证
+3. 阅读 Certora 文档
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="阶段三实战3-6-月"&gt;阶段三：实战（3-6 月）&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 验证开源项目
+2. 参与审计
+3. 建立验证框架
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="总结"&gt;总结&lt;/h2&gt;
+&lt;p&gt;形式化验证核心：&lt;/p&gt;</description></item></channel></rss>

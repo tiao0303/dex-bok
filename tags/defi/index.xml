@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>DeFi on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/defi/</link><description>Recent content in DeFi on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sat, 21 Mar 2026 21:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/defi/index.xml" rel="self" type="application/rss+xml"/><item><title>T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎</title><link>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/t2_06_amm_principles/</link><pubDate>Thu, 19 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/t2_06_amm_principles/</guid><description>&lt;h1 id="t2-进阶实战-06amm-原理详解--理解-dex-的核心引擎"&gt;T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎&lt;/h1&gt;
+&lt;p&gt;在上一节中，我们了解了 DEX 的基础概念。本节我们来深入理解 DEX 的核心引擎——&lt;strong&gt;AMM（Automated Market Maker，自动做市商）&lt;/strong&gt;。理解 AMM 的原理，是所有进阶 DeFi 操作的根基。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一amm-是什么"&gt;一、AMM 是什么？&lt;/h2&gt;
+&lt;h3 id="传统做市商-vs-amm"&gt;传统做市商 vs AMM&lt;/h3&gt;
+&lt;p&gt;在传统金融中，&lt;strong&gt;做市商&lt;/strong&gt;是提供流动性的专业机构。他们在订单簿上同时挂出买单和卖单，赚取买卖价差（bid-ask spread）。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;传统订单簿模式：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;买单队列 卖单队列
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;用户B 买入 2 ETH @ 1990 用户D 卖出 1 ETH @ 2010
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;用户A 买入 1 ETH @ 1980 用户C 卖出 3 ETH @ 2020
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ↑ 差价 = 2010 - 1990 = 20 USD
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;AMM 则完全取消了订单簿&lt;/strong&gt;，用一个数学公式取而代之。无论你是买入还是卖出，智能合约根据公式自动报价，无需任何对手方等待。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="二恒定乘积公式amm-的灵魂"&gt;二、恒定乘积公式：AMM 的灵魂&lt;/h2&gt;
+&lt;h3 id="公式本身"&gt;公式本身&lt;/h3&gt;
+&lt;p&gt;AMM 最核心的公式是&lt;strong&gt;恒定乘积（Constant Product）&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>PancakeSwap 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/09-pancakeswap/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/09-pancakeswap/</guid><description>&lt;h1 id="pancakeswap-深度分析"&gt;PancakeSwap 深度分析&lt;/h1&gt;
+&lt;h2 id="项目简介"&gt;项目简介&lt;/h2&gt;
+&lt;p&gt;PancakeSwap 是 BSC（Binance Smart Chain）生态系统中规模最大的去中心化交易所（DEX），于 2020 年 9 月上线。它由匿名团队创建，凭借 Binance 生态的低 Gas 费和快速确认时间，迅速超越以太坊上的许多竞品，成为 BSC 链上 TVL（总锁仓量）最高的 DEX。PancakeSwap 的产品线已从最初的 AMM 兑换扩展至IFO（首次发行农场）、预测市场、NFT 市场、彩票及 DAO 治理等多个方向，构建了一个相对完整的 DeFi 生态矩阵。&lt;/p&gt;
+&lt;h2 id="核心机制"&gt;核心机制&lt;/h2&gt;
+&lt;p&gt;PancakeSwap 基于 AMM（自动做市商）模型，采用恒定乘积算法（x × y = k），用户通过向流动性池注入代币提供流动性，交易手续费为 0.25%，其中 0.17% 分配给流动性提供者，0.03% 用于 CAKE 代币回购销毁，0.05% 用于运营。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;v2 到 v3 的演进：&lt;/strong&gt; PancakeSwap 于 2023 年推出 v3 版本，引入了集中流动性（Concentrated Liquidity）机制，流动性提供者可以将资金部署在特定价格区间内，从而在等额资金下获得更高的资本效率和做市收益。这一设计与 Uniswap V3 类似，但在 BSC 链上实现，为用户提供了更精细化的做市工具。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;IFO（Initial Farm Offering）：&lt;/strong&gt; PancakeSwap 创新性地推出了IFO机制，允许项目方在 PancakeSwap 平台上发行新代币，用户通过质押 CAKE 或其他资产参与认购。这一机制在 2020-2021 年 DeFi summer 期间吸引了大量关注和资金参与。&lt;/p&gt;</description></item><item><title>Balancer 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/10-balancer/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/10-balancer/</guid><description>&lt;h1 id="balancer-深度分析"&gt;Balancer 深度分析&lt;/h1&gt;
+&lt;h2 id="项目简介"&gt;项目简介&lt;/h2&gt;
+&lt;p&gt;Balancer 是一个基于以太坊的去中心化交易所和资产管理协议，由 Fernando Martinelli 和 Blake Rodriguez 于 2018 年底创立，2020 年 3 月正式上线主网。Balancer 最初以「可变比例 AMM」为核心创新点，允许任何人创建包含多达 8 种代币的自定义权重流动性池，彻底改变了传统 AMM 只能采用 50/50 固定比例的限制。2023 年，Balancer 推出 v3 版本，整合了 Boosted Pools（收益增强池）和 veBAL 治理模型，进一步强化了其作为专业做市和资产管理平台的市场定位。&lt;/p&gt;
+&lt;h2 id="核心机制"&gt;核心机制&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;可变权重 AMM（Weighted Pool）：&lt;/strong&gt; Balancer 的核心创新在于将 AMM 的代币权重从固定的 50/50 扩展为任意比例（0-100%）。例如，用户可以创建一个 80% ETH + 20% USDC 的流动性池，交易价格会根据池子权重动态调整。这为专业做市商和量化策略提供了极大的灵活性，使得被动指数投资和主动做市可以在同一个协议内实现。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;加权数学公式：&lt;/strong&gt; Balancer 采用恒定加权乘积公式：∏(x_i)^{w_i} = k，其中 w_i 为第 i 个资产的权重。这与 Uniswap 的恒定乘积公式有本质区别，支持更多样化的资产配置。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Boosted Pools（收益增强池）：&lt;/strong&gt; Balancer 将闲置流动性自动存入 Aave 等借贷协议以获取额外收益，LP 在提供流动性的同时还能获得借出收益，显著提升了资金利用效率。这一机制在 2022-2023 年稳定币和主流资产池中被广泛采用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;veBAL 治理模型：&lt;/strong&gt; 2022 年 Balancer 引入 veBAL（投票托管 BAL），用户将 BAL 锁定最多一年获得 veBAL，veBAL 持有者可以：1）决定哪些流动性池获得 BAL 挖矿奖励及其权重；2）获得协议手续费分成；3）参与治理投票。这一模型有效对齐了流动性提供者、协议收入和治理权力。&lt;/p&gt;</description></item><item><title>DODO 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/11-dodo/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/11-dodo/</guid><description>&lt;h1 id="dodo-深度分析"&gt;DODO 深度分析&lt;/h1&gt;
+&lt;h2 id="项目简介"&gt;项目简介&lt;/h2&gt;
+&lt;p&gt;DODO 是由 New搊学实验室（Cycle Labs）开发的新一代链上流动性协议，于 2020 年 8 月在以太坊主网上线。DODO 团队成员主要来自加密货币行业，创始人 Diane Dai 是前 CoinMarketCap 产品负责人。DODO 的核心定位是「下一代链上流动性基础设施」，主打 PMM（Proactive Market Maker，主动做市商）算法，试图解决传统 AMM 的无常损失、资本效率低下和滑点问题。DODO 已部署至以太坊、BSC、Polygon、Arbitrum、Avalanche 等多条链，并持续迭代其 v2、v3 版本。&lt;/p&gt;
+&lt;h2 id="核心机制"&gt;核心机制&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;PMM（Proactive Market Maker）算法：&lt;/strong&gt; DODO 的核心创新在于 PMM 机制，这是对传统 AMM 的重要改进。PMM 的核心思想是引入预言机（Oracle）价格作为参考，让资金池的价格自动向预言机价格靠拢，从而在正常市场条件下大幅减少无常损失。&lt;/p&gt;
+&lt;p&gt;PMM 的数学公式为：y = b × (1 - (x / (k × P_o))^α)，其中 P_o 是预言机价格，k 是流动性参数，α 控制价格弹性。与恒定乘积 AMM（Uniswap）相比，PMM 在价格偏离预言机时会以更陡峭的曲线进行交易，使价格快速回归合理区间。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;DODO v2 — 面向做市商的专业工具：&lt;/strong&gt; v2 版本引入了面向专业做市商的基础设施，包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;DODO Private Pool：&lt;/strong&gt; 允许项目方或专业做市商创建完全自定义的流动性池，支持设置交易手续费率（0%~1% 任意）、流动性参数和代币组合&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DODO Classic（恒定乘积池）：&lt;/strong&gt; 兼容标准 AMM 逻辑，保留了对 Uniswap 用户的兼容性&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DODO Vending Machine：&lt;/strong&gt; 项目方一键发币并创建初始流动性的工具，降低了项目启动门槛&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;DODO v3 — 众筹建池（Crowdpooling）：&lt;/strong&gt; v3 版本引入了 Crowdpooling 机制，实现了零滑点、无风险溢价的新资产发行方式。项目方设置起始价格和募集规模，用户以该价格无滑点认购，募集结束后形成初始流动性。这一机制结合了 ICO 的公平性和 DEX 的去中心化特点。&lt;/p&gt;</description></item><item><title>量化交易策略深度解析：从传统金融到 DeFi</title><link>https://tiao0303.github.io/dex-bok/posts/quant_strategy_deep_dive/</link><pubDate>Sat, 21 Mar 2026 21:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/quant_strategy_deep_dive/</guid><description>&lt;h1 id="量化交易策略深度解析从传统金融到-defi"&gt;量化交易策略深度解析：从传统金融到 DeFi&lt;/h1&gt;
+&lt;p&gt;量化交易是指利用数学模型、统计分析和计算机程序来执行交易策略的投资方法。与主观交易不同，量化交易基于数据驱动决策，通过消除情绪干扰和利用市场效率低下来获取稳定收益。本文将深入探讨主流量化策略及其在 DeFi 领域的应用。&lt;/p&gt;
+&lt;h2 id="一传统金融量化策略"&gt;一、传统金融量化策略&lt;/h2&gt;
+&lt;h3 id="1-趋势跟踪策略"&gt;1. 趋势跟踪策略&lt;/h3&gt;
+&lt;p&gt;趋势跟踪是历史最悠久也是最经典的量化策略之一。其核心思想是「趋势是你的朋友」—— 既然无法预测市场转向，那就顺势而为。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;主要技术指标&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;移动平均线 (MA)&lt;/strong&gt;：简单移动平均 (SMA) 和指数移动平均 (EMA) 是最基础的趋势指标。当价格上穿均线时产生买入信号，下穿时产生卖出信号。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;动量指标 (Momentum)&lt;/strong&gt;：如 RSI、MACD 等，用于衡量价格变动的速度和幅度。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;趋势线突破&lt;/strong&gt;：当价格突破关键趋势线时入场。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;策略优势&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;逻辑清晰，易于程序化实现&lt;/li&gt;
+&lt;li&gt;在趋势明显的牛市或熊市中表现优异&lt;/li&gt;
+&lt;li&gt;风险管理相对简单&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;策略劣势&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;震荡行情中容易反复止损&lt;/li&gt;
+&lt;li&gt;需要较长的回测周期来验证有效性&lt;/li&gt;
+&lt;li&gt;参数优化可能出现过拟合&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="2-均值回归策略"&gt;2. 均值回归策略&lt;/h3&gt;
+&lt;p&gt;均值回归策略基于一个假设：价格会围绕长期均值波动，当价格偏离均值时，最终会回归均值。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;应用场景&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;统计套利&lt;/strong&gt;：利用相关性较高的资产对，当价差偏离历史均值时，买入相对低估的资产，卖出高估的资产。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;布林带策略&lt;/strong&gt;：当价格触及布林带上下轨时，预期价格会回归中轨。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;配对交易&lt;/strong&gt;：选择两只高度相关的股票，当价差扩大时做空高估的，做多低估的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;关键挑战&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;准确计算「均值」需要大量历史数据&lt;/li&gt;
+&lt;li&gt;极端行情下均值可能永久偏离&lt;/li&gt;
+&lt;li&gt;需要防范「均值陷阱」&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="3-套利策略"&gt;3. 套利策略&lt;/h3&gt;
+&lt;p&gt;套利策略利用市场定价效率低下获取无风险或低风险收益。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;主要类型&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;空间套利&lt;/strong&gt;：同时在两个市场买卖相同资产，利用价差获利。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;时间套利&lt;/strong&gt;：利用资产在不同时间的定价差异。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;统计套利&lt;/strong&gt;：基于历史统计规律进行套利。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;跨产品套利&lt;/strong&gt;：如期货与现货之间的价差交易。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="4-做市商策略"&gt;4. 做市商策略&lt;/h3&gt;
+&lt;p&gt;做市商通过同时提供买卖报价来赚取价差收益。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;核心机制&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在订单簿两侧挂单&lt;/li&gt;
+&lt;li&gt;低价买入，高价卖出&lt;/li&gt;
+&lt;li&gt;赚取 bid-ask spread&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;关键能力&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;精准的订单簿分析&lt;/li&gt;
+&lt;li&gt;快速的执行速度&lt;/li&gt;
+&lt;li&gt;有效的库存管理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="二defi-量化策略"&gt;二、DeFi 量化策略&lt;/h2&gt;
+&lt;p&gt;DeFi（去中心化金融）为量化交易提供了独特的机遇。由于区块链的透明性、多链生态的分散性以及智能合约的自动化能力，DeFi 市场中存在着比传统金融市场更多的定价效率低下问题。&lt;/p&gt;
+&lt;h3 id="1-dex-套利"&gt;1. DEX 套利&lt;/h3&gt;
+&lt;p&gt;去中心化交易所 (DEX) 套利是 DeFi 最经典的量化策略之一。&lt;/p&gt;</description></item><item><title>Rebasing 池子是什么？弹性供应代币的 AMM 挑战</title><link>https://tiao0303.github.io/dex-bok/posts/t4_advanced/29_rebasing_pools/</link><pubDate>Sat, 21 Mar 2026 11:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4_advanced/29_rebasing_pools/</guid><description>&lt;h2 id="什么是-rebasing-代币"&gt;什么是 Rebasing 代币&lt;/h2&gt;
+&lt;p&gt;Rebasing（弹性供应）代币是一种&lt;strong&gt;供应量会自动调整&lt;/strong&gt;的加密货币机制。通过算法定期调整总流通量，以达到目标价格或分配奖励。&lt;/p&gt;
+&lt;h3 id="核心机制"&gt;核心机制&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;场景&lt;/th&gt;
+ &lt;th&gt;操作&lt;/th&gt;
+ &lt;th&gt;效果&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;价格高于目标&lt;/td&gt;
+ &lt;td&gt;正向 Rebase（+supply）&lt;/td&gt;
+ &lt;td&gt;代币数量增加，单价下降&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;价格低于目标&lt;/td&gt;
+ &lt;td&gt;负向 Rebase（-supply）&lt;/td&gt;
+ &lt;td&gt;代币数量减少，单价上升&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;关键点&lt;/strong&gt;：用户的持币比例保持不变，但绝对数量会变化。&lt;/p&gt;
+&lt;h3 id="代表项目"&gt;代表项目&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AMPL&lt;/strong&gt;：最早的弹性供应稳定币，目标是 $1&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;aToken&lt;/strong&gt;（Aave）：存款产生利息时数量增加&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;stETH&lt;/strong&gt;：质押收益体现为代币数量增长&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="rebasing-池子的特殊挑战"&gt;Rebasing 池子的特殊挑战&lt;/h2&gt;
+&lt;h3 id="传统-amm-的问题"&gt;传统 AMM 的问题&lt;/h3&gt;
+&lt;p&gt;标准 AMM（如 Uniswap V2/V3）假设代币供应是&lt;strong&gt;固定或可预测变化&lt;/strong&gt;的。当 Rebasing 代币的供应突然变化时：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;案例：池中有 1000 AMPL + 1000 USDC
+
+正向 Rebase 后：AMPL 供应变为 1100（+10%）
+ 
+传统 AMM 认知：
+→ 误判为需求减少 → AMPL 价值被低估
+→ LP 遭受&amp;#34; divergence loss&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="问题本质"&gt;问题本质&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;价值泄露&lt;/strong&gt;：AMM 无法识别&amp;quot;供应增加&amp;quot;还是&amp;quot;需求减少&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;无常损失加剧&lt;/strong&gt;：供应调整带来的额外波动&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;池子偿付风险&lt;/strong&gt;：极端负向 Rebase 可能导致池子资不抵债&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="解决方案专用-amm"&gt;解决方案：专用 AMM&lt;/h2&gt;
+&lt;h3 id="1-elasticswap"&gt;1. ElasticSwap&lt;/h3&gt;
+&lt;p&gt;专为弹性供应代币设计的 AMM，能正确感知 Rebase 事件：&lt;/p&gt;</description></item><item><title>ERC4626 金库标准 - 收益代币化的革命</title><link>https://tiao0303.github.io/dex-bok/posts/developer/07-erc4626-vault-standard/</link><pubDate>Sat, 21 Mar 2026 10:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/developer/07-erc4626-vault-standard/</guid><description>&lt;h2 id="什么是-erc4626"&gt;什么是 ERC4626&lt;/h2&gt;
+&lt;p&gt;ERC4626（Tokenized Vault Standard）是 Ethereum 上&lt;strong&gt;代币化金库&lt;/strong&gt;的标准接口，于 2023 年正式确立。它扩展了 ERC20，使得金库份额成为一种可交易的 ERC20 代币。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;核心价值&lt;/strong&gt;：统一收益聚合协议接口，让不同 DeFi 协议可以无缝互操作。&lt;/p&gt;
+&lt;h2 id="为什么需要-erc4626"&gt;为什么需要 ERC4626&lt;/h2&gt;
+&lt;p&gt;在 ERC4626 出现之前，每个收益聚合器都有自己的接口：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Yearn、Aave、Compound 的存款凭证各不相同&lt;/li&gt;
+&lt;li&gt;开发者需要为每个协议单独适配&lt;/li&gt;
+&lt;li&gt;难以构建跨协议的复杂策略&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ERC4626 &lt;strong&gt;一句话概括&lt;/strong&gt;：&lt;strong&gt;&amp;ldquo;一种代币，两种形式&amp;rdquo;&lt;/strong&gt; —— 存入底层资产，获得金库份额。&lt;/p&gt;
+&lt;h2 id="核心接口规范"&gt;核心接口规范&lt;/h2&gt;
+&lt;h3 id="必需函数"&gt;必需函数&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 底层资产（如 USDC）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;asset&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 金库管理的总资产
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;totalAssets&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 存款：资产 -&amp;gt; 份额
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;deposit&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; assets, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; receiver) &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 铸造：份额 -&amp;gt; 资产（逆向）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;mint&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; shares, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; receiver) &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 取款：份额 -&amp;gt; 资产
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;withdraw&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; assets, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; receiver, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; owner) &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 赎回：资产 -&amp;gt; 份额（逆向）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;redeem&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; shares, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; receiver, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; owner) &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 转换函数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;convertToShares&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; assets) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;convertToAssets&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; shares) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="可选函数"&gt;可选函数&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 存款最大额
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;maxDeposit&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; receiver) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 预览存款结果
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;previewDeposit&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; assets) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 预览取款结果
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;previewWithdraw&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; assets) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="工作原理图解"&gt;工作原理图解&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户存款流程：
+ 
+1 USDC ──────► [ERC4626 Vault] ──────► 获得 1 vaultToken
+(底层资产) (金库合约) (ERC20 份额代币)
+ 
+ │
+ ▼
+ [投资到收益源]
+ (Aave/Compound/Yearn)
+ │
+ ▼
+ 产生收益 → vaultToken 价值增长
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="实际使用示例"&gt;实际使用示例&lt;/h2&gt;
+&lt;h3 id="存款"&gt;存款&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;vault&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;web3&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;eth&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Contract&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;ERC4626_ABI&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;vaultAddress&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 将 USDC 存入金库，获得 vaultToken
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;shares&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;vault&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;methods&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .&lt;span style="color:#a6e22e"&gt;deposit&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;amount&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;userAddress&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .&lt;span style="color:#a6e22e"&gt;send&lt;/span&gt;({ &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;userAddress&lt;/span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="预览收益"&gt;预览收益&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 查看当前汇率
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;sharesOut&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;vault&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;methods&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .&lt;span style="color:#a6e22e"&gt;convertToShares&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;1000e6&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .&lt;span style="color:#a6e22e"&gt;call&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;console&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;log&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;`1000 USDC 可以换取 &lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;sharesOut&lt;/span&gt;&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt; vaultToken`&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="取款"&gt;取款&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 赎回 vaultToken，换回底层资产
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;assets&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;vault&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;methods&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .&lt;span style="color:#a6e22e"&gt;redeem&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;sharesAmount&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;userAddress&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;userAddress&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .&lt;span style="color:#a6e22e"&gt;send&lt;/span&gt;({ &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;userAddress&lt;/span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="erc4626-的优势"&gt;ERC4626 的优势&lt;/h2&gt;
+&lt;h3 id="1-极致互操作性"&gt;1. 极致互操作性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;金库份额可直接用于其他 DeFi 协议&lt;/li&gt;
+&lt;li&gt;可在 DEX 上交易&lt;/li&gt;
+&lt;li&gt;可作为抵押物借贷&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="2-开发者友好"&gt;2. 开发者友好&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 统一接口，一个适配器连接所有金库
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;IVault&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;is&lt;/span&gt; IERC20 {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;deposit&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; assets, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; receiver) &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;withdraw&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; assets, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; receiver, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; owner) &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// ...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-安全性提升"&gt;3. 安全性提升&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;标准化减少自定义代码，降低漏洞风险&lt;/li&gt;
+&lt;li&gt;内置 &lt;code&gt;preview*&lt;/code&gt; 函数支持安全计算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="安全考虑"&gt;安全考虑&lt;/h2&gt;
+&lt;h3 id="通胀攻击inflation-attack"&gt;通胀攻击（Inflation Attack）&lt;/h3&gt;
+&lt;p&gt;当金库为空时，攻击者可利用第一笔存款操控汇率：&lt;/p&gt;</description></item><item><title>ERC20 代币标准 - DeFi 世界的基石</title><link>https://tiao0303.github.io/dex-bok/posts/developer/06-erc20-token-standard/</link><pubDate>Sat, 21 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/developer/06-erc20-token-standard/</guid><description>&lt;h2 id="什么是-erc20"&gt;什么是 ERC20&lt;/h2&gt;
+&lt;p&gt;ERC20 是 Ethereum 上**可替代代币（Fungible Token）**的技术标准，于 2017 年正式标准化（EIP-20）。由 Fabian Vogelsteller 提出，旨在为所有基于 Ethereum 的代币建立一套统一的接口规范。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;核心特点&lt;/strong&gt;：每个代币单元完全相同、可互换 —— 就像美元一样，每一张的价值相等。&lt;/p&gt;
+&lt;h2 id="为什么要用-erc20"&gt;为什么要用 ERC20&lt;/h2&gt;
+&lt;p&gt;在 ERC20 出现之前，每个代币项目都要自己定义接口，导致：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;钱包需要为每个代币单独适配&lt;/li&gt;
+&lt;li&gt;交易所上线新代币成本极高&lt;/li&gt;
+&lt;li&gt;DeFi 协议无法通用地兼容各种代币&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ERC20 彻底解决了这些问题，实现了&lt;strong&gt;代币的即插即用&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id="核心接口规范"&gt;核心接口规范&lt;/h2&gt;
+&lt;h3 id="必需函数"&gt;必需函数&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 查询代币总供应量
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;totalSupply&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 查询指定地址的余额
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;balanceOf&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; owner) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 转账代币
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;transfer&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; to, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; value) &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 授权第三方转账
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;approve&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; spender, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; value) &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 第三方代理转账
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;transferFrom&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;from&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; to, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; value) &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 查询授权额度
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;allowance&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; owner, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; spender) &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="可选函数增强可用性"&gt;可选函数（增强可用性）&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 代币名称（如 &amp;#34;USD Coin&amp;#34;）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 代币符号（如 &amp;#34;USDC&amp;#34;）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;symbol&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 小数位数（通常为 18）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;decimals&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint8&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="实际使用示例"&gt;实际使用示例&lt;/h2&gt;
+&lt;h3 id="1-查询余额"&gt;1. 查询余额&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&amp;#34;&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// USDC
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;token&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;web3&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;eth&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Contract&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;ERC20_ABI&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;tokenAddress&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;balance&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;token&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;methods&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;balanceOf&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;userAddress&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;call&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;console&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;log&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;`余额: &lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;balance&lt;/span&gt; &lt;span style="color:#f92672"&gt;/&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1e6&lt;/span&gt;&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt; USDC`&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// USDC decimals = 6
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="2-转账代币"&gt;2. 转账代币&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;token&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;methods&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;transfer&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;recipientAddress&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;amount&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;send&lt;/span&gt;({ &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;senderAddress&lt;/span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-授权-defi-协议"&gt;3. 授权 DeFi 协议&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 授权 Uniswap 使用你的代币
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;token&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;methods&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;approve&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;uniswapRouter&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;amount&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;send&lt;/span&gt;({ &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;userAddress&lt;/span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="erc20-的安全性考虑"&gt;ERC20 的安全性考虑&lt;/h2&gt;
+&lt;h3 id="常见漏洞"&gt;常见漏洞&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;假充值攻击&lt;/strong&gt;：仅检查返回值而非实际到账&lt;/p&gt;</description></item><item><title>DeFi 量化策略 - 套利与做市实战完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/t4_advanced/defi_quant_strategy_arbitrage_market_making/</link><pubDate>Thu, 19 Mar 2026 14:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4_advanced/defi_quant_strategy_arbitrage_market_making/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;DeFi 市场的低效性为量化交易者创造了大量机会。本文将深入分析主流量化策略，提供可落地的代码实现，并探讨风险控制方法。&lt;/p&gt;
+&lt;h2 id="一套利策略全景图"&gt;一、套利策略全景图&lt;/h2&gt;
+&lt;h3 id="11-主要套利类型"&gt;1.1 主要套利类型&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;策略类型&lt;/th&gt;
+ &lt;th&gt;利润来源&lt;/th&gt;
+ &lt;th&gt;复杂度&lt;/th&gt;
+ &lt;th&gt;资金要求&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;跨DEX套利&lt;/td&gt;
+ &lt;td&gt;价格差&lt;/td&gt;
+ &lt;td&gt;⭐⭐&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;三角套利&lt;/td&gt;
+ &lt;td&gt;汇率差&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;资金费率套利&lt;/td&gt;
+ &lt;td&gt;资金费差额&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;跨链套利&lt;/td&gt;
+ &lt;td&gt;跨链价差&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;期现套利&lt;/td&gt;
+ &lt;td&gt;期货溢价&lt;/td&gt;
+ &lt;td&gt;⭐⭐&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="二跨dex三角套利策略"&gt;二、跨DEX三角套利策略&lt;/h2&gt;
+&lt;h3 id="21-策略原理"&gt;2.1 策略原理&lt;/h3&gt;
+&lt;p&gt;利用三个交易对之间的价格不平衡进行无风险获利：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;路径：ETH → USDC → USDT → ETH
+
+1. 用 ETH 换 USDC（DEX A）
+2. 用 USDC 换 USDT（DEX B）
+3. 用 USDT 换 ETH（DEX C）
+
+如果：汇率乘积 ≠ 1，则存在利润
+profit = initial_amount × (rate1 × rate2 × rate3 - 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;数学公式&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DeFi 安全实战 - 智能合约攻击与防护完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/security/defi_security_attack_defense/</link><pubDate>Thu, 19 Mar 2026 13:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/security/defi_security_attack_defense/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;DeFi 协议累计遭受攻击损失已超过 &lt;strong&gt;60 亿美元&lt;/strong&gt;。本文将从实战角度分析常见攻击手段，并提供可落地的防护方案。&lt;/p&gt;
+&lt;h2 id="一2024-2025-年重大攻击事件"&gt;一、2024-2025 年重大攻击事件&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;协议&lt;/th&gt;
+ &lt;th&gt;损失金额&lt;/th&gt;
+ &lt;th&gt;攻击类型&lt;/th&gt;
+ &lt;th&gt;时间&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Euler Finance&lt;/td&gt;
+ &lt;td&gt;$197M&lt;/td&gt;
+ &lt;td&gt;闪电贷 + 薄授权&lt;/td&gt;
+ &lt;td&gt;2023.03&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Curve Finance&lt;/td&gt;
+ &lt;td&gt;$73M&lt;/td&gt;
+ &lt;td&gt;重入攻击&lt;/td&gt;
+ &lt;td&gt;2023.07&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Mixin Network&lt;/td&gt;
+ &lt;td&gt;$200M&lt;/td&gt;
+ &lt;td&gt;预言机攻击&lt;/td&gt;
+ &lt;td&gt;2023.09&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;BonqDAO&lt;/td&gt;
+ &lt;td&gt;$89M&lt;/td&gt;
+ &lt;td&gt;预言机操纵&lt;/td&gt;
+ &lt;td&gt;2023.02&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="二flash-loan-闪电贷攻击"&gt;二、Flash Loan 闪电贷攻击&lt;/h2&gt;
+&lt;h3 id="21-攻击原理"&gt;2.1 攻击原理&lt;/h3&gt;
+&lt;p&gt;闪电贷允许在单笔交易内借出并归还任意数量的资产，无需抵押。攻击者利用这一特性：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;借款 → 操纵价格/触发漏洞 → 归还 → 获利&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 典型 Flash Loan 攻击流程
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;IFlashLoanReceiver&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;executeOperation&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;[] calldata tokens,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[] calldata amounts,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[] calldata premiums,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; initiator,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bytes&lt;/span&gt; calldata params
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Attacker&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;attack&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; pool, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; target) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 1. 从闪电贷池借款
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(usdt).flashLoan(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ae81ff"&gt;1000000&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;e6, &lt;span style="color:#75715e"&gt;// 借 100万 USDT
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;executeOperation&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;[] calldata tokens,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[] calldata amounts,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[] calldata premiums,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; initiator,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bytes&lt;/span&gt; calldata params
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;override&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 2. 在目标协议执行攻击操作
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// - 操纵预言机价格
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// - 触发漏洞合约逻辑
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// - 清算抵押不足头寸
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 3. 归还借款 + 手续费
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amounts[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; premium &lt;span style="color:#f92672"&gt;=&lt;/span&gt; premiums[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokens[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]).approve(msg.sender, amount &lt;span style="color:#f92672"&gt;+&lt;/span&gt; premium);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 4. 获利转出
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// profit = attack_revenue - (amount + premium)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="22-euler-finance-攻击详解2023"&gt;2.2 Euler Finance 攻击详解（2023）&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;漏洞原理&lt;/strong&gt;：薄授权（Bent Authorization）允许存款人直接提取协议外的资产：&lt;/p&gt;</description></item><item><title>Uniswap V2/V3/V4 机制对比与深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/uniswap-v2-v3-v4-comparison/</link><pubDate>Thu, 19 Mar 2026 12:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/uniswap-v2-v3-v4-comparison/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;Uniswap 作为 DeFi 生态最重要的 DEX 协议，历经 V2、V3、V4 三个重大版本迭代，每个版本都带来了革命性的创新。本文将从底层机制、资本效率、Gas 优化等维度进行深度对比分析。&lt;/p&gt;
+&lt;h2 id="一版本演进概览"&gt;一、版本演进概览&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;特性&lt;/th&gt;
+ &lt;th&gt;V2&lt;/th&gt;
+ &lt;th&gt;V3&lt;/th&gt;
+ &lt;th&gt;V4&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;推出时间&lt;/td&gt;
+ &lt;td&gt;2020.05&lt;/td&gt;
+ &lt;td&gt;2021.05&lt;/td&gt;
+ &lt;td&gt;2024&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;流动性模型&lt;/td&gt;
+ &lt;td&gt;均匀分布&lt;/td&gt;
+ &lt;td&gt;集中流动性&lt;/td&gt;
+ &lt;td&gt;钩子+集中流动性&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;手续费&lt;/td&gt;
+ &lt;td&gt;0.3% 固定&lt;/td&gt;
+ &lt;td&gt;0.05%-1% 可调&lt;/td&gt;
+ &lt;td&gt;自定义&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;预言机&lt;/td&gt;
+ &lt;td&gt;TWAP&lt;/td&gt;
+ &lt;td&gt;TWAP + 几何平均&lt;/td&gt;
+ &lt;td&gt;增强型&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Gas 效率&lt;/td&gt;
+ &lt;td&gt;基准&lt;/td&gt;
+ &lt;td&gt;优化 30%&lt;/td&gt;
+ &lt;td&gt;显著优化&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="二核心机制对比"&gt;二、核心机制对比&lt;/h2&gt;
+&lt;h3 id="21-恒定乘积模型v2"&gt;2.1 恒定乘积模型（V2）&lt;/h3&gt;
+&lt;p&gt;V2 采用经典的 &lt;code&gt;x * y = k&lt;/code&gt; 公式：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// UniswapV2Pair.sol 核心逻辑
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getAmountOut&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountIn, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveIn, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveOut) &lt;span style="color:#66d9ef"&gt;internal&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;pure&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountOut) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amountIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;UniswapV2: INSUFFICIENT_INPUT_AMOUNT&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(reserveIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; reserveOut &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;UniswapV2: INSUFFICIENT_LIQUIDITY&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;997&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// 0.3% 手续费
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;*&lt;/span&gt; reserveOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; denominator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; reserveIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; amountInWithFee;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;/&lt;/span&gt; denominator;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数学推导&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>DeFi 收益 farming 完全指南</title><link>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/09_defi_yield/</link><pubDate>Wed, 18 Mar 2026 21:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/09_defi_yield/</guid><description>&lt;h2 id="defi-收益来源"&gt;DeFi 收益来源&lt;/h2&gt;
+&lt;h3 id="1-交易手续费-"&gt;1. 交易手续费 ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;来源&lt;/strong&gt;：用户 swap 支付的费用
+&lt;strong&gt;分配&lt;/strong&gt;：按 LP 份额比例分配
+&lt;strong&gt;特点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最稳定&lt;/li&gt;
+&lt;li&gt;与市场波动无关&lt;/li&gt;
+&lt;li&gt;APY 5-50%&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;代表&lt;/strong&gt;：Uniswap、Curve、SushiSwap&lt;/p&gt;
+&lt;h3 id="2-流动性挖矿奖励-"&gt;2. 流动性挖矿奖励 ⭐⭐⭐⭐&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;来源&lt;/strong&gt;：协议代币排放
+&lt;strong&gt;分配&lt;/strong&gt;：按 LP 份额 + 乘数
+&lt;strong&gt;特点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;收益高但不稳定&lt;/li&gt;
+&lt;li&gt;代币价格波动大&lt;/li&gt;
+&lt;li&gt;早期项目风险高&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;代表&lt;/strong&gt;：Uniswap (UNI)、Curve (CRV)、Balancer (BAL)&lt;/p&gt;
+&lt;h3 id="3-借贷利息-"&gt;3. 借贷利息 ⭐⭐⭐⭐&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;来源&lt;/strong&gt;：借款人支付利息
+&lt;strong&gt;分配&lt;/strong&gt;：按存款比例
+&lt;strong&gt;特点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;相对稳定&lt;/li&gt;
+&lt;li&gt;单币存入（无 IL）&lt;/li&gt;
+&lt;li&gt;APY 2-20%&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;代表&lt;/strong&gt;：Aave、Compound、MakerDAO&lt;/p&gt;
+&lt;h3 id="4-质押奖励-"&gt;4. 质押奖励 ⭐⭐⭐&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;来源&lt;/strong&gt;：PoS 网络验证奖励
+&lt;strong&gt;分配&lt;/strong&gt;：按质押量
+&lt;strong&gt;特点&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;无 IL&lt;/li&gt;
+&lt;li&gt;锁定期限制&lt;/li&gt;
+&lt;li&gt;APY 3-15%&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;代表&lt;/strong&gt;：ETH2.0、Lido、Rocket Pool&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="收益对比"&gt;收益对比&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;策略&lt;/th&gt;
+ &lt;th&gt;风险&lt;/th&gt;
+ &lt;th&gt;APY 范围&lt;/th&gt;
+ &lt;th&gt;推荐度&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;稳定币 LP&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;td&gt;3-10%&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;主流币 LP&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;td&gt;10-30%&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;挖矿奖励&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;td&gt;30-200%+&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;借贷&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;td&gt;2-15%&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;质押&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;td&gt;3-10%&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="热门-farm-策略"&gt;热门 Farm 策略&lt;/h2&gt;
+&lt;h3 id="1-curve-3pool--convex-"&gt;1. Curve 3pool + Convex ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;流程&lt;/strong&gt;：&lt;/p&gt;</description></item></channel></rss>

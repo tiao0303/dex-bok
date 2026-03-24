@@ -1,0 +1,139 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='代币经济学深度（高级）
+
+难度：⭐⭐⭐ 高级 | 字数：约 1,500 字 | 预计阅读时间：7 分钟
+
+
+一、什么是代币经济学？
+代币经济学（Tokenomics） = 代币（Token）+ 经济学（Economics），即加密货币的激励机制设计。
+它包括：
+
+代币的发行机制：总量多少？谁增发？增发给谁？
+代币的分配机制：初始代币分给谁？团队、投资人、社区各占多少？
+代币的价值捕获：持有代币能得到什么？有什么用？
+代币的销毁机制：供应量会减少吗？如何减少？
+
+一个项目可以技术完美，但代币经济学设计糟糕——结果往往是代币价格归零，项目死亡。好的代币经济学，是让持币者和项目长期利益一致的激励机制设计。
+
+二、代币的两大类型
+类型一：实用型代币（Utility Token）
+定义：持有代币可以获得某种"使用权限"或"服务权益"。
+典型案例：
+
+ETH（以太坊）：持有 ETH 可以支付 Gas 费用（网络使用费），Gas 费越高 ETH 需求越大
+UNI（Uniswap）：持有 UNI 可参与 Uniswap 协议治理投票
+AAVE：持有 AAVE 可参与 Aave 协议治理，并获得手续费减免
+
+价值逻辑：代币的价值来自"使用需求"——用的人越多，需求越大。
+类型二：权益型代币（Security Token / Governance Token）
+定义：持有代币可获得协议产生的现金流权益（类似股票分红）。
+典型案例：
+
+LDO（Lido）：持有 LDO 可分享 Lido 质押业务的收入分成
+CRV（Curve）：长期锁定 CRV 可获得协议手续费分成，并获得更优的交易手续费率
+
+价值逻辑：代币类似"股票"，持有=持有协议的部分权益。
+
+⚠️ 区分实用型代币和证券型代币在监管层面极为重要，但实际项目中两者的界限往往模糊。
+
+
+三、代币分配的常见结构
+一个典型的代币分配（以 Uniswap 为例）：
+
+  
+      
+          分配对象
+          比例
+          解锁机制
+      
+  
+  
+      
+          团队 & 顾问
+          17.8%
+          4年锁仓，每年线性解锁 25%
+      
+      
+          投资者
+          15.3%
+          通常有 1–2 年锁仓
+      
+      
+          社区空投
+          4.9%
+          一次性分发完毕
+      
+      
+          国库（Treasury）
+          43%
+          社区治理控制，逐步使用
+      
+      
+          流动性挖矿
+          19%
+          随生态发展逐步分配
+      
+  
+
+解锁机制（Vesting）的重要性
+Vesting（代币归属） 是指代币按时间线性或阶梯式释放的机制。'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/researcher/09_token_economics/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/researcher/09_token_economics/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/researcher/09_token_economics/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/researcher/09_token_economics/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='代币经济学深度（高级） 难度：⭐⭐⭐ 高级 | 字数：约 1,500 字 | 预计阅读时间：7 分钟
+一、什么是代币经济学？ 代币经济学（Tokenomics） = 代币（Token）+ 经济学（Economics），即加密货币的激励机制设计。
+它包括：
+代币的发行机制：总量多少？谁增发？增发给谁？ 代币的分配机制：初始代币分给谁？团队、投资人、社区各占多少？ 代币的价值捕获：持有代币能得到什么？有什么用？ 代币的销毁机制：供应量会减少吗？如何减少？ 一个项目可以技术完美，但代币经济学设计糟糕——结果往往是代币价格归零，项目死亡。好的代币经济学，是让持币者和项目长期利益一致的激励机制设计。
+二、代币的两大类型 类型一：实用型代币（Utility Token） 定义：持有代币可以获得某种"使用权限"或"服务权益"。
+典型案例：
+ETH（以太坊）：持有 ETH 可以支付 Gas 费用（网络使用费），Gas 费越高 ETH 需求越大 UNI（Uniswap）：持有 UNI 可参与 Uniswap 协议治理投票 AAVE：持有 AAVE 可参与 Aave 协议治理，并获得手续费减免 价值逻辑：代币的价值来自"使用需求"——用的人越多，需求越大。
+类型二：权益型代币（Security Token / Governance Token） 定义：持有代币可获得协议产生的现金流权益（类似股票分红）。
+典型案例：
+LDO（Lido）：持有 LDO 可分享 Lido 质押业务的收入分成 CRV（Curve）：长期锁定 CRV 可获得协议手续费分成，并获得更优的交易手续费率 价值逻辑：代币类似"股票"，持有=持有协议的部分权益。
+⚠️ 区分实用型代币和证券型代币在监管层面极为重要，但实际项目中两者的界限往往模糊。
+三、代币分配的常见结构 一个典型的代币分配（以 Uniswap 为例）：
+分配对象 比例 解锁机制 团队 & 顾问 17.8% 4年锁仓，每年线性解锁 25% 投资者 15.3% 通常有 1–2 年锁仓 社区空投 4.9% 一次性分发完毕 国库（Treasury） 43% 社区治理控制，逐步使用 流动性挖矿 19% 随生态发展逐步分配 解锁机制（Vesting）的重要性 Vesting（代币归属） 是指代币按时间线性或阶梯式释放的机制。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='代币经济学深度（高级） 难度：⭐⭐⭐ 高级 | 字数：约 1,500 字 | 预计阅读时间：7 分钟
+一、什么是代币经济学？ 代币经济学（Tokenomics） = 代币（Token）+ 经济学（Economics），即加密货币的激励机制设计。
+它包括：
+代币的发行机制：总量多少？谁增发？增发给谁？ 代币的分配机制：初始代币分给谁？团队、投资人、社区各占多少？ 代币的价值捕获：持有代币能得到什么？有什么用？ 代币的销毁机制：供应量会减少吗？如何减少？ 一个项目可以技术完美，但代币经济学设计糟糕——结果往往是代币价格归零，项目死亡。好的代币经济学，是让持币者和项目长期利益一致的激励机制设计。
+二、代币的两大类型 类型一：实用型代币（Utility Token） 定义：持有代币可以获得某种"使用权限"或"服务权益"。
+典型案例：
+ETH（以太坊）：持有 ETH 可以支付 Gas 费用（网络使用费），Gas 费越高 ETH 需求越大 UNI（Uniswap）：持有 UNI 可参与 Uniswap 协议治理投票 AAVE：持有 AAVE 可参与 Aave 协议治理，并获得手续费减免 价值逻辑：代币的价值来自"使用需求"——用的人越多，需求越大。
+类型二：权益型代币（Security Token / Governance Token） 定义：持有代币可获得协议产生的现金流权益（类似股票分红）。
+典型案例：
+LDO（Lido）：持有 LDO 可分享 Lido 质押业务的收入分成 CRV（Curve）：长期锁定 CRV 可获得协议手续费分成，并获得更优的交易手续费率 价值逻辑：代币类似"股票"，持有=持有协议的部分权益。
+⚠️ 区分实用型代币和证券型代币在监管层面极为重要，但实际项目中两者的界限往往模糊。
+三、代币分配的常见结构 一个典型的代币分配（以 Uniswap 为例）：
+分配对象 比例 解锁机制 团队 & 顾问 17.8% 4年锁仓，每年线性解锁 25% 投资者 15.3% 通常有 1–2 年锁仓 社区空投 4.9% 一次性分发完毕 国库（Treasury） 43% 社区治理控制，逐步使用 流动性挖矿 19% 随生态发展逐步分配 解锁机制（Vesting）的重要性 Vesting（代币归属） 是指代币按时间线性或阶梯式释放的机制。'><meta itemprop=wordCount content="292"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='代币经济学深度（高级） 难度：⭐⭐⭐ 高级 | 字数：约 1,500 字 | 预计阅读时间：7 分钟
+一、什么是代币经济学？ 代币经济学（Tokenomics） = 代币（Token）+ 经济学（Economics），即加密货币的激励机制设计。
+它包括：
+代币的发行机制：总量多少？谁增发？增发给谁？ 代币的分配机制：初始代币分给谁？团队、投资人、社区各占多少？ 代币的价值捕获：持有代币能得到什么？有什么用？ 代币的销毁机制：供应量会减少吗？如何减少？ 一个项目可以技术完美，但代币经济学设计糟糕——结果往往是代币价格归零，项目死亡。好的代币经济学，是让持币者和项目长期利益一致的激励机制设计。
+二、代币的两大类型 类型一：实用型代币（Utility Token） 定义：持有代币可以获得某种"使用权限"或"服务权益"。
+典型案例：
+ETH（以太坊）：持有 ETH 可以支付 Gas 费用（网络使用费），Gas 费越高 ETH 需求越大 UNI（Uniswap）：持有 UNI 可参与 Uniswap 协议治理投票 AAVE：持有 AAVE 可参与 Aave 协议治理，并获得手续费减免 价值逻辑：代币的价值来自"使用需求"——用的人越多，需求越大。
+类型二：权益型代币（Security Token / Governance Token） 定义：持有代币可获得协议产生的现金流权益（类似股票分红）。
+典型案例：
+LDO（Lido）：持有 LDO 可分享 Lido 质押业务的收入分成 CRV（Curve）：长期锁定 CRV 可获得协议手续费分成，并获得更优的交易手续费率 价值逻辑：代币类似"股票"，持有=持有协议的部分权益。
+⚠️ 区分实用型代币和证券型代币在监管层面极为重要，但实际项目中两者的界限往往模糊。
+三、代币分配的常见结构 一个典型的代币分配（以 Uniswap 为例）：
+分配对象 比例 解锁机制 团队 & 顾问 17.8% 4年锁仓，每年线性解锁 25% 投资者 15.3% 通常有 1–2 年锁仓 社区空投 4.9% 一次性分发完毕 国库（Treasury） 43% 社区治理控制，逐步使用 流动性挖矿 19% 随生态发展逐步分配 解锁机制（Vesting）的重要性 Vesting（代币归属） 是指代币按时间线性或阶梯式释放的机制。'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-09_token_economics"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#一什么是代币经济学>一、什么是代币经济学？</a></li><li><a href=#二代币的两大类型>二、代币的两大类型</a><ul><li><a href=#类型一实用型代币utility-token>类型一：实用型代币（Utility Token）</a></li><li><a href=#类型二权益型代币security-token--governance-token>类型二：权益型代币（Security Token / Governance Token）</a></li></ul></li><li><a href=#三代币分配的常见结构>三、代币分配的常见结构</a><ul><li><a href=#解锁机制vesting的重要性>解锁机制（Vesting）的重要性</a></li></ul></li><li><a href=#四通胀型-vs-通缩型代币>四、通胀型 vs 通缩型代币</a><ul><li><a href=#通胀型代币-inflationary-token>通胀型代币（ inflationary Token）</a></li><li><a href=#通缩型代币deflationary-token>通缩型代币（Deflationary Token）</a></li></ul></li><li><a href=#五代币的价值捕获机制>五、代币的价值捕获机制</a><ul><li><a href=#机制一手续费捕获fee-capture>机制一：手续费捕获（Fee Capture）</a></li><li><a href=#机制二销毁捕获burn-to-mint>机制二：销毁捕获（Burn-to-Mint）</a></li><li><a href=#机制三治理价值>机制三：治理价值</a></li><li><a href=#机制四质押收益>机制四：质押收益</a></li></ul></li><li><a href=#六代币经济学设计的常见陷阱>六、代币经济学设计的常见陷阱</a><ul><li><a href=#陷阱一token-过度稀释>陷阱一：Token 过度稀释</a></li><li><a href=#陷阱二团队代币比例过高>陷阱二：团队代币比例过高</a></li><li><a href=#陷阱三代币没有实际使用场景>陷阱三：代币没有实际使用场景</a></li><li><a href=#陷阱四治理被大户劫持>陷阱四：治理被大户劫持</a></li></ul></li><li><a href=#七如何评估一个项目的代币经济学>七、如何评估一个项目的代币经济学？</a><ul><li><a href=#评估清单>评估清单</a></li></ul></li><li><a href=#八结语>八、结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>292 字</span></div></header><h1 id=代币经济学深度高级>代币经济学深度（高级）</h1><blockquote><p><strong>难度：⭐⭐⭐ 高级</strong> | 字数：约 1,500 字 | 预计阅读时间：7 分钟</p></blockquote><hr><h2 id=一什么是代币经济学>一、什么是代币经济学？</h2><p><strong>代币经济学（Tokenomics）</strong> = 代币（Token）+ 经济学（Economics），即加密货币的激励机制设计。</p><p>它包括：</p><ul><li><strong>代币的发行机制</strong>：总量多少？谁增发？增发给谁？</li><li><strong>代币的分配机制</strong>：初始代币分给谁？团队、投资人、社区各占多少？</li><li><strong>代币的价值捕获</strong>：持有代币能得到什么？有什么用？</li><li><strong>代币的销毁机制</strong>：供应量会减少吗？如何减少？</li></ul><p>一个项目可以技术完美，但代币经济学设计糟糕——结果往往是代币价格归零，项目死亡。<strong>好的代币经济学，是让持币者和项目长期利益一致的激励机制设计。</strong></p><hr><h2 id=二代币的两大类型>二、代币的两大类型</h2><h3 id=类型一实用型代币utility-token>类型一：实用型代币（Utility Token）</h3><p><strong>定义</strong>：持有代币可以获得某种"使用权限"或"服务权益"。</p><p>典型案例：</p><ul><li><strong>ETH（以太坊）</strong>：持有 ETH 可以支付 Gas 费用（网络使用费），Gas 费越高 ETH 需求越大</li><li><strong>UNI（Uniswap）</strong>：持有 UNI 可参与 Uniswap 协议治理投票</li><li><strong>AAVE</strong>：持有 AAVE 可参与 Aave 协议治理，并获得手续费减免</li></ul><p><strong>价值逻辑</strong>：代币的价值来自"使用需求"——用的人越多，需求越大。</p><h3 id=类型二权益型代币security-token--governance-token>类型二：权益型代币（Security Token / Governance Token）</h3><p><strong>定义</strong>：持有代币可获得协议产生的<strong>现金流权益</strong>（类似股票分红）。</p><p>典型案例：</p><ul><li><strong>LDO（Lido）</strong>：持有 LDO 可分享 Lido 质押业务的收入分成</li><li><strong>CRV（Curve）</strong>：长期锁定 CRV 可获得协议手续费分成，并获得更优的交易手续费率</li></ul><p><strong>价值逻辑</strong>：代币类似"股票"，持有=持有协议的部分权益。</p><blockquote><p>⚠️ 区分实用型代币和证券型代币在监管层面极为重要，但实际项目中两者的界限往往模糊。</p></blockquote><hr><h2 id=三代币分配的常见结构>三、代币分配的常见结构</h2><p>一个典型的代币分配（以 Uniswap 为例）：</p><table><thead><tr><th>分配对象</th><th>比例</th><th>解锁机制</th></tr></thead><tbody><tr><td>团队 & 顾问</td><td>17.8%</td><td>4年锁仓，每年线性解锁 25%</td></tr><tr><td>投资者</td><td>15.3%</td><td>通常有 1–2 年锁仓</td></tr><tr><td>社区空投</td><td>4.9%</td><td>一次性分发完毕</td></tr><tr><td>国库（Treasury）</td><td>43%</td><td>社区治理控制，逐步使用</td></tr><tr><td>流动性挖矿</td><td>19%</td><td>随生态发展逐步分配</td></tr></tbody></table><h3 id=解锁机制vesting的重要性>解锁机制（Vesting）的重要性</h3><p><strong>Vesting（代币归属）</strong> 是指代币按时间线性或阶梯式释放的机制。</p><pre tabindex=0><code>典型的 4 年 Vesting + 1 年 cliff：
+- 代币分 4 年释放，每年 25%
+- 第 1 年通常有 cliff（悬崖期），即第一年内看不到任何代币
+</code></pre><p><strong>为什么要这样设计？</strong></p><ul><li>防止团队和早期投资者一次性砸盘</li><li>确保团队长期与项目利益绑定（中途离开=放弃未归属代币）</li><li>保护社区投资者不被短期抛压伤害</li></ul><hr><h2 id=四通胀型-vs-通缩型代币>四、通胀型 vs 通缩型代币</h2><h3 id=通胀型代币-inflationary-token>通胀型代币（ inflationary Token）</h3><p>持续增发，没有上限。</p><p><strong>代表</strong>：ETH（2021 年 EIP-1559 改革前）、很多 DeFi 协议的激励代币（如早期 SUSHI、APE）</p><p><strong>风险</strong>：如果代币增发速度超过需求增长速度，持币者将被稀释，实际购买力下降。</p><pre tabindex=0><code>举例：某 DeFi 协议每天通胀 1% 发放挖矿奖励
+→ 如果 DeFi 收益率每天只有 0.5%
+→ 代币价格将以每天 0.5% 的速度下跌
+→ 矿工抛压 &gt; 买盘 → 死亡螺旋
+</code></pre><p>这正是 2020–2021 年很多"土狗" DeFi 的命运：代币通胀速度远超实际需求，价格归零。</p><h3 id=通缩型代币deflationary-token>通缩型代币（Deflationary Token）</h3><p>通过机制持续减少供应。</p><p><strong>代表</strong>：ETH（EIP-1559 改革后，基础 Gas 费被销毁）、MakerDAO（部分手续费用于回购 DAI）</p><p><strong>EIP-1559 案例详解</strong>：</p><ul><li>2021 年 8 月以太坊伦敦升级引入 EIP-1559</li><li>每笔交易的<strong>基础费（Base Fee）</strong> 被销毁而非发给矿工</li><li>网络繁忙时，ETH 的销毁速度可以超过增发速度</li><li>2021–2023 年部分月份，ETH 成为真正的<strong>通缩资产</strong>（净供应量减少）</li></ul><hr><h2 id=五代币的价值捕获机制>五、代币的价值捕获机制</h2><p>持有代币，为什么它的价值会增长？这是代币经济学最核心的问题。</p><h3 id=机制一手续费捕获fee-capture>机制一：手续费捕获（Fee Capture）</h3><p>协议产生的交易手续费，按比例分配给代币持有者。</p><pre tabindex=0><code>Curve（CRV）模型：
+- 每笔交易收取 0.04% 手续费
+- 50% 手续费归流动性提供者
+- 50% 手续费分配给 veCRV（锁仓 CRV 的持有者）
+</code></pre><p><strong>本质</strong>：代币持有者相当于"协议股东"，享受现金流分配。</p><h3 id=机制二销毁捕获burn-to-mint>机制二：销毁捕获（Burn-to-Mint）</h3><p>代币被销毁以换取某种权益或资产，从而减少流通量。</p><pre tabindex=0><code>BNB：
+- 每季度用利润销毁 BNB
+- BNB 供应量持续减少（理论上限 1 亿枚）
+</code></pre><h3 id=机制三治理价值>机制三：治理价值</h3><p>持有代币 = 持有对协议参数的投票权。当一个协议管理着数十亿美元的资产时，<strong>治理权本身就具有极高的价值</strong>。</p><pre tabindex=0><code>举例：
+- 在 MakerDAO，治理者投票决定抵押品类型、利率参数、Dai 存款利率
+- 控制 MakerDAO = 控制数十亿美元资产的运作规则
+</code></pre><h3 id=机制四质押收益>机制四：质押收益</h3><p>将代币质押在协议中，获取年化收益率（APY）。</p><pre tabindex=0><code>典型场景：
+- 将代币质押在 DEX 流动性池
+- 或在权益证明区块链中质押获取验证奖励
+</code></pre><hr><h2 id=六代币经济学设计的常见陷阱>六、代币经济学设计的常见陷阱</h2><h3 id=陷阱一token-过度稀释>陷阱一：Token 过度稀释</h3><p>大量新项目采用"高通胀代币经济学"：用高 APY 吸引流动性，一旦奖励减少，用户和 TVL 迅速流失。</p><p><strong>案例</strong>：2020 年的 Yearn Finance YFI——总量仅 3 万枚，无通胀，是难得的"代币经济学优等生"。反例是无数高通胀仿盘。</p><h3 id=陷阱二团队代币比例过高>陷阱二：团队代币比例过高</h3><p>如果团队和早期投资人持有 50%+ 的代币，<strong>社区将始终面临巨大的抛压</strong>——每一次价格上涨都是抛售机会。</p><h3 id=陷阱三代币没有实际使用场景>陷阱三：代币没有实际使用场景</h3><p>很多项目发币纯粹是为了"激励用户"，代币除了炒作毫无用途。<strong>一旦挖矿结束，代币价格即失去支撑。</strong></p><h3 id=陷阱四治理被大户劫持>陷阱四：治理被大户劫持</h3><p>理论上"去中心化治理"是民主的，但实际中往往被"巨鲸"（持有大量代币的地址）操控。</p><hr><h2 id=七如何评估一个项目的代币经济学>七、如何评估一个项目的代币经济学？</h2><h3 id=评估清单>评估清单</h3><table><thead><tr><th>维度</th><th>好</th><th>差</th></tr></thead><tbody><tr><td>供应机制</td><td>有上限/有销毁机制</td><td>无限通胀</td></tr><tr><td>团队占比</td><td>&lt; 15%</td><td>> 25%</td></tr><tr><td>归属期</td><td>4年+有 cliff</td><td>立即释放</td></tr><tr><td>代币用途</td><td>治理/分红/质押</td><td>仅有"激励"价值</td></tr><tr><td>通胀率</td><td>&lt; 5%/年</td><td>每天通胀 1%+</td></tr><tr><td>社区持有</td><td>> 50%</td><td>&lt; 30%</td></tr></tbody></table><hr><h2 id=八结语>八、结语</h2><p>代币经济学是加密项目的"基因"。一个 Tokenomics 设计糟糕的项目，无论技术多先进，最终都会因为激励错配而失败。</p><p>对于投资者而言，理解代币的发行曲线、价值捕获机制、团队代币归属计划，是评估加密资产基本面不可或缺的环节。</p><p>对于建设者而言，代币经济学不是"发币时写进白皮书的几行字"，而是从项目诞生第一天起，就需要系统性思考的<strong>激励机制设计</strong>。激励对了，社区会自发推动项目增长；激励错了，Token 可能成为项目失败的原因。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/researcher/10_regulation_trends/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/researcher/08_layer2_scaling/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

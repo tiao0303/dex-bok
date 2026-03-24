@@ -1,0 +1,133 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="权限控制问题：被忽视的合约安全命门
+引言
+在代码安全审计中，权限控制缺陷（Access Control Issues）是最常见、同时也是最容易被忽视的漏洞类型之一。与重入攻击不同，权限控制问题往往不需要复杂的攻击技巧——只需要找到一个没有人调用的公开函数。
+为什么权限控制如此关键
+智能合约的一个重要特点是默认公开。除 private 和 internal 函数外，所有 public 和 external 函数都可能被任何人调用。如果关键操作（如铸造代币、修改参数、暂停合约、转走资金）缺少权限校验，等同于把金库的钥匙挂在门上。
+权限控制漏洞的常见形态
+形态一：缺失权限校验
+最基础的错误：关键函数没有 onlyOwner 或等价修饰符。
+// 有漏洞
+function setFeeRecipient(address _feeRecipient) external {
+    feeRecipient = _feeRecipient;
+}
+
+// 正确
+function setFeeRecipient(address _feeRecipient) external onlyAdmin {
+    feeRecipient = _feeRecipient;
+}
+影响：攻击者可以将费用接收地址改为自己，持续吸走协议收入。
+形态二：权限覆盖不足
+关键参数有权限校验，但只保护了部分修改路径，其他路径同样能修改该参数。
+// setFeeRecipient 有权限
+function setFeeRecipient(address _feeRecipient) external onlyAdmin {
+    feeRecipient = _feeRecipient;
+}
+
+// 但 init() 初始化函数没有权限保护！
+function initialize(address _feeRecipient) public {
+    feeRecipient = _feeRecipient; // 任何人可重新初始化
+}
+形态三：过于宽松的所有权
+// owner() 是公开可读的，但 setOwner() 没有权限保护
+function setOwner(address _newOwner) external {
+    _transferOwnership(_newOwner); // 任何人都能把自己设为 owner
+}
+形态四：Owner 密钥泄露
+即使代码层面权限控制完美，如果 owner 私钥被钓鱼或木马窃取，一切防护形同虚设。"><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/security/04_access_control_issues/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/security/04_access_control_issues/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/security/04_access_control_issues/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/security/04_access_control_issues/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="权限控制问题：被忽视的合约安全命门 引言 在代码安全审计中，权限控制缺陷（Access Control Issues）是最常见、同时也是最容易被忽视的漏洞类型之一。与重入攻击不同，权限控制问题往往不需要复杂的攻击技巧——只需要找到一个没有人调用的公开函数。
+为什么权限控制如此关键 智能合约的一个重要特点是默认公开。除 private 和 internal 函数外，所有 public 和 external 函数都可能被任何人调用。如果关键操作（如铸造代币、修改参数、暂停合约、转走资金）缺少权限校验，等同于把金库的钥匙挂在门上。
+权限控制漏洞的常见形态 形态一：缺失权限校验 最基础的错误：关键函数没有 onlyOwner 或等价修饰符。
+// 有漏洞 function setFeeRecipient(address _feeRecipient) external { feeRecipient = _feeRecipient; } // 正确 function setFeeRecipient(address _feeRecipient) external onlyAdmin { feeRecipient = _feeRecipient; } 影响：攻击者可以将费用接收地址改为自己，持续吸走协议收入。
+形态二：权限覆盖不足 关键参数有权限校验，但只保护了部分修改路径，其他路径同样能修改该参数。
+// setFeeRecipient 有权限 function setFeeRecipient(address _feeRecipient) external onlyAdmin { feeRecipient = _feeRecipient; } // 但 init() 初始化函数没有权限保护！ function initialize(address _feeRecipient) public { feeRecipient = _feeRecipient; // 任何人可重新初始化 } 形态三：过于宽松的所有权 // owner() 是公开可读的，但 setOwner() 没有权限保护 function setOwner(address _newOwner) external { _transferOwnership(_newOwner); // 任何人都能把自己设为 owner } 形态四：Owner 密钥泄露 即使代码层面权限控制完美，如果 owner 私钥被钓鱼或木马窃取，一切防护形同虚设。"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="权限控制问题：被忽视的合约安全命门 引言 在代码安全审计中，权限控制缺陷（Access Control Issues）是最常见、同时也是最容易被忽视的漏洞类型之一。与重入攻击不同，权限控制问题往往不需要复杂的攻击技巧——只需要找到一个没有人调用的公开函数。
+为什么权限控制如此关键 智能合约的一个重要特点是默认公开。除 private 和 internal 函数外，所有 public 和 external 函数都可能被任何人调用。如果关键操作（如铸造代币、修改参数、暂停合约、转走资金）缺少权限校验，等同于把金库的钥匙挂在门上。
+权限控制漏洞的常见形态 形态一：缺失权限校验 最基础的错误：关键函数没有 onlyOwner 或等价修饰符。
+// 有漏洞 function setFeeRecipient(address _feeRecipient) external { feeRecipient = _feeRecipient; } // 正确 function setFeeRecipient(address _feeRecipient) external onlyAdmin { feeRecipient = _feeRecipient; } 影响：攻击者可以将费用接收地址改为自己，持续吸走协议收入。
+形态二：权限覆盖不足 关键参数有权限校验，但只保护了部分修改路径，其他路径同样能修改该参数。
+// setFeeRecipient 有权限 function setFeeRecipient(address _feeRecipient) external onlyAdmin { feeRecipient = _feeRecipient; } // 但 init() 初始化函数没有权限保护！ function initialize(address _feeRecipient) public { feeRecipient = _feeRecipient; // 任何人可重新初始化 } 形态三：过于宽松的所有权 // owner() 是公开可读的，但 setOwner() 没有权限保护 function setOwner(address _newOwner) external { _transferOwnership(_newOwner); // 任何人都能把自己设为 owner } 形态四：Owner 密钥泄露 即使代码层面权限控制完美，如果 owner 私钥被钓鱼或木马窃取，一切防护形同虚设。"><meta itemprop=wordCount content="335"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="权限控制问题：被忽视的合约安全命门 引言 在代码安全审计中，权限控制缺陷（Access Control Issues）是最常见、同时也是最容易被忽视的漏洞类型之一。与重入攻击不同，权限控制问题往往不需要复杂的攻击技巧——只需要找到一个没有人调用的公开函数。
+为什么权限控制如此关键 智能合约的一个重要特点是默认公开。除 private 和 internal 函数外，所有 public 和 external 函数都可能被任何人调用。如果关键操作（如铸造代币、修改参数、暂停合约、转走资金）缺少权限校验，等同于把金库的钥匙挂在门上。
+权限控制漏洞的常见形态 形态一：缺失权限校验 最基础的错误：关键函数没有 onlyOwner 或等价修饰符。
+// 有漏洞 function setFeeRecipient(address _feeRecipient) external { feeRecipient = _feeRecipient; } // 正确 function setFeeRecipient(address _feeRecipient) external onlyAdmin { feeRecipient = _feeRecipient; } 影响：攻击者可以将费用接收地址改为自己，持续吸走协议收入。
+形态二：权限覆盖不足 关键参数有权限校验，但只保护了部分修改路径，其他路径同样能修改该参数。
+// setFeeRecipient 有权限 function setFeeRecipient(address _feeRecipient) external onlyAdmin { feeRecipient = _feeRecipient; } // 但 init() 初始化函数没有权限保护！ function initialize(address _feeRecipient) public { feeRecipient = _feeRecipient; // 任何人可重新初始化 } 形态三：过于宽松的所有权 // owner() 是公开可读的，但 setOwner() 没有权限保护 function setOwner(address _newOwner) external { _transferOwnership(_newOwner); // 任何人都能把自己设为 owner } 形态四：Owner 密钥泄露 即使代码层面权限控制完美，如果 owner 私钥被钓鱼或木马窃取，一切防护形同虚设。"><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-04_access_control_issues"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#引言>引言</a></li><li><a href=#为什么权限控制如此关键>为什么权限控制如此关键</a></li><li><a href=#权限控制漏洞的常见形态>权限控制漏洞的常见形态</a><ul><li><a href=#形态一缺失权限校验>形态一：缺失权限校验</a></li><li><a href=#形态二权限覆盖不足>形态二：权限覆盖不足</a></li><li><a href=#形态三过于宽松的所有权>形态三：过于宽松的所有权</a></li><li><a href=#形态四owner-密钥泄露>形态四：Owner 密钥泄露</a></li></ul></li><li><a href=#真实案例解析>真实案例解析</a><ul><li><a href=#parity-多签钱包事件2017>Parity 多签钱包事件（2017）</a></li><li><a href=#opyn-合约漏洞2020>Opyn 合约漏洞（2020）</a></li><li><a href=#cream-finance-闪电贷攻击2021>Cream Finance 闪电贷攻击（2021）</a></li></ul></li><li><a href=#基于角色的权限控制系统>基于角色的权限控制系统</a></li><li><a href=#time-lock-队列限制权限的滥用>Time-Lock 队列：限制权限的滥用</a></li><li><a href=#多签钱包的最佳实践>多签钱包的最佳实践</a></li><li><a href=#权限控制检查清单>权限控制检查清单</a></li><li><a href=#结语>结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>335 字</span></div></header><h1 id=权限控制问题被忽视的合约安全命门>权限控制问题：被忽视的合约安全命门</h1><h2 id=引言>引言</h2><p>在代码安全审计中，权限控制缺陷（Access Control Issues）是最常见、同时也是最容易被忽视的漏洞类型之一。与重入攻击不同，权限控制问题往往不需要复杂的攻击技巧——只需要找到一个没有人调用的公开函数。</p><h2 id=为什么权限控制如此关键>为什么权限控制如此关键</h2><p>智能合约的一个重要特点是<strong>默认公开</strong>。除 <code>private</code> 和 <code>internal</code> 函数外，所有 <code>public</code> 和 <code>external</code> 函数都可能被任何人调用。如果关键操作（如铸造代币、修改参数、暂停合约、转走资金）缺少权限校验，等同于把金库的钥匙挂在门上。</p><h2 id=权限控制漏洞的常见形态>权限控制漏洞的常见形态</h2><h3 id=形态一缺失权限校验>形态一：缺失权限校验</h3><p>最基础的错误：关键函数没有 <code>onlyOwner</code> 或等价修饰符。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 有漏洞
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setFeeRecipient</span>(<span style=color:#66d9ef>address</span> _feeRecipient) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    feeRecipient <span style=color:#f92672>=</span> _feeRecipient;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 正确
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setFeeRecipient</span>(<span style=color:#66d9ef>address</span> _feeRecipient) <span style=color:#66d9ef>external</span> onlyAdmin {
+</span></span><span style=display:flex><span>    feeRecipient <span style=color:#f92672>=</span> _feeRecipient;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>影响</strong>：攻击者可以将费用接收地址改为自己，持续吸走协议收入。</p><h3 id=形态二权限覆盖不足>形态二：权限覆盖不足</h3><p>关键参数有权限校验，但只保护了部分修改路径，其他路径同样能修改该参数。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// setFeeRecipient 有权限
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setFeeRecipient</span>(<span style=color:#66d9ef>address</span> _feeRecipient) <span style=color:#66d9ef>external</span> onlyAdmin {
+</span></span><span style=display:flex><span>    feeRecipient <span style=color:#f92672>=</span> _feeRecipient;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 但 init() 初始化函数没有权限保护！
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>initialize</span>(<span style=color:#66d9ef>address</span> _feeRecipient) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    feeRecipient <span style=color:#f92672>=</span> _feeRecipient; <span style=color:#75715e>// 任何人可重新初始化
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=形态三过于宽松的所有权>形态三：过于宽松的所有权</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// owner() 是公开可读的，但 setOwner() 没有权限保护
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setOwner</span>(<span style=color:#66d9ef>address</span> _newOwner) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    _transferOwnership(_newOwner); <span style=color:#75715e>// 任何人都能把自己设为 owner
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=形态四owner-密钥泄露>形态四：Owner 密钥泄露</h3><p>即使代码层面权限控制完美，如果 owner 私钥被钓鱼或木马窃取，一切防护形同虚设。</p><h2 id=真实案例解析>真实案例解析</h2><h3 id=parity-多签钱包事件2017>Parity 多签钱包事件（2017）</h3><p>Parity 多签钱包的<strong>初始化函数是公开的</strong>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>initMultiowned</span>(<span style=color:#66d9ef>address</span>[] _owners, <span style=color:#66d9ef>uint</span> _required) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 未检查是否已初始化
+</span></span></span><span style=display:flex><span>    m_numOwners <span style=color:#f92672>=</span> _owners.length <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>;
+</span></span><span style=display:flex><span>    m_owners[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>uint</span>(_owners[<span style=color:#ae81ff>0</span>]);
+</span></span><span style=display:flex><span>    m_owners[<span style=color:#ae81ff>2</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>uint</span>(_owners[<span style=color:#ae81ff>1</span>]);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>攻击者通过调用 <code>initMultiowned()</code> 将自己设为唯一 owner，然后调用 <code>execute()</code> 转走所有资金。共有 3 个钱包约 15 万 ETH 永久丢失。</p><h3 id=opyn-合约漏洞2020>Opyn 合约漏洞（2020）</h3><p>Opyn 的 oUSDC 合约中，<code>removeAsset</code> 函数允许任何人移除资产支持——攻击者利用此漏洞双重提取抵押品，获利约 37 万美元。</p><h3 id=cream-finance-闪电贷攻击2021>Cream Finance 闪电贷攻击（2021）</h3><p>合约的 <code>accrueInterest()</code> 虽然有权限，但攻击者利用 cToken 合约的治理漏洞，通过闪电贷操纵治理投票，获得了调用权限。</p><h2 id=基于角色的权限控制系统>基于角色的权限控制系统</h2><p>现代合约普遍采用<strong>基于角色的访问控制（RBAC）</strong>，而非简单的 owner 模型：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts/access/AccessControl.sol&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>SecureProtocol</span> <span style=color:#66d9ef>is</span> AccessControl {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes32</span> <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>constant</span> ADMIN_ROLE <span style=color:#f92672>=</span> keccak256(<span style=color:#e6db74>&#34;ADMIN_ROLE&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes32</span> <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>constant</span> KEEPER_ROLE <span style=color:#f92672>=</span> keccak256(<span style=color:#e6db74>&#34;KEEPER_ROLE&#34;</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>constructor</span>() {
+</span></span><span style=display:flex><span>        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+</span></span><span style=display:flex><span>        _grantRole(ADMIN_ROLE, msg.sender);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 只有 ADMIN 才能修改核心参数
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setReserveFactor</span>(<span style=color:#66d9ef>uint256</span> _factor) <span style=color:#66d9ef>external</span> onlyRole(ADMIN_ROLE) {
+</span></span><span style=display:flex><span>        reserveFactor <span style=color:#f92672>=</span> _factor;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// KEEPER 可以调用清算函数
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>liquidate</span>(<span style=color:#66d9ef>address</span> borrower) <span style=color:#66d9ef>external</span> onlyRole(KEEPER_ROLE) {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 清算逻辑
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>优势</strong>：</p><ul><li>支持多签管理（多个地址持有同一角色）</li><li>角色可以细粒度分配（不需要把全部权限给一个地址）</li><li>支持权限委托和撤销</li></ul><h2 id=time-lock-队列限制权限的滥用>Time-Lock 队列：限制权限的滥用</h2><p>即使 owner 有权限修改关键参数，也不应该立即生效。Time-Lock（时间锁）机制要求修改在队列中等待一段时间：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Timelock</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>constant</span> MIN_DELAY <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span> <span style=color:#66d9ef>days</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>constant</span> MAX_DELAY <span style=color:#f92672>=</span> <span style=color:#ae81ff>30</span> <span style=color:#66d9ef>days</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>bytes32</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>bool</span>) <span style=color:#66d9ef>public</span> queuedTransactions;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>queueTransaction</span>(
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span> target, 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint</span> value, 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>string</span> calldata signature,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>bytes</span> calldata data,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint</span> eta
+</span></span><span style=display:flex><span>    ) <span style=color:#66d9ef>external</span> onlyOwner <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bytes32</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 将交易加入队列，最短等待 MIN_DELAY
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>bytes32</span> txHash <span style=color:#f92672>=</span> keccak256(abi.encode(target, value, data, eta));
+</span></span><span style=display:flex><span>        queuedTransactions[txHash] <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>        emit QueueTransaction(txHash);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> txHash;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>executeTransaction</span>(<span style=color:#66d9ef>bytes32</span> txHash) <span style=color:#66d9ef>external</span> onlyOwner {
+</span></span><span style=display:flex><span>        require(queuedTransactions[txHash], <span style=color:#e6db74>&#34;Not queued&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 执行已排队的交易
+</span></span></span><span style=display:flex><span>        queuedTransactions[txHash] <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>用户和监控系统可以在等待期内发现异常操作并采取行动（撤离资金、触发紧急治理）。</p><h2 id=多签钱包的最佳实践>多签钱包的最佳实践</h2><p>关键操作应通过多签钱包（如 Gnosis Safe）进行：</p><table><thead><tr><th>操作类型</th><th>推荐权限配置</th></tr></thead><tbody><tr><td>修改核心参数</td><td>3/5 多签，24h timelock</td></tr><tr><td>紧急暂停合约</td><td>2/3 多签，即时生效</td></tr><tr><td>大额资金转出</td><td>4/7 多签，48h timelock</td></tr><tr><td>添加新 KEEPER</td><td>3/5 多签，24h timelock</td></tr></tbody></table><h2 id=权限控制检查清单>权限控制检查清单</h2><ul><li><input disabled type=checkbox> 关键函数是否都有权限修饰符？</li><li><input disabled type=checkbox> 是否区分了不同角色的权限边界？</li><li><input disabled type=checkbox> 是否有初始化保护（防止重复初始化）？</li><li><input disabled type=checkbox> Owner 私钥是否安全存储（硬件钱包 / 多签）？</li><li><input disabled type=checkbox> 是否存在绕过权限检查的隐藏路径？</li><li><input disabled type=checkbox> 关键参数修改是否有 time-lock？</li><li><input disabled type=checkbox> 是否有紧急暂停机制（Emergency Pause）？</li><li><input disabled type=checkbox> 是否定期审计权限配置？</li></ul><h2 id=结语>结语</h2><p>权限控制是合约安全的"底层操作系统"——即使其他逻辑完美无缺，一个权限缺陷就可能让所有安全投入归零。无论是开发者还是审计者，都需要以"最小权限原则"审视每一行合约代码：每个函数是否只被应该调用它的人调用？</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/security/05_flash_loan_attacks/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/security/03_reentrancy_attack/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

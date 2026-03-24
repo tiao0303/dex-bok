@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Claude-Code-Series on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/</link><description>Recent content in Claude-Code-Series on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Tue, 24 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/claude-code-series/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code 交互模式：多轮对话完成复杂任务</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/02_claude_code_interactive_mode/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/02_claude_code_interactive_mode/</guid><description>&lt;h1 id="claude-code-交互模式多轮对话完成复杂任务"&gt;Claude Code 交互模式：多轮对话完成复杂任务&lt;/h1&gt;
+&lt;h2 id="单次模式-vs-交互模式"&gt;单次模式 vs 交互模式&lt;/h2&gt;
+&lt;p&gt;Claude Code 支持两种主要工作模式：&lt;/p&gt;
+&lt;h3 id="单次任务模式"&gt;单次任务模式&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude &lt;span style="color:#e6db74"&gt;&amp;#34;帮我写一个排序算法&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;适合简单、独立的编程任务。&lt;/p&gt;
+&lt;h3 id="交互模式"&gt;交互模式&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 进入交互式对话&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;适合复杂、多步骤的项目开发。&lt;/p&gt;
+&lt;h2 id="多轮对话的艺术"&gt;多轮对话的艺术&lt;/h2&gt;
+&lt;h3 id="1-上下文累积"&gt;1. 上下文累积&lt;/h3&gt;
+&lt;p&gt;Claude Code 会自动维护对话上下文：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;gt; claude
+# 第一轮：创建项目结构
+帮我初始化一个 React + TypeScript 项目
+
+# 第二轮：继续开发
+现在添加一个用户登录页面
+
+# 第三轮：添加功能
+登录成功后跳转到 dashboard
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Claude 知道项目已经初始化、已有哪些文件，所以每次新请求都在正确上下文中执行。&lt;/p&gt;
+&lt;h3 id="2-精确引用文件"&gt;2. 精确引用文件&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;@&lt;/code&gt; 符号精确引用文件：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;帮我改进 @src/utils/auth.ts 里的 token 刷新逻辑
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Claude 会直接读取该文件内容并提出改进建议。&lt;/p&gt;
+&lt;h3 id="3-分步骤执行"&gt;3. 分步骤执行&lt;/h3&gt;
+&lt;p&gt;不要一次让 Claude 做太多事：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 建议：分步骤
+第一步：设计数据库 Schema
+第二步：写 API 路由
+第三步：写前端组件
+第四步：测试集成
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="4-tdd-开发流程"&gt;4. TDD 开发流程&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 1. 先写测试
+帮我为 calculateSwap() 函数写 Foundry 测试，覆盖：
+- 正常路径
+- 余额不足
+- 无授权
+
+# 2. 运行测试确认失败
+forge test
+
+# 3. 实现功能
+帮我实现 calculateSwap() 函数，让测试通过
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="常用交互命令"&gt;常用交互命令&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;命令&lt;/th&gt;
+ &lt;th&gt;作用&lt;/th&gt;
+ &lt;th&gt;示例&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;@file&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;引用文件&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;@src/app.ts&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/web&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;搜索网络&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/web latest Next.js release&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/grep&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;搜索代码&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/grep &amp;quot;TODO&amp;quot; **/*.ts&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/ask&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;简单问题&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/ask React useEffect vs useLayoutEffect&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/review&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;代码审查&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/review @src/auth.ts&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="实战重构一个大文件"&gt;实战：重构一个大文件&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 第一轮：让 Claude 分析
+帮我分析 @src的大型文件.ts 的结构，列出主要函数和依赖关系
+
+# 第二轮：制定拆分计划
+根据分析结果，我要把这个文件拆成 3 个模块：
+- validators/ - 数据验证
+- processors/ - 业务逻辑
+- handlers/ - 外部接口
+
+# 第三轮：执行拆分
+按上述计划拆分，每完成一个模块我来确认
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="最佳实践"&gt;最佳实践&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;每次任务明确&lt;/strong&gt;：不要模糊请求，给出具体输入输出&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;及时纠正&lt;/strong&gt;：Claude 理解错了马上说&amp;quot;不对，应该是&amp;hellip;&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;检查中间结果&lt;/strong&gt;：大任务中途让它暂停，确认后再继续&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;保留上下文&lt;/strong&gt;：重要决策记录在 CLAUDE.md 里&lt;/li&gt;
+&lt;/ol&gt;</description></item><item><title>Claude Code 入门指南：AI 编程第一课，让 AI 替你写代码</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/01_claude_code_getting_started/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/01_claude_code_getting_started/</guid><description>&lt;h1 id="claude-code-入门指南ai-编程第一课让-ai-替你写代码"&gt;Claude Code 入门指南：AI 编程第一课，让 AI 替你写代码&lt;/h1&gt;
+&lt;h2 id="什么是-claude-code"&gt;什么是 Claude Code&lt;/h2&gt;
+&lt;p&gt;Claude Code 是 Anthropic 官方推出的命令行工具，让你直接在终端里调用 Claude 进行编程任务。本质上是一个本地 AI 编程伴侣，支持 macOS、Linux、Windows（WSL）。&lt;/p&gt;
+&lt;p&gt;核心能力：读写文件、执行命令、搜索代码、多轮对话。&lt;/p&gt;
+&lt;h2 id="安装与初始化"&gt;安装与初始化&lt;/h2&gt;
+&lt;p&gt;npm 安装：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;npm install -g @anthropic-ai/claude-code
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude --version
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;认证：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude auth login
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;export ANTHROPIC_API_KEY&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;sk-ant-...&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="第一个项目"&gt;第一个项目&lt;/h2&gt;
+&lt;p&gt;启动会话：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd ~/my-project
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Claude 会分析请求、创建/修改文件、展示改动，等你确认（y/n）。&lt;/p&gt;
+&lt;h2 id="核心命令"&gt;核心命令&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;命令&lt;/th&gt;
+ &lt;th&gt;作用&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;claude&lt;/td&gt;
+ &lt;td&gt;启动交互会话&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;claude &amp;ldquo;任务&amp;rdquo;&lt;/td&gt;
+ &lt;td&gt;单次任务模式&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;claude &amp;ndash;print&lt;/td&gt;
+ &lt;td&gt;非交互模式&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/clear&lt;/td&gt;
+ &lt;td&gt;清空对话&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/compact&lt;/td&gt;
+ &lt;td&gt;压缩上下文&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/review&lt;/td&gt;
+ &lt;td&gt;审查当前文件&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/test&lt;/td&gt;
+ &lt;td&gt;运行测试&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="与-git-集成"&gt;与 Git 集成&lt;/h2&gt;
+&lt;p&gt;Claude Code 与 Git 无缝集成，可以自动生成 commit message：&lt;/p&gt;</description></item><item><title>Claude Code 大仓库导航：让 AI 深度理解你的代码库</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/03_claude_code_repo_navigation/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/03_claude_code_repo_navigation/</guid><description>&lt;h1 id="claude-code-大仓库导航让-ai-深度理解你的代码库"&gt;Claude Code 大仓库导航：让 AI 深度理解你的代码库&lt;/h1&gt;
+&lt;h2 id="面对大仓库的挑战"&gt;面对大仓库的挑战&lt;/h2&gt;
+&lt;p&gt;当你接手一个数万行的代码库时，Claude Code 是最好的导航工具。&lt;/p&gt;
+&lt;h2 id="文件理解"&gt;文件理解&lt;/h2&gt;
+&lt;h3 id="快速了解项目结构"&gt;快速了解项目结构&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;claude
+帮我了解这个项目的整体结构，重点关注：
+1. 入口文件在哪里
+2. 主要模块有哪些
+3. 配置文件在哪里
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="深度理解单个文件"&gt;深度理解单个文件&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;读取 @src/core/Exchange.sol 并解释：
+- 这个合约的核心数据存储结构
+- 主要的外部调用接口
+- 安全相关的设计
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="代码搜索"&gt;代码搜索&lt;/h2&gt;
+&lt;h3 id="grep-搜索"&gt;Grep 搜索&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;帮我搜索所有调用了 Uniswap V3 Quoter 的地方，
+输出每个调用的文件位置、行号和上下文
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="语义搜索"&gt;语义搜索&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;找出所有&amp;#34;授权转账&amp;#34;相关的代码（approve + transferFrom），
+标注出可能的安全风险点
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="跨文件追踪"&gt;跨文件追踪&lt;/h2&gt;
+&lt;h3 id="追踪数据流"&gt;追踪数据流&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;追踪一笔 USDT 转账的完整路径：
+从用户点击 Swap 开始，到合约最终执行
+经过哪些文件？哪些函数？
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="理解依赖关系"&gt;理解依赖关系&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;帮我画出 @src/core/ 目录下各合约的依赖关系图，
+用文字描述即可
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="安全审查"&gt;安全审查&lt;/h2&gt;
+&lt;h3 id="常用审查模式"&gt;常用审查模式&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;对这个目录 @contracts/security/ 做全面安全审查：
+1. 重入攻击风险
+2. 整数溢出/下溢
+3. 授权绕过
+4. 逻辑错误
+
+对每个问题，说明：文件位置、严重程度、修复建议
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="特定漏洞检查"&gt;特定漏洞检查&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;检查所有 external/public 函数是否有：
+- 非零地址检查
+- 授权检查
+- 余额边界检查
+- reentrancy guard
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="性能分析"&gt;性能分析&lt;/h2&gt;
+&lt;h3 id="gas-优化"&gt;Gas 优化&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;分析 @contracts/SwapAggregator.sol 的 gas 消耗：
+1. 找出最贵的 5 个操作
+2. 提出具体优化方案
+3. 估算每个优化能节省多少 gas
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="实战案例"&gt;实战案例&lt;/h2&gt;
+&lt;h3 id="defi-聚合器代码审查"&gt;DeFi 聚合器代码审查&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;项目路径：~/defi-aggregator
+
+任务：
+1. 理解架构：用户如何发起一笔 Swap，路径是怎样的
+2. 找出风险点：哪些地方可能被 MEV 机器人攻击
+3. 给出安全清单：上线前必须修复的问题
+
+输出格式：
+## 架构理解
+[文字描述]
+
+## 风险点
+| 位置 | 风险 | 严重度 | 建议 |
+|------|------|--------|------|
+
+## 上线前检查清单
+- [ ] ...
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="命令速查"&gt;命令速查&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;需求&lt;/th&gt;
+ &lt;th&gt;命令&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;了解结构&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;claude &amp;quot;分析项目结构&amp;quot;&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;搜索代码&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/grep &amp;quot;pattern&amp;quot; **/*.sol&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;读文件&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;cat @file&lt;/code&gt; 或直接引用&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;查依赖&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;claude &amp;quot;追踪 X 的调用链&amp;quot;&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;安全审查&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/security-review @path&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Gas 分析&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/gas-profile @file&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;</description></item><item><title>Claude Code 自动化与自定义：把 AI 变成你的专属开发助手</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/04_claude_code_automation/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/04_claude_code_automation/</guid><description>&lt;h1 id="claude-code-自动化与自定义把-ai-变成你的专属开发助手"&gt;Claude Code 自动化与自定义：把 AI 变成你的专属开发助手&lt;/h1&gt;
+&lt;h2 id="claudemd项目级上下文"&gt;CLAUDE.md：项目级上下文&lt;/h2&gt;
+&lt;p&gt;在项目根目录创建 &lt;code&gt;CLAUDE.md&lt;/code&gt;，定义项目的技术栈、规范和工作流程。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;# CLAUDE.md
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 项目概述
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;这是一个 Uniswap V3 风格的 DEX 合约项目，使用 Foundry 开发。
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 技术栈
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; Solidity ^0.8.20
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; Foundry (forge/cast/chisel)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; TypeScript + Hardhat (前端)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 代码规范
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 所有 external 函数必须有 NatSpec 注释
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 安全函数必须使用 SafeMath 或 0.8+ 的内置检查
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 测试覆盖率必须 &amp;gt; 90%
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 常用命令
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge build`&lt;/span&gt; - 编译
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge test`&lt;/span&gt; - 运行测试
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge coverage`&lt;/span&gt; - 覆盖率
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge script Deploy.s.sol`&lt;/span&gt; - 部署
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 项目结构
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`contracts/`&lt;/span&gt; - 合约源码
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`test/`&lt;/span&gt; - 测试文件
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`script/`&lt;/span&gt; - 部署脚本
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`src/`&lt;/span&gt; - 前端源码
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Claude Code 会自动读取 CLAUDE.md，在整个对话中保持一致上下文。&lt;/p&gt;</description></item><item><title>Skill 写作深度调研：如何构建真正好用的 AI 插件</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/05_skill_writing_research/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/05_skill_writing_research/</guid><description>&lt;h1 id="skill-写作深度调研如何构建真正好用的-ai-插件"&gt;Skill 写作深度调研：如何构建真正好用的 AI 插件&lt;/h1&gt;
+&lt;h2 id="什么是-skill"&gt;什么是 Skill&lt;/h2&gt;
+&lt;p&gt;Skill 是 AI 智能体的&amp;quot;插件系统&amp;quot;——把专业领域的知识、工作流程和工具封装成可复用的模块。OpenClaw 的 Skill 本质上是一个目录，包含：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;skill-name/
+├── SKILL.md (必需) # 触发条件和执行指南
+├── scripts/ # 可执行脚本（Python/Bash 等）
+├── references/ # 参考文档（按需加载）
+└── assets/ # 静态资源（模板、图标等）
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Skill 让 AI 不再是通用模型，而是能胜任特定专业任务的专家。&lt;/p&gt;
+&lt;h2 id="为什么-skill-如此重要"&gt;为什么 Skill 如此重要&lt;/h2&gt;
+&lt;p&gt;模型本身再强，也无法凭空知道：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;你的内部 API 接口和认证方式&lt;/li&gt;
+&lt;li&gt;公司特有的代码规范和业务逻辑&lt;/li&gt;
+&lt;li&gt;需要特定序列操作的复杂工作流&lt;/li&gt;
+&lt;li&gt;特定工具的调用方式和错误处理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Skill 就是填补这个缺口的机制。把&amp;quot;只有你知道&amp;quot;的知识注入 AI 的执行上下文。&lt;/p&gt;
+&lt;h2 id="skill-的核心设计原则"&gt;Skill 的核心设计原则&lt;/h2&gt;
+&lt;h3 id="原则-1越简洁越好"&gt;原则 1：越简洁越好&lt;/h3&gt;
+&lt;p&gt;Context window 是公共资源。Skill 和所有内容共享有限的上下文空间：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;系统提示词&lt;/li&gt;
+&lt;li&gt;对话历史&lt;/li&gt;
+&lt;li&gt;其他 Skill 的元数据&lt;/li&gt;
+&lt;li&gt;用户的实际请求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;每个 Skill 应当只提供 AI 真正不知道的内容。&lt;/strong&gt; 每写一段话都要问自己：AI 真的需要这个解释吗？这段文字值得花多少 token？&lt;/p&gt;</description></item></channel></rss>

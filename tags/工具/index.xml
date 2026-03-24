@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>工具 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E5%B7%A5%E5%85%B7/</link><description>Recent content in 工具 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Mon, 23 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/</guid><description>&lt;h1 id="openclaw-skills-插件系统实战从零构建你的第一个-skill"&gt;OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / Skills / 插件 / 实战&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="什么是-skills"&gt;什么是 Skills&lt;/h2&gt;
+&lt;p&gt;Skills 是 OpenClaw 的&lt;strong&gt;扩展工具层&lt;/strong&gt;，它让 AI Agent 能够执行具体的外部操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生成图片 → 调用 &lt;code&gt;image-generation&lt;/code&gt; Skill&lt;/li&gt;
+&lt;li&gt;发飞书消息 → 调用 &lt;code&gt;feishu-doc&lt;/code&gt; Skill&lt;/li&gt;
+&lt;li&gt;搜索 GitHub → 调用 &lt;code&gt;github&lt;/code&gt; Skill&lt;/li&gt;
+&lt;li&gt;发送邮件 → 调用 &lt;code&gt;gog&lt;/code&gt; Skill&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;本质上，Skill 就是一个&lt;strong&gt;封装好的命令行工具&lt;/strong&gt;，AI Agent 通过标准化接口调用它。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="skills-的标准结构"&gt;Skills 的标准结构&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;~/.openclaw/workspace/skills/
+└── my-skill/
+ ├── SKILL.md # 技能说明文档（AI 会读取）
+ ├── scripts/ # 可执行脚本
+ │ └── run.sh
+ └── references/ # 参考文档
+ └── examples.md
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="skillmd-的标准格式"&gt;SKILL.md 的标准格式&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;name: my-skill
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;description: 技能的简短描述，激活关键词
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;# My Skill
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 激活场景
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;当用户提到以下内容时使用本技能：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 生成图片
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 画一张图
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; AI 画图
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 工作流程
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;1.&lt;/span&gt; 理解需求
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;2.&lt;/span&gt; 调用脚本
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;3.&lt;/span&gt; 返回结果
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 使用方式
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 基本用法
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;```bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python3 my_skill.py --param value
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="示例"&gt;示例&lt;/h2&gt;
+&lt;p&gt;python3 my_skill.py &amp;ndash;prompt &amp;ldquo;一只猫&amp;rdquo; &amp;ndash;output ~/Downloads/cat.png&lt;/p&gt;</description></item><item><title>OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/01_openclaw_getting_started/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/01_openclaw_getting_started/</guid><description>&lt;h1 id="openclaw-入门指南自托管-ai-网关让任何聊天应用都变成你的私人助手"&gt;OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 工具 / 入门&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="为什么需要-openclaw"&gt;为什么需要 OpenClaw&lt;/h2&gt;
+&lt;p&gt;在 AI 时代，我们每天在不同的聊天应用中切换：Telegram 处理工作、Discord 参与社区、WhatsApp 联系家人。但 AI 助手呢？ChatGPT 在网页里，Claude 在单独窗口，Copilot 在 VS Code 里。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;问题&lt;/strong&gt;：AI 助手和你的日常聊天工具是割裂的。&lt;/p&gt;
+&lt;p&gt;OpenClaw 解决的就是这个问题：它是一个&lt;strong&gt;自托管网关&lt;/strong&gt;，桥接你的聊天应用（Telegram、Discord、WhatsApp、飞书等）和 AI 智能体，让你在任何一个常用聊天软件里，都能召唤你的私人 AI 助手。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="什么是-openclaw"&gt;什么是 OpenClaw&lt;/h2&gt;
+&lt;h3 id="核心定义"&gt;核心定义&lt;/h3&gt;
+&lt;p&gt;OpenClaw 是一个运行在你本地机器（或服务器）上的&lt;strong&gt;网关进程&lt;/strong&gt;，它同时连接多个聊天平台和多个 AI 模型/智能体。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;你的手机/电脑
+ ├── Telegram ──┐
+ ├── Discord ──┼──▶ OpenClaw Gateway ──▶ AI Agent (Claude/GPT/MiniMax...)
+ ├── 飞书 ──┤ │
+ └── WhatsApp ──┘ ▼
+ 本地文件系统
+ (你的数据)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="关键特性"&gt;关键特性&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;特性&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;自托管&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;数据留在你自己的机器上，不经过第三方服务器&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;多渠道&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;同时支持 Telegram、Discord、WhatsApp、飞书、iMessage 等&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;多智能体&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;可以运行多个专业角色（研究员、架构师、开发者等）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;插件生态&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;支持 Skills 扩展，可自定义工作流&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;跨平台&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;macOS、Linux、树莓派都能跑&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="5-分钟快速上手"&gt;5 分钟快速上手&lt;/h2&gt;
+&lt;h3 id="第一步安装"&gt;第一步：安装&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;npm install -g openclaw
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二步启动网关"&gt;第二步：启动网关&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;openclaw gateway start
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第三步配置聊天渠道"&gt;第三步：配置聊天渠道&lt;/h3&gt;
+&lt;p&gt;以 Telegram 为例：&lt;/p&gt;</description></item><item><title>OpenClaw 安全实践：自托管数据控制与权限管理</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/05_openclaw_local_deployment/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/05_openclaw_local_deployment/</guid><description>&lt;h1 id="openclaw-安全实践自托管数据控制与权限管理"&gt;OpenClaw 安全实践：自托管数据控制与权限管理&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 安全 / 隐私 / 深度&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="自托管的核心价值你的数据你做主"&gt;自托管的核心价值：你的数据你做主&lt;/h2&gt;
+&lt;p&gt;很多人问我：为什么不用 ChatGPT？答案很简单：&lt;strong&gt;数据控制&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;用第三方 AI 服务，你的对话历史、文件、偏好都会被服务商存储和分析。OpenClaw 的自托管模式，让所有数据都留在你自己的机器上——这是它与 SaaS AI 工具最本质的区别。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="数据安全的多层防护"&gt;数据安全的多层防护&lt;/h2&gt;
+&lt;h3 id="第一层本地存储"&gt;第一层：本地存储&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;~/.openclaw/
+├── agents/ # Agent 工作区
+│ ├── main/
+│ ├── researcher/
+│ └── developer/
+├── credentials/ # 加密存储的凭证
+├── workspace/ # 项目文件
+└── venv/ # Python 虚拟环境
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;关键原则&lt;/strong&gt;：所有文件都在本地，只有 AI API 调用走网络。&lt;/p&gt;
+&lt;h3 id="第二层凭证隔离"&gt;第二层：凭证隔离&lt;/h3&gt;
+&lt;p&gt;API Keys 和 Bot Tokens 存在 &lt;code&gt;~/.openclaw/credentials/&lt;/code&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;~/.openclaw/credentials/
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;├── feishu-main-allowFrom.json &lt;span style="color:#75715e"&gt;# 飞书凭证（只允许特定用户）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;├── telegram-allowFrom.json &lt;span style="color:#75715e"&gt;# Telegram 凭证&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└── .env &lt;span style="color:#75715e"&gt;# API Keys（不提交 git）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这些文件权限设置为 &lt;code&gt;600&lt;/code&gt;，防止其他用户读取：&lt;/p&gt;</description></item><item><title>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/02_openclaw_architecture/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/02_openclaw_architecture/</guid><description>&lt;h1 id="openclaw-架构解析gatewayagentchannel-三层架构深度剖析"&gt;OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 架构 / 深度&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="为什么理解架构很重要"&gt;为什么理解架构很重要&lt;/h2&gt;
+&lt;p&gt;很多用户把 OpenClaw 当作&amp;quot;飞书/Telegram 接入 AI&amp;quot;的简单工具。但真正理解它的架构后，你会发现它本质上是一个&lt;strong&gt;本地 AI 智能体运行平台&lt;/strong&gt;——有调度器、有工作区隔离、有多渠道分发。&lt;/p&gt;
+&lt;p&gt;理解架构，才能用好 OpenClaw 的高级特性（多智能体、Skills、cron 定时任务等）。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="整体架构"&gt;整体架构&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌─────────────────────────────────────────────────────────────┐
+│ OpenClaw Gateway │
+│ │
+│ ┌──────────────┐ ┌─────────────┐ ┌────────────┐ │
+│ │ Channel │ │ Agent │ │ Skills │ │
+│ │ (消息收发) │ ──▶ │ (智能体) │ ──▶ │ (工具) │ │
+│ └──────────────┘ └─────────────┘ └────────────┘ │
+│ │ │ │ │
+│ └───────────────────┴────────────────────┘ │
+│ │ │
+│ ┌────────▼────────┐ │
+│ │ Message Bus │ │
+│ │ (消息总线) │ │
+│ └─────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="第一层channel渠道"&gt;第一层：Channel（渠道）&lt;/h2&gt;
+&lt;p&gt;Channel 负责&lt;strong&gt;与外部聊天平台通信&lt;/strong&gt;。&lt;/p&gt;</description></item><item><title>用 OpenClaw 构建多智能体团队：角色划分与任务协调实战</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/03_openclaw_multi_agent/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/03_openclaw_multi_agent/</guid><description>&lt;h1 id="用-openclaw-构建多智能体团队角色划分与任务协调实战"&gt;用 OpenClaw 构建多智能体团队：角色划分与任务协调实战&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 多智能体 / 实战&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="从单兵作战到团队协作"&gt;从单兵作战到团队协作&lt;/h2&gt;
+&lt;p&gt;用 AI 写代码不难，但用 AI 做复杂项目（调研 → 架构 → 开发 → 评审 → 决策）就复杂了。一个通用的 AI 无法同时精通所有领域。&lt;/p&gt;
+&lt;p&gt;OpenClaw 的解决方案是：&lt;strong&gt;多智能体团队&lt;/strong&gt;——每个 Agent 专注一个角色，协同完成复杂任务。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="团队角色设计"&gt;团队角色设计&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; ┌─────────────────────────────┐
+ │ main (协调员) │
+ │ 接收任务 → 分析 → 分派 → 汇总 │
+ └──────────┬──────────────────┘
+ │
+ ┌──────────────┼──────────────────────┐
+ ▼ ▼ ▼
+ researcher architect developer
+ (调研员) (架构师) (开发者)
+ │ │ │
+ ▼ ▼ ▼
+ reviewer frontend security
+ (评审) (前端) (安全)
+ │
+ ▼ decider
+ (决策者)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="各角色职责"&gt;各角色职责&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;角色&lt;/th&gt;
+ &lt;th&gt;输入&lt;/th&gt;
+ &lt;th&gt;输出&lt;/th&gt;
+ &lt;th&gt;特点&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;researcher&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;问题/背景&lt;/td&gt;
+ &lt;td&gt;调研报告、市场分析&lt;/td&gt;
+ &lt;td&gt;广度优先，信息挖掘&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;architect&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;需求&lt;/td&gt;
+ &lt;td&gt;架构设计、技术选型&lt;/td&gt;
+ &lt;td&gt;系统性、前瞻性&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;developer&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;设计稿&lt;/td&gt;
+ &lt;td&gt;代码实现&lt;/td&gt;
+ &lt;td&gt;可执行、可测试&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;frontend&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;需求&lt;/td&gt;
+ &lt;td&gt;UI设计方案、组件规范&lt;/td&gt;
+ &lt;td&gt;用户视角&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;reviewer&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;方案/代码&lt;/td&gt;
+ &lt;td&gt;评审报告、改进建议&lt;/td&gt;
+ &lt;td&gt;批判性思维&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;security&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;方案/代码&lt;/td&gt;
+ &lt;td&gt;风险矩阵、安全建议&lt;/td&gt;
+ &lt;td&gt;底线思维&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;decider&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;各方意见&lt;/td&gt;
+ &lt;td&gt;最终决策&lt;/td&gt;
+ &lt;td&gt;权衡利弊、拍板&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="任务分配流程"&gt;任务分配流程&lt;/h2&gt;
+&lt;h3 id="案例dex-聚合器项目"&gt;案例：DEX 聚合器项目&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户（阿白）
+ │
+ ▼ 发起项目请求
+main (协调员)
+ │
+ ├── 解析任务 → 需要：调研 + 架构 + 开发 + 前端 + 安全 + 评审 + 决策
+ │
+ ▼ 并行派发（5路同时）
+ ┌─────────┬──────────┬─────────┬────────┬────────┐
+ ▼ ▼ ▼ ▼ ▼ │
+researcher architect developer frontend security │
+ │ │ │ │ │ │
+ │ │ │ │ │ │
+ │ │ │ │ │ │
+ └─────────┴──────────┴─────────┴────────┴────────┘
+ │
+ ▼ 各自输出报告
+ reviewer (综合评审)
+ │
+ ▼ 评审结论
+ decider (最终决策)
+ │
+ ▼
+ 汇总报告 → 发给用户
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实际执行命令"&gt;实际执行命令&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# main 协调员收到 阿白 的请求后&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;main: @architect @researcher @developer @frontend @security 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 基于DEX聚合器项目，各自输出方案
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 各 Agent 并行工作&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;researcher → 输出 RESEARCH.md（竞品分析）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;architect → 输出 ARCHITECTURE.md（系统架构）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;developer → 输出 DEVELOP.md（合约设计）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;frontend → 输出 FRONTEND.md（UI设计）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security → 输出 SECURITY.md（风险矩阵）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 评审汇总&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;reviewer → 输出 REVIEW.md（综合评审）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 最终决策&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;decider → 输出 DECISION.md（Go/No-Go）
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="工作区隔离设计"&gt;工作区隔离设计&lt;/h2&gt;
+&lt;p&gt;每个 Agent 的工作区完全独立：&lt;/p&gt;</description></item><item><title>链上数据分析实战 - 像侦探一样追踪资金</title><link>https://tiao0303.github.io/dex-bok/posts/t4_advanced/20_onchain_analysis_tutorial/</link><pubDate>Thu, 19 Mar 2026 00:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4_advanced/20_onchain_analysis_tutorial/</guid><description>&lt;h2 id="为什么需要链上分析"&gt;为什么需要链上分析&lt;/h2&gt;
+&lt;h3 id="区块链的优势"&gt;区块链的优势&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 所有交易公开透明&lt;/li&gt;
+&lt;li&gt;✅ 数据不可篡改&lt;/li&gt;
+&lt;li&gt;✅ 实时可查&lt;/li&gt;
+&lt;li&gt;✅ 无信息不对称&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="能发现什么"&gt;能发现什么&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;信息&lt;/th&gt;
+ &lt;th&gt;价值&lt;/th&gt;
+ &lt;th&gt;例子&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;大户动向&lt;/td&gt;
+ &lt;td&gt;提前布局&lt;/td&gt;
+ &lt;td&gt;鲸鱼买入→跟投&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;项目方行为&lt;/td&gt;
+ &lt;td&gt;识别风险&lt;/td&gt;
+ &lt;td&gt;团队转账→警惕&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;资金流向&lt;/td&gt;
+ &lt;td&gt;发现趋势&lt;/td&gt;
+ &lt;td&gt;流入某协议→机会&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;聪明钱追踪&lt;/td&gt;
+ &lt;td&gt;抄作业&lt;/td&gt;
+ &lt;td&gt;KOL 持仓→参考&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="工具一etherscan-"&gt;工具一：Etherscan ⭐⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="基础功能"&gt;基础功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;查询交易记录&lt;/li&gt;
+&lt;li&gt;查看持币地址&lt;/li&gt;
+&lt;li&gt;监控大额转账&lt;/li&gt;
+&lt;li&gt;合约代码审计&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="实战技巧"&gt;实战技巧&lt;/h3&gt;
+&lt;h4 id="1-追踪大户钱包"&gt;1. 追踪大户钱包&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;步骤：
+1. 找到知名大户地址（如 V 神、a16z）
+2. 添加到 Watch List
+3. 设置邮件提醒
+4. 定期查看持仓变化
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="2-发现聪明钱"&gt;2. 发现聪明钱&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;方法：
+1. 找到早期买入某币的地址
+2. 查看该地址其他持仓
+3. 发现潜在机会
+4. 验证后跟投
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="3-监控项目方"&gt;3. 监控项目方&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;关注：
+- 团队钱包转账
+- 国库资金动向
+- 解锁代币流向
+- 异常大额转出
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="高级功能"&gt;高级功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;API 接口&lt;/strong&gt;：自动化监控&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;标签系统&lt;/strong&gt;：识别地址身份&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gas Tracker&lt;/strong&gt;：优化交易时机&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="工具二dune-analytics-"&gt;工具二：Dune Analytics ⭐⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="什么是-dune"&gt;什么是 Dune&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;链上数据 SQL 查询平台&lt;/li&gt;
+&lt;li&gt;社区创建 Dashboard&lt;/li&gt;
+&lt;li&gt;免费使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="核心功能"&gt;核心功能&lt;/h3&gt;
+&lt;h4 id="1-查询数据"&gt;1. 查询数据&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;-- 示例：查询 Uniswap V3 日交易量
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;SELECT&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; DATE_TRUNC(&lt;span style="color:#e6db74"&gt;&amp;#39;day&amp;#39;&lt;/span&gt;, evt_block_time) &lt;span style="color:#66d9ef"&gt;AS&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;day&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;SUM&lt;/span&gt;(amount_usd) &lt;span style="color:#66d9ef"&gt;AS&lt;/span&gt; volume
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;FROM&lt;/span&gt; uniswap_v3_ethereum.evt_swap
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;GROUP&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;BY&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;ORDER&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;BY&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;DESC&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;LIMIT&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;30&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="2-创建-dashboard"&gt;2. 创建 Dashboard&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;可视化展示&lt;/li&gt;
+&lt;li&gt;实时更新&lt;/li&gt;
+&lt;li&gt;分享链接&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="3-订阅警报"&gt;3. 订阅警报&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;价格突破&lt;/li&gt;
+&lt;li&gt;大额交易&lt;/li&gt;
+&lt;li&gt;TVL 变化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="热门-dashboard-推荐"&gt;热门 Dashboard 推荐&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;Dashboard&lt;/th&gt;
+ &lt;th&gt;用途&lt;/th&gt;
+ &lt;th&gt;链接&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Uniswap V3 Overview&lt;/td&gt;
+ &lt;td&gt;DEX 数据&lt;/td&gt;
+ &lt;td&gt;dune.com/uniswap&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;NFT Marketplace&lt;/td&gt;
+ &lt;td&gt;NFT 交易&lt;/td&gt;
+ &lt;td&gt;dune.com/nft&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;L2 Beat&lt;/td&gt;
+ &lt;td&gt;Layer2 数据&lt;/td&gt;
+ &lt;td&gt;dune.com/l2beat&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="工具三nansen-"&gt;工具三：Nansen ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="核心优势"&gt;核心优势&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;地址标签库（2 亿+）&lt;/li&gt;
+&lt;li&gt;聪明钱追踪&lt;/li&gt;
+&lt;li&gt;机构持仓分析&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="功能详解"&gt;功能详解&lt;/h3&gt;
+&lt;h4 id="1-smart-money"&gt;1. Smart Money&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;追踪对象：
+- 顶级基金（a16z、Paradigm）
+- 知名 KOL
+- 早期投资者
+- 成功交易者
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="2-token-god-mode"&gt;2. Token God Mode&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;查看：
+- 持有人分布
+- 大户增减仓
+- 交易所流入流出
+- 持仓盈亏
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="3-nft-god-mode"&gt;3. NFT God Mode&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;分析：
+- 稀有度排名
+- 大户收藏
+- 地板价趋势
+- 交易量变化
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="价格"&gt;价格&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;计划&lt;/th&gt;
+ &lt;th&gt;价格&lt;/th&gt;
+ &lt;th&gt;适合人群&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Free&lt;/td&gt;
+ &lt;td&gt;$0&lt;/td&gt;
+ &lt;td&gt;新手体验&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Standard&lt;/td&gt;
+ &lt;td&gt;$199/月&lt;/td&gt;
+ &lt;td&gt;个人投资者&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;VIP&lt;/td&gt;
+ &lt;td&gt;$999/月&lt;/td&gt;
+ &lt;td&gt;专业机构&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="工具四debank-"&gt;工具四：DeBank ⭐⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="核心功能-1"&gt;核心功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;多链资产总览&lt;/li&gt;
+&lt;li&gt;DeFi 持仓追踪&lt;/li&gt;
+&lt;li&gt;历史交易记录&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="使用场景"&gt;使用场景&lt;/h3&gt;
+&lt;h4 id="1-查看自己资产"&gt;1. 查看自己资产&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;支持链：
+- Ethereum
+- BSC
+- Polygon
+- Arbitrum
+- Optimism
+- 等 10+ 链
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="2-追踪大户"&gt;2. 追踪大户&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;步骤：
+1. 搜索大户地址
+2. 查看完整持仓
+3. 分析投资策略
+4. 学习参考
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="3-协议分析"&gt;3. 协议分析&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;数据：
+- TVL 趋势
+- 用户数
+- 交易量
+- 收入
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="优点"&gt;优点&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 完全免费&lt;/li&gt;
+&lt;li&gt;✅ 界面友好&lt;/li&gt;
+&lt;li&gt;✅ 多链支持&lt;/li&gt;
+&lt;li&gt;✅ 实时更新&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="工具五token-terminal-"&gt;工具五：Token Terminal ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="专注方向"&gt;专注方向&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;协议收入分析&lt;/li&gt;
+&lt;li&gt;财务指标对比&lt;/li&gt;
+&lt;li&gt;估值模型&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="核心指标"&gt;核心指标&lt;/h3&gt;
+&lt;h4 id="1-收入指标"&gt;1. 收入指标&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;指标&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;th&gt;用途&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Revenue&lt;/td&gt;
+ &lt;td&gt;协议收入&lt;/td&gt;
+ &lt;td&gt;盈利能力&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Fees&lt;/td&gt;
+ &lt;td&gt;用户付费&lt;/td&gt;
+ &lt;td&gt;需求强度&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Token Emission&lt;/td&gt;
+ &lt;td&gt;代币释放&lt;/td&gt;
+ &lt;td&gt;通胀压力&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="2-估值指标"&gt;2. 估值指标&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;指标&lt;/th&gt;
+ &lt;th&gt;公式&lt;/th&gt;
+ &lt;th&gt;用途&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;P/S&lt;/td&gt;
+ &lt;td&gt;市值/收入&lt;/td&gt;
+ &lt;td&gt;估值高低&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;P/E&lt;/td&gt;
+ &lt;td&gt;市值/利润&lt;/td&gt;
+ &lt;td&gt;回本周期&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;FDV/TVL&lt;/td&gt;
+ &lt;td&gt;全流通/锁仓&lt;/td&gt;
+ &lt;td&gt;泡沫程度&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="实战应用"&gt;实战应用&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;筛选低估协议：
+1. P/S &amp;lt; 5
+2. 收入增长 &amp;gt;50%
+3. TVL 稳定增长
+4. 代币释放少
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="工具六arkham-intelligence-"&gt;工具六：Arkham Intelligence ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="特色功能"&gt;特色功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;实体标注（交易所、基金、项目方）&lt;/li&gt;
+&lt;li&gt;资金流向可视化&lt;/li&gt;
+&lt;li&gt;大额警报&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="实战案例"&gt;实战案例&lt;/h3&gt;
+&lt;h4 id="追踪交易所"&gt;追踪交易所&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;监控：
+- Binance 热钱包
+- Coinbase 机构钱包
+- FTX（暴雷前可提前发现）
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="发现异常"&gt;发现异常&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;警报条件：
+- 单笔&amp;gt;$1000 万转账
+- 项目方钱包异动
+- 交易所大额流入（可能砸盘）
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="我的分析工作流"&gt;我的分析工作流&lt;/h2&gt;
+&lt;h3 id="每日例行30-分钟"&gt;每日例行（30 分钟）&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. DeBank 查看持仓变化 (5min)
+2. Etherscan 检查警报 (5min)
+3. Dune 浏览热门 Dashboard (10min)
+4. Twitter 关注链上 KOL (10min)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="每周深度2-小时"&gt;每周深度（2 小时）&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. Nansen 分析聪明钱动向 (30min)
+2. Token Terminal 更新估值表 (30min)
+3. 撰写分析笔记 (30min)
+4. 调整持仓 (30min)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="每月复盘4-小时"&gt;每月复盘（4 小时）&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 统计收益率
+2. 分析成功/失败案例
+3. 优化策略
+4. 制定下月计划
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="实战案例发现投资机会"&gt;实战案例：发现投资机会&lt;/h2&gt;
+&lt;h3 id="案例一提前发现-arbitrum-空投"&gt;案例一：提前发现 Arbitrum 空投&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;线索：
+1. Nansen 显示聪明钱大量使用 Arbitrum
+2. Dune 数据显示 TVL 快速增长
+3. 官方 Twitter 暗示空投
+
+行动：
+- 桥接资金到 Arbitrum
+- 使用主流 DEX
+- 获得$5000 空投
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="案例二识别-luna-风险"&gt;案例二：识别 Luna 风险&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;警报信号：
+1. 项目方钱包大额转账
+2. UST 池子不平衡
+3. 聪明钱提前出逃
+
+行动：
+- 提前卖出 LUNA
+- 兑换成 USDC
+- 避免归零损失
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="数据分析模板"&gt;数据分析模板&lt;/h2&gt;
+&lt;h3 id="项目调研清单"&gt;项目调研清单&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;基础信息：
+□ 团队背景
+□ 投资人
+□ 代币分配
+□ 解锁时间表
+
+链上数据：
+□ TVL 趋势
+□ 用户数增长
+□ 交易量
+□ 收入
+
+持仓分析：
+□ 大户持仓变化
+□ 聪明钱动向
+□ 交易所流向
+□ 社交媒体情绪
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="总结"&gt;总结&lt;/h2&gt;
+&lt;p&gt;链上分析核心：&lt;/p&gt;</description></item><item><title>Top 50 DEX 池子排行</title><link>https://tiao0303.github.io/dex-bok/tools/pool-rankings/</link><pubDate>Wed, 18 Mar 2026 21:15:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/tools/pool-rankings/</guid><description>&lt;h2 id="数据来源"&gt;数据来源&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;源&lt;/strong&gt;：Uniswap V3 Subgraph&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;更新频率&lt;/strong&gt;：每 30 分钟&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最后更新&lt;/strong&gt;：2026-03-18 21:17&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="top-10-池子"&gt;Top 10 池子&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;排名&lt;/th&gt;
+ &lt;th&gt;交易对&lt;/th&gt;
+ &lt;th&gt;TVL (USD)&lt;/th&gt;
+ &lt;th&gt;24h 成交量&lt;/th&gt;
+ &lt;th&gt;费率&lt;/th&gt;
+ &lt;th&gt;APY&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;1&lt;/td&gt;
+ &lt;td&gt;USDC/WETH&lt;/td&gt;
+ &lt;td&gt;$287,650,000&lt;/td&gt;
+ &lt;td&gt;$156,780,000&lt;/td&gt;
+ &lt;td&gt;0.05%&lt;/td&gt;
+ &lt;td&gt;18.2%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;2&lt;/td&gt;
+ &lt;td&gt;USDC/USDT&lt;/td&gt;
+ &lt;td&gt;$245,320,000&lt;/td&gt;
+ &lt;td&gt;$89,450,000&lt;/td&gt;
+ &lt;td&gt;0.01%&lt;/td&gt;
+ &lt;td&gt;5.8%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;3&lt;/td&gt;
+ &lt;td&gt;WBTC/WETH&lt;/td&gt;
+ &lt;td&gt;$178,900,000&lt;/td&gt;
+ &lt;td&gt;$67,230,000&lt;/td&gt;
+ &lt;td&gt;0.30%&lt;/td&gt;
+ &lt;td&gt;22.1%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;4&lt;/td&gt;
+ &lt;td&gt;DAI/USDC&lt;/td&gt;
+ &lt;td&gt;$134,560,000&lt;/td&gt;
+ &lt;td&gt;$45,120,000&lt;/td&gt;
+ &lt;td&gt;0.01%&lt;/td&gt;
+ &lt;td&gt;4.2%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;5&lt;/td&gt;
+ &lt;td&gt;WETH/USDT&lt;/td&gt;
+ &lt;td&gt;$98,750,000&lt;/td&gt;
+ &lt;td&gt;$78,340,000&lt;/td&gt;
+ &lt;td&gt;0.05%&lt;/td&gt;
+ &lt;td&gt;16.5%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;6&lt;/td&gt;
+ &lt;td&gt;LINK/WETH&lt;/td&gt;
+ &lt;td&gt;$87,230,000&lt;/td&gt;
+ &lt;td&gt;$34,560,000&lt;/td&gt;
+ &lt;td&gt;0.30%&lt;/td&gt;
+ &lt;td&gt;19.8%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;7&lt;/td&gt;
+ &lt;td&gt;UNI/WETH&lt;/td&gt;
+ &lt;td&gt;$76,450,000&lt;/td&gt;
+ &lt;td&gt;$28,900,000&lt;/td&gt;
+ &lt;td&gt;0.30%&lt;/td&gt;
+ &lt;td&gt;21.3%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;8&lt;/td&gt;
+ &lt;td&gt;PEPE/WETH&lt;/td&gt;
+ &lt;td&gt;$65,780,000&lt;/td&gt;
+ &lt;td&gt;$89,120,000&lt;/td&gt;
+ &lt;td&gt;1.00%&lt;/td&gt;
+ &lt;td&gt;45.6%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;9&lt;/td&gt;
+ &lt;td&gt;WETH/USDC&lt;/td&gt;
+ &lt;td&gt;$54,320,000&lt;/td&gt;
+ &lt;td&gt;$23,450,000&lt;/td&gt;
+ &lt;td&gt;0.05%&lt;/td&gt;
+ &lt;td&gt;15.2%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;10&lt;/td&gt;
+ &lt;td&gt;FRAX/USDC&lt;/td&gt;
+ &lt;td&gt;$48,900,000&lt;/td&gt;
+ &lt;td&gt;$12,340,000&lt;/td&gt;
+ &lt;td&gt;0.01%&lt;/td&gt;
+ &lt;td&gt;3.8%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="筛选建议"&gt;筛选建议&lt;/h2&gt;
+&lt;h3 id="稳健型-lp"&gt;稳健型 LP&lt;/h3&gt;
+&lt;p&gt;选择：稳定币对（USDC/USDT、DAI/USDC）&lt;/p&gt;</description></item></channel></rss>

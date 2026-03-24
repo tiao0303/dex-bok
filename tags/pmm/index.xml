@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>PMM on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/pmm/</link><description>Recent content in PMM on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Fri, 20 Mar 2026 19:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/pmm/index.xml" rel="self" type="application/rss+xml"/><item><title>DODO 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/11-dodo/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/11-dodo/</guid><description>&lt;h1 id="dodo-深度分析"&gt;DODO 深度分析&lt;/h1&gt;
+&lt;h2 id="项目简介"&gt;项目简介&lt;/h2&gt;
+&lt;p&gt;DODO 是由 New搊学实验室（Cycle Labs）开发的新一代链上流动性协议，于 2020 年 8 月在以太坊主网上线。DODO 团队成员主要来自加密货币行业，创始人 Diane Dai 是前 CoinMarketCap 产品负责人。DODO 的核心定位是「下一代链上流动性基础设施」，主打 PMM（Proactive Market Maker，主动做市商）算法，试图解决传统 AMM 的无常损失、资本效率低下和滑点问题。DODO 已部署至以太坊、BSC、Polygon、Arbitrum、Avalanche 等多条链，并持续迭代其 v2、v3 版本。&lt;/p&gt;
+&lt;h2 id="核心机制"&gt;核心机制&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;PMM（Proactive Market Maker）算法：&lt;/strong&gt; DODO 的核心创新在于 PMM 机制，这是对传统 AMM 的重要改进。PMM 的核心思想是引入预言机（Oracle）价格作为参考，让资金池的价格自动向预言机价格靠拢，从而在正常市场条件下大幅减少无常损失。&lt;/p&gt;
+&lt;p&gt;PMM 的数学公式为：y = b × (1 - (x / (k × P_o))^α)，其中 P_o 是预言机价格，k 是流动性参数，α 控制价格弹性。与恒定乘积 AMM（Uniswap）相比，PMM 在价格偏离预言机时会以更陡峭的曲线进行交易，使价格快速回归合理区间。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;DODO v2 — 面向做市商的专业工具：&lt;/strong&gt; v2 版本引入了面向专业做市商的基础设施，包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;DODO Private Pool：&lt;/strong&gt; 允许项目方或专业做市商创建完全自定义的流动性池，支持设置交易手续费率（0%~1% 任意）、流动性参数和代币组合&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DODO Classic（恒定乘积池）：&lt;/strong&gt; 兼容标准 AMM 逻辑，保留了对 Uniswap 用户的兼容性&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DODO Vending Machine：&lt;/strong&gt; 项目方一键发币并创建初始流动性的工具，降低了项目启动门槛&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;DODO v3 — 众筹建池（Crowdpooling）：&lt;/strong&gt; v3 版本引入了 Crowdpooling 机制，实现了零滑点、无风险溢价的新资产发行方式。项目方设置起始价格和募集规模，用户以该价格无滑点认购，募集结束后形成初始流动性。这一机制结合了 ICO 的公平性和 DEX 的去中心化特点。&lt;/p&gt;</description></item></channel></rss>

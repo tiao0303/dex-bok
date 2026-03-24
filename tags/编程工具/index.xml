@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>编程工具 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/</link><description>Recent content in 编程工具 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Tue, 24 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code 入门指南：AI 编程第一课，让 AI 替你写代码</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/01_claude_code_getting_started/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/01_claude_code_getting_started/</guid><description>&lt;h1 id="claude-code-入门指南ai-编程第一课让-ai-替你写代码"&gt;Claude Code 入门指南：AI 编程第一课，让 AI 替你写代码&lt;/h1&gt;
+&lt;h2 id="什么是-claude-code"&gt;什么是 Claude Code&lt;/h2&gt;
+&lt;p&gt;Claude Code 是 Anthropic 官方推出的命令行工具，让你直接在终端里调用 Claude 进行编程任务。本质上是一个本地 AI 编程伴侣，支持 macOS、Linux、Windows（WSL）。&lt;/p&gt;
+&lt;p&gt;核心能力：读写文件、执行命令、搜索代码、多轮对话。&lt;/p&gt;
+&lt;h2 id="安装与初始化"&gt;安装与初始化&lt;/h2&gt;
+&lt;p&gt;npm 安装：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;npm install -g @anthropic-ai/claude-code
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude --version
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;认证：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude auth login
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;export ANTHROPIC_API_KEY&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;sk-ant-...&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="第一个项目"&gt;第一个项目&lt;/h2&gt;
+&lt;p&gt;启动会话：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd ~/my-project
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Claude 会分析请求、创建/修改文件、展示改动，等你确认（y/n）。&lt;/p&gt;
+&lt;h2 id="核心命令"&gt;核心命令&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;命令&lt;/th&gt;
+ &lt;th&gt;作用&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;claude&lt;/td&gt;
+ &lt;td&gt;启动交互会话&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;claude &amp;ldquo;任务&amp;rdquo;&lt;/td&gt;
+ &lt;td&gt;单次任务模式&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;claude &amp;ndash;print&lt;/td&gt;
+ &lt;td&gt;非交互模式&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/clear&lt;/td&gt;
+ &lt;td&gt;清空对话&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/compact&lt;/td&gt;
+ &lt;td&gt;压缩上下文&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/review&lt;/td&gt;
+ &lt;td&gt;审查当前文件&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/test&lt;/td&gt;
+ &lt;td&gt;运行测试&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="与-git-集成"&gt;与 Git 集成&lt;/h2&gt;
+&lt;p&gt;Claude Code 与 Git 无缝集成，可以自动生成 commit message：&lt;/p&gt;</description></item></channel></rss>

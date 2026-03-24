@@ -1,0 +1,170 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='React / Vue 框架入门：现代 DApp 的界面骨架
+
+难度：🌱 入门 | 字数：约 1000 字 | 预计阅读：6 分钟
+
+前言
+当你的 HTML/CSS/JS 基础足够扎实，下一步就是拥抱现代前端框架。在 Web3 生态中，React 是绝对主流——无论是 Uniswap、OpenSea 还是 Aave，前端清一色基于 React 构建。本文以 React 为重点，Vue 为对比，帮你快速选定方向并入门。
+
+一、为什么 Web3 DApp 普遍选择 React？
+
+生态丰富：ethers.js、wagmi、RainbowKit、web3modal 等主流 Web3 库都以 React 为一等公民
+组件化天然契合：DApp 的 UI 由"连接按钮"、&ldquo;余额卡片&rdquo;、&ldquo;交易列表"等独立组件构成，React 的组件模型非常适合
+社区活跃：遇到问题时有大量现成解决方案
+
+Vue 也不是不能用——Compound 早期的界面就基于 Vue。但整体而言，React 的招聘需求和插件生态更占优势。
+
+二、React 核心概念快速梳理
+2.1 JSX：模板与逻辑共存
+JSX 让你在 JavaScript 中写类 HTML 语法，组件的 UI 与逻辑内聚在一起：
+import { useState, useEffect } from &#39;react&#39;;
+
+function WalletBalance({ address }) {
+  const [balance, setBalance] = useState(&#39;0&#39;);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // 模拟链上数据获取
+    const fetchBalance = async () => {
+      setLoading(true);
+      const res = await getBalance(address);
+      setBalance(res);
+      setLoading(false);
+    };
+    fetchBalance();
+  }, [address]);
+
+  return (
+    <div className="balance-card">
+      <h3>账户余额</h3>
+      {loading ? (
+        <p className="loading">加载中...</p>
+      ) : (
+        <p className="balance">{balance} ETH</p>
+      )}
+    </div>
+  );
+}
+2.2 Hooks：函数组件的状态管理
+useState 管理组件内部状态，useEffect 处理副作用（链上数据获取、事件监听），useContext 跨组件共享全局状态（如钱包连接状态）：'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/frontend/03_react_vue_getting_started/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/frontend/03_react_vue_getting_started/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/frontend/03_react_vue_getting_started/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/frontend/03_react_vue_getting_started/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='React / Vue 框架入门：现代 DApp 的界面骨架 难度：🌱 入门 | 字数：约 1000 字 | 预计阅读：6 分钟
+前言 当你的 HTML/CSS/JS 基础足够扎实，下一步就是拥抱现代前端框架。在 Web3 生态中，React 是绝对主流——无论是 Uniswap、OpenSea 还是 Aave，前端清一色基于 React 构建。本文以 React 为重点，Vue 为对比，帮你快速选定方向并入门。
+一、为什么 Web3 DApp 普遍选择 React？ 生态丰富：ethers.js、wagmi、RainbowKit、web3modal 等主流 Web3 库都以 React 为一等公民 组件化天然契合：DApp 的 UI 由"连接按钮"、“余额卡片”、“交易列表"等独立组件构成，React 的组件模型非常适合 社区活跃：遇到问题时有大量现成解决方案 Vue 也不是不能用——Compound 早期的界面就基于 Vue。但整体而言，React 的招聘需求和插件生态更占优势。
+二、React 核心概念快速梳理 2.1 JSX：模板与逻辑共存 JSX 让你在 JavaScript 中写类 HTML 语法，组件的 UI 与逻辑内聚在一起：
+import { useState, useEffect } from &#39;react&#39;; function WalletBalance({ address }) { const [balance, setBalance] = useState(&#39;0&#39;); const [loading, setLoading] = useState(true); useEffect(() => { // 模拟链上数据获取 const fetchBalance = async () => { setLoading(true); const res = await getBalance(address); setBalance(res); setLoading(false); }; fetchBalance(); }, [address]); return ( <div className="balance-card"> <h3>账户余额</h3> {loading ? ( <p className="loading">加载中...</p> ) : ( <p className="balance">{balance} ETH</p> )} </div> ); } 2.2 Hooks：函数组件的状态管理 useState 管理组件内部状态，useEffect 处理副作用（链上数据获取、事件监听），useContext 跨组件共享全局状态（如钱包连接状态）：'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='React / Vue 框架入门：现代 DApp 的界面骨架 难度：🌱 入门 | 字数：约 1000 字 | 预计阅读：6 分钟
+前言 当你的 HTML/CSS/JS 基础足够扎实，下一步就是拥抱现代前端框架。在 Web3 生态中，React 是绝对主流——无论是 Uniswap、OpenSea 还是 Aave，前端清一色基于 React 构建。本文以 React 为重点，Vue 为对比，帮你快速选定方向并入门。
+一、为什么 Web3 DApp 普遍选择 React？ 生态丰富：ethers.js、wagmi、RainbowKit、web3modal 等主流 Web3 库都以 React 为一等公民 组件化天然契合：DApp 的 UI 由"连接按钮"、“余额卡片”、“交易列表"等独立组件构成，React 的组件模型非常适合 社区活跃：遇到问题时有大量现成解决方案 Vue 也不是不能用——Compound 早期的界面就基于 Vue。但整体而言，React 的招聘需求和插件生态更占优势。
+二、React 核心概念快速梳理 2.1 JSX：模板与逻辑共存 JSX 让你在 JavaScript 中写类 HTML 语法，组件的 UI 与逻辑内聚在一起：
+import { useState, useEffect } from &#39;react&#39;; function WalletBalance({ address }) { const [balance, setBalance] = useState(&#39;0&#39;); const [loading, setLoading] = useState(true); useEffect(() => { // 模拟链上数据获取 const fetchBalance = async () => { setLoading(true); const res = await getBalance(address); setBalance(res); setLoading(false); }; fetchBalance(); }, [address]); return ( <div className="balance-card"> <h3>账户余额</h3> {loading ? ( <p className="loading">加载中...</p> ) : ( <p className="balance">{balance} ETH</p> )} </div> ); } 2.2 Hooks：函数组件的状态管理 useState 管理组件内部状态，useEffect 处理副作用（链上数据获取、事件监听），useContext 跨组件共享全局状态（如钱包连接状态）：'><meta itemprop=wordCount content="438"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='React / Vue 框架入门：现代 DApp 的界面骨架 难度：🌱 入门 | 字数：约 1000 字 | 预计阅读：6 分钟
+前言 当你的 HTML/CSS/JS 基础足够扎实，下一步就是拥抱现代前端框架。在 Web3 生态中，React 是绝对主流——无论是 Uniswap、OpenSea 还是 Aave，前端清一色基于 React 构建。本文以 React 为重点，Vue 为对比，帮你快速选定方向并入门。
+一、为什么 Web3 DApp 普遍选择 React？ 生态丰富：ethers.js、wagmi、RainbowKit、web3modal 等主流 Web3 库都以 React 为一等公民 组件化天然契合：DApp 的 UI 由"连接按钮"、“余额卡片”、“交易列表"等独立组件构成，React 的组件模型非常适合 社区活跃：遇到问题时有大量现成解决方案 Vue 也不是不能用——Compound 早期的界面就基于 Vue。但整体而言，React 的招聘需求和插件生态更占优势。
+二、React 核心概念快速梳理 2.1 JSX：模板与逻辑共存 JSX 让你在 JavaScript 中写类 HTML 语法，组件的 UI 与逻辑内聚在一起：
+import { useState, useEffect } from &#39;react&#39;; function WalletBalance({ address }) { const [balance, setBalance] = useState(&#39;0&#39;); const [loading, setLoading] = useState(true); useEffect(() => { // 模拟链上数据获取 const fetchBalance = async () => { setLoading(true); const res = await getBalance(address); setBalance(res); setLoading(false); }; fetchBalance(); }, [address]); return ( <div className="balance-card"> <h3>账户余额</h3> {loading ? ( <p className="loading">加载中...</p> ) : ( <p className="balance">{balance} ETH</p> )} </div> ); } 2.2 Hooks：函数组件的状态管理 useState 管理组件内部状态，useEffect 处理副作用（链上数据获取、事件监听），useContext 跨组件共享全局状态（如钱包连接状态）：'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-03_react_vue_getting_started"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#一为什么-web3-dapp-普遍选择-react>一、为什么 Web3 DApp 普遍选择 React？</a></li><li><a href=#二react-核心概念快速梳理>二、React 核心概念快速梳理</a><ul><li><a href=#21-jsx模板与逻辑共存>2.1 JSX：模板与逻辑共存</a></li><li><a href=#22-hooks函数组件的状态管理>2.2 Hooks：函数组件的状态管理</a></li><li><a href=#23-条件渲染与列表渲染>2.3 条件渲染与列表渲染</a></li></ul></li><li><a href=#三项目初始化vite--react--typescript>三、项目初始化：Vite + React + TypeScript</a></li><li><a href=#四vue-3-概览另一个可行选择>四、Vue 3 概览：另一个可行选择</a></li><li><a href=#五学习建议>五、学习建议</a></li><li><a href=#小结>小结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>438 字</span></div></header><h1 id=react--vue-框架入门现代-dapp-的界面骨架>React / Vue 框架入门：现代 DApp 的界面骨架</h1><blockquote><p>难度：🌱 入门 | 字数：约 1000 字 | 预计阅读：6 分钟</p></blockquote><h2 id=前言>前言</h2><p>当你的 HTML/CSS/JS 基础足够扎实，下一步就是拥抱现代前端框架。在 Web3 生态中，<strong>React 是绝对主流</strong>——无论是 Uniswap、OpenSea 还是 Aave，前端清一色基于 React 构建。本文以 React 为重点，Vue 为对比，帮你快速选定方向并入门。</p><hr><h2 id=一为什么-web3-dapp-普遍选择-react>一、为什么 Web3 DApp 普遍选择 React？</h2><ol><li><strong>生态丰富</strong>：ethers.js、wagmi、RainbowKit、web3modal 等主流 Web3 库都以 React 为一等公民</li><li><strong>组件化天然契合</strong>：DApp 的 UI 由"连接按钮"、&ldquo;余额卡片&rdquo;、&ldquo;交易列表"等独立组件构成，React 的组件模型非常适合</li><li><strong>社区活跃</strong>：遇到问题时有大量现成解决方案</li></ol><p>Vue 也不是不能用——Compound 早期的界面就基于 Vue。但整体而言，React 的招聘需求和插件生态更占优势。</p><hr><h2 id=二react-核心概念快速梳理>二、React 核心概念快速梳理</h2><h3 id=21-jsx模板与逻辑共存>2.1 JSX：模板与逻辑共存</h3><p>JSX 让你在 JavaScript 中写类 HTML 语法，组件的 UI 与逻辑内聚在一起：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>useState</span>, <span style=color:#a6e22e>useEffect</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;react&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>WalletBalance</span>({ <span style=color:#a6e22e>address</span> }) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>balance</span>, <span style=color:#a6e22e>setBalance</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>(<span style=color:#e6db74>&#39;0&#39;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>loading</span>, <span style=color:#a6e22e>setLoading</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>(<span style=color:#66d9ef>true</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>useEffect</span>(() =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 模拟链上数据获取
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>fetchBalance</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>async</span> () =&gt; {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>setLoading</span>(<span style=color:#66d9ef>true</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>res</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>getBalance</span>(<span style=color:#a6e22e>address</span>);
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>setBalance</span>(<span style=color:#a6e22e>res</span>);
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>setLoading</span>(<span style=color:#66d9ef>false</span>);
+</span></span><span style=display:flex><span>    };
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fetchBalance</span>();
+</span></span><span style=display:flex><span>  }, [<span style=color:#a6e22e>address</span>]);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>className</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;balance-card&#34;</span>&gt;
+</span></span><span style=display:flex><span>      &lt;<span style=color:#f92672>h3</span>&gt;<span style=color:#a6e22e>账户余额</span>&lt;/<span style=color:#f92672>h3</span>&gt;
+</span></span><span style=display:flex><span>      {<span style=color:#a6e22e>loading</span> <span style=color:#f92672>?</span> (
+</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>p</span> <span style=color:#a6e22e>className</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;loading&#34;</span>&gt;<span style=color:#a6e22e>加载中</span>...&lt;/<span style=color:#f92672>p</span>&gt;
+</span></span><span style=display:flex><span>      ) <span style=color:#f92672>:</span> (
+</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>p</span> <span style=color:#a6e22e>className</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;balance&#34;</span>&gt;{<span style=color:#a6e22e>balance</span>} <span style=color:#a6e22e>ETH</span>&lt;/<span style=color:#f92672>p</span>&gt;
+</span></span><span style=display:flex><span>      )}
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=22-hooks函数组件的状态管理>2.2 Hooks：函数组件的状态管理</h3><p><code>useState</code> 管理组件内部状态，<code>useEffect</code> 处理副作用（链上数据获取、事件监听），<code>useContext</code> 跨组件共享全局状态（如钱包连接状态）：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#75715e>// 创建 Web3 上下文
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>createContext</span>, <span style=color:#a6e22e>useContext</span>, <span style=color:#a6e22e>useState</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;react&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>Web3Context</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>createContext</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>Web3Provider</span>({ <span style=color:#a6e22e>children</span> }) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>account</span>, <span style=color:#a6e22e>setAccount</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>(<span style=color:#66d9ef>null</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>connect</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>async</span> () =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>accounts</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> window.<span style=color:#a6e22e>ethereum</span>.<span style=color:#a6e22e>request</span>({
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;eth_requestAccounts&#39;</span>,
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>setAccount</span>(<span style=color:#a6e22e>accounts</span>[<span style=color:#ae81ff>0</span>]);
+</span></span><span style=display:flex><span>  };
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>Web3Context.Provider</span> <span style=color:#a6e22e>value</span><span style=color:#f92672>=</span>{{ <span style=color:#a6e22e>account</span>, <span style=color:#a6e22e>connect</span> }}&gt;
+</span></span><span style=display:flex><span>      {<span style=color:#a6e22e>children</span>}
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>Web3Context.Provider</span>&gt;
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>useWeb3</span> <span style=color:#f92672>=</span> () =&gt; <span style=color:#a6e22e>useContext</span>(<span style=color:#a6e22e>Web3Context</span>);
+</span></span></code></pre></div><h3 id=23-条件渲染与列表渲染>2.3 条件渲染与列表渲染</h3><p>DApp 中大量场景需要根据状态渲染不同 UI：连接前 vs 连接后、有余额 vs 无余额、加载中 vs 加载完成：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>DAppUI</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>account</span>, <span style=color:#a6e22e>connect</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>useWeb3</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>      {<span style=color:#f92672>!</span><span style=color:#a6e22e>account</span> <span style=color:#f92672>?</span> (
+</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>button</span> <span style=color:#a6e22e>onClick</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>connect</span>}&gt;<span style=color:#a6e22e>连接钱包</span>&lt;/<span style=color:#f92672>button</span>&gt;
+</span></span><span style=display:flex><span>      ) <span style=color:#f92672>:</span> (
+</span></span><span style=display:flex><span>        &lt;&gt;
+</span></span><span style=display:flex><span>          &lt;<span style=color:#f92672>p</span>&gt;<span style=color:#a6e22e>地址</span><span style=color:#f92672>:</span> {<span style=color:#a6e22e>account</span>}&lt;/<span style=color:#f92672>p</span>&gt;
+</span></span><span style=display:flex><span>          &lt;<span style=color:#f92672>WalletBalance</span> <span style=color:#a6e22e>address</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>account</span>} /&gt;
+</span></span><span style=display:flex><span>          &lt;<span style=color:#f92672>TransactionHistory</span> <span style=color:#a6e22e>address</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>account</span>} /&gt;
+</span></span><span style=display:flex><span>        &lt;/&gt;
+</span></span><span style=display:flex><span>      )}
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=三项目初始化vite--react--typescript>三、项目初始化：Vite + React + TypeScript</h2><p>现代 React 项目推荐使用 <strong>Vite</strong> 作为构建工具，它比 Create React App 快得多：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 创建项目</span>
+</span></span><span style=display:flex><span>npm create vite@latest my-dapp -- --template react-ts
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>cd my-dapp
+</span></span><span style=display:flex><span>npm install
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 安装 Web3 相关依赖</span>
+</span></span><span style=display:flex><span>npm install ethers wagmi viem @tanstack/react-query
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>npm run dev
+</span></span></code></pre></div><p>目录结构参考：</p><pre tabindex=0><code>src/
+├── components/        # UI 组件
+│   ├── ConnectButton.tsx
+│   └── BalanceCard.tsx
+├── context/           # 全局状态
+│   └── Web3Context.tsx
+├── hooks/             # 自定义 Hooks
+│   └── useTokenBalance.ts
+├── App.tsx
+└── main.tsx
+</code></pre><hr><h2 id=四vue-3-概览另一个可行选择>四、Vue 3 概览：另一个可行选择</h2><p>如果你对 Vue 更加熟悉，或者所在团队技术栈是 Vue，也可以用于 Web3 开发：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm create vite@latest my-vue-dapp -- --template vue-ts
+</span></span><span style=display:flex><span>npm install ethers vue-dapp
+</span></span></code></pre></div><p>Vue 3 的 Composition API 提供了类似 React Hooks 的逻辑组织方式：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-vue data-lang=vue><span style=display:flex><span>&lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>setup</span>&gt;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>ref</span>, <span style=color:#a6e22e>onMounted</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;vue&#39;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>useEthers</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;vue-dapp&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>address</span>, <span style=color:#a6e22e>balance</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>useEthers</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>connect</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>async</span> () =&gt; {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>await</span> <span style=color:#a6e22e>connectWallet</span>();
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>&lt;/<span style=color:#f92672>script</span>&gt;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>template</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#f92672>button</span> <span style=color:#f92672>@click</span><span style=color:#e6db74>=&#34;connect&#34;</span>&gt;<span style=color:#a6e22e>连接</span> <span style=color:#a6e22e>MetaMask</span>&lt;/<span style=color:#f92672>button</span>&gt;
+</span></span><span style=display:flex><span>  &lt;<span style=color:#f92672>p</span> <span style=color:#f92672>v-if</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;address&#34;</span>&gt;<span style=color:#a6e22e>地址</span><span style=color:#f92672>:</span> {{ <span style=color:#a6e22e>address</span> }}&lt;/<span style=color:#f92672>p</span>&gt;
+</span></span><span style=display:flex><span>&lt;/<span style=color:#f92672>template</span>&gt;
+</span></span></code></pre></div><p>Vue-dapp 是 Vue 生态中较为成熟的 Web3 集成库，不过总体插件丰富度仍不及 React 生态。</p><hr><h2 id=五学习建议>五、学习建议</h2><table><thead><tr><th>建议</th><th>说明</th></tr></thead><tbody><tr><td>先做 Todo List</td><td>不要急着学 Web3，先用 React/Vue 做一个完整的任务管理应用</td></tr><tr><td>深入理解 Hooks</td><td><code>useEffect</code> 的依赖数组、<code>useState</code> 的异步更新是高频踩坑点</td></tr><tr><td>学 TypeScript</td><td>Web3 项目几乎必用 TS，建议从 interface 和泛型开始</td></tr><tr><td>看源码</td><td>尝试阅读 wagmi 的源码或 API 设计，理解其工程思想</td></tr></tbody></table><hr><h2 id=小结>小结</h2><p>React 是 Web3 前端开发的首选框架，其组件化、Hooks 生态和状态管理模式与 DApp 天然契合。下一篇文章我们将正式进入 Web3.js / Ethers.js 的世界，学习如何从 JavaScript 与区块链节点通信。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/04_web3_ethers_getting_started/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/02_html_css_js_basics/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

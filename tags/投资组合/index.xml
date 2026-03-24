@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>投资组合 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%8A%95%E8%B5%84%E7%BB%84%E5%90%88/</link><description>Recent content in 投资组合 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 18 Mar 2026 14:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%8A%95%E8%B5%84%E7%BB%84%E5%90%88/index.xml" rel="self" type="application/rss+xml"/><item><title>T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平</title><link>https://tiao0303.github.io/dex-bok/posts/t1_beginner/t1_05_advanced_tips/</link><pubDate>Wed, 18 Mar 2026 14:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1_beginner/t1_05_advanced_tips/</guid><description>&lt;h1 id="t1-新手入门-05---进阶技巧提升你的-dex-交易水平"&gt;T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平&lt;/h1&gt;
+&lt;p&gt;恭喜你完成 T1 新手入门系列！这是最后一篇，我们将学习进阶技巧。&lt;/p&gt;
+&lt;h2 id="限价单交易"&gt;限价单交易&lt;/h2&gt;
+&lt;h3 id="什么是限价单"&gt;什么是限价单？&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;市价单&lt;/strong&gt;：立即以当前价格成交。
+&lt;strong&gt;限价单&lt;/strong&gt;：设定目标价格，达到时自动成交。&lt;/p&gt;
+&lt;h3 id="为什么需要限价单"&gt;为什么需要限价单？&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;不需要时刻盯盘&lt;/li&gt;
+&lt;li&gt;避免情绪化交易&lt;/li&gt;
+&lt;li&gt;可以设置止盈止损&lt;/li&gt;
+&lt;li&gt;更好的价格执行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="支持限价单的-dex"&gt;支持限价单的 DEX&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;DEX&lt;/th&gt;
+ &lt;th&gt;链&lt;/th&gt;
+ &lt;th&gt;特点&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Uniswap V3&lt;/td&gt;
+ &lt;td&gt;Ethereum&lt;/td&gt;
+ &lt;td&gt;集中流动性&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;1inch&lt;/td&gt;
+ &lt;td&gt;多链&lt;/td&gt;
+ &lt;td&gt;聚合器，支持限价&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Matcha&lt;/td&gt;
+ &lt;td&gt;多链&lt;/td&gt;
+ &lt;td&gt;0x 协议，高级订单&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Jupiter&lt;/td&gt;
+ &lt;td&gt;Solana&lt;/td&gt;
+ &lt;td&gt;限价单 + DCA&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;PancakeSwap&lt;/td&gt;
+ &lt;td&gt;BSC&lt;/td&gt;
+ &lt;td&gt;V3 支持限价&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="设置限价单步骤以-1inch-为例"&gt;设置限价单步骤（以 1inch 为例）&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;打开 &lt;a href="https://app.1inch.io"&gt;https://app.1inch.io&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;连接钱包&lt;/li&gt;
+&lt;li&gt;选择交易对&lt;/li&gt;
+&lt;li&gt;点击&amp;quot;Limit Order&amp;quot;&lt;/li&gt;
+&lt;li&gt;设置：
+&lt;ul&gt;
+&lt;li&gt;价格：你希望的成交价&lt;/li&gt;
+&lt;li&gt;数量：交易金额&lt;/li&gt;
+&lt;li&gt;有效期：订单过期时间&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;签名订单（不需要 Gas）&lt;/li&gt;
+&lt;li&gt;等待成交&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="限价单策略"&gt;限价单策略&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;买入策略&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;当前价格：$100
+目标买入价：$80（-20%）
+设置：当价格跌到$80 时自动买入
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;止盈策略&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;持仓成本：$100
+目标卖出价：$150（+50%）
+设置：当价格涨到$150 时自动卖出
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;止损策略&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;持仓成本：$100
+止损价：$80（-20%）
+设置：当价格跌到$80 时自动卖出
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="dca定投策略"&gt;DCA（定投策略）&lt;/h2&gt;
+&lt;h3 id="什么是-dca"&gt;什么是 DCA？&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Dollar-Cost Averaging&lt;/strong&gt;：定期定额投资。&lt;/p&gt;</description></item></channel></rss>

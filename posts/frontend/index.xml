@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>frontend on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/posts/frontend/</link><description>Recent content in frontend on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Mon, 01 Jan 0001 00:00:00 +0000</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/posts/frontend/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://tiao0303.github.io/dex-bok/posts/frontend/01_frontend_learning_path/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/frontend/01_frontend_learning_path/</guid><description>&lt;h1 id="web3-前端开发入门路径从零到初识去中心化世界"&gt;Web3 前端开发入门路径：从零到初识去中心化世界&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;难度：🌱 入门 | 字数：约 850 字 | 预计阅读：5 分钟&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;Web3 正在重新定义互联网的前端形态。不同于传统 Web 开发，Web3 前端开发者需要理解区块链的基本概念，掌握与智能合约交互的能力，并将去中心化思维融入产品设计。本系列文章将带你从传统前端出发，逐步深入 Web3 前端开发的内核。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="第一阶段夯实传统前端基础"&gt;第一阶段：夯实传统前端基础&lt;/h2&gt;
+&lt;h3 id="11-html--css--javascript"&gt;1.1 HTML / CSS / JavaScript&lt;/h3&gt;
+&lt;p&gt;一切 Web 界面的起点。无论框架如何演进，HTML 语义化、CSS 布局与响应式设计、JavaScript 异步编程（Promise / async-await）都是不可或缺的根基。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;推荐学习资源：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MDN Web Docs（权威文档）&lt;/li&gt;
+&lt;li&gt;freeCodeCamp（免费实战练习）&lt;/li&gt;
+&lt;li&gt;《JavaScript 高级程序设计》（红宝书）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;每日练习目标：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;能独立实现一个移动端适配的个人主页&lt;/li&gt;
+&lt;li&gt;能用 Fetch API 发起网络请求并处理响应&lt;/li&gt;
+&lt;li&gt;理解事件冒泡、闭包、原型链&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="12-现代前端框架"&gt;1.2 现代前端框架&lt;/h3&gt;
+&lt;p&gt;React 和 Vue 是目前生态最成熟的两大框架。&lt;strong&gt;建议优先选择 React&lt;/strong&gt;，原因如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;React 是以太坊生态（ethers.js / wagmi / viem）的默认前端框架&lt;/li&gt;
+&lt;li&gt;技术文档、教程、社区插件更丰富&lt;/li&gt;
+&lt;li&gt;就业市场认可度更高&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;学习路线：&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;组件化思想 → JSX 语法 → State / Props → Hooks → 虚拟 DOM → 生态系统
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="13-typescript"&gt;1.3 TypeScript&lt;/h3&gt;
+&lt;p&gt;几乎所有正经的 Web3 前端项目都使用 TypeScript。它带来的类型安全能有效降低与链上数据交互时的出错概率。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/frontend/02_html_css_js_basics/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/frontend/02_html_css_js_basics/</guid><description>&lt;h1 id="html--css--javascriptweb3-前端的基石"&gt;HTML / CSS / JavaScript：Web3 前端的基石&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;难度：🌱 入门 | 字数：约 950 字 | 预计阅读：6 分钟&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;很多刚入门 Web3 的同学急于学习ethers.js和智能合约交互，却忽略了前端基础的重要性。实际上，HTML/CSS/JS 构成了所有 DApp 用户界面的底层支撑，扎实的根基能让你在后续学习中事半功倍。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一html在-web3-世界里的特殊角色"&gt;一、HTML：在 Web3 世界里的特殊角色&lt;/h2&gt;
+&lt;h3 id="11-语义化标签与可访问性"&gt;1.1 语义化标签与可访问性&lt;/h3&gt;
+&lt;p&gt;区块链浏览器、链上数据看板等应用对可访问性要求极高。使用 &lt;code&gt;&amp;lt;main&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;nav&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;article&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;section&amp;gt;&lt;/code&gt; 等语义化标签，不仅有助于 SEO，也能让屏幕阅读器正确解析页面结构。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&amp;lt;!-- 典型 DApp 布局 --&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;header&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;nav&lt;/span&gt;&amp;gt;钱包连接按钮 | 导航链接&amp;lt;/&lt;span style="color:#f92672"&gt;nav&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;lt;/&lt;span style="color:#f92672"&gt;header&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;main&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;section&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;id&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;balance&amp;#34;&lt;/span&gt;&amp;gt;账户余额展示区&amp;lt;/&lt;span style="color:#f92672"&gt;section&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;section&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;id&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;transactions&amp;#34;&lt;/span&gt;&amp;gt;交易记录区&amp;lt;/&lt;span style="color:#f92672"&gt;section&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;lt;/&lt;span style="color:#f92672"&gt;main&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;footer&lt;/span&gt;&amp;gt;Powered by Ethereum&amp;lt;/&lt;span style="color:#f92672"&gt;footer&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="12-表单与用户输入"&gt;1.2 表单与用户输入&lt;/h3&gt;
+&lt;p&gt;DApp 中大量场景依赖用户输入：钱包地址查询、代币合约地址、交易金额等。正确使用 &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; 的 &lt;code&gt;type&lt;/code&gt; 属性（&lt;code&gt;text&lt;/code&gt;、&lt;code&gt;number&lt;/code&gt;）配合 &lt;code&gt;pattern&lt;/code&gt; 校验，能在提交前拦截无效数据。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-html" data-lang="html"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;input&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;type&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;text&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;id&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;addressInput&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;placeholder&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;0x...&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;pattern&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;^0x[a-fA-F0-9]{40}$&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;title&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;请输入有效的以太坊地址&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="二css构建-web3-视觉体验"&gt;二、CSS：构建 Web3 视觉体验&lt;/h2&gt;
+&lt;h3 id="21-css-变量与主题切换"&gt;2.1 CSS 变量与主题切换&lt;/h3&gt;
+&lt;p&gt;Web3 应用通常需要支持深色/浅色主题切换，这与钱包的深色模式高度契合。利用 CSS 变量可以轻松实现主题管理：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/frontend/03_react_vue_getting_started/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/frontend/03_react_vue_getting_started/</guid><description>&lt;h1 id="react--vue-框架入门现代-dapp-的界面骨架"&gt;React / Vue 框架入门：现代 DApp 的界面骨架&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;难度：🌱 入门 | 字数：约 1000 字 | 预计阅读：6 分钟&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;当你的 HTML/CSS/JS 基础足够扎实，下一步就是拥抱现代前端框架。在 Web3 生态中，&lt;strong&gt;React 是绝对主流&lt;/strong&gt;——无论是 Uniswap、OpenSea 还是 Aave，前端清一色基于 React 构建。本文以 React 为重点，Vue 为对比，帮你快速选定方向并入门。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一为什么-web3-dapp-普遍选择-react"&gt;一、为什么 Web3 DApp 普遍选择 React？&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;生态丰富&lt;/strong&gt;：ethers.js、wagmi、RainbowKit、web3modal 等主流 Web3 库都以 React 为一等公民&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;组件化天然契合&lt;/strong&gt;：DApp 的 UI 由&amp;quot;连接按钮&amp;quot;、&amp;ldquo;余额卡片&amp;rdquo;、&amp;ldquo;交易列表&amp;quot;等独立组件构成，React 的组件模型非常适合&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;社区活跃&lt;/strong&gt;：遇到问题时有大量现成解决方案&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Vue 也不是不能用——Compound 早期的界面就基于 Vue。但整体而言，React 的招聘需求和插件生态更占优势。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="二react-核心概念快速梳理"&gt;二、React 核心概念快速梳理&lt;/h2&gt;
+&lt;h3 id="21-jsx模板与逻辑共存"&gt;2.1 JSX：模板与逻辑共存&lt;/h3&gt;
+&lt;p&gt;JSX 让你在 JavaScript 中写类 HTML 语法，组件的 UI 与逻辑内聚在一起：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;import&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;useState&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;useEffect&lt;/span&gt; } &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;react&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;WalletBalance&lt;/span&gt;({ &lt;span style="color:#a6e22e"&gt;address&lt;/span&gt; }) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; [&lt;span style="color:#a6e22e"&gt;balance&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;setBalance&lt;/span&gt;] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;useState&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;0&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; [&lt;span style="color:#a6e22e"&gt;loading&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;setLoading&lt;/span&gt;] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;useState&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;useEffect&lt;/span&gt;(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 模拟链上数据获取
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;fetchBalance&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; () =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;setLoading&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;res&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getBalance&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;setBalance&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;res&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;setLoading&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fetchBalance&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }, [&lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;div&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;className&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;balance-card&amp;#34;&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;h3&lt;/span&gt;&amp;gt;&lt;span style="color:#a6e22e"&gt;账户余额&lt;/span&gt;&amp;lt;/&lt;span style="color:#f92672"&gt;h3&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {&lt;span style="color:#a6e22e"&gt;loading&lt;/span&gt; &lt;span style="color:#f92672"&gt;?&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;p&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;className&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;loading&amp;#34;&lt;/span&gt;&amp;gt;&lt;span style="color:#a6e22e"&gt;加载中&lt;/span&gt;...&amp;lt;/&lt;span style="color:#f92672"&gt;p&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ) &lt;span style="color:#f92672"&gt;:&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;p&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;className&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;balance&amp;#34;&lt;/span&gt;&amp;gt;{&lt;span style="color:#a6e22e"&gt;balance&lt;/span&gt;} &lt;span style="color:#a6e22e"&gt;ETH&lt;/span&gt;&amp;lt;/&lt;span style="color:#f92672"&gt;p&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; )}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;/&lt;span style="color:#f92672"&gt;div&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="22-hooks函数组件的状态管理"&gt;2.2 Hooks：函数组件的状态管理&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;useState&lt;/code&gt; 管理组件内部状态，&lt;code&gt;useEffect&lt;/code&gt; 处理副作用（链上数据获取、事件监听），&lt;code&gt;useContext&lt;/code&gt; 跨组件共享全局状态（如钱包连接状态）：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/frontend/04_web3_ethers_getting_started/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/frontend/04_web3_ethers_getting_started/</guid><description>&lt;h1 id="web3js--ethersjs-入门连接前端与区块链"&gt;Web3.js / Ethers.js 入门：连接前端与区块链&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;难度：🌱🌿 进阶 | 字数：约 1050 字 | 预计阅读：7 分钟&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;传统前端通过 HTTP 请求与后端 API 通信，而 Web3 前端则需要与区块链节点交互。Web3.js 和 Ethers.js 就是这座桥梁的核心库。本篇文章将详细对比两者，并手把手带你写出入门级的链上交互代码。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一web3js-vs-ethersjs选哪个"&gt;一、Web3.js vs Ethers.js：选哪个？&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;维度&lt;/th&gt;
+ &lt;th&gt;Web3.js&lt;/th&gt;
+ &lt;th&gt;Ethers.js&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;体积&lt;/td&gt;
+ &lt;td&gt;较大（~500KB）&lt;/td&gt;
+ &lt;td&gt;轻量（~80KB）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;API 风格&lt;/td&gt;
+ &lt;td&gt;命令式，接近底层&lt;/td&gt;
+ &lt;td&gt;简洁，抽象良好&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;钱包支持&lt;/td&gt;
+ &lt;td&gt;自己实现&lt;/td&gt;
+ &lt;td&gt;内置 Wallet 类&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;当前维护&lt;/td&gt;
+ &lt;td&gt;Ethereum 官方维护&lt;/td&gt;
+ &lt;td&gt;独立社区，更新活跃&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;生态采用&lt;/td&gt;
+ &lt;td&gt;较老项目使用较多&lt;/td&gt;
+ &lt;td&gt;新项目首选&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;结论&lt;/strong&gt;：新项目建议优先选择 &lt;strong&gt;Ethers.js&lt;/strong&gt;（v6），它更轻量、API 更友好，且是当前主流 DApp 开发的首选。Web3.js 适合需要与节点底层细节频繁打交道的场景。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="二ethersjs-核心概念"&gt;二、Ethers.js 核心概念&lt;/h2&gt;
+&lt;h3 id="21-provider连接区块链节点"&gt;2.1 Provider：连接区块链节点&lt;/h3&gt;
+&lt;p&gt;Provider 是与区块链节点通信的抽象。你可以使用公开的 RPC 节点，也可以使用付费的专业节点服务（如 Infura、Alchemy）：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;import&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;BrowserProvider&lt;/span&gt; } &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;ethers&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 方式一：使用 MetaMask 提供的 BrowserProvider（最常用）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;provider&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;BrowserProvider&lt;/span&gt;(window.&lt;span style="color:#a6e22e"&gt;ethereum&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 方式二：使用公开 RPC
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;import&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;JsonRpcProvider&lt;/span&gt; } &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;ethers&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;provider&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;JsonRpcProvider&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;https://mainnet.infura.io/v3/YOUR_PROJECT_ID&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 方式三：使用 WSS（WebSocket）——适合监听实时事件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;import&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;WebSocketProvider&lt;/span&gt; } &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;ethers&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;wsProvider&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;WebSocketProvider&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;wss://mainnet.infura.io/ws/v3/YOUR_PROJECT_ID&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="22-signer交易签名者"&gt;2.2 Signer：交易签名者&lt;/h3&gt;
+&lt;p&gt;Signer 持有私钥，可以签署交易并发送至网络。通过 MetaMask 连接时，&lt;code&gt;BrowserProvider.getSigner()&lt;/code&gt; 返回的就是当前钱包的签名者：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/frontend/05_wallet_connection_implementation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/frontend/05_wallet_connection_implementation/</guid><description>&lt;h1 id="连接钱包功能实现从-metamask-到多链钱包"&gt;连接钱包功能实现：从 MetaMask 到多链钱包&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;难度：🌱🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;&amp;ldquo;连接钱包&amp;quot;是每个 DApp 的入口功能。表面看只是一个按钮，背后却涉及钱包检测、账户获取、网络切换、断开重连等一系列交互逻辑。本文将手把手实现一个健壮的钱包连接模块。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一核心逻辑概览"&gt;一、核心逻辑概览&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;检查钱包是否安装
+ ├─ 未安装 → 提示安装 MetaMask
+ └─ 已安装 → 请求连接
+ ├─ 用户授权 → 获取账户地址 + 渲染 DApp 内容
+ └─ 用户拒绝 → 显示错误提示
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="二基础实现原生-ethersjs"&gt;二、基础实现：原生 ethers.js&lt;/h2&gt;
+&lt;h3 id="21-检测钱包安装"&gt;2.1 检测钱包安装&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;isMetaMaskInstalled&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; () =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;typeof&lt;/span&gt; window.&lt;span style="color:#a6e22e"&gt;ethereum&lt;/span&gt; &lt;span style="color:#f92672"&gt;!==&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;undefined&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; window.&lt;span style="color:#a6e22e"&gt;ethereum&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;isMetaMask&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;isMetaMaskInstalled&lt;/span&gt;()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;console&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;warn&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;MetaMask 未安装，请前往 https://metamask.io 下载&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="22-连接钱包"&gt;2.2 连接钱包&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;import&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;BrowserProvider&lt;/span&gt; } &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;ethers&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;connectWallet&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;try&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;isMetaMaskInstalled&lt;/span&gt;()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;throw&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; Error(&lt;span style="color:#e6db74"&gt;&amp;#39;MetaMask wallet is not installed&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;provider&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;BrowserProvider&lt;/span&gt;(window.&lt;span style="color:#a6e22e"&gt;ethereum&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;accounts&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;provider&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;send&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;eth_requestAccounts&amp;#39;&lt;/span&gt;, []);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;accounts&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;length&lt;/span&gt; &lt;span style="color:#f92672"&gt;===&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;throw&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; Error(&lt;span style="color:#e6db74"&gt;&amp;#39;No authorized accounts found&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;address&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;accounts&lt;/span&gt;[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;network&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;provider&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;getNetwork&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;balance&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;provider&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;getBalance&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;network&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;balance&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;provider&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#66d9ef"&gt;catch&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;console&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;error&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;连接钱包失败:&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;error&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;message&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;throw&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;error&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="23-断开钱包"&gt;2.3 断开钱包&lt;/h3&gt;
+&lt;p&gt;MetaMask 本身不提供程序化断开的 API（出于安全考虑），但你可以清除本地状态：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/frontend/06_dapp_frontend_architecture/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/frontend/06_dapp_frontend_architecture/</guid><description>&lt;h1 id="dapp-前端架构设计从-demo-到生产级应用"&gt;DApp 前端架构设计：从 Demo 到生产级应用&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;难度：🌱🌿 进阶 | 字数：约 1150 字 | 预计阅读：7 分钟&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;一个能跑通的 Demo 和一个生产级的 DApp 之间，差距不仅是代码量，更是架构设计、工程化思维和用户体验的全面提升。本篇文章将从目录结构、状态管理、Web3 交互层分离、错误处理等多个维度，探讨 DApp 前端架构的最佳实践。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一常见-dapp-前端架构问题"&gt;一、常见 DApp 前端架构问题&lt;/h2&gt;
+&lt;p&gt;很多开发者在入门阶段会写出这样的代码：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ❌ 所有逻辑堆在一个组件里——难以维护
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;App&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; [&lt;span style="color:#a6e22e"&gt;balance&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;setBalance&lt;/span&gt;] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;useState&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; [&lt;span style="color:#a6e22e"&gt;txs&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;setTxs&lt;/span&gt;] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;useState&lt;/span&gt;([]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; [&lt;span style="color:#a6e22e"&gt;loading&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;setLoading&lt;/span&gt;] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;useState&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;useEffect&lt;/span&gt;(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// ABI、合约地址、RPC URL 全都硬编码在这里
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;contract&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Contract&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;ADDR&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;ABI&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;provider&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;contract&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;BalanceOf&lt;/span&gt;().&lt;span style="color:#a6e22e"&gt;then&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;setBalance&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }, []);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// ... 几百行后
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样的代码在功能简单时尚可运行，一旦功能增加（多合约、多网络、多用户状态）就会迅速失控。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="二分层架构设计"&gt;二、分层架构设计&lt;/h2&gt;
+&lt;p&gt;推荐采用以下四层架构：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌─────────────────────────────────────┐
+│ UI Layer (React) │ 视图渲染、用户交互
+├─────────────────────────────────────┤
+│ Hooks / Business Logic │ 业务逻辑、状态管理
+├─────────────────────────────────────┤
+│ Web3 Service Layer │ 合约交互、交易发送
+├─────────────────────────────────────┤
+│ Provider Layer │ 钱包、节点连接
+└─────────────────────────────────────┘
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="21-目录结构参考"&gt;2.1 目录结构参考&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;src/
+├── contracts/ # 合约相关
+│ ├── abis/ # ABI 文件
+│ └── addresses.ts # 各网络的合约地址
+├── hooks/ # 自定义 Hooks（业务逻辑）
+│ ├── useTokenBalance.ts
+│ ├── useTransaction.ts
+│ └── useNetwork.ts
+├── services/ # Web3 服务层
+│ ├── tokenService.ts # 代币相关操作
+│ ├── swapService.ts # 交换逻辑
+│ └── transactionService.ts
+├── providers/ # Context Providers
+│ ├── Web3Provider.tsx
+│ └── ThemeProvider.tsx
+├── components/ # UI 组件
+│ ├── common/ # 通用组件（Button、Card）
+│ ├── wallet/ # 钱包相关（ConnectButton、NetworkSelector）
+│ └── features/ # 功能组件（SwapPanel、LiquidityPanel）
+├── utils/ # 工具函数
+│ ├── format.ts # 格式化（地址、金额）
+│ └── errors.ts # 错误定义
+├── config/
+│ └── chains.ts # 链配置（ChainID、RPC、Explorer）
+└── App.tsx
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="三状态管理策略"&gt;三、状态管理策略&lt;/h2&gt;
+&lt;h3 id="31-react-内置状态-vs-全局状态"&gt;3.1 React 内置状态 vs 全局状态&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;场景&lt;/th&gt;
+ &lt;th&gt;推荐方案&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;组件内部 UI 状态（弹窗开关、loading）&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;useState&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;跨组件共享的 Web3 状态（账户、余额）&lt;/td&gt;
+ &lt;td&gt;Context + &lt;code&gt;useReducer&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;复杂列表数据（交易历史）&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;react-query&lt;/code&gt;（推荐）或 Zustand&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;持久化状态（用户偏好）&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;localStorage&lt;/code&gt; + Context&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="32-使用-react-query-管理链上数据"&gt;3.2 使用 react-query 管理链上数据&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;react-query&lt;/code&gt;（也称 TanStack Query）是管理服务端/链上数据获取的利器，天然支持缓存、自动刷新、分页等能力：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/frontend/07_signature_verification/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/frontend/07_signature_verification/</guid><description>&lt;h1 id="签名与验签实战保障用户数据完整性"&gt;签名与验签实战：保障用户数据完整性&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;难度：🌱🌿🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;在 Web3 世界里，签名是一种无需上链即可验证用户身份和数据完整性的机制。从&amp;quot;登录 Web3&amp;quot;到 DeFi 交易授权，签名无处不在。然而，签名也是最容易引入安全漏洞的环节之一。本篇文章将深入讲解签名的原理、常见类型以及安全实践。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一为什么需要签名"&gt;一、为什么需要签名？&lt;/h2&gt;
+&lt;p&gt;区块链交易需要消耗 Gas，成本真实存在。对于不需要写入链上的操作（如登录、声明资产、设置权限），签名提供了一种&lt;strong&gt;零成本的验证方式&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;身份验证&lt;/strong&gt;：证明某条消息由特定私钥持有者签署&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据完整性&lt;/strong&gt;：证明消息在传输过程中未被篡改&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;不可抵赖性&lt;/strong&gt;：签署人无法否认其签署行为&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="二以太坊签名消息标准"&gt;二、以太坊签名消息标准&lt;/h2&gt;
+&lt;h3 id="21-eip-191结构化消息格式"&gt;2.1 EIP-191：结构化消息格式&lt;/h3&gt;
+&lt;p&gt;以太坊签名的消息必须遵循 EIP-191 规范，格式如下：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;\x19Ethereum Signed Message:\n${message.length}${message}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这样的前缀设计是为了区分普通文本消息和以太坊签名的消息，防止签名被滥用（重放攻击）。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;import&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;hashMessage&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;recoverAddress&lt;/span&gt; } &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;ethers&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 构造 EIP-191 消息
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;message&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;欢迎登录 DApp&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;paddedMessage&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;hashMessage&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;message&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;console&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;log&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;消息哈希:&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;paddedMessage&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 用户签名后
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// const signature = await signer.signMessage(message);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="22-personal_sign-流程"&gt;2.2 personal_sign 流程&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;signMessage&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;message&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;string&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;provider&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;BrowserProvider&lt;/span&gt;(window.&lt;span style="color:#a6e22e"&gt;ethereum&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;signer&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;provider&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;getSigner&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// ethers.js 会自动处理 EIP-191 前缀
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;signature&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;signer&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;signMessage&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;message&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 验签：恢复签名者的地址
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;recoveredAddress&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;recoverAddress&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;hashMessage&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;message&lt;/span&gt;), &lt;span style="color:#a6e22e"&gt;signature&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;isValid&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;recoveredAddress&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;toLowerCase&lt;/span&gt;() &lt;span style="color:#f92672"&gt;===&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;signer&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;toLowerCase&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;console&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;log&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;签名是否有效:&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;isValid&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;signature&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="三典型应用场景"&gt;三、典型应用场景&lt;/h2&gt;
+&lt;h3 id="31-web3-登录sign-in-with-ethereum"&gt;3.1 Web3 登录（Sign-In with Ethereum）&lt;/h3&gt;
+&lt;p&gt;这是目前最流行的 Web3 身份验证方式，OpenSea、ENS 等平台均采用：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/frontend/08_decentralized_frontend_security/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/frontend/08_decentralized_frontend_security/</guid><description>&lt;h1 id="去中心化前端安全守护用户的数字资产"&gt;去中心化前端安全：守护用户的数字资产&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;难度：🌿🌿🌿 高级 | 字数：约 1200 字 | 预计阅读：8 分钟&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;Web3 前端与传统 Web 前端在安全风险上有很多重叠，但有几个独特的攻击面让 DApp 开发者如履薄冰——一次签名授权失误可能导致用户资产全部清零。本篇文章将系统梳理 Web3 前端面临的安全威胁与防御策略。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一独特的安全攻击面"&gt;一、独特的安全攻击面&lt;/h2&gt;
+&lt;h3 id="11-恶意合约授权token-approval-drain"&gt;1.1 恶意合约授权（Token Approval Drain）&lt;/h3&gt;
+&lt;p&gt;这是 Web3 中最常见、最高发的攻击手法。攻击者通过诱骗用户签署一个看似正常实则恶意的 &lt;code&gt;transferFrom&lt;/code&gt; 授权，从而转移用户的所有代币。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;攻击链：&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;攻击者部署恶意合约 → 在 DApp 前端植入钓鱼弹窗 → 用户点击&amp;#34;授权&amp;#34; →
+实际签署的是恶意合约的 transferFrom → 攻击者立即转走用户资产
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;防御措施：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ✅ 推荐：使用 safeTransferFrom 代替直接授权
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 或者：设置授权额度为 0 后再设置新额度
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;setApproval&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;token&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;spender&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;amount&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;contract&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Contract&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;token&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;ERC20_ABI&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;signer&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 先检查当前授权额度
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;currentAllowance&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;contract&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;allowance&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;account&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;spender&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;currentAllowance&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 先撤销旧授权（设置 为 0）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;revokeTx&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;contract&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;approve&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;spender&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;revokeTx&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;wait&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 再设置新授权
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;approveTx&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;contract&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;approve&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;spender&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;amount&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;approveTx&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;wait&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="12-签名钓鱼signature-phishing"&gt;1.2 签名钓鱼（Signature Phishing）&lt;/h3&gt;
+&lt;p&gt;详见上篇文章，此处补充前端层面的额外防御：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/frontend/09_frontend_performance_optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/frontend/09_frontend_performance_optimization/</guid><description>&lt;h1 id="前端性能优化让-dapp-跑得更快更轻"&gt;前端性能优化：让 DApp 跑得更快更轻&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;难度：🌿🌿🌿 高级 | 字数：约 1100 字 | 预计阅读：7 分钟&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;区块链交互天然存在网络延迟（区块确认时间、RPC 响应），如果前端再慢，用户体验将非常糟糕。性能优化不仅是用户体验问题，更直接影响 DeFi 协议的交易执行成功率（滑点、时效性）。本篇文章从加载性能、渲染性能、链上交互优化三个维度全面展开。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一加载性能首屏秒开"&gt;一、加载性能：首屏秒开&lt;/h2&gt;
+&lt;h3 id="11-代码分割与懒加载"&gt;1.1 代码分割与懒加载&lt;/h3&gt;
+&lt;p&gt;DApp 通常不需要一次性加载所有路由和组件。使用 React 的 &lt;code&gt;lazy&lt;/code&gt; 和 &lt;code&gt;Suspense&lt;/code&gt; 实现按需加载：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-jsx" data-lang="jsx"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;import&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;lazy&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;Suspense&lt;/span&gt; } &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;react&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;SwapPage&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;lazy&lt;/span&gt;(() =&amp;gt; &lt;span style="color:#66d9ef"&gt;import&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;./pages/SwapPage&amp;#39;&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;PortfolioPage&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;lazy&lt;/span&gt;(() =&amp;gt; &lt;span style="color:#66d9ef"&gt;import&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;./pages/PortfolioPage&amp;#39;&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;App&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;Suspense&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;fallback&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;{&amp;lt;&lt;span style="color:#f92672"&gt;LoadingSpinner&lt;/span&gt; /&amp;gt;}&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;Routes&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;Route&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;path&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;/swap&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;element&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;{&amp;lt;&lt;span style="color:#f92672"&gt;SwapPage&lt;/span&gt; /&amp;gt;} /&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;&lt;span style="color:#f92672"&gt;Route&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;path&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;/portfolio&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;element&lt;/span&gt;&lt;span style="color:#f92672"&gt;=&lt;/span&gt;{&amp;lt;&lt;span style="color:#f92672"&gt;PortfolioPage&lt;/span&gt; /&amp;gt;} /&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;/&lt;span style="color:#f92672"&gt;Routes&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &amp;lt;/&lt;span style="color:#f92672"&gt;Suspense&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="12-依赖体积优化"&gt;1.2 依赖体积优化&lt;/h3&gt;
+&lt;p&gt;Web3 库体积普遍较大，需要精打细算：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 使用 bundlephobia 检查每个包的体积&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;npx bundlephobia-cli ethers
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 替换重型库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# ❌ 使用 web3.js (~500KB)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# ✅ 使用 ethers.js v6 (~80KB) 或 viem (~30KB)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 按需导入，而非全量导入
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ❌
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;import&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;ethers&lt;/span&gt; } &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;ethers&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ✅ 只导入需要的部分
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;import&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;Contract&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;BrowserProvider&lt;/span&gt; } &lt;span style="color:#a6e22e"&gt;from&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;ethers&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="13-tree-shaking-与构建配置"&gt;1.3 Tree Shaking 与构建配置&lt;/h3&gt;
+&lt;p&gt;确保 Vite/Webpack 配置支持 Tree Shaking：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/posts/frontend/10_cross_chain_frontend_integration/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/frontend/10_cross_chain_frontend_integration/</guid><description>&lt;h1 id="跨链前端集成让-dapp-在多链生态中自由穿梭"&gt;跨链前端集成：让 DApp 在多链生态中自由穿梭&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;难度：🌿🌿🌿🌿 高级 | 字数：约 1150 字 | 预计阅读：8 分钟&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;以太坊主网 Gas 费用高企，BSC、Polygon、Avalanche、Arbitrum 等 Layer2/Layer1 新链蓬勃发展，用户手里的资产分布在不同区块链上。跨链前端集成已成为现代 DApp 的必备能力。本篇文章将深入探讨多链架构设计、跨链通信机制以及主流跨链方案的前端集成实践。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一为什么需要跨链"&gt;一、为什么需要跨链？&lt;/h2&gt;
+&lt;h3 id="11-用户现状"&gt;1.1 用户现状&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用户在 Ethereum 有 ETH 和主流 ERC-20 代币&lt;/li&gt;
+&lt;li&gt;在 BSC 有 BNB 和 BEP-20 代币&lt;/li&gt;
+&lt;li&gt;在 Polygon 有 MATIC 和 PRC-20 代币&lt;/li&gt;
+&lt;li&gt;跨链 Swap、跨链质押、跨链 NFT 交易需求激增&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="12-跨链-dapp-的类型"&gt;1.2 跨链 DApp 的类型&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;类型&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;跨链桥接&lt;/td&gt;
+ &lt;td&gt;将资产从一条链转移到另一条链&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;跨链 Swap&lt;/td&gt;
+ &lt;td&gt;兑换不同链上的同种资产（如 ETH on ETH ↔ ETH on Polygon）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;跨链聚合&lt;/td&gt;
+ &lt;td&gt;聚合多条链的流动性（如 LI.FI、Socket）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;跨链消息传递&lt;/td&gt;
+ &lt;td&gt;在一条链上触发另一条链上的合约逻辑（如 LayerZero）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="二多链前端架构"&gt;二、多链前端架构&lt;/h2&gt;
+&lt;h3 id="21-链配置抽象"&gt;2.1 链配置抽象&lt;/h3&gt;
+&lt;p&gt;不要在代码中硬编码 chainId，统一管理所有链的配置：&lt;/p&gt;</description></item></channel></rss>

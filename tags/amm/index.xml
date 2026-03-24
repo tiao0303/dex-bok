@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AMM on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/amm/</link><description>Recent content in AMM on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sat, 21 Mar 2026 11:30:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/amm/index.xml" rel="self" type="application/rss+xml"/><item><title>T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎</title><link>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/t2_06_amm_principles/</link><pubDate>Thu, 19 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/t2_06_amm_principles/</guid><description>&lt;h1 id="t2-进阶实战-06amm-原理详解--理解-dex-的核心引擎"&gt;T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎&lt;/h1&gt;
+&lt;p&gt;在上一节中，我们了解了 DEX 的基础概念。本节我们来深入理解 DEX 的核心引擎——&lt;strong&gt;AMM（Automated Market Maker，自动做市商）&lt;/strong&gt;。理解 AMM 的原理，是所有进阶 DeFi 操作的根基。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一amm-是什么"&gt;一、AMM 是什么？&lt;/h2&gt;
+&lt;h3 id="传统做市商-vs-amm"&gt;传统做市商 vs AMM&lt;/h3&gt;
+&lt;p&gt;在传统金融中，&lt;strong&gt;做市商&lt;/strong&gt;是提供流动性的专业机构。他们在订单簿上同时挂出买单和卖单，赚取买卖价差（bid-ask spread）。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;传统订单簿模式：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;买单队列 卖单队列
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;用户B 买入 2 ETH @ 1990 用户D 卖出 1 ETH @ 2010
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;用户A 买入 1 ETH @ 1980 用户C 卖出 3 ETH @ 2020
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ↑ 差价 = 2010 - 1990 = 20 USD
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;AMM 则完全取消了订单簿&lt;/strong&gt;，用一个数学公式取而代之。无论你是买入还是卖出，智能合约根据公式自动报价，无需任何对手方等待。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="二恒定乘积公式amm-的灵魂"&gt;二、恒定乘积公式：AMM 的灵魂&lt;/h2&gt;
+&lt;h3 id="公式本身"&gt;公式本身&lt;/h3&gt;
+&lt;p&gt;AMM 最核心的公式是&lt;strong&gt;恒定乘积（Constant Product）&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>T2 进阶实战 06：流动性池深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/06_liquidity_pool_deep_dive/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/06_liquidity_pool_deep_dive/</guid><description>&lt;h1 id="流动性池深度分析"&gt;流动性池深度分析&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;流动性池是 DEX 的核心组件。理解流动性池的运作机制，对于构建高效的交易策略和优化的智能合约至关重要。本文深入分析流动性池的数学模型、资本效率优化以及实际部署中的关键考量。&lt;/p&gt;
+&lt;h2 id="恒定乘积公式详解"&gt;恒定乘积公式详解&lt;/h2&gt;
+&lt;h3 id="基础公式"&gt;基础公式&lt;/h3&gt;
+&lt;p&gt;Uniswap V2 采用的恒定乘积公式：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;x &lt;span style="color:#f92672"&gt;*&lt;/span&gt; y &lt;span style="color:#f92672"&gt;=&lt;/span&gt; k
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;x&lt;/code&gt; = 代币 A 的数量&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;y&lt;/code&gt; = 代币 B 的数量&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;k&lt;/code&gt; = 恒定常数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="价格发现机制"&gt;价格发现机制&lt;/h3&gt;
+&lt;p&gt;边际价格由导数得出：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;P = dy/dx = -y/x
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这意味着价格完全由池中的代币比例决定。&lt;/p&gt;
+&lt;h3 id="代码实现"&gt;代码实现&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;swap&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountIn, &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isTokenA) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amountIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;Amount must be positive&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveA &lt;span style="color:#f92672"&gt;=&lt;/span&gt; IERC20(tokenA).balanceOf(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveB &lt;span style="color:#f92672"&gt;=&lt;/span&gt; IERC20(tokenB).balanceOf(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (isTokenA) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 计算输出量：amountOut = reserveB - k / (reserveA + amountIn)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; getAmountOut(amountIn, reserveA, reserveB);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenA).transferFrom(msg.sender, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this), amountIn);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenB).transfer(msg.sender, amountOut);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; getAmountOut(amountIn, reserveB, reserveA);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenB).transferFrom(msg.sender, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this), amountIn);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenA).transfer(msg.sender, amountOut);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 验证 k 值未减少
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; _updateReserves();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getAmountOut&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountIn, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveIn, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveOut) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;pure&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountOut) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amountIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; reserveIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; reserveOut &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;997&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// 0.3% 手续费
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;*&lt;/span&gt; reserveOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; denominator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (reserveIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;) &lt;span style="color:#f92672"&gt;+&lt;/span&gt; amountInWithFee;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;/&lt;/span&gt; denominator;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="资本效率问题"&gt;资本效率问题&lt;/h2&gt;
+&lt;h3 id="v2-的资本效率低下"&gt;V2 的资本效率低下&lt;/h3&gt;
+&lt;p&gt;在 V2 模型中，流动性分布在 &lt;code&gt;0&lt;/code&gt; 到 &lt;code&gt;∞&lt;/code&gt; 的价格范围内，但大部分资金实际上从未被使用。&lt;/p&gt;</description></item><item><title>PancakeSwap 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/09-pancakeswap/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/09-pancakeswap/</guid><description>&lt;h1 id="pancakeswap-深度分析"&gt;PancakeSwap 深度分析&lt;/h1&gt;
+&lt;h2 id="项目简介"&gt;项目简介&lt;/h2&gt;
+&lt;p&gt;PancakeSwap 是 BSC（Binance Smart Chain）生态系统中规模最大的去中心化交易所（DEX），于 2020 年 9 月上线。它由匿名团队创建，凭借 Binance 生态的低 Gas 费和快速确认时间，迅速超越以太坊上的许多竞品，成为 BSC 链上 TVL（总锁仓量）最高的 DEX。PancakeSwap 的产品线已从最初的 AMM 兑换扩展至IFO（首次发行农场）、预测市场、NFT 市场、彩票及 DAO 治理等多个方向，构建了一个相对完整的 DeFi 生态矩阵。&lt;/p&gt;
+&lt;h2 id="核心机制"&gt;核心机制&lt;/h2&gt;
+&lt;p&gt;PancakeSwap 基于 AMM（自动做市商）模型，采用恒定乘积算法（x × y = k），用户通过向流动性池注入代币提供流动性，交易手续费为 0.25%，其中 0.17% 分配给流动性提供者，0.03% 用于 CAKE 代币回购销毁，0.05% 用于运营。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;v2 到 v3 的演进：&lt;/strong&gt; PancakeSwap 于 2023 年推出 v3 版本，引入了集中流动性（Concentrated Liquidity）机制，流动性提供者可以将资金部署在特定价格区间内，从而在等额资金下获得更高的资本效率和做市收益。这一设计与 Uniswap V3 类似，但在 BSC 链上实现，为用户提供了更精细化的做市工具。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;IFO（Initial Farm Offering）：&lt;/strong&gt; PancakeSwap 创新性地推出了IFO机制，允许项目方在 PancakeSwap 平台上发行新代币，用户通过质押 CAKE 或其他资产参与认购。这一机制在 2020-2021 年 DeFi summer 期间吸引了大量关注和资金参与。&lt;/p&gt;</description></item><item><title>Balancer 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/10-balancer/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/10-balancer/</guid><description>&lt;h1 id="balancer-深度分析"&gt;Balancer 深度分析&lt;/h1&gt;
+&lt;h2 id="项目简介"&gt;项目简介&lt;/h2&gt;
+&lt;p&gt;Balancer 是一个基于以太坊的去中心化交易所和资产管理协议，由 Fernando Martinelli 和 Blake Rodriguez 于 2018 年底创立，2020 年 3 月正式上线主网。Balancer 最初以「可变比例 AMM」为核心创新点，允许任何人创建包含多达 8 种代币的自定义权重流动性池，彻底改变了传统 AMM 只能采用 50/50 固定比例的限制。2023 年，Balancer 推出 v3 版本，整合了 Boosted Pools（收益增强池）和 veBAL 治理模型，进一步强化了其作为专业做市和资产管理平台的市场定位。&lt;/p&gt;
+&lt;h2 id="核心机制"&gt;核心机制&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;可变权重 AMM（Weighted Pool）：&lt;/strong&gt; Balancer 的核心创新在于将 AMM 的代币权重从固定的 50/50 扩展为任意比例（0-100%）。例如，用户可以创建一个 80% ETH + 20% USDC 的流动性池，交易价格会根据池子权重动态调整。这为专业做市商和量化策略提供了极大的灵活性，使得被动指数投资和主动做市可以在同一个协议内实现。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;加权数学公式：&lt;/strong&gt; Balancer 采用恒定加权乘积公式：∏(x_i)^{w_i} = k，其中 w_i 为第 i 个资产的权重。这与 Uniswap 的恒定乘积公式有本质区别，支持更多样化的资产配置。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Boosted Pools（收益增强池）：&lt;/strong&gt; Balancer 将闲置流动性自动存入 Aave 等借贷协议以获取额外收益，LP 在提供流动性的同时还能获得借出收益，显著提升了资金利用效率。这一机制在 2022-2023 年稳定币和主流资产池中被广泛采用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;veBAL 治理模型：&lt;/strong&gt; 2022 年 Balancer 引入 veBAL（投票托管 BAL），用户将 BAL 锁定最多一年获得 veBAL，veBAL 持有者可以：1）决定哪些流动性池获得 BAL 挖矿奖励及其权重；2）获得协议手续费分成；3）参与治理投票。这一模型有效对齐了流动性提供者、协议收入和治理权力。&lt;/p&gt;</description></item><item><title>Rebasing 池子是什么？弹性供应代币的 AMM 挑战</title><link>https://tiao0303.github.io/dex-bok/posts/t4_advanced/29_rebasing_pools/</link><pubDate>Sat, 21 Mar 2026 11:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4_advanced/29_rebasing_pools/</guid><description>&lt;h2 id="什么是-rebasing-代币"&gt;什么是 Rebasing 代币&lt;/h2&gt;
+&lt;p&gt;Rebasing（弹性供应）代币是一种&lt;strong&gt;供应量会自动调整&lt;/strong&gt;的加密货币机制。通过算法定期调整总流通量，以达到目标价格或分配奖励。&lt;/p&gt;
+&lt;h3 id="核心机制"&gt;核心机制&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;场景&lt;/th&gt;
+ &lt;th&gt;操作&lt;/th&gt;
+ &lt;th&gt;效果&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;价格高于目标&lt;/td&gt;
+ &lt;td&gt;正向 Rebase（+supply）&lt;/td&gt;
+ &lt;td&gt;代币数量增加，单价下降&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;价格低于目标&lt;/td&gt;
+ &lt;td&gt;负向 Rebase（-supply）&lt;/td&gt;
+ &lt;td&gt;代币数量减少，单价上升&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;关键点&lt;/strong&gt;：用户的持币比例保持不变，但绝对数量会变化。&lt;/p&gt;
+&lt;h3 id="代表项目"&gt;代表项目&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AMPL&lt;/strong&gt;：最早的弹性供应稳定币，目标是 $1&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;aToken&lt;/strong&gt;（Aave）：存款产生利息时数量增加&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;stETH&lt;/strong&gt;：质押收益体现为代币数量增长&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="rebasing-池子的特殊挑战"&gt;Rebasing 池子的特殊挑战&lt;/h2&gt;
+&lt;h3 id="传统-amm-的问题"&gt;传统 AMM 的问题&lt;/h3&gt;
+&lt;p&gt;标准 AMM（如 Uniswap V2/V3）假设代币供应是&lt;strong&gt;固定或可预测变化&lt;/strong&gt;的。当 Rebasing 代币的供应突然变化时：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;案例：池中有 1000 AMPL + 1000 USDC
+
+正向 Rebase 后：AMPL 供应变为 1100（+10%）
+ 
+传统 AMM 认知：
+→ 误判为需求减少 → AMPL 价值被低估
+→ LP 遭受&amp;#34; divergence loss&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="问题本质"&gt;问题本质&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;价值泄露&lt;/strong&gt;：AMM 无法识别&amp;quot;供应增加&amp;quot;还是&amp;quot;需求减少&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;无常损失加剧&lt;/strong&gt;：供应调整带来的额外波动&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;池子偿付风险&lt;/strong&gt;：极端负向 Rebase 可能导致池子资不抵债&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="解决方案专用-amm"&gt;解决方案：专用 AMM&lt;/h2&gt;
+&lt;h3 id="1-elasticswap"&gt;1. ElasticSwap&lt;/h3&gt;
+&lt;p&gt;专为弹性供应代币设计的 AMM，能正确感知 Rebase 事件：&lt;/p&gt;</description></item><item><title>Uniswap V2/V3/V4 机制对比与深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/uniswap-v2-v3-v4-comparison/</link><pubDate>Thu, 19 Mar 2026 12:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/uniswap-v2-v3-v4-comparison/</guid><description>&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;Uniswap 作为 DeFi 生态最重要的 DEX 协议，历经 V2、V3、V4 三个重大版本迭代，每个版本都带来了革命性的创新。本文将从底层机制、资本效率、Gas 优化等维度进行深度对比分析。&lt;/p&gt;
+&lt;h2 id="一版本演进概览"&gt;一、版本演进概览&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;特性&lt;/th&gt;
+ &lt;th&gt;V2&lt;/th&gt;
+ &lt;th&gt;V3&lt;/th&gt;
+ &lt;th&gt;V4&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;推出时间&lt;/td&gt;
+ &lt;td&gt;2020.05&lt;/td&gt;
+ &lt;td&gt;2021.05&lt;/td&gt;
+ &lt;td&gt;2024&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;流动性模型&lt;/td&gt;
+ &lt;td&gt;均匀分布&lt;/td&gt;
+ &lt;td&gt;集中流动性&lt;/td&gt;
+ &lt;td&gt;钩子+集中流动性&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;手续费&lt;/td&gt;
+ &lt;td&gt;0.3% 固定&lt;/td&gt;
+ &lt;td&gt;0.05%-1% 可调&lt;/td&gt;
+ &lt;td&gt;自定义&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;预言机&lt;/td&gt;
+ &lt;td&gt;TWAP&lt;/td&gt;
+ &lt;td&gt;TWAP + 几何平均&lt;/td&gt;
+ &lt;td&gt;增强型&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Gas 效率&lt;/td&gt;
+ &lt;td&gt;基准&lt;/td&gt;
+ &lt;td&gt;优化 30%&lt;/td&gt;
+ &lt;td&gt;显著优化&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="二核心机制对比"&gt;二、核心机制对比&lt;/h2&gt;
+&lt;h3 id="21-恒定乘积模型v2"&gt;2.1 恒定乘积模型（V2）&lt;/h3&gt;
+&lt;p&gt;V2 采用经典的 &lt;code&gt;x * y = k&lt;/code&gt; 公式：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// UniswapV2Pair.sol 核心逻辑
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getAmountOut&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountIn, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveIn, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; reserveOut) &lt;span style="color:#66d9ef"&gt;internal&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;pure&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountOut) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amountIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;UniswapV2: INSUFFICIENT_INPUT_AMOUNT&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(reserveIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; reserveOut &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;UniswapV2: INSUFFICIENT_LIQUIDITY&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;997&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// 0.3% 手续费
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;*&lt;/span&gt; reserveOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; denominator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; reserveIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; amountInWithFee;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;/&lt;/span&gt; denominator;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数学推导&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>AMM 数学原理深究 - 曲线设计与资本效率</title><link>https://tiao0303.github.io/dex-bok/posts/t6_master/26_amm_math_deep_dive/</link><pubDate>Thu, 19 Mar 2026 01:30:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6_master/26_amm_math_deep_dive/</guid><description>&lt;h2 id="amm-核心公式推导"&gt;AMM 核心公式推导&lt;/h2&gt;
+&lt;h3 id="恒定乘积公式uniswap-v2"&gt;恒定乘积公式（Uniswap V2）&lt;/h3&gt;
+&lt;h4 id="基本公式"&gt;基本公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;x * y = k
+
+其中：
+x = Token A 数量
+y = Token B 数量
+k = 常数
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="价格推导"&gt;价格推导&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;边际价格 = dy/dx
+
+对 x * y = k 求导：
+y + x * dy/dx = 0
+dy/dx = -y/x
+
+所以：价格 P = y/x
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="滑点公式"&gt;滑点公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;买入 Δx 的 Token A：
+新价格 P&amp;#39; = (y - Δy) / (x + Δx)
+
+滑点 = (P&amp;#39; - P) / P
+ = Δx / (x + Δx)
+
+结论：
+- 池子越小，滑点越大
+- 交易越大，滑点越大
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="恒定和公式curve-stableswap"&gt;恒定和公式（Curve StableSwap）&lt;/h3&gt;
+&lt;h4 id="基本公式-1"&gt;基本公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;x + y = k
+
+价格恒定为 1:1
+适合稳定币交易
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="stableswap-混合公式"&gt;StableSwap 混合公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;A * n^n * Σx_i + D = A * D * n^n + D^(n+1) / (n^n * Πx_i)
+
+其中：
+A = 放大系数
+n = 资产数量
+D = 不变量
+x_i = 各资产数量
+
+A → ∞ 时：趋近恒定和
+A → 0 时：趋近恒定积
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="放大系数-a-的作用"&gt;放大系数 A 的作用&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;A 值&lt;/th&gt;
+ &lt;th&gt;曲线形状&lt;/th&gt;
+ &lt;th&gt;适用场景&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;1&lt;/td&gt;
+ &lt;td&gt;标准恒定积&lt;/td&gt;
+ &lt;td&gt;波动资产&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;100&lt;/td&gt;
+ &lt;td&gt;中间态&lt;/td&gt;
+ &lt;td&gt;弱相关资产&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;10000&lt;/td&gt;
+ &lt;td&gt;接近恒定和&lt;/td&gt;
+ &lt;td&gt;稳定币&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="集中流动性公式uniswap-v3"&gt;集中流动性公式（Uniswap V3）&lt;/h3&gt;
+&lt;h4 id="核心创新"&gt;核心创新&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;只在价格区间 [P_a, P_b] 内提供流动性
+
+公式：
+L = √(x * y) （在价格范围内）
+
+实际流动性 = L * (√P_b - √P_a)
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="资本效率提升"&gt;资本效率提升&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;效率提升倍数 = P_b / (P_b - P_a)
+
+示例：
+当前价格 P = $1800
+区间 [1600, 2000]
+效率提升 = 2000 / (2000-1600) = 5 倍
+
+区间 [1700, 1900]
+效率提升 = 1900 / (1900-1700) = 9.5 倍
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="虚拟储备推导"&gt;虚拟储备推导&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;在区间 [P_a, P_b] 内：
+x_real = L * (1/√P - 1/√P_b)
+y_real = L * (√P - √P_a)
+
+当 P 超出区间：
+- P &amp;lt; P_a：全部为 x（Token A）
+- P &amp;gt; P_b：全部为 y（Token B）
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="无常损失数学分析"&gt;无常损失数学分析&lt;/h2&gt;
+&lt;h3 id="无常损失公式推导"&gt;无常损失公式推导&lt;/h3&gt;
+&lt;h4 id="基础推导"&gt;基础推导&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;初始状态：
+- 价格 P0
+- 存入 x0 个 Token A，y0 个 Token B
+- 总价值 V0 = x0 * P0 + y0
+
+价格变化后：
+- 新价格 P1 = r * P0（r 为价格变化倍数）
+- 池子自动调整：x1 * y1 = k
+
+LP 价值：
+V_lp = x1 * P1 + y1
+
+持有价值：
+V_hold = x0 * P1 + y0
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="无常损失公式"&gt;无常损失公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;IL = V_lp / V_hold - 1
+
+简化后：
+IL = 2√r / (1+r) - 1
+
+其中 r = P1/P0（价格变化倍数）
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="数值验证"&gt;数值验证&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;价格变化&lt;/th&gt;
+ &lt;th&gt;r&lt;/th&gt;
+ &lt;th&gt;IL 计算&lt;/th&gt;
+ &lt;th&gt;IL 结果&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;+10%&lt;/td&gt;
+ &lt;td&gt;1.1&lt;/td&gt;
+ &lt;td&gt;2√1.1/2.1 - 1&lt;/td&gt;
+ &lt;td&gt;-0.23%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;+25%&lt;/td&gt;
+ &lt;td&gt;1.25&lt;/td&gt;
+ &lt;td&gt;2√1.25/2.25 - 1&lt;/td&gt;
+ &lt;td&gt;-1.4%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;+50%&lt;/td&gt;
+ &lt;td&gt;1.5&lt;/td&gt;
+ &lt;td&gt;2√1.5/2.5 - 1&lt;/td&gt;
+ &lt;td&gt;-5.7%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;+100%&lt;/td&gt;
+ &lt;td&gt;2.0&lt;/td&gt;
+ &lt;td&gt;2√2/3 - 1&lt;/td&gt;
+ &lt;td&gt;-21.5%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;-50%&lt;/td&gt;
+ &lt;td&gt;0.5&lt;/td&gt;
+ &lt;td&gt;2√0.5/1.5 - 1&lt;/td&gt;
+ &lt;td&gt;-21.5%&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="v3-无常损失分析"&gt;V3 无常损失分析&lt;/h3&gt;
+&lt;h4 id="区间内-il"&gt;区间内 IL&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;IL_v3 = IL_v2 * (P_b - P_a) / (√P_b - √P_a)²
+
+结论：
+- 区间越窄，IL 越大
+- 但收益也越高
+- 需要权衡
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="被甩出损失"&gt;被甩出损失&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;当价格超出区间 [P_a, P_b]：
+
+P &amp;lt; P_a：
+- 全部变为 Token A
+- 损失 = (P0 - P) / P0
+
+P &amp;gt; P_b：
+- 全部变为 Token B
+- 踏空收益 = (P - P0) / P0
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="最优费用率设计"&gt;最优费用率设计&lt;/h2&gt;
+&lt;h3 id="费用率对-lp-收益影响"&gt;费用率对 LP 收益影响&lt;/h3&gt;
+&lt;h4 id="收益公式"&gt;收益公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;LP 收益 = 交易量 × 费用率 × LP 份额
+
+年化 APY = (日交易量 × 365 × 费用率) / TVL
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="费用率与交易量关系"&gt;费用率与交易量关系&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;交易量 = f(费用率)
+
+费用率↑ → 单笔收益↑ → 交易量↓
+费用率↓ → 单笔收益↓ → 交易量↑
+
+最优费用率 = argmax(费用率 × 交易量)
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="v3-多档位设计"&gt;V3 多档位设计&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;档位&lt;/th&gt;
+ &lt;th&gt;适合资产&lt;/th&gt;
+ &lt;th&gt;理论依据&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;0.01%&lt;/td&gt;
+ &lt;td&gt;稳定币&lt;/td&gt;
+ &lt;td&gt;低波动，高频率&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;0.05%&lt;/td&gt;
+ &lt;td&gt;主流币&lt;/td&gt;
+ &lt;td&gt;中等波动&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;0.30%&lt;/td&gt;
+ &lt;td&gt;长尾资产&lt;/td&gt;
+ &lt;td&gt;高波动，低频率&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;1.00%&lt;/td&gt;
+ &lt;td&gt;Meme 币&lt;/td&gt;
+ &lt;td&gt;极高波动&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="资本效率优化"&gt;资本效率优化&lt;/h2&gt;
+&lt;h3 id="效率定义"&gt;效率定义&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;资本效率 = 相同交易量所需资金 / 实际所需资金
+
+V2 效率 = 1x
+V3 效率 = P_b / (P_b - P_a)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="最优区间选择"&gt;最优区间选择&lt;/h3&gt;
+&lt;h4 id="基于波动率"&gt;基于波动率&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;最优区间宽度 = 2 × 日波动率 × √T
+
+示例：
+ETH 日波动率 = 5%
+预期持有期 T = 7 天
+最优宽度 = 2 × 5% × √7 = 26.5%
+
+区间：[P×0.87, P×1.13]
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="基于历史数据"&gt;基于历史数据&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;步骤：
+1. 统计过去 30 天价格范围
+2. 计算 95% 置信区间
+3. 设置略宽于该区间的 LP 区间
+4. 平衡被甩风险与效率
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="动态再平衡策略"&gt;动态再平衡策略&lt;/h3&gt;
+&lt;h4 id="再平衡触发条件"&gt;再平衡触发条件&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;条件 1：价格接近区间边界
+if P &amp;lt; P_a × 1.1 or P &amp;gt; P_b × 0.9:
+ rebalance()
+
+条件 2：效率下降过多
+if 当前效率 &amp;lt; 初始效率 × 0.5:
+ rebalance()
+
+条件 3：固定时间间隔
+if days_since_last_rebalance &amp;gt; 7:
+ rebalance()
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="再平衡成本"&gt;再平衡成本&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;成本 = Gas 费 + 滑点损失 + 手续费
+
+收益 = 效率提升带来的额外收益
+
+决策：
+if 收益 &amp;gt; 成本：
+ 执行再平衡
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="高级-amm-设计"&gt;高级 AMM 设计&lt;/h2&gt;
+&lt;h3 id="曲线参数优化"&gt;曲线参数优化&lt;/h3&gt;
+&lt;h4 id="动态-a-值curve"&gt;动态 A 值（Curve）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;A = f(池子不平衡度)
+
+池子平衡时：A 值高（低滑点）
+池子不平衡时：A 值低（保护流动性）
+
+公式：
+A = A_base × (1 + imbalance_factor)
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="动态费用uniswap-v3-改进"&gt;动态费用（Uniswap V3 改进）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;费用率 = f(波动率，交易量)
+
+高波动时：费用率↑（保护 LP）
+低波动时：费用率↓（吸引交易）
+
+实现：
+fee = base_fee × (1 + volatility_multiplier)
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="预言机集成"&gt;预言机集成&lt;/h3&gt;
+&lt;h4 id="twap-预言机"&gt;TWAP 预言机&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;时间加权平均价格（TWAP）
+
+计算：
+TWAP = Σ(price_i × time_i) / Σtime_i
+
+用途：
+- 防止价格操纵
+- 衍生品结算
+- 跨链价格参考
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="预言机操纵攻击"&gt;预言机操纵攻击&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;攻击方式：
+1. 闪电贷大额交易
+2. 瞬间改变池子价格
+3. 利用被操纵价格借贷/清算
+
+防御：
+- 使用 TWAP（多区块平均）
+- 增加操纵成本
+- 多预言机聚合
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="数学工具与代码"&gt;数学工具与代码&lt;/h2&gt;
+&lt;h3 id="python-实现-il-计算器"&gt;Python 实现 IL 计算器&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; math
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;impermanent_loss&lt;/span&gt;(price_ratio):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&amp;#34;计算无常损失&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; math&lt;span style="color:#f92672"&gt;.&lt;/span&gt;sqrt(price_ratio) &lt;span style="color:#f92672"&gt;/&lt;/span&gt; (&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; price_ratio) &lt;span style="color:#f92672"&gt;-&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;v3_capital_efficiency&lt;/span&gt;(price_lower, price_upper, price_current):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&amp;#34;计算 V3 资本效率&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; price_lower &lt;span style="color:#f92672"&gt;&amp;gt;=&lt;/span&gt; price_upper:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; price_upper &lt;span style="color:#f92672"&gt;/&lt;/span&gt; (price_upper &lt;span style="color:#f92672"&gt;-&lt;/span&gt; price_lower)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;optimal_fee_rate&lt;/span&gt;(volume_elasticity, base_volume):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&amp;#34;计算最优费用率&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# volume = base_volume * (1 - elasticity * fee_rate)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# revenue = fee_rate * volume&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# 求导得最优解&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#f92672"&gt;/&lt;/span&gt; (&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; volume_elasticity)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="总结"&gt;总结&lt;/h2&gt;
+&lt;p&gt;AMM 数学核心：&lt;/p&gt;</description></item><item><title>AMM 原理详解 - 自动做市商核心机制</title><link>https://tiao0303.github.io/dex-bok/posts/t1_beginner/01_amm_principles/</link><pubDate>Wed, 18 Mar 2026 21:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1_beginner/01_amm_principles/</guid><description>&lt;h2 id="什么是-amm"&gt;什么是 AMM&lt;/h2&gt;
+&lt;p&gt;自动做市商（Automated Market Maker）是去中心化交易所（DEX）的核心机制，用数学公式代替传统订单簿来实现资产交易。&lt;/p&gt;
+&lt;h2 id="核心公式恒定乘积"&gt;核心公式：恒定乘积&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;x * y = k
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;x&lt;/strong&gt; = Token A 的数量&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;y&lt;/strong&gt; = Token B 的数量&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;k&lt;/strong&gt; = 常数（流动性总量保持不变）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="公式含义"&gt;公式含义&lt;/h3&gt;
+&lt;p&gt;无论交易如何进行，池中两种 token 的乘积始终保持不变。这导致：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;买入 Token A → A 减少，B 增加 → A 价格上涨&lt;/li&gt;
+&lt;li&gt;卖出 Token A → A 增加，B 减少 → A 价格下跌&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="amm-工作流程"&gt;AMM 工作流程&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-mermaid" data-lang="mermaid"&gt;graph LR
+ A[用户存入双币] --&amp;gt; B[成为 LP]
+ B --&amp;gt; C[获得 LP Token]
+ C --&amp;gt; D[交易产生手续费]
+ D --&amp;gt; E[LP 获得收益]
+&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;提供流动性&lt;/strong&gt;：用户存入等值的双币（如 1 ETH + 1800 USDC）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;获得凭证&lt;/strong&gt;：收到 LP Token，代表池子份额&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;交易发生&lt;/strong&gt;：其他用户 swap，支付手续费（通常 0.3%）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;收益分配&lt;/strong&gt;：手续费累积到池中，LP 按比例分享&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="关键概念"&gt;关键概念&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;术语&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;th&gt;重要性&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;流动性池&lt;/td&gt;
+ &lt;td&gt;存放交易对的智能合约&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;LP Token&lt;/td&gt;
+ &lt;td&gt;流动性凭证，可随时赎回&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;滑点&lt;/td&gt;
+ &lt;td&gt;大额交易导致的价格偏移&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;无常损失&lt;/td&gt;
+ &lt;td&gt;币价波动导致的相对损失&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="实战要点"&gt;实战要点&lt;/h2&gt;
+&lt;h3 id="小额交易1000-usd"&gt;小额交易（&amp;lt;1000 USD）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;滑点可忽略不计&lt;/li&gt;
+&lt;li&gt;直接用 Uniswap/Sushiswap&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="大额交易10000-usd"&gt;大额交易（&amp;gt;10000 USD）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;分多笔执行&lt;/li&gt;
+&lt;li&gt;使用聚合器（1inch、Matcha）&lt;/li&gt;
+&lt;li&gt;考虑使用 Flashbots 避免 MEV&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="选择池子"&gt;选择池子&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;看深度&lt;/strong&gt; &amp;gt; 看 APY&lt;/li&gt;
+&lt;li&gt;深度不足时，高 APY 可能是陷阱&lt;/li&gt;
+&lt;li&gt;检查历史 TVL 稳定性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="无常损失详解"&gt;无常损失详解&lt;/h2&gt;
+&lt;p&gt;无常损失（Impermanent Loss）是 LP 最常见的风险：&lt;/p&gt;</description></item></channel></rss>

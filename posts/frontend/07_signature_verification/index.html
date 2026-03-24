@@ -1,0 +1,167 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="签名与验签实战：保障用户数据完整性
+
+难度：🌱🌿🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟
+
+前言
+在 Web3 世界里，签名是一种无需上链即可验证用户身份和数据完整性的机制。从&#34;登录 Web3&#34;到 DeFi 交易授权，签名无处不在。然而，签名也是最容易引入安全漏洞的环节之一。本篇文章将深入讲解签名的原理、常见类型以及安全实践。
+
+一、为什么需要签名？
+区块链交易需要消耗 Gas，成本真实存在。对于不需要写入链上的操作（如登录、声明资产、设置权限），签名提供了一种零成本的验证方式：
+
+身份验证：证明某条消息由特定私钥持有者签署
+数据完整性：证明消息在传输过程中未被篡改
+不可抵赖性：签署人无法否认其签署行为
+
+
+二、以太坊签名消息标准
+2.1 EIP-191：结构化消息格式
+以太坊签名的消息必须遵循 EIP-191 规范，格式如下：
+\x19Ethereum Signed Message:\n${message.length}${message}
+这样的前缀设计是为了区分普通文本消息和以太坊签名的消息，防止签名被滥用（重放攻击）。
+import { hashMessage, recoverAddress } from 'ethers';
+
+// 构造 EIP-191 消息
+const message = '欢迎登录 DApp';
+const paddedMessage = hashMessage(message);
+console.log('消息哈希:', paddedMessage);
+
+// 用户签名后
+// const signature = await signer.signMessage(message);
+2.2 personal_sign 流程
+async function signMessage(message: string) {
+  const provider = new BrowserProvider(window.ethereum);
+  const signer = await provider.getSigner();
+
+  // ethers.js 会自动处理 EIP-191 前缀
+  const signature = await signer.signMessage(message);
+
+  // 验签：恢复签名者的地址
+  const recoveredAddress = recoverAddress(hashMessage(message), signature);
+
+  const isValid = recoveredAddress.toLowerCase() === signer.address.toLowerCase();
+  console.log('签名是否有效:', isValid);
+
+  return signature;
+}
+
+三、典型应用场景
+3.1 Web3 登录（Sign-In with Ethereum）
+这是目前最流行的 Web3 身份验证方式，OpenSea、ENS 等平台均采用："><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/frontend/07_signature_verification/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/frontend/07_signature_verification/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/frontend/07_signature_verification/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/frontend/07_signature_verification/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="签名与验签实战：保障用户数据完整性 难度：🌱🌿🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟
+前言 在 Web3 世界里，签名是一种无需上链即可验证用户身份和数据完整性的机制。从&#34;登录 Web3&#34;到 DeFi 交易授权，签名无处不在。然而，签名也是最容易引入安全漏洞的环节之一。本篇文章将深入讲解签名的原理、常见类型以及安全实践。
+一、为什么需要签名？ 区块链交易需要消耗 Gas，成本真实存在。对于不需要写入链上的操作（如登录、声明资产、设置权限），签名提供了一种零成本的验证方式：
+身份验证：证明某条消息由特定私钥持有者签署 数据完整性：证明消息在传输过程中未被篡改 不可抵赖性：签署人无法否认其签署行为 二、以太坊签名消息标准 2.1 EIP-191：结构化消息格式 以太坊签名的消息必须遵循 EIP-191 规范，格式如下：
+\x19Ethereum Signed Message:\n${message.length}${message} 这样的前缀设计是为了区分普通文本消息和以太坊签名的消息，防止签名被滥用（重放攻击）。
+import { hashMessage, recoverAddress } from 'ethers'; // 构造 EIP-191 消息 const message = '欢迎登录 DApp'; const paddedMessage = hashMessage(message); console.log('消息哈希:', paddedMessage); // 用户签名后 // const signature = await signer.signMessage(message); 2.2 personal_sign 流程 async function signMessage(message: string) { const provider = new BrowserProvider(window.ethereum); const signer = await provider.getSigner(); // ethers.js 会自动处理 EIP-191 前缀 const signature = await signer.signMessage(message); // 验签：恢复签名者的地址 const recoveredAddress = recoverAddress(hashMessage(message), signature); const isValid = recoveredAddress.toLowerCase() === signer.address.toLowerCase(); console.log('签名是否有效:', isValid); return signature; } 三、典型应用场景 3.1 Web3 登录（Sign-In with Ethereum） 这是目前最流行的 Web3 身份验证方式，OpenSea、ENS 等平台均采用："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="签名与验签实战：保障用户数据完整性 难度：🌱🌿🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟
+前言 在 Web3 世界里，签名是一种无需上链即可验证用户身份和数据完整性的机制。从&#34;登录 Web3&#34;到 DeFi 交易授权，签名无处不在。然而，签名也是最容易引入安全漏洞的环节之一。本篇文章将深入讲解签名的原理、常见类型以及安全实践。
+一、为什么需要签名？ 区块链交易需要消耗 Gas，成本真实存在。对于不需要写入链上的操作（如登录、声明资产、设置权限），签名提供了一种零成本的验证方式：
+身份验证：证明某条消息由特定私钥持有者签署 数据完整性：证明消息在传输过程中未被篡改 不可抵赖性：签署人无法否认其签署行为 二、以太坊签名消息标准 2.1 EIP-191：结构化消息格式 以太坊签名的消息必须遵循 EIP-191 规范，格式如下：
+\x19Ethereum Signed Message:\n${message.length}${message} 这样的前缀设计是为了区分普通文本消息和以太坊签名的消息，防止签名被滥用（重放攻击）。
+import { hashMessage, recoverAddress } from 'ethers'; // 构造 EIP-191 消息 const message = '欢迎登录 DApp'; const paddedMessage = hashMessage(message); console.log('消息哈希:', paddedMessage); // 用户签名后 // const signature = await signer.signMessage(message); 2.2 personal_sign 流程 async function signMessage(message: string) { const provider = new BrowserProvider(window.ethereum); const signer = await provider.getSigner(); // ethers.js 会自动处理 EIP-191 前缀 const signature = await signer.signMessage(message); // 验签：恢复签名者的地址 const recoveredAddress = recoverAddress(hashMessage(message), signature); const isValid = recoveredAddress.toLowerCase() === signer.address.toLowerCase(); console.log('签名是否有效:', isValid); return signature; } 三、典型应用场景 3.1 Web3 登录（Sign-In with Ethereum） 这是目前最流行的 Web3 身份验证方式，OpenSea、ENS 等平台均采用："><meta itemprop=wordCount content="446"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="签名与验签实战：保障用户数据完整性 难度：🌱🌿🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟
+前言 在 Web3 世界里，签名是一种无需上链即可验证用户身份和数据完整性的机制。从&#34;登录 Web3&#34;到 DeFi 交易授权，签名无处不在。然而，签名也是最容易引入安全漏洞的环节之一。本篇文章将深入讲解签名的原理、常见类型以及安全实践。
+一、为什么需要签名？ 区块链交易需要消耗 Gas，成本真实存在。对于不需要写入链上的操作（如登录、声明资产、设置权限），签名提供了一种零成本的验证方式：
+身份验证：证明某条消息由特定私钥持有者签署 数据完整性：证明消息在传输过程中未被篡改 不可抵赖性：签署人无法否认其签署行为 二、以太坊签名消息标准 2.1 EIP-191：结构化消息格式 以太坊签名的消息必须遵循 EIP-191 规范，格式如下：
+\x19Ethereum Signed Message:\n${message.length}${message} 这样的前缀设计是为了区分普通文本消息和以太坊签名的消息，防止签名被滥用（重放攻击）。
+import { hashMessage, recoverAddress } from 'ethers'; // 构造 EIP-191 消息 const message = '欢迎登录 DApp'; const paddedMessage = hashMessage(message); console.log('消息哈希:', paddedMessage); // 用户签名后 // const signature = await signer.signMessage(message); 2.2 personal_sign 流程 async function signMessage(message: string) { const provider = new BrowserProvider(window.ethereum); const signer = await provider.getSigner(); // ethers.js 会自动处理 EIP-191 前缀 const signature = await signer.signMessage(message); // 验签：恢复签名者的地址 const recoveredAddress = recoverAddress(hashMessage(message), signature); const isValid = recoveredAddress.toLowerCase() === signer.address.toLowerCase(); console.log('签名是否有效:', isValid); return signature; } 三、典型应用场景 3.1 Web3 登录（Sign-In with Ethereum） 这是目前最流行的 Web3 身份验证方式，OpenSea、ENS 等平台均采用："><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-07_signature_verification"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#一为什么需要签名>一、为什么需要签名？</a></li><li><a href=#二以太坊签名消息标准>二、以太坊签名消息标准</a><ul><li><a href=#21-eip-191结构化消息格式>2.1 EIP-191：结构化消息格式</a></li><li><a href=#22-personal_sign-流程>2.2 personal_sign 流程</a></li></ul></li><li><a href=#三典型应用场景>三、典型应用场景</a><ul><li><a href=#31-web3-登录sign-in-with-ethereum>3.1 Web3 登录（Sign-In with Ethereum）</a></li><li><a href=#32-后端验签nodejs-示例>3.2 后端验签（Node.js 示例）</a></li><li><a href=#33-结构化数据签名eip-712>3.3 结构化数据签名（EIP-712）</a></li></ul></li><li><a href=#四安全风险与防范>四、安全风险与防范</a><ul><li><a href=#41-签名劫持signature-replay>4.1 签名劫持（Signature Replay）</a></li><li><a href=#42-签名钓鱼silent-signing>4.2 签名钓鱼（Silent Signing）</a></li><li><a href=#43-模糊签名obfuscated-signing>4.3 模糊签名（Obfuscated Signing）</a></li><li><a href=#44-签名数据泄漏>4.4 签名数据泄漏</a></li></ul></li><li><a href=#五签名的链上验证>五、签名的链上验证</a></li><li><a href=#小结>小结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>446 字</span></div></header><h1 id=签名与验签实战保障用户数据完整性>签名与验签实战：保障用户数据完整性</h1><blockquote><p>难度：🌱🌿🌿 进阶 | 字数：约 1100 字 | 预计阅读：7 分钟</p></blockquote><h2 id=前言>前言</h2><p>在 Web3 世界里，签名是一种无需上链即可验证用户身份和数据完整性的机制。从"登录 Web3"到 DeFi 交易授权，签名无处不在。然而，签名也是最容易引入安全漏洞的环节之一。本篇文章将深入讲解签名的原理、常见类型以及安全实践。</p><hr><h2 id=一为什么需要签名>一、为什么需要签名？</h2><p>区块链交易需要消耗 Gas，成本真实存在。对于不需要写入链上的操作（如登录、声明资产、设置权限），签名提供了一种<strong>零成本的验证方式</strong>：</p><ul><li><strong>身份验证</strong>：证明某条消息由特定私钥持有者签署</li><li><strong>数据完整性</strong>：证明消息在传输过程中未被篡改</li><li><strong>不可抵赖性</strong>：签署人无法否认其签署行为</li></ul><hr><h2 id=二以太坊签名消息标准>二、以太坊签名消息标准</h2><h3 id=21-eip-191结构化消息格式>2.1 EIP-191：结构化消息格式</h3><p>以太坊签名的消息必须遵循 EIP-191 规范，格式如下：</p><pre tabindex=0><code>\x19Ethereum Signed Message:\n${message.length}${message}
+</code></pre><p>这样的前缀设计是为了区分普通文本消息和以太坊签名的消息，防止签名被滥用（重放攻击）。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>hashMessage</span>, <span style=color:#a6e22e>recoverAddress</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 构造 EIP-191 消息
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;欢迎登录 DApp&#39;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>paddedMessage</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>hashMessage</span>(<span style=color:#a6e22e>message</span>);
+</span></span><span style=display:flex><span><span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;消息哈希:&#39;</span>, <span style=color:#a6e22e>paddedMessage</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 用户签名后
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// const signature = await signer.signMessage(message);
+</span></span></span></code></pre></div><h3 id=22-personal_sign-流程>2.2 personal_sign 流程</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>signMessage</span>(<span style=color:#a6e22e>message</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>string</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>provider</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>BrowserProvider</span>(window.<span style=color:#a6e22e>ethereum</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>signer</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getSigner</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// ethers.js 会自动处理 EIP-191 前缀
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>signature</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>signer</span>.<span style=color:#a6e22e>signMessage</span>(<span style=color:#a6e22e>message</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 验签：恢复签名者的地址
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>recoveredAddress</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>recoverAddress</span>(<span style=color:#a6e22e>hashMessage</span>(<span style=color:#a6e22e>message</span>), <span style=color:#a6e22e>signature</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>isValid</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>recoveredAddress</span>.<span style=color:#a6e22e>toLowerCase</span>() <span style=color:#f92672>===</span> <span style=color:#a6e22e>signer</span>.<span style=color:#a6e22e>address</span>.<span style=color:#a6e22e>toLowerCase</span>();
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;签名是否有效:&#39;</span>, <span style=color:#a6e22e>isValid</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>signature</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=三典型应用场景>三、典型应用场景</h2><h3 id=31-web3-登录sign-in-with-ethereum>3.1 Web3 登录（Sign-In with Ethereum）</h3><p>这是目前最流行的 Web3 身份验证方式，OpenSea、ENS 等平台均采用：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// 后端生成随机 nonce，前端请求签名
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>nonce</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>fetch</span>(<span style=color:#e6db74>&#39;/api/auth/nonce&#39;</span>).<span style=color:#a6e22e>then</span>(<span style=color:#a6e22e>r</span> =&gt; <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>text</span>());
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 用户签署
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>`Sign in with Ethereum to access the app.\n\nNonce: </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>nonce</span><span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>signature</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>signer</span>.<span style=color:#a6e22e>signMessage</span>(<span style=color:#a6e22e>message</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 发送给后端验证
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>response</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>fetch</span>(<span style=color:#e6db74>&#39;/api/auth/verify&#39;</span>, {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;POST&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>body</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>JSON</span>.<span style=color:#a6e22e>stringify</span>({ <span style=color:#a6e22e>address</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>account</span>, <span style=color:#a6e22e>signature</span>, <span style=color:#a6e22e>message</span>, <span style=color:#a6e22e>nonce</span> }),
+</span></span><span style=display:flex><span>});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>success</span>, <span style=color:#a6e22e>token</span> } <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>response</span>.<span style=color:#a6e22e>json</span>();
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>success</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 登录成功，存储 JWT
+</span></span></span><span style=display:flex><span>  <span style=color:#a6e22e>localStorage</span>.<span style=color:#a6e22e>setItem</span>(<span style=color:#e6db74>&#39;authToken&#39;</span>, <span style=color:#a6e22e>token</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=32-后端验签nodejs-示例>3.2 后端验签（Node.js 示例）</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>hashMessage</span>, <span style=color:#a6e22e>recoverAddress</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>verifySignature</span>(<span style=color:#a6e22e>message</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>string</span>, <span style=color:#a6e22e>signature</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>string</span>, <span style=color:#a6e22e>expectedAddress</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>string</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>messageHash</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>hashMessage</span>(<span style=color:#a6e22e>message</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>recovered</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>recoverAddress</span>(<span style=color:#a6e22e>messageHash</span>, <span style=color:#a6e22e>signature</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>recovered</span>.<span style=color:#a6e22e>toLowerCase</span>() <span style=color:#f92672>===</span> <span style=color:#a6e22e>expectedAddress</span>.<span style=color:#a6e22e>toLowerCase</span>();
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=33-结构化数据签名eip-712>3.3 结构化数据签名（EIP-712）</h3><p>对于复杂数据结构（如授权许可、订单详情），推荐使用 EIP-712 标准，它提供了更结构化、更友好的签名展示：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>TypedDataEncoder</span>, <span style=color:#a6e22e>verifyMessage</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>domain</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;MyDApp&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>version</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;1&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>chainId</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>1</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>verifyingContract</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;0x...&#39;</span>,
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>types</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>Person</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;name&#39;</span>, <span style=color:#a6e22e>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;string&#39;</span> },
+</span></span><span style=display:flex><span>    { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;wallet&#39;</span>, <span style=color:#a6e22e>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;address&#39;</span> },
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>Mail</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;from&#39;</span>, <span style=color:#a6e22e>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Person&#39;</span> },
+</span></span><span style=display:flex><span>    { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;to&#39;</span>, <span style=color:#a6e22e>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Person&#39;</span> },
+</span></span><span style=display:flex><span>    { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;contents&#39;</span>, <span style=color:#a6e22e>type</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;string&#39;</span> },
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>from</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Alice&#39;</span>, <span style=color:#a6e22e>wallet</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;0x...&#39;</span> },
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>to</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Bob&#39;</span>, <span style=color:#a6e22e>wallet</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;0x...&#39;</span> },
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>contents</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Hello, Bob!&#39;</span>,
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>signTypedData</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>provider</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>BrowserProvider</span>(window.<span style=color:#a6e22e>ethereum</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>signer</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getSigner</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>signature</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>signer</span>.<span style=color:#a6e22e>signTypedData</span>(<span style=color:#a6e22e>domain</span>, <span style=color:#a6e22e>types</span>, <span style=color:#a6e22e>value</span>);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>signature</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=四安全风险与防范>四、安全风险与防范</h2><h3 id=41-签名劫持signature-replay>4.1 签名劫持（Signature Replay）</h3><p>同一签名可能被恶意重放到不同场景：</p><p><strong>防范措施：</strong></p><ul><li>在消息中加入 <code>nonce</code>（随机数）</li><li>在消息中加入 <code>chainId</code> 和 <code>verifyingContract</code>（防止跨链重放）</li><li>每次签署后，后端立即将 nonce 标记为已使用</li></ul><h3 id=42-签名钓鱼silent-signing>4.2 签名钓鱼（Silent Signing）</h3><p>恶意 DApp 可能诱导用户签署隐藏交易（如授权转移资产）：</p><p><strong>防范措施：</strong></p><ul><li>始终仔细阅读 MetaMask 签名请求中的原文</li><li>使用 EIP-712 的结构化展示，避免纯文本签名</li><li>签名前确认域名（dApp 域名应与预期一致）</li></ul><h3 id=43-模糊签名obfuscated-signing>4.3 模糊签名（Obfuscated Signing）</h3><p>攻击者通过不可见字符或 Unicode 同形文字混淆消息内容：</p><p><strong>防范措施：</strong></p><ul><li>展示签名消息时，对不可见字符进行过滤</li><li>使用 EIP-712 结构化数据而非纯文本消息</li></ul><h3 id=44-签名数据泄漏>4.4 签名数据泄漏</h3><p>敏感数据不应放在消息中——签名消息本身是公开的：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// ❌ 危险：私钥或敏感信息不应在签名消息中
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>`My private key is: 0x123...`</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// ✅ 安全：仅签名必要的业务数据
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>`Authorize swap: 100 USDC → 0.05 ETH. OrderID: </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>orderId</span><span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>;
+</span></span></code></pre></div><hr><h2 id=五签名的链上验证>五、签名的链上验证</h2><p>有些场景需要在智能合约中验证签名是否合法，这需要合约实现 EIP-712 的 <code>ecrecover</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 合约中的验签逻辑
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>verify</span>(
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes32</span> digest,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> signer,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes</span> <span style=color:#66d9ef>memory</span> signature
+</span></span><span style=display:flex><span>) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>pure</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> ecrecover(digest, v, r, s) <span style=color:#f92672>==</span> signer;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>前端负责生成符合 EIP-712 的 digest，合约负责用 <code>ecrecover</code> 验签。</p><hr><h2 id=小结>小结</h2><p>签名是 Web3 前端开发中最需要谨慎对待的环节之一。理解 EIP-191 / EIP-712 标准的原理，掌握签发与验签的完整流程，并时刻警惕签名劫持、钓鱼等安全风险，是每个 Web3 前端开发者的必修课。下一篇文章我们将深入 Web3 前端的安全领域，系统性地梳理常见攻击向量与防御策略。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/08_decentralized_frontend_security/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/06_dapp_frontend_architecture/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

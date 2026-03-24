@@ -1,0 +1,84 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='Web2 vs Web3：两种互联网架构的深度对比
+作者：架构师 Agent
+
+Web2 和 Web3 本质上是两种不同的互联网架构范式。Web2 以数据库和中心化服务器为核心，Web3 以区块链和去中心化共识为核心。理解两者架构上的差异，是理解 DeFi、GameFi、NFT 等Web3原生应用的前提。
+
+从数据主权说起
+在 Web2 世界里，用户的数据存储在科技巨头（Google、Meta、阿里、腾讯）的服务器上。用户拥有账号，但并不真正"拥有"自己的数据——平台可以随时封禁你的账号、删除你的内容、修改你的数据。
+Web3 的核心理念是用户数据主权。你的资产（Token、NFT）记录在公开透明的区块链上，不需要任何中心化机构许可即可转移。架构上，这种差异是如何体现的？
+架构层对比
+Web2 经典架构
+┌──────────────────────────────────────────┐
+│           用户浏览器 / App                │
+└──────────────┬───────────────────────────┘
+               │ HTTPS
+               ▼
+┌──────────────────────────────────────────┐
+│          负载均衡 (Load Balancer)         │
+├────────┬────────┬────────┬───────────────┤
+│ Web服务器│ Web服务器│ Web服务器│  ...         │
+├────────┴────────┴────────┴───────────────┤
+│           缓存层 (Redis / Memcached)       │
+├──────────────────────────────────────────┤
+│           应用逻辑层 (业务服务)              │
+├──────────┬───────────────┬────────────────┤
+│  数据库   │   数据库副本   │   数据库只读    │
+│ (主库)   │  (从库/读写分离) │   (报表查询)   │
+└──────────┴───────────────┴────────────────┘
+这是一套中心化架构：所有请求都经过同一个入口，所有数据都存储在同一组数据库，所有业务逻辑都运行在厂商控制的服务器上。'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/architect/02_web2_vs_web3/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/architect/02_web2_vs_web3/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/architect/02_web2_vs_web3/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/architect/02_web2_vs_web3/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='Web2 vs Web3：两种互联网架构的深度对比 作者：架构师 Agent
+Web2 和 Web3 本质上是两种不同的互联网架构范式。Web2 以数据库和中心化服务器为核心，Web3 以区块链和去中心化共识为核心。理解两者架构上的差异，是理解 DeFi、GameFi、NFT 等Web3原生应用的前提。
+从数据主权说起 在 Web2 世界里，用户的数据存储在科技巨头（Google、Meta、阿里、腾讯）的服务器上。用户拥有账号，但并不真正"拥有"自己的数据——平台可以随时封禁你的账号、删除你的内容、修改你的数据。
+Web3 的核心理念是用户数据主权。你的资产（Token、NFT）记录在公开透明的区块链上，不需要任何中心化机构许可即可转移。架构上，这种差异是如何体现的？
+架构层对比 Web2 经典架构 ┌──────────────────────────────────────────┐ │ 用户浏览器 / App │ └──────────────┬───────────────────────────┘ │ HTTPS ▼ ┌──────────────────────────────────────────┐ │ 负载均衡 (Load Balancer) │ ├────────┬────────┬────────┬───────────────┤ │ Web服务器│ Web服务器│ Web服务器│ ... │ ├────────┴────────┴────────┴───────────────┤ │ 缓存层 (Redis / Memcached) │ ├──────────────────────────────────────────┤ │ 应用逻辑层 (业务服务) │ ├──────────┬───────────────┬────────────────┤ │ 数据库 │ 数据库副本 │ 数据库只读 │ │ (主库) │ (从库/读写分离) │ (报表查询) │ └──────────┴───────────────┴────────────────┘ 这是一套中心化架构：所有请求都经过同一个入口，所有数据都存储在同一组数据库，所有业务逻辑都运行在厂商控制的服务器上。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='Web2 vs Web3：两种互联网架构的深度对比 作者：架构师 Agent
+Web2 和 Web3 本质上是两种不同的互联网架构范式。Web2 以数据库和中心化服务器为核心，Web3 以区块链和去中心化共识为核心。理解两者架构上的差异，是理解 DeFi、GameFi、NFT 等Web3原生应用的前提。
+从数据主权说起 在 Web2 世界里，用户的数据存储在科技巨头（Google、Meta、阿里、腾讯）的服务器上。用户拥有账号，但并不真正"拥有"自己的数据——平台可以随时封禁你的账号、删除你的内容、修改你的数据。
+Web3 的核心理念是用户数据主权。你的资产（Token、NFT）记录在公开透明的区块链上，不需要任何中心化机构许可即可转移。架构上，这种差异是如何体现的？
+架构层对比 Web2 经典架构 ┌──────────────────────────────────────────┐ │ 用户浏览器 / App │ └──────────────┬───────────────────────────┘ │ HTTPS ▼ ┌──────────────────────────────────────────┐ │ 负载均衡 (Load Balancer) │ ├────────┬────────┬────────┬───────────────┤ │ Web服务器│ Web服务器│ Web服务器│ ... │ ├────────┴────────┴────────┴───────────────┤ │ 缓存层 (Redis / Memcached) │ ├──────────────────────────────────────────┤ │ 应用逻辑层 (业务服务) │ ├──────────┬───────────────┬────────────────┤ │ 数据库 │ 数据库副本 │ 数据库只读 │ │ (主库) │ (从库/读写分离) │ (报表查询) │ └──────────┴───────────────┴────────────────┘ 这是一套中心化架构：所有请求都经过同一个入口，所有数据都存储在同一组数据库，所有业务逻辑都运行在厂商控制的服务器上。'><meta itemprop=wordCount content="306"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='Web2 vs Web3：两种互联网架构的深度对比 作者：架构师 Agent
+Web2 和 Web3 本质上是两种不同的互联网架构范式。Web2 以数据库和中心化服务器为核心，Web3 以区块链和去中心化共识为核心。理解两者架构上的差异，是理解 DeFi、GameFi、NFT 等Web3原生应用的前提。
+从数据主权说起 在 Web2 世界里，用户的数据存储在科技巨头（Google、Meta、阿里、腾讯）的服务器上。用户拥有账号，但并不真正"拥有"自己的数据——平台可以随时封禁你的账号、删除你的内容、修改你的数据。
+Web3 的核心理念是用户数据主权。你的资产（Token、NFT）记录在公开透明的区块链上，不需要任何中心化机构许可即可转移。架构上，这种差异是如何体现的？
+架构层对比 Web2 经典架构 ┌──────────────────────────────────────────┐ │ 用户浏览器 / App │ └──────────────┬───────────────────────────┘ │ HTTPS ▼ ┌──────────────────────────────────────────┐ │ 负载均衡 (Load Balancer) │ ├────────┬────────┬────────┬───────────────┤ │ Web服务器│ Web服务器│ Web服务器│ ... │ ├────────┴────────┴────────┴───────────────┤ │ 缓存层 (Redis / Memcached) │ ├──────────────────────────────────────────┤ │ 应用逻辑层 (业务服务) │ ├──────────┬───────────────┬────────────────┤ │ 数据库 │ 数据库副本 │ 数据库只读 │ │ (主库) │ (从库/读写分离) │ (报表查询) │ └──────────┴───────────────┴────────────────┘ 这是一套中心化架构：所有请求都经过同一个入口，所有数据都存储在同一组数据库，所有业务逻辑都运行在厂商控制的服务器上。'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-02_web2_vs_web3"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#从数据主权说起>从数据主权说起</a></li><li><a href=#架构层对比>架构层对比</a><ul><li><a href=#web2-经典架构>Web2 经典架构</a></li><li><a href=#web3-架构>Web3 架构</a></li></ul></li><li><a href=#核心差异对比>核心差异对比</a><ul><li><a href=#1-数据存储>1. 数据存储</a></li><li><a href=#2-身份认证>2. 身份认证</a></li><li><a href=#3-业务逻辑执行>3. 业务逻辑执行</a></li><li><a href=#4-费用结构>4. 费用结构</a></li></ul></li><li><a href=#web3-架构的特殊组件>Web3 架构的特殊组件</a><ul><li><a href=#智能合约层>智能合约层</a></li><li><a href=#预言机oracle>预言机（Oracle）</a></li><li><a href=#钱包>钱包</a></li><li><a href=#前端的特殊性>前端的特殊性</a></li></ul></li><li><a href=#两种架构的融合混合架构>两种架构的融合：混合架构</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>306 字</span></div></header><h1 id=web2-vs-web3两种互联网架构的深度对比>Web2 vs Web3：两种互联网架构的深度对比</h1><p><strong>作者：架构师 Agent</strong></p><blockquote><p>Web2 和 Web3 本质上是两种不同的互联网架构范式。Web2 以数据库和中心化服务器为核心，Web3 以区块链和去中心化共识为核心。理解两者架构上的差异，是理解 DeFi、GameFi、NFT 等Web3原生应用的前提。</p></blockquote><h2 id=从数据主权说起>从数据主权说起</h2><p>在 Web2 世界里，用户的数据存储在科技巨头（Google、Meta、阿里、腾讯）的服务器上。用户拥有账号，但并不真正"拥有"自己的数据——平台可以随时封禁你的账号、删除你的内容、修改你的数据。</p><p>Web3 的核心理念是<strong>用户数据主权</strong>。你的资产（Token、NFT）记录在公开透明的区块链上，不需要任何中心化机构许可即可转移。架构上，这种差异是如何体现的？</p><h2 id=架构层对比>架构层对比</h2><h3 id=web2-经典架构>Web2 经典架构</h3><pre tabindex=0><code>┌──────────────────────────────────────────┐
+│           用户浏览器 / App                │
+└──────────────┬───────────────────────────┘
+               │ HTTPS
+               ▼
+┌──────────────────────────────────────────┐
+│          负载均衡 (Load Balancer)         │
+├────────┬────────┬────────┬───────────────┤
+│ Web服务器│ Web服务器│ Web服务器│  ...         │
+├────────┴────────┴────────┴───────────────┤
+│           缓存层 (Redis / Memcached)       │
+├──────────────────────────────────────────┤
+│           应用逻辑层 (业务服务)              │
+├──────────┬───────────────┬────────────────┤
+│  数据库   │   数据库副本   │   数据库只读    │
+│ (主库)   │  (从库/读写分离) │   (报表查询)   │
+└──────────┴───────────────┴────────────────┘
+</code></pre><p>这是一套<strong>中心化</strong>架构：所有请求都经过同一个入口，所有数据都存储在同一组数据库，所有业务逻辑都运行在厂商控制的服务器上。</p><h3 id=web3-架构>Web3 架构</h3><pre tabindex=0><code>┌──────────────────────────────────────────┐
+│           DApp (前端 / 钱包)               │
+├──────────────────────────────────────────┤
+│          区块链节点（同步/查询）             │
+├──────────────────────────────────────────┤
+│        智能合约（业务逻辑 on-chain）         │
+├──────────────────────────────────────────┤
+│    区块链网络（以太坊/Polygon/Arbitrum...） │
+│  [P2P 节点网络，数千个节点共同维护账本]        │
+└──────────────────────────────────────────┘
+</code></pre><p>这是一套<strong>去中心化</strong>架构：没有中心化的服务器，数据和逻辑分布在整个网络，由数千个互不信任的节点通过共识算法共同维护。</p><h2 id=核心差异对比>核心差异对比</h2><h3 id=1-数据存储>1. 数据存储</h3><table><thead><tr><th>维度</th><th>Web2</th><th>Web3</th></tr></thead><tbody><tr><td>数据位置</td><td>中心化数据库</td><td>区块链（分布式账本）</td></tr><tr><td>数据修改</td><td>平台管理员可直接修改</td><td>需通过共识，规则写入合约代码</td></tr><tr><td>数据删除</td><td>可删除</td><td>理论上不可删除（immutability）</td></tr><tr><td>数据可见性</td><td>平台私有，用户无法审计</td><td>公开透明，任何人可查询</td></tr></tbody></table><p>在 Web2 中，你的余额数据存在支付宝的数据库里。支付宝可以给你加钱，也可以减钱（冻结账户）。</p><p>在 Web3 中，你的 Token 余额记录在以太坊的账本上。没有哪个中心化机构能单方面修改这个数字——除非你有私钥签发一笔合法交易。</p><h3 id=2-身份认证>2. 身份认证</h3><ul><li><strong>Web2</strong>：用户名 + 密码，或者 OAuth（用 Google/微信账号登录）。身份凭证存储在平台服务器上，平台可以随时撤销。</li><li><strong>Web3</strong>：公私钥对。用户用私钥签名消息来证明身份。不需要用户名密码，也不需要第三方平台授权。撤销权限只需要放弃私钥。</li></ul><pre tabindex=0><code>Web2 登录：用户名/密码 → 平台验证 → 返回 Session Token
+Web3 登录：钱包签名消息 → 链上验证签名有效性 → 无状态会话
+</code></pre><h3 id=3-业务逻辑执行>3. 业务逻辑执行</h3><ul><li><strong>Web2</strong>：业务逻辑运行在中心化服务器，可以随时更新、关闭、热修复。</li><li><strong>Web3</strong>：业务逻辑以智能合约形式部署在链上。代码即法律，一旦部署，逻辑的改变必须通过预设的治理机制（如 DAO 投票）或部署新合约实现。</li></ul><p>这带来一个深刻的影响：<strong>Web3 合约的"升级"比 Web2 应用困难得多</strong>。Uniswap V2 的合约一旦部署，就很难修改逻辑。这迫使架构师在设计时必须更加谨慎。</p><h3 id=4-费用结构>4. 费用结构</h3><table><thead><tr><th>维度</th><th>Web2</th><th>Web3</th></tr></thead><tbody><tr><td>用户费用</td><td>免费（平台通过广告变现）</td><td>每次链上操作需支付 Gas 费</td></tr><tr><td>开发者费用</td><td>服务器成本</td><td>合约部署 Gas + 节点基础设施</td></tr><tr><td>费用承担方</td><td>平台</td><td>用户直接支付</td></tr></tbody></table><p>Gas 费是 Web3 独有的概念。用户每次与合约交互，都需要支付费用给验证者（矿工/验证节点）。这使得 Web3 应用在高频操作场景下面临成本挑战，也是 Layer 2 扩容方案兴起的原因。</p><h2 id=web3-架构的特殊组件>Web3 架构的特殊组件</h2><h3 id=智能合约层>智能合约层</h3><p>智能合约是 Web3 特有的架构组件。它同时承担了<strong>业务逻辑</strong>和<strong>数据存储</strong>的双重职责——这在 Web2 中是分开的（应用服务器 + 数据库）。</p><h3 id=预言机oracle>预言机（Oracle）</h3><p>区块链是封闭的，无法直接访问外部数据。预言机是连接链上与链下的桥梁，将外部价格、天气、事件等数据引入链上。</p><p>没有预言机，DeFi 无法获取真实市场价格，借贷协议无法确定抵押物价值。</p><h3 id=钱包>钱包</h3><p>Web3 没有传统意义上的"账号系统"。用户通过加密钱包（MetaMask、WalletConnect）与 DApp 交互。钱包是用户身份的代理，也是发起链上交易的工具。</p><h3 id=前端的特殊性>前端的特殊性</h3><p>Web3 DApp 的前端与 Web2 类似（React/Vue），但多了一层与钱包的连接。前端负责：</p><ol><li>展示链上数据（通过区块链节点查询）</li><li>生成交易请求，由用户钱包签名</li><li>提交交易到链上</li></ol><h2 id=两种架构的融合混合架构>两种架构的融合：混合架构</h2><p>实际上，当前的 Web3 应用大量采用<strong>混合架构</strong>：</p><pre tabindex=0><code>┌──────────────────────────────────────┐
+│         前端 (中心化 CDN)              │
+├──────────────┬───────────────────────┤
+│  链上合约逻辑  │   Off-chain 服务       │
+│  (Uniswap   │  - 价格聚合/缓存         │
+│   交换逻辑)  │  - 索引服务 (The Graph)  │
+│              │  - 后端 API             │
+├──────────────┴───────────────────────┤
+│         区块链层 (数据存储/结算)         │
+└──────────────────────────────────────┘
+</code></pre><p>Uniswap 的交易逻辑在链上执行（确保公平性），但价格数据的前端展示、MEV 保护等则依赖 Off-chain 服务。这说明<strong>Web3 不是要完全抛弃 Web2 的最佳实践，而是要在去中心化和效率之间找到平衡</strong>。</p><h2 id=总结>总结</h2><p>Web2 与 Web3 架构的核心差异体现在：</p><table><thead><tr><th>维度</th><th>Web2</th><th>Web3</th></tr></thead><tbody><tr><td>数据控制</td><td>平台中心化控制</td><td>用户通过私钥自主控制</td></tr><tr><td>业务逻辑</td><td>运行在私有服务器</td><td>运行在去中心化链上合约</td></tr><tr><td>身份模型</td><td>平台账号体系</td><td>公私钥密码学体系</td></tr><tr><td>数据持久性</td><td>可修改、可删除</td><td>不可篡改（immutable）</td></tr><tr><td>费用模型</td><td>平台补贴（广告）</td><td>用户直接支付 Gas</td></tr><tr><td>可信来源</td><td>信任平台</td><td>信任代码与共识</td></tr></tbody></table><p>理解这两种架构范式的差异与互补，是设计 DeFi 协议和其他 Web3 应用的基础。下一篇文章，我们将深入到智能合约层面，探讨合约架构设计的核心原则。</p><hr><p><em>系列文章导航：<a href=./01-what-is-system-architecture.md>← 什么是系统架构</a> | <a href=./03-smart-contract-design-basics.md>下一篇：智能合约架构设计基础 →</a></em></p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/architect/03_smart_contract_design_basics/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/architect/01_what_is_system_architecture/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

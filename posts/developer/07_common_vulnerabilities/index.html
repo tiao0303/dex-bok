@@ -1,0 +1,271 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='智能合约常见安全漏洞与防范
+安全是 DeFi 的生命线
+智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。本文中我们将系统梳理最常见的安全漏洞及防御方法。
+一、重入攻击（Reentrancy）
+攻击原理
+攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数：
+// 有漏洞的合约：先转账，后更新状态
+contract VulnerableBank {
+    mapping(address => uint256) public balances;
+    
+    function deposit() external payable {
+        balances[msg.sender] += msg.value;
+    }
+    
+    function withdraw(uint256 amount) external {
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        
+        // 漏洞点：状态更新在外部调用之后
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Transfer failed");
+        
+        balances[msg.sender] -= amount; // 第二次进入时余额尚未扣除
+    }
+}
+攻击合约示例
+contract Attacker {
+    VulnerableBank public bank;
+    
+    constructor(address _bank) {
+        bank = VulnerableBank(_bank);
+    }
+    
+    // 先存款，使自己有余额可提
+    function attack() external payable {
+        bank.deposit{value: 1 ether}();
+        bank.withdraw(1 ether);
+    }
+    
+    // 收款回调触发下一次 withdraw
+    receive() external payable {
+        if (address(bank).balance >= 1 ether) {
+            bank.withdraw(1 ether);
+        }
+    }
+}
+防御措施
+1. CEI 模式（Checks-Effects-Interactions）'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/developer/07_common_vulnerabilities/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/developer/07_common_vulnerabilities/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/developer/07_common_vulnerabilities/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/developer/07_common_vulnerabilities/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='智能合约常见安全漏洞与防范 安全是 DeFi 的生命线 智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。本文中我们将系统梳理最常见的安全漏洞及防御方法。
+一、重入攻击（Reentrancy） 攻击原理 攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数：
+// 有漏洞的合约：先转账，后更新状态 contract VulnerableBank { mapping(address => uint256) public balances; function deposit() external payable { balances[msg.sender] += msg.value; } function withdraw(uint256 amount) external { require(balances[msg.sender] >= amount, "Insufficient balance"); // 漏洞点：状态更新在外部调用之后 (bool success, ) = msg.sender.call{value: amount}(""); require(success, "Transfer failed"); balances[msg.sender] -= amount; // 第二次进入时余额尚未扣除 } } 攻击合约示例 contract Attacker { VulnerableBank public bank; constructor(address _bank) { bank = VulnerableBank(_bank); } // 先存款，使自己有余额可提 function attack() external payable { bank.deposit{value: 1 ether}(); bank.withdraw(1 ether); } // 收款回调触发下一次 withdraw receive() external payable { if (address(bank).balance >= 1 ether) { bank.withdraw(1 ether); } } } 防御措施 1. CEI 模式（Checks-Effects-Interactions）'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='智能合约常见安全漏洞与防范 安全是 DeFi 的生命线 智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。本文中我们将系统梳理最常见的安全漏洞及防御方法。
+一、重入攻击（Reentrancy） 攻击原理 攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数：
+// 有漏洞的合约：先转账，后更新状态 contract VulnerableBank { mapping(address => uint256) public balances; function deposit() external payable { balances[msg.sender] += msg.value; } function withdraw(uint256 amount) external { require(balances[msg.sender] >= amount, "Insufficient balance"); // 漏洞点：状态更新在外部调用之后 (bool success, ) = msg.sender.call{value: amount}(""); require(success, "Transfer failed"); balances[msg.sender] -= amount; // 第二次进入时余额尚未扣除 } } 攻击合约示例 contract Attacker { VulnerableBank public bank; constructor(address _bank) { bank = VulnerableBank(_bank); } // 先存款，使自己有余额可提 function attack() external payable { bank.deposit{value: 1 ether}(); bank.withdraw(1 ether); } // 收款回调触发下一次 withdraw receive() external payable { if (address(bank).balance >= 1 ether) { bank.withdraw(1 ether); } } } 防御措施 1. CEI 模式（Checks-Effects-Interactions）'><meta itemprop=wordCount content="711"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='智能合约常见安全漏洞与防范 安全是 DeFi 的生命线 智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。本文中我们将系统梳理最常见的安全漏洞及防御方法。
+一、重入攻击（Reentrancy） 攻击原理 攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数：
+// 有漏洞的合约：先转账，后更新状态 contract VulnerableBank { mapping(address => uint256) public balances; function deposit() external payable { balances[msg.sender] += msg.value; } function withdraw(uint256 amount) external { require(balances[msg.sender] >= amount, "Insufficient balance"); // 漏洞点：状态更新在外部调用之后 (bool success, ) = msg.sender.call{value: amount}(""); require(success, "Transfer failed"); balances[msg.sender] -= amount; // 第二次进入时余额尚未扣除 } } 攻击合约示例 contract Attacker { VulnerableBank public bank; constructor(address _bank) { bank = VulnerableBank(_bank); } // 先存款，使自己有余额可提 function attack() external payable { bank.deposit{value: 1 ether}(); bank.withdraw(1 ether); } // 收款回调触发下一次 withdraw receive() external payable { if (address(bank).balance >= 1 ether) { bank.withdraw(1 ether); } } } 防御措施 1. CEI 模式（Checks-Effects-Interactions）'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-07_common_vulnerabilities"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#安全是-defi-的生命线>安全是 DeFi 的生命线</a></li><li><a href=#一重入攻击reentrancy>一、重入攻击（Reentrancy）</a><ul><li><a href=#攻击原理>攻击原理</a></li><li><a href=#攻击合约示例>攻击合约示例</a></li><li><a href=#防御措施>防御措施</a></li></ul></li><li><a href=#二预言机价格操控>二、预言机价格操控</a><ul><li><a href=#攻击原理-1>攻击原理</a></li><li><a href=#防御措施-1>防御措施</a></li></ul></li><li><a href=#三整数溢出下溢>三、整数溢出/下溢</a><ul><li><a href=#攻击原理-2>攻击原理</a></li><li><a href=#防御措施-2>防御措施</a></li></ul></li><li><a href=#四访问控制漏洞>四、访问控制漏洞</a><ul><li><a href=#攻击原理-3>攻击原理</a></li><li><a href=#防御措施-3>防御措施</a></li></ul></li><li><a href=#五闪电贷攻击>五、闪电贷攻击</a><ul><li><a href=#攻击原理-4>攻击原理</a></li><li><a href=#防御措施-4>防御措施</a></li></ul></li><li><a href=#六前端绕过攻击>六、前端绕过攻击</a><ul><li><a href=#攻击原理-5>攻击原理</a></li><li><a href=#防御措施-5>防御措施</a></li></ul></li><li><a href=#七应急响应计划>七、应急响应计划</a></li><li><a href=#安全检查清单>安全检查清单</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>711 字</span></div></header><h1 id=智能合约常见安全漏洞与防范>智能合约常见安全漏洞与防范</h1><h2 id=安全是-defi-的生命线>安全是 DeFi 的生命线</h2><p>智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。本文中我们将系统梳理最常见的安全漏洞及防御方法。</p><h2 id=一重入攻击reentrancy>一、重入攻击（Reentrancy）</h2><h3 id=攻击原理>攻击原理</h3><p>攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 有漏洞的合约：先转账，后更新状态
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>VulnerableBank</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>) <span style=color:#66d9ef>public</span> balances;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>deposit</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>payable</span> {
+</span></span><span style=display:flex><span>        balances[msg.sender] <span style=color:#f92672>+=</span> msg.value;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>        require(balances[msg.sender] <span style=color:#f92672>&gt;=</span> amount, <span style=color:#e6db74>&#34;Insufficient balance&#34;</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 漏洞点：状态更新在外部调用之后
+</span></span></span><span style=display:flex><span>        (<span style=color:#66d9ef>bool</span> success, ) <span style=color:#f92672>=</span> msg.sender.call{value<span style=color:#f92672>:</span> amount}(<span style=color:#e6db74>&#34;&#34;</span>);
+</span></span><span style=display:flex><span>        require(success, <span style=color:#e6db74>&#34;Transfer failed&#34;</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        balances[msg.sender] <span style=color:#f92672>-=</span> amount; <span style=color:#75715e>// 第二次进入时余额尚未扣除
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=攻击合约示例>攻击合约示例</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Attacker</span> {
+</span></span><span style=display:flex><span>    VulnerableBank <span style=color:#66d9ef>public</span> bank;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>constructor</span>(<span style=color:#66d9ef>address</span> _bank) {
+</span></span><span style=display:flex><span>        bank <span style=color:#f92672>=</span> VulnerableBank(_bank);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 先存款，使自己有余额可提
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>attack</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>payable</span> {
+</span></span><span style=display:flex><span>        bank.deposit{value<span style=color:#f92672>:</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>ether</span>}();
+</span></span><span style=display:flex><span>        bank.withdraw(<span style=color:#ae81ff>1</span> <span style=color:#66d9ef>ether</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 收款回调触发下一次 withdraw
+</span></span></span><span style=display:flex><span>    receive() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>payable</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (<span style=color:#66d9ef>address</span>(bank).balance <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>ether</span>) {
+</span></span><span style=display:flex><span>            bank.withdraw(<span style=color:#ae81ff>1</span> <span style=color:#66d9ef>ether</span>);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=防御措施>防御措施</h3><p><strong>1. CEI 模式（Checks-Effects-Interactions）</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 1. Checks
+</span></span></span><span style=display:flex><span>    require(balances[msg.sender] <span style=color:#f92672>&gt;=</span> amount, <span style=color:#e6db74>&#34;Insufficient balance&#34;</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 2. Effects（先更新状态）
+</span></span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>-=</span> amount;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 3. Interactions（最后做外部调用）
+</span></span></span><span style=display:flex><span>    (<span style=color:#66d9ef>bool</span> success, ) <span style=color:#f92672>=</span> msg.sender.call{value<span style=color:#f92672>:</span> amount}(<span style=color:#e6db74>&#34;&#34;</span>);
+</span></span><span style=display:flex><span>    require(success, <span style=color:#e6db74>&#34;Transfer failed&#34;</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>2. 引入互斥锁</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>SecureBank</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bool</span> <span style=color:#66d9ef>private</span> locked;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>modifier</span> <span style=color:#a6e22e>noReentrant</span>() {
+</span></span><span style=display:flex><span>        require(<span style=color:#f92672>!</span>locked, <span style=color:#e6db74>&#34;No reentrancy&#34;</span>);
+</span></span><span style=display:flex><span>        locked <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>_</span>;
+</span></span><span style=display:flex><span>        locked <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> noReentrant {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>3. 使用 OpenZeppelin 的 ReentrancyGuard</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts/utils/ReentrancyGuard.sol&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>SecureBank</span> <span style=color:#66d9ef>is</span> ReentrancyGuard {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> nonReentrant {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=二预言机价格操控>二、预言机价格操控</h2><h3 id=攻击原理-1>攻击原理</h3><p>攻击者利用闪电贷在短时间内操控交易对价格，使预言机返回错误价格，然后在其他协议中套利。</p><p>2022 年 Mango Markets 攻击就是典型案例：攻击者操控代币价格，利用借贷协议取出巨额资产。</p><h3 id=防御措施-1>防御措施</h3><p><strong>1. 使用 TWAP（时间加权平均价格）</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>ChainlinkOracle</span> {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>using</span> AggregatorV3Interface <span style=color:#66d9ef>for</span> <span style=color:#66d9ef>address</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getTWAP</span>(<span style=color:#66d9ef>address</span> token, <span style=color:#66d9ef>uint256</span> interval) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> latestPrice <span style=color:#f92672>=</span> AggregatorV3Interface(token).latestAnswer();
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> price1HourAgo <span style=color:#f92672>=</span> AggregatorV3Interface(token).latestAnswer(); <span style=color:#75715e>// 实际应取1小时前数据
+</span></span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 建议使用 Uniswap V3 TWAP 或 Chainlink 的historical data
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> (latestPrice <span style=color:#f92672>+</span> price1HourAgo) <span style=color:#f92672>/</span> <span style=color:#ae81ff>2</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getLatestPrice</span>(<span style=color:#66d9ef>address</span> token) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>        (, <span style=color:#66d9ef>int256</span> price, , , ) <span style=color:#f92672>=</span> AggregatorV3Interface(token).latestRoundData();
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>uint256</span>(price);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>2. 多预言机聚合</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>AggregatedOracle</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>address</span>[]) <span style=color:#66d9ef>public</span> oracles; <span style=color:#75715e>// 多个预言机源
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getPrice</span>(<span style=color:#66d9ef>address</span> token) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span>[] <span style=color:#66d9ef>memory</span> sources <span style=color:#f92672>=</span> oracles[token];
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span>[] <span style=color:#66d9ef>memory</span> prices <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#66d9ef>uint256</span>[](sources.length);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>uint</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> sources.length; i<span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>            prices[i] <span style=color:#f92672>=</span> Chainlink(sources[i]).getPrice(token);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 取中位数
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> _getMedian(prices);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>3. 设置价格波动检查</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>validatePrice</span>(<span style=color:#66d9ef>address</span> token, <span style=color:#66d9ef>uint256</span> newPrice) <span style=color:#66d9ef>internal</span> <span style=color:#66d9ef>view</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> lastPrice <span style=color:#f92672>=</span> lastPrices[token];
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> maxDeviation <span style=color:#f92672>=</span> lastPrice <span style=color:#f92672>*</span> <span style=color:#ae81ff>150</span> <span style=color:#f92672>/</span> <span style=color:#ae81ff>10000</span>; <span style=color:#75715e>// 最大15%波动
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    require(
+</span></span><span style=display:flex><span>        newPrice <span style=color:#f92672>&gt;=</span> lastPrice <span style=color:#f92672>-</span> maxDeviation <span style=color:#f92672>&amp;&amp;</span> 
+</span></span><span style=display:flex><span>        newPrice <span style=color:#f92672>&lt;=</span> lastPrice <span style=color:#f92672>+</span> maxDeviation,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Price manipulation detected&#34;</span>
+</span></span><span style=display:flex><span>    );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=三整数溢出下溢>三、整数溢出/下溢</h2><h3 id=攻击原理-2>攻击原理</h3><p>Solidity 0.8 之前的版本不内置溢出检查，攻击者可利用溢出绕过金额检查：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// Solidity &lt; 0.8 版本
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    require(balances[msg.sender] <span style=color:#f92672>-</span> amount <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>0</span>); <span style=color:#75715e>// 下溢时绕过检查
+</span></span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>-=</span> amount;
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=防御措施-2>防御措施</h3><p><strong>升级到 Solidity 0.8+</strong> —— 内置溢出检查会在溢出时自动 revert：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>pragma solidity</span> <span style=color:#f92672>^</span><span style=color:#ae81ff>0</span>.<span style=color:#ae81ff>8</span>.<span style=color:#ae81ff>24</span>;
+</span></span><span style=display:flex><span><span style=color:#75715e>// 不需要 SafeMath，编译器自动检查
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> balance;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>add</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    balance <span style=color:#f92672>+=</span> amount; <span style=color:#75715e>// 溢出时自动 revert
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>如果必须使用低版本，引入 SafeMath</strong>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>library</span> SafeMath {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>add</span>(<span style=color:#66d9ef>uint256</span> a, <span style=color:#66d9ef>uint256</span> b) <span style=color:#66d9ef>internal</span> <span style=color:#66d9ef>pure</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> c <span style=color:#f92672>=</span> a <span style=color:#f92672>+</span> b;
+</span></span><span style=display:flex><span>        require(c <span style=color:#f92672>&gt;=</span> a, <span style=color:#e6db74>&#34;SafeMath: addition overflow&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> c;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=四访问控制漏洞>四、访问控制漏洞</h2><h3 id=攻击原理-3>攻击原理</h3><p>忘记添加权限检查，任何人都可以调用管理员函数：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 漏洞：缺少 onlyOwner 修饰器
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setFee</span>(<span style=color:#66d9ef>uint256</span> newFee) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    fee <span style=color:#f92672>=</span> newFee;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 攻击者直接调用，修改手续费为 100%
+</span></span></span></code></pre></div><h3 id=防御措施-3>防御措施</h3><p><strong>1. 显式声明访问控制</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>AccessControl</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>public</span> owner;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>modifier</span> <span style=color:#a6e22e>onlyOwner</span>() {
+</span></span><span style=display:flex><span>        require(msg.sender <span style=color:#f92672>==</span> owner, <span style=color:#e6db74>&#34;Not authorized&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>_</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setFee</span>(<span style=color:#66d9ef>uint256</span> newFee) <span style=color:#66d9ef>external</span> onlyOwner {
+</span></span><span style=display:flex><span>        fee <span style=color:#f92672>=</span> newFee;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>2. 使用 OpenZeppelin AccessControl</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts/access/AccessControl.sol&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyContract</span> <span style=color:#66d9ef>is</span> AccessControl {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes32</span> <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>constant</span> MINTER_ROLE <span style=color:#f92672>=</span> keccak256(<span style=color:#e6db74>&#34;MINTER_ROLE&#34;</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>constructor</span>() {
+</span></span><span style=display:flex><span>        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>mint</span>(<span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> onlyRole(MINTER_ROLE) {
+</span></span><span style=display:flex><span>        _mint(to, amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=五闪电贷攻击>五、闪电贷攻击</h2><h3 id=攻击原理-4>攻击原理</h3><p>闪电贷允许你在一个交易内借出巨款、进行操作、归还借款。攻击者利用这一点操纵价格或绕过余额检查：</p><pre tabindex=0><code>1. 借出 1000 ETH
+2. 在 DEX 大量买入某代币，推高价格
+3. 用被操控的价格在借贷协议借款
+4. 归还闪电贷
+5. 利润落袋
+</code></pre><h3 id=防御措施-4>防御措施</h3><p><strong>1. 价格延迟生效</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>DelayedPrice</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> price;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> lastUpdateTime;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> delay <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>hours</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setPrice</span>(<span style=color:#66d9ef>uint256</span> newPrice) <span style=color:#66d9ef>external</span> onlyOracle {
+</span></span><span style=display:flex><span>        require(
+</span></span><span style=display:flex><span>            block.timestamp <span style=color:#f92672>&gt;=</span> lastUpdateTime <span style=color:#f92672>+</span> delay,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;Price update too frequent&#34;</span>
+</span></span><span style=display:flex><span>        );
+</span></span><span style=display:flex><span>        price <span style=color:#f92672>=</span> newPrice;
+</span></span><span style=display:flex><span>        lastUpdateTime <span style=color:#f92672>=</span> block.timestamp;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>2. 检查交易来源</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>modifier</span> <span style=color:#a6e22e>notInFlashLoan</span>() {
+</span></span><span style=display:flex><span>    require(
+</span></span><span style=display:flex><span>        tx.origin <span style=color:#f92672>==</span> msg.sender <span style=color:#f92672>||</span> <span style=color:#f92672>!</span>IFlashLoan(msg.sender).isFlashLoan(),
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;Flash loan detected&#34;</span>
+</span></span><span style=display:flex><span>    );
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>_</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><blockquote><p>⚠️ 注意：此方法可以被绕过，最根本的防御还是使用 TWAP 和多数据源。</p></blockquote><h2 id=六前端绕过攻击>六、前端绕过攻击</h2><h3 id=攻击原理-5>攻击原理</h3><p>前端限制最小交易额，但合约层没有校验，攻击者直接调用合约绕过。</p><h3 id=防御措施-5>防御措施</h3><p><strong>服务端校验必须同步到合约层</strong>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>swap</span>(<span style=color:#66d9ef>uint256</span> minAmountOut, <span style=color:#66d9ef>uint256</span> deadline) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>    require(block.timestamp <span style=color:#f92672>&lt;=</span> deadline, <span style=color:#e6db74>&#34;Transaction expired&#34;</span>);
+</span></span><span style=display:flex><span>    require(amountOut <span style=color:#f92672>&gt;=</span> minAmountOut, <span style=color:#e6db74>&#34;Slippage tolerance exceeded&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 执行交换
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=七应急响应计划>七、应急响应计划</h2><p>即使做了充分防御，也要准备应急响应：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Pausable</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bool</span> <span style=color:#66d9ef>public</span> paused;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>public</span> pauseGuardian;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>event</span> <span style=color:#a6e22e>Paused</span>(<span style=color:#66d9ef>address</span> account);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>event</span> <span style=color:#a6e22e>Unpaused</span>(<span style=color:#66d9ef>address</span> account);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>modifier</span> <span style=color:#a6e22e>whenNotPaused</span>() {
+</span></span><span style=display:flex><span>        require(<span style=color:#f92672>!</span>paused, <span style=color:#e6db74>&#34;Contract is paused&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>_</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>pause</span>() <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>        require(
+</span></span><span style=display:flex><span>            msg.sender <span style=color:#f92672>==</span> pauseGuardian <span style=color:#f92672>||</span> msg.sender <span style=color:#f92672>==</span> owner(),
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;Not authorized to pause&#34;</span>
+</span></span><span style=display:flex><span>        );
+</span></span><span style=display:flex><span>        paused <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>        emit Paused(msg.sender);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=安全检查清单>安全检查清单</h2><table><thead><tr><th>类别</th><th>检查项</th></tr></thead><tbody><tr><td>重入</td><td>是否使用 CEI 模式？是否有互斥锁？</td></tr><tr><td>访问控制</td><td>关键函数是否都有权限检查？</td></tr><tr><td>整数</td><td>是否使用 SafeMath 或 Solidity 0.8+？</td></tr><tr><td>预言机</td><td>是否使用 TWAP？是否有多数据源聚合？</td></tr><tr><td>闪电贷</td><td>价格是否有延迟生效机制？</td></tr><tr><td>前端</td><td>关键参数在合约层是否校验？</td></tr></tbody></table><h2 id=总结>总结</h2><p>智能合约安全需要"纵深防御"——每一层都可能失效，但多层防护让攻击者无懈可击。最重要的是：<strong>永远假设你的代码会被攻击，永远不要相信用户输入，永远保持谦逊</strong>。</p><p>下一篇文章我们将讨论 Gas 优化技巧，这是智能合约开发的高级话题。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/developer/08_gas_optimization/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/developer/06_contract_testing_deploy/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

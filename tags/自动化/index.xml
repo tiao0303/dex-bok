@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>自动化 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/</link><description>Recent content in 自动化 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Tue, 24 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code 自动化与自定义：把 AI 变成你的专属开发助手</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/04_claude_code_automation/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/04_claude_code_automation/</guid><description>&lt;h1 id="claude-code-自动化与自定义把-ai-变成你的专属开发助手"&gt;Claude Code 自动化与自定义：把 AI 变成你的专属开发助手&lt;/h1&gt;
+&lt;h2 id="claudemd项目级上下文"&gt;CLAUDE.md：项目级上下文&lt;/h2&gt;
+&lt;p&gt;在项目根目录创建 &lt;code&gt;CLAUDE.md&lt;/code&gt;，定义项目的技术栈、规范和工作流程。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;# CLAUDE.md
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 项目概述
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;这是一个 Uniswap V3 风格的 DEX 合约项目，使用 Foundry 开发。
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 技术栈
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; Solidity ^0.8.20
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; Foundry (forge/cast/chisel)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; TypeScript + Hardhat (前端)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 代码规范
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 所有 external 函数必须有 NatSpec 注释
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 安全函数必须使用 SafeMath 或 0.8+ 的内置检查
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 测试覆盖率必须 &amp;gt; 90%
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 常用命令
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge build`&lt;/span&gt; - 编译
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge test`&lt;/span&gt; - 运行测试
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge coverage`&lt;/span&gt; - 覆盖率
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge script Deploy.s.sol`&lt;/span&gt; - 部署
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 项目结构
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`contracts/`&lt;/span&gt; - 合约源码
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`test/`&lt;/span&gt; - 测试文件
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`script/`&lt;/span&gt; - 部署脚本
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`src/`&lt;/span&gt; - 前端源码
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Claude Code 会自动读取 CLAUDE.md，在整个对话中保持一致上下文。&lt;/p&gt;</description></item></channel></rss>

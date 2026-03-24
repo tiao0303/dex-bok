@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>脱锚 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E8%84%B1%E9%94%9A/</link><description>Recent content in 脱锚 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:40:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E8%84%B1%E9%94%9A/index.xml" rel="self" type="application/rss+xml"/><item><title>稳定币脱锚历史复盘 - 血泪教训总结</title><link>https://tiao0303.github.io/dex-bok/posts/t4_advanced/18_stablecoin_depeg_history/</link><pubDate>Thu, 19 Mar 2026 00:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4_advanced/18_stablecoin_depeg_history/</guid><description>&lt;h2 id="什么是脱锚"&gt;什么是脱锚&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;脱锚&lt;/strong&gt; = 稳定币价格偏离 1 USD&lt;/p&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;程度&lt;/th&gt;
+ &lt;th&gt;价格范围&lt;/th&gt;
+ &lt;th&gt;风险等级&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;正常波动&lt;/td&gt;
+ &lt;td&gt;$0.99-1.01&lt;/td&gt;
+ &lt;td&gt;🟢 低&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;轻度脱锚&lt;/td&gt;
+ &lt;td&gt;$0.95-0.99&lt;/td&gt;
+ &lt;td&gt;🟡 中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;严重脱锚&lt;/td&gt;
+ &lt;td&gt;$0.80-0.95&lt;/td&gt;
+ &lt;td&gt;🟠 高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;崩盘&lt;/td&gt;
+ &lt;td&gt;&amp;lt;$0.80&lt;/td&gt;
+ &lt;td&gt;🔴 极高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="案例一ust-崩盘-202205-"&gt;案例一：UST 崩盘 (2022.05) 🔴&lt;/h2&gt;
+&lt;h3 id="事件回顾"&gt;事件回顾&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;2022.05.02: UST = $0.998 (正常)
+2022.05.05: UST = $0.985 (开始脱锚)
+2022.05.07: UST = $0.65 (恐慌性抛售)
+2022.05.09: UST = $0.30 (彻底崩盘)
+2022.05.12: UST = $0.10 (归零)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="损失统计"&gt;损失统计&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;项目&lt;/th&gt;
+ &lt;th&gt;损失&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;市值蒸发&lt;/td&gt;
+ &lt;td&gt;$400 亿 → $1 亿&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;LUNA 归零&lt;/td&gt;
+ &lt;td&gt;$300 亿 → $0&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;用户损失&lt;/td&gt;
+ &lt;td&gt;超 200 万人&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="崩盘原因"&gt;崩盘原因&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;算法机制缺陷&lt;/strong&gt;&lt;/p&gt;</description></item></channel></rss>

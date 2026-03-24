@@ -1,0 +1,240 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="DApp 前端架构设计：从 Demo 到生产级应用
+
+难度：🌱🌿 进阶 | 字数：约 1150 字 | 预计阅读：7 分钟
+
+前言
+一个能跑通的 Demo 和一个生产级的 DApp 之间，差距不仅是代码量，更是架构设计、工程化思维和用户体验的全面提升。本篇文章将从目录结构、状态管理、Web3 交互层分离、错误处理等多个维度，探讨 DApp 前端架构的最佳实践。
+
+一、常见 DApp 前端架构问题
+很多开发者在入门阶段会写出这样的代码：
+// ❌ 所有逻辑堆在一个组件里——难以维护
+function App() {
+  const [balance, setBalance] = useState();
+  const [txs, setTxs] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // ABI、合约地址、RPC URL 全都硬编码在这里
+    const contract = new Contract(ADDR, ABI, provider);
+    contract.BalanceOf().then(setBalance);
+  }, []);
+
+  // ... 几百行后
+}
+这样的代码在功能简单时尚可运行，一旦功能增加（多合约、多网络、多用户状态）就会迅速失控。
+
+二、分层架构设计
+推荐采用以下四层架构：
+┌─────────────────────────────────────┐
+│          UI Layer (React)            │  视图渲染、用户交互
+├─────────────────────────────────────┤
+│         Hooks / Business Logic       │  业务逻辑、状态管理
+├─────────────────────────────────────┤
+│         Web3 Service Layer           │  合约交互、交易发送
+├─────────────────────────────────────┤
+│           Provider Layer            │  钱包、节点连接
+└─────────────────────────────────────┘
+2.1 目录结构参考
+src/
+├── contracts/               # 合约相关
+│   ├── abis/                # ABI 文件
+│   └── addresses.ts          # 各网络的合约地址
+├── hooks/                   # 自定义 Hooks（业务逻辑）
+│   ├── useTokenBalance.ts
+│   ├── useTransaction.ts
+│   └── useNetwork.ts
+├── services/                # Web3 服务层
+│   ├── tokenService.ts       # 代币相关操作
+│   ├── swapService.ts        # 交换逻辑
+│   └── transactionService.ts
+├── providers/               # Context Providers
+│   ├── Web3Provider.tsx
+│   └── ThemeProvider.tsx
+├── components/              # UI 组件
+│   ├── common/               # 通用组件（Button、Card）
+│   ├── wallet/              # 钱包相关（ConnectButton、NetworkSelector）
+│   └── features/             # 功能组件（SwapPanel、LiquidityPanel）
+├── utils/                   # 工具函数
+│   ├── format.ts             # 格式化（地址、金额）
+│   └── errors.ts             # 错误定义
+├── config/
+│   └── chains.ts             # 链配置（ChainID、RPC、Explorer）
+└── App.tsx
+
+三、状态管理策略
+3.1 React 内置状态 vs 全局状态
+
+  
+      
+          场景
+          推荐方案
+      
+  
+  
+      
+          组件内部 UI 状态（弹窗开关、loading）
+          useState
+      
+      
+          跨组件共享的 Web3 状态（账户、余额）
+          Context + useReducer
+      
+      
+          复杂列表数据（交易历史）
+          react-query（推荐）或 Zustand
+      
+      
+          持久化状态（用户偏好）
+          localStorage + Context
+      
+  
+
+3.2 使用 react-query 管理链上数据
+react-query（也称 TanStack Query）是管理服务端/链上数据获取的利器，天然支持缓存、自动刷新、分页等能力："><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/frontend/06_dapp_frontend_architecture/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/frontend/06_dapp_frontend_architecture/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/frontend/06_dapp_frontend_architecture/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/frontend/06_dapp_frontend_architecture/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="DApp 前端架构设计：从 Demo 到生产级应用 难度：🌱🌿 进阶 | 字数：约 1150 字 | 预计阅读：7 分钟
+前言 一个能跑通的 Demo 和一个生产级的 DApp 之间，差距不仅是代码量，更是架构设计、工程化思维和用户体验的全面提升。本篇文章将从目录结构、状态管理、Web3 交互层分离、错误处理等多个维度，探讨 DApp 前端架构的最佳实践。
+一、常见 DApp 前端架构问题 很多开发者在入门阶段会写出这样的代码：
+// ❌ 所有逻辑堆在一个组件里——难以维护 function App() { const [balance, setBalance] = useState(); const [txs, setTxs] = useState([]); const [loading, setLoading] = useState(false); useEffect(() => { // ABI、合约地址、RPC URL 全都硬编码在这里 const contract = new Contract(ADDR, ABI, provider); contract.BalanceOf().then(setBalance); }, []); // ... 几百行后 } 这样的代码在功能简单时尚可运行，一旦功能增加（多合约、多网络、多用户状态）就会迅速失控。
+二、分层架构设计 推荐采用以下四层架构：
+┌─────────────────────────────────────┐ │ UI Layer (React) │ 视图渲染、用户交互 ├─────────────────────────────────────┤ │ Hooks / Business Logic │ 业务逻辑、状态管理 ├─────────────────────────────────────┤ │ Web3 Service Layer │ 合约交互、交易发送 ├─────────────────────────────────────┤ │ Provider Layer │ 钱包、节点连接 └─────────────────────────────────────┘ 2.1 目录结构参考 src/ ├── contracts/ # 合约相关 │ ├── abis/ # ABI 文件 │ └── addresses.ts # 各网络的合约地址 ├── hooks/ # 自定义 Hooks（业务逻辑） │ ├── useTokenBalance.ts │ ├── useTransaction.ts │ └── useNetwork.ts ├── services/ # Web3 服务层 │ ├── tokenService.ts # 代币相关操作 │ ├── swapService.ts # 交换逻辑 │ └── transactionService.ts ├── providers/ # Context Providers │ ├── Web3Provider.tsx │ └── ThemeProvider.tsx ├── components/ # UI 组件 │ ├── common/ # 通用组件（Button、Card） │ ├── wallet/ # 钱包相关（ConnectButton、NetworkSelector） │ └── features/ # 功能组件（SwapPanel、LiquidityPanel） ├── utils/ # 工具函数 │ ├── format.ts # 格式化（地址、金额） │ └── errors.ts # 错误定义 ├── config/ │ └── chains.ts # 链配置（ChainID、RPC、Explorer） └── App.tsx 三、状态管理策略 3.1 React 内置状态 vs 全局状态 场景 推荐方案 组件内部 UI 状态（弹窗开关、loading） useState 跨组件共享的 Web3 状态（账户、余额） Context + useReducer 复杂列表数据（交易历史） react-query（推荐）或 Zustand 持久化状态（用户偏好） localStorage + Context 3.2 使用 react-query 管理链上数据 react-query（也称 TanStack Query）是管理服务端/链上数据获取的利器，天然支持缓存、自动刷新、分页等能力："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="DApp 前端架构设计：从 Demo 到生产级应用 难度：🌱🌿 进阶 | 字数：约 1150 字 | 预计阅读：7 分钟
+前言 一个能跑通的 Demo 和一个生产级的 DApp 之间，差距不仅是代码量，更是架构设计、工程化思维和用户体验的全面提升。本篇文章将从目录结构、状态管理、Web3 交互层分离、错误处理等多个维度，探讨 DApp 前端架构的最佳实践。
+一、常见 DApp 前端架构问题 很多开发者在入门阶段会写出这样的代码：
+// ❌ 所有逻辑堆在一个组件里——难以维护 function App() { const [balance, setBalance] = useState(); const [txs, setTxs] = useState([]); const [loading, setLoading] = useState(false); useEffect(() => { // ABI、合约地址、RPC URL 全都硬编码在这里 const contract = new Contract(ADDR, ABI, provider); contract.BalanceOf().then(setBalance); }, []); // ... 几百行后 } 这样的代码在功能简单时尚可运行，一旦功能增加（多合约、多网络、多用户状态）就会迅速失控。
+二、分层架构设计 推荐采用以下四层架构：
+┌─────────────────────────────────────┐ │ UI Layer (React) │ 视图渲染、用户交互 ├─────────────────────────────────────┤ │ Hooks / Business Logic │ 业务逻辑、状态管理 ├─────────────────────────────────────┤ │ Web3 Service Layer │ 合约交互、交易发送 ├─────────────────────────────────────┤ │ Provider Layer │ 钱包、节点连接 └─────────────────────────────────────┘ 2.1 目录结构参考 src/ ├── contracts/ # 合约相关 │ ├── abis/ # ABI 文件 │ └── addresses.ts # 各网络的合约地址 ├── hooks/ # 自定义 Hooks（业务逻辑） │ ├── useTokenBalance.ts │ ├── useTransaction.ts │ └── useNetwork.ts ├── services/ # Web3 服务层 │ ├── tokenService.ts # 代币相关操作 │ ├── swapService.ts # 交换逻辑 │ └── transactionService.ts ├── providers/ # Context Providers │ ├── Web3Provider.tsx │ └── ThemeProvider.tsx ├── components/ # UI 组件 │ ├── common/ # 通用组件（Button、Card） │ ├── wallet/ # 钱包相关（ConnectButton、NetworkSelector） │ └── features/ # 功能组件（SwapPanel、LiquidityPanel） ├── utils/ # 工具函数 │ ├── format.ts # 格式化（地址、金额） │ └── errors.ts # 错误定义 ├── config/ │ └── chains.ts # 链配置（ChainID、RPC、Explorer） └── App.tsx 三、状态管理策略 3.1 React 内置状态 vs 全局状态 场景 推荐方案 组件内部 UI 状态（弹窗开关、loading） useState 跨组件共享的 Web3 状态（账户、余额） Context + useReducer 复杂列表数据（交易历史） react-query（推荐）或 Zustand 持久化状态（用户偏好） localStorage + Context 3.2 使用 react-query 管理链上数据 react-query（也称 TanStack Query）是管理服务端/链上数据获取的利器，天然支持缓存、自动刷新、分页等能力："><meta itemprop=wordCount content="539"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="DApp 前端架构设计：从 Demo 到生产级应用 难度：🌱🌿 进阶 | 字数：约 1150 字 | 预计阅读：7 分钟
+前言 一个能跑通的 Demo 和一个生产级的 DApp 之间，差距不仅是代码量，更是架构设计、工程化思维和用户体验的全面提升。本篇文章将从目录结构、状态管理、Web3 交互层分离、错误处理等多个维度，探讨 DApp 前端架构的最佳实践。
+一、常见 DApp 前端架构问题 很多开发者在入门阶段会写出这样的代码：
+// ❌ 所有逻辑堆在一个组件里——难以维护 function App() { const [balance, setBalance] = useState(); const [txs, setTxs] = useState([]); const [loading, setLoading] = useState(false); useEffect(() => { // ABI、合约地址、RPC URL 全都硬编码在这里 const contract = new Contract(ADDR, ABI, provider); contract.BalanceOf().then(setBalance); }, []); // ... 几百行后 } 这样的代码在功能简单时尚可运行，一旦功能增加（多合约、多网络、多用户状态）就会迅速失控。
+二、分层架构设计 推荐采用以下四层架构：
+┌─────────────────────────────────────┐ │ UI Layer (React) │ 视图渲染、用户交互 ├─────────────────────────────────────┤ │ Hooks / Business Logic │ 业务逻辑、状态管理 ├─────────────────────────────────────┤ │ Web3 Service Layer │ 合约交互、交易发送 ├─────────────────────────────────────┤ │ Provider Layer │ 钱包、节点连接 └─────────────────────────────────────┘ 2.1 目录结构参考 src/ ├── contracts/ # 合约相关 │ ├── abis/ # ABI 文件 │ └── addresses.ts # 各网络的合约地址 ├── hooks/ # 自定义 Hooks（业务逻辑） │ ├── useTokenBalance.ts │ ├── useTransaction.ts │ └── useNetwork.ts ├── services/ # Web3 服务层 │ ├── tokenService.ts # 代币相关操作 │ ├── swapService.ts # 交换逻辑 │ └── transactionService.ts ├── providers/ # Context Providers │ ├── Web3Provider.tsx │ └── ThemeProvider.tsx ├── components/ # UI 组件 │ ├── common/ # 通用组件（Button、Card） │ ├── wallet/ # 钱包相关（ConnectButton、NetworkSelector） │ └── features/ # 功能组件（SwapPanel、LiquidityPanel） ├── utils/ # 工具函数 │ ├── format.ts # 格式化（地址、金额） │ └── errors.ts # 错误定义 ├── config/ │ └── chains.ts # 链配置（ChainID、RPC、Explorer） └── App.tsx 三、状态管理策略 3.1 React 内置状态 vs 全局状态 场景 推荐方案 组件内部 UI 状态（弹窗开关、loading） useState 跨组件共享的 Web3 状态（账户、余额） Context + useReducer 复杂列表数据（交易历史） react-query（推荐）或 Zustand 持久化状态（用户偏好） localStorage + Context 3.2 使用 react-query 管理链上数据 react-query（也称 TanStack Query）是管理服务端/链上数据获取的利器，天然支持缓存、自动刷新、分页等能力："><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-06_dapp_frontend_architecture"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#一常见-dapp-前端架构问题>一、常见 DApp 前端架构问题</a></li><li><a href=#二分层架构设计>二、分层架构设计</a><ul><li><a href=#21-目录结构参考>2.1 目录结构参考</a></li></ul></li><li><a href=#三状态管理策略>三、状态管理策略</a><ul><li><a href=#31-react-内置状态-vs-全局状态>3.1 React 内置状态 vs 全局状态</a></li><li><a href=#32-使用-react-query-管理链上数据>3.2 使用 react-query 管理链上数据</a></li></ul></li><li><a href=#四错误处理体系>四、错误处理体系</a></li><li><a href=#五配置与常量管理>五、配置与常量管理</a><ul><li><a href=#51-多链配置>5.1 多链配置</a></li><li><a href=#52-环境变量管理>5.2 环境变量管理</a></li></ul></li><li><a href=#六测试策略>六、测试策略</a></li><li><a href=#小结>小结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>539 字</span></div></header><h1 id=dapp-前端架构设计从-demo-到生产级应用>DApp 前端架构设计：从 Demo 到生产级应用</h1><blockquote><p>难度：🌱🌿 进阶 | 字数：约 1150 字 | 预计阅读：7 分钟</p></blockquote><h2 id=前言>前言</h2><p>一个能跑通的 Demo 和一个生产级的 DApp 之间，差距不仅是代码量，更是架构设计、工程化思维和用户体验的全面提升。本篇文章将从目录结构、状态管理、Web3 交互层分离、错误处理等多个维度，探讨 DApp 前端架构的最佳实践。</p><hr><h2 id=一常见-dapp-前端架构问题>一、常见 DApp 前端架构问题</h2><p>很多开发者在入门阶段会写出这样的代码：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#75715e>// ❌ 所有逻辑堆在一个组件里——难以维护
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>App</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>balance</span>, <span style=color:#a6e22e>setBalance</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>();
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>txs</span>, <span style=color:#a6e22e>setTxs</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>([]);
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> [<span style=color:#a6e22e>loading</span>, <span style=color:#a6e22e>setLoading</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>useState</span>(<span style=color:#66d9ef>false</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>useEffect</span>(() =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ABI、合约地址、RPC URL 全都硬编码在这里
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>contract</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Contract</span>(<span style=color:#a6e22e>ADDR</span>, <span style=color:#a6e22e>ABI</span>, <span style=color:#a6e22e>provider</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>contract</span>.<span style=color:#a6e22e>BalanceOf</span>().<span style=color:#a6e22e>then</span>(<span style=color:#a6e22e>setBalance</span>);
+</span></span><span style=display:flex><span>  }, []);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// ... 几百行后
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>这样的代码在功能简单时尚可运行，一旦功能增加（多合约、多网络、多用户状态）就会迅速失控。</p><hr><h2 id=二分层架构设计>二、分层架构设计</h2><p>推荐采用以下四层架构：</p><pre tabindex=0><code>┌─────────────────────────────────────┐
+│          UI Layer (React)            │  视图渲染、用户交互
+├─────────────────────────────────────┤
+│         Hooks / Business Logic       │  业务逻辑、状态管理
+├─────────────────────────────────────┤
+│         Web3 Service Layer           │  合约交互、交易发送
+├─────────────────────────────────────┤
+│           Provider Layer            │  钱包、节点连接
+└─────────────────────────────────────┘
+</code></pre><h3 id=21-目录结构参考>2.1 目录结构参考</h3><pre tabindex=0><code>src/
+├── contracts/               # 合约相关
+│   ├── abis/                # ABI 文件
+│   └── addresses.ts          # 各网络的合约地址
+├── hooks/                   # 自定义 Hooks（业务逻辑）
+│   ├── useTokenBalance.ts
+│   ├── useTransaction.ts
+│   └── useNetwork.ts
+├── services/                # Web3 服务层
+│   ├── tokenService.ts       # 代币相关操作
+│   ├── swapService.ts        # 交换逻辑
+│   └── transactionService.ts
+├── providers/               # Context Providers
+│   ├── Web3Provider.tsx
+│   └── ThemeProvider.tsx
+├── components/              # UI 组件
+│   ├── common/               # 通用组件（Button、Card）
+│   ├── wallet/              # 钱包相关（ConnectButton、NetworkSelector）
+│   └── features/             # 功能组件（SwapPanel、LiquidityPanel）
+├── utils/                   # 工具函数
+│   ├── format.ts             # 格式化（地址、金额）
+│   └── errors.ts             # 错误定义
+├── config/
+│   └── chains.ts             # 链配置（ChainID、RPC、Explorer）
+└── App.tsx
+</code></pre><hr><h2 id=三状态管理策略>三、状态管理策略</h2><h3 id=31-react-内置状态-vs-全局状态>3.1 React 内置状态 vs 全局状态</h3><table><thead><tr><th>场景</th><th>推荐方案</th></tr></thead><tbody><tr><td>组件内部 UI 状态（弹窗开关、loading）</td><td><code>useState</code></td></tr><tr><td>跨组件共享的 Web3 状态（账户、余额）</td><td>Context + <code>useReducer</code></td></tr><tr><td>复杂列表数据（交易历史）</td><td><code>react-query</code>（推荐）或 Zustand</td></tr><tr><td>持久化状态（用户偏好）</td><td><code>localStorage</code> + Context</td></tr></tbody></table><h3 id=32-使用-react-query-管理链上数据>3.2 使用 react-query 管理链上数据</h3><p><code>react-query</code>（也称 TanStack Query）是管理服务端/链上数据获取的利器，天然支持缓存、自动刷新、分页等能力：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm install @tanstack/react-query
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>useQuery</span>, <span style=color:#a6e22e>useMutation</span>, <span style=color:#a6e22e>useQueryClient</span> } <span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#39;@tanstack/react-query&#39;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>Contract</span> } <span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>useWallet</span> } <span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#39;@/hooks/useWallet&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 获取 Token 余额
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>useTokenBalance</span>(<span style=color:#a6e22e>tokenAddress</span>: <span style=color:#66d9ef>string</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>provider</span>, <span style=color:#a6e22e>account</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>useWallet</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>useQuery</span>({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>queryKey</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;balance&#39;</span>, <span style=color:#a6e22e>tokenAddress</span>, <span style=color:#a6e22e>account</span>],
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>queryFn</span>: <span style=color:#66d9ef>async</span> () <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>contract</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Contract</span>(<span style=color:#a6e22e>tokenAddress</span>, <span style=color:#a6e22e>ERC20_ABI</span>, <span style=color:#a6e22e>provider</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>balance</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>contract</span>.<span style=color:#a6e22e>balanceOf</span>(<span style=color:#a6e22e>account</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>formatEther</span>(<span style=color:#a6e22e>balance</span>);
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>enabled</span><span style=color:#f92672>:</span> <span style=color:#f92672>!!</span><span style=color:#a6e22e>provider</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#f92672>!!</span><span style=color:#a6e22e>account</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>staleTime</span>: <span style=color:#66d9ef>30_000</span>, <span style=color:#75715e>// 30 秒内不重新请求
+</span></span></span><span style=display:flex><span>    <span style=color:#a6e22e>refetchInterval</span>: <span style=color:#66d9ef>60_000</span>, <span style=color:#75715e>// 每 60 秒自动刷新
+</span></span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 发送交易
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>useTransfer() {</span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>queryClient</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>useQueryClient</span>();
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>provider</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>useWallet</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>useMutation</span>({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>mutationFn</span>: <span style=color:#66d9ef>async</span> ({ <span style=color:#a6e22e>to</span>, <span style=color:#a6e22e>amount</span> }<span style=color:#f92672>:</span> { <span style=color:#a6e22e>to</span>: <span style=color:#66d9ef>string</span>; <span style=color:#a6e22e>amount</span>: <span style=color:#66d9ef>string</span> }) <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>signer</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getSigner</span>();
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>contract</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Contract</span>(<span style=color:#a6e22e>USDT_ADDR</span>, <span style=color:#a6e22e>ERC20_ABI</span>, <span style=color:#a6e22e>signer</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>tx</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>contract</span>.<span style=color:#a6e22e>transfer</span>(<span style=color:#a6e22e>to</span>, <span style=color:#a6e22e>parseEther</span>(<span style=color:#a6e22e>amount</span>));
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>tx</span>.<span style=color:#a6e22e>wait</span>(); <span style=color:#75715e>// 等待链上确认
+</span></span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>onSuccess</span><span style=color:#f92672>:</span> () <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// 交易成功后，自动刷新余额
+</span></span></span><span style=display:flex><span>      <span style=color:#a6e22e>queryClient</span>.<span style=color:#a6e22e>invalidateQueries</span>({ <span style=color:#a6e22e>queryKey</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;balance&#39;</span>] });
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=四错误处理体系>四、错误处理体系</h2><p>区块链交互的错误类型远比传统 HTTP 请求复杂，建议建立统一的错误处理层：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// utils/errors.ts
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Web3Error</span> <span style=color:#66d9ef>extends</span> Error {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>constructor</span>(
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>message</span>: <span style=color:#66d9ef>string</span>,
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>code</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;USER_REJECTED&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;INSUFFICIENT_FUNDS&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;NETWORK_ERROR&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;CONTRACT_ERROR&#39;</span> <span style=color:#f92672>|</span> <span style=color:#e6db74>&#39;TIMEOUT&#39;</span>
+</span></span><span style=display:flex><span>  ) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>super</span>(<span style=color:#a6e22e>message</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>name</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;Web3Error&#39;</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>parseEthersError</span>(<span style=color:#a6e22e>error</span>: <span style=color:#66d9ef>any</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Web3Error</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>error</span>.<span style=color:#a6e22e>code</span> <span style=color:#f92672>===</span> <span style=color:#ae81ff>4001</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Web3Error</span>(<span style=color:#e6db74>&#39;用户拒绝了交易&#39;</span>, <span style=color:#e6db74>&#39;USER_REJECTED&#39;</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>error</span>.<span style=color:#a6e22e>code</span> <span style=color:#f92672>===</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>32000</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>error</span>.<span style=color:#a6e22e>message</span>.<span style=color:#a6e22e>includes</span>(<span style=color:#e6db74>&#39;insufficient funds&#39;</span>)) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Web3Error</span>(<span style=color:#e6db74>&#39;余额不足以支付 Gas&#39;</span>, <span style=color:#e6db74>&#39;INSUFFICIENT_FUNDS&#39;</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Web3Error</span>(<span style=color:#a6e22e>error</span>.<span style=color:#a6e22e>message</span> <span style=color:#f92672>||</span> <span style=color:#e6db74>&#39;未知错误&#39;</span>, <span style=color:#e6db74>&#39;NETWORK_ERROR&#39;</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=五配置与常量管理>五、配置与常量管理</h2><h3 id=51-多链配置>5.1 多链配置</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// config/chains.ts
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>SUPPORTED_CHAINS</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>1</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Ethereum&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rpcUrl</span>: <span style=color:#66d9ef>process.env.REACT_APP_ETH_RPC</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>explorer</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://etherscan.io&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>nativeCurrency</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Ether&#39;</span>, <span style=color:#66d9ef>symbol</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ETH&#39;</span>, <span style=color:#a6e22e>decimals</span>: <span style=color:#66d9ef>18</span> },
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>137</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Polygon&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rpcUrl</span>: <span style=color:#66d9ef>process.env.REACT_APP_POLYGON_RPC</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>explorer</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://polygonscan.com&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>nativeCurrency</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;MATIC&#39;</span>, <span style=color:#66d9ef>symbol</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;MATIC&#39;</span>, <span style=color:#a6e22e>decimals</span>: <span style=color:#66d9ef>18</span> },
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>} <span style=color:#66d9ef>as</span> <span style=color:#66d9ef>const</span>;
+</span></span></code></pre></div><h3 id=52-环境变量管理>5.2 环境变量管理</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># .env.example</span>
+</span></span><span style=display:flex><span>REACT_APP_ETH_RPC<span style=color:#f92672>=</span>https://mainnet.infura.io/v3/YOUR_KEY
+</span></span><span style=display:flex><span>REACT_APP_POLYGON_RPC<span style=color:#f92672>=</span>https://polygon-mainnet.g.alchemy.com/v2/YOUR_KEY
+</span></span><span style=display:flex><span>REACT_APP_CHAIN_ID<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+</span></span></code></pre></div><hr><h2 id=六测试策略>六、测试策略</h2><p>DApp 前端测试比传统 Web 应用更复杂，因为涉及与真实区块链的交互：</p><ol><li><strong>单元测试</strong>：使用 Jest + @testing-library/react 测试组件逻辑</li><li><strong>集成测试</strong>：使用 Hardhat 本地节点（或 Anvil）启动一条本地链进行端到端测试</li><li><strong>E2E 测试</strong>：使用 Playwright 测试完整的用户操作流程（连接钱包 → 发起交易 → 验证状态变化）</li></ol><hr><h2 id=小结>小结</h2><p>一个好的 DApp 前端架构需要：分层设计清晰、状态管理合理、错误处理完善、多链支持优雅。下一篇文章我们将深入探讨 Web3 前端中最敏感的部分——签名与验签。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/07_signature_verification/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/05_wallet_connection_implementation/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

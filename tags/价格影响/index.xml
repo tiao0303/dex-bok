@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>价格影响 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E4%BB%B7%E6%A0%BC%E5%BD%B1%E5%93%8D/</link><description>Recent content in 价格影响 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E4%BB%B7%E6%A0%BC%E5%BD%B1%E5%93%8D/index.xml" rel="self" type="application/rss+xml"/><item><title>T2 进阶实战 07：滑点与价格影响</title><link>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/07_slippage_price_impact/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/07_slippage_price_impact/</guid><description>&lt;h1 id="滑点与价格影响"&gt;滑点与价格影响&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;滑点（Slippage）是 DEX 交易中最重要的概念之一。理解滑点的来源、计算方法和优化策略，对于构建高效的交易执行系统至关重要。&lt;/p&gt;
+&lt;h2 id="滑点的定义"&gt;滑点的定义&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;滑点&lt;/strong&gt; = 预期价格与实际成交价格的差异&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;滑点百分比 = (预期价格 - 实际价格) / 预期价格 × 100%
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="滑点的来源"&gt;滑点的来源&lt;/h2&gt;
+&lt;h3 id="1-价格影响price-impact"&gt;1. 价格影响（Price Impact）&lt;/h3&gt;
+&lt;p&gt;由于 AMM 的定价机制，大额交易会改变池子的价格。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;恒定乘积模型下的价格影响：&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;给定：x * y = k
+买入 Δx 的代币 A：
+- 新价格 P&amp;#39; = (y - Δy) / (x + Δx)
+- 原价格 P = y / x
+- 价格影响 = (P - P&amp;#39;) / P
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="2-外部市场波动"&gt;2. 外部市场波动&lt;/h3&gt;
+&lt;p&gt;在交易确认期间，外部市场价格可能发生变化。&lt;/p&gt;
+&lt;h3 id="3-mev-攻击"&gt;3. MEV 攻击&lt;/h3&gt;
+&lt;p&gt;前端运行（Front-running）和三明治攻击会加剧滑点。&lt;/p&gt;
+&lt;h2 id="价格影响计算"&gt;价格影响计算&lt;/h2&gt;
+&lt;h3 id="精确公式"&gt;精确公式&lt;/h3&gt;
+&lt;p&gt;对于恒定乘积 AMM，买入 &lt;code&gt;Δx&lt;/code&gt; 数量的代币 A：&lt;/p&gt;</description></item></channel></rss>

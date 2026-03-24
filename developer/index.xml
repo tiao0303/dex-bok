@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Developers on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/developer/</link><description>Recent content in Developers on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><atom:link href="https://tiao0303.github.io/dex-bok/developer/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://tiao0303.github.io/dex-bok/developer/01_programming_path/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/developer/01_programming_path/</guid><description>&lt;h1 id="编程入门到精通区块链开发者的学习路径"&gt;编程入门到精通：区块链开发者的学习路径&lt;/h1&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;如果你想成为一名区块链开发者，学习路径其实很清晰：先掌握编程基础，再深入智能合约世界。区块链开发本质上是&lt;strong&gt;后端开发 + 密码学 + 经济机制设计&lt;/strong&gt;的结合。本文将为你规划一条从零到精通的学习路线。&lt;/p&gt;
+&lt;h2 id="第一阶段编程基础1-3个月"&gt;第一阶段：编程基础（1-3个月）&lt;/h2&gt;
+&lt;h3 id="选择一门主力语言"&gt;选择一门主力语言&lt;/h3&gt;
+&lt;p&gt;建议从 &lt;strong&gt;JavaScript&lt;/strong&gt; 或 &lt;strong&gt;Python&lt;/strong&gt; 入手。这两门语言生态丰富、学习资源多，且在区块链领域也有广泛应用。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;JavaScript&lt;/strong&gt;：适合全栈开发，以太坊开发框架 Hardhat、Truffle 都基于 JS&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Python&lt;/strong&gt;：智能合约测试、数据分析、量化交易首选&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="核心知识体系"&gt;核心知识体系&lt;/h3&gt;
+&lt;p&gt;无论选择哪门语言，以下基础知识必须掌握：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 变量、数据类型、运算符
+2. 条件判断、循环语句
+3. 函数与作用域
+4. 数组、字典（对象）数据结构
+5. 面向对象编程（类、继承、接口）
+6. 异步编程（Promise、async/await）
+7. 错误处理与调试技巧
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实战建议"&gt;实战建议&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;完成 3-5 个综合性小项目（如 Todo 列表、简易博客、RESTful API）&lt;/li&gt;
+&lt;li&gt;学会使用 Git 版本控制&lt;/li&gt;
+&lt;li&gt;能在本地搭建开发环境并熟练使用命令行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="第二阶段区块链基础1-2个月"&gt;第二阶段：区块链基础（1-2个月）&lt;/h2&gt;
+&lt;h3 id="理解区块链核心概念"&gt;理解区块链核心概念&lt;/h3&gt;
+&lt;p&gt;在学习 Solidity 之前，你需要理解区块链的工作原理：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;去中心化账本&lt;/strong&gt;：数据分布式存储，无单一控制节点&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;共识机制&lt;/strong&gt;：PoW（工作量证明）、PoS（权益证明）如何保证一致性&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;哈希函数&lt;/strong&gt;：理解 SHA-256 等哈希算法的不可逆性&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;公私钥体系&lt;/strong&gt;：非对称加密、数字签名的工作原理&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gas 机制&lt;/strong&gt;：以太坊上计算资源的计费模型&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="推荐的入门学习资源"&gt;推荐的入门学习资源&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;《精通比特币》（Mastering Bitcoin）—— 理解比特币UTXO模型&lt;/li&gt;
+&lt;li&gt;Ethereum 官方文档 —— 理解以太坊账户模型和 EVM&lt;/li&gt;
+&lt;li&gt;Vitalik 的博客 —— 深入理解区块链设计哲学&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="第三阶段solidity-智能合约开发2-4个月"&gt;第三阶段：Solidity 智能合约开发（2-4个月）&lt;/h2&gt;
+&lt;h3 id="solidity-语言特性"&gt;Solidity 语言特性&lt;/h3&gt;
+&lt;p&gt;Solidity 是一门面向合约的编程语言，运行在以太坊虚拟机（EVM）上。它的语法类似 JavaScript，但有以下关键区别：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/developer/02_solidity_basics/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/developer/02_solidity_basics/</guid><description>&lt;h1 id="solidity-基础语法从变量到函数"&gt;Solidity 基础语法：从变量到函数&lt;/h1&gt;
+&lt;h2 id="概述"&gt;概述&lt;/h2&gt;
+&lt;p&gt;Solidity 是以太坊智能合约开发的首选语言，语法融合了 JavaScript 的简洁与 Java 的强类型特性。本文将系统讲解 Solidity 的基础语法，帮助你快速上手智能合约编写。&lt;/p&gt;
+&lt;h2 id="第一个-solidity-合约"&gt;第一个 Solidity 合约&lt;/h2&gt;
+&lt;p&gt;每个 Solidity 源文件通常以许可证声明和版本约束开头：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// SPDX-License-Identifier: MIT
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;pragma solidity&lt;/span&gt; &lt;span style="color:#f92672"&gt;^&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;.&lt;span style="color:#ae81ff"&gt;8&lt;/span&gt;.&lt;span style="color:#ae81ff"&gt;24&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;SPDX-License-Identifier&lt;/code&gt;：声明代码许可证，主流项目多用 MIT 或 GPL-3.0&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pragma solidity ^0.8.24&lt;/code&gt;：约束编译器版本，&lt;code&gt;^&lt;/code&gt; 表示兼容 0.8.24 及以上 0.8.x 版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="数据类型"&gt;数据类型&lt;/h2&gt;
+&lt;p&gt;Solidity 是一门静态类型语言，变量必须在声明时指定类型。&lt;/p&gt;
+&lt;h3 id="值类型"&gt;值类型&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;类型&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;th&gt;示例&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;bool&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;布尔值&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;bool public isActive = true;&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;int/uint&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;有/无符号整数&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;int256 public balance = -100;&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;address&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;20字节以太坊地址&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;address public owner = msg.sender;&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;bytes1~bytes32&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;固定长度字节数组&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;bytes32 public hash;&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="引用类型"&gt;引用类型&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 数组（动态大小）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt;[] &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; numbers;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;[] &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; investors;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 结构体
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Token&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; name;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; supply;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; creator;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 映射：键值对，类似哈希表
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;mapping&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; balances;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;mapping&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;mapping&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;)) &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; allowances;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;重要&lt;/strong&gt;：声明映射时，值类型的默认值为 &lt;code&gt;0&lt;/code&gt;，地址类型为 &lt;code&gt;address(0)&lt;/code&gt;，布尔为 &lt;code&gt;false&lt;/code&gt;。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/developer/03_smart_contract_env/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/developer/03_smart_contract_env/</guid><description>&lt;h1 id="智能合约开发环境搭建工具链全景指南"&gt;智能合约开发环境搭建：工具链全景指南&lt;/h1&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;在编写第一个 Solidity 合约之前，我们需要一套完整的开发环境。与传统 Web 开发不同，智能合约开发涉及区块链本地测试、Gas 模拟、部署脚本等特殊需求。本文将详细介绍从零搭建专业级开发环境的完整流程。&lt;/p&gt;
+&lt;h2 id="核心工具栈"&gt;核心工具栈&lt;/h2&gt;
+&lt;p&gt;一套完整的智能合约开发环境通常包含：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;编辑器/IDE → VS Code + Solidity 插件
+编译工具 → solc（Solidity 编译器）
+开发框架 → Hardhat 或 Foundry
+本地测试网络 → Hardhat Network 或 Ganache
+前端交互库 → ethers.js 或 web3.js
+包管理 → npm / yarn
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="第一步安装-nodejs-与包管理器"&gt;第一步：安装 Node.js 与包管理器&lt;/h2&gt;
+&lt;p&gt;Solidity 开发工具大多基于 Node.js，首选通过 nvm（Node Version Manager）安装：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 安装 nvm&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;source ~/.zshrc &lt;span style="color:#75715e"&gt;# 或 source ~/.bashrc&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 安装 LTS 版本 Node.js&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nvm install --lts
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nvm use --lts
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 验证安装&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;node --version &lt;span style="color:#75715e"&gt;# v20.x.x&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;npm --version &lt;span style="color:#75715e"&gt;# 10.x.x&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;提示&lt;/strong&gt;：Windows 用户建议使用 WSL2（Windows Subsystem for Linux）或直接下载 Node.js 官方安装包。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/developer/04_erc20_standard/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/developer/04_erc20_standard/</guid><description>&lt;h1 id="erc-20-代币标准详解理解-defi-的基石"&gt;ERC-20 代币标准详解：理解 DeFi 的基石&lt;/h1&gt;
+&lt;h2 id="什么是-erc-20"&gt;什么是 ERC-20&lt;/h2&gt;
+&lt;p&gt;ERC-20 是以太坊上**同质化代币（ Fungible Token ）**的标准接口规范。2017 年通过 EIP-20 正式确立，成为以太坊生态中发行代币的统一协议。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;同质化&lt;/strong&gt;意味着每一枚代币都是等价的——我的 1 ETH 和你的 1 ETH 完全等价，可以互换。ERC-20 代币正是这种特性的代币。&lt;/p&gt;
+&lt;p&gt;ERC-20 之前，每个代币项目都需要自己定义转账逻辑，导致钱包、交易所需要为每个代币单独适配。ERC-20 的出现彻底改变了这一局面——只要遵循这个接口标准，就能无缝兼容所有钱包和交易所。&lt;/p&gt;
+&lt;h2 id="接口规范"&gt;接口规范&lt;/h2&gt;
+&lt;p&gt;ERC-20 标准定义了 6 个必须实现的核心函数和 2 个可选函数，以及 3 个事件。&lt;/p&gt;
+&lt;h3 id="必需函数"&gt;必需函数&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;IERC20&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 代币总供应量
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;totalSupply&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 查询指定地址的代币余额
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;balanceOf&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; account) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 从调用者地址向目标地址转账
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;transfer&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; to, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 查询授权额度（owner 授权给 spender 的代币数量）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;allowance&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; owner, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; spender) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 授权第三方使用自己的代币（典型场景：DEX 挂单需要授权）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;approve&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; spender, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 执行授权转账（从 from 向 to 转账，需先 approve）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;transferFrom&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;from&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; to, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="事件"&gt;事件&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 转账事件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Transfer&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;from&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; to, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; value);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 授权事件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Approval&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; owner, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; spender, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; value);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;indexed&lt;/code&gt; 关键字允许对事件参数进行过滤，这在构建前端应用时非常有用。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/developer/05_defi_core_contracts/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/developer/05_defi_core_contracts/</guid><description>&lt;h1 id="defi-核心合约解析amm借贷与收益聚合"&gt;DeFi 核心合约解析：AMM、借贷与收益聚合&lt;/h1&gt;
+&lt;h2 id="defi-的三大支柱"&gt;DeFi 的三大支柱&lt;/h2&gt;
+&lt;p&gt;去中心化金融（DeFi）由三类核心协议构成：&lt;strong&gt;去中心化交易所（DEX）&lt;/strong&gt;、&lt;strong&gt;借贷协议&lt;/strong&gt;和&lt;strong&gt;收益聚合器&lt;/strong&gt;。理解这三类协议的合约设计，是成为 DeFi 开发者的必经之路。&lt;/p&gt;
+&lt;h2 id="一amm-去中心化交易所"&gt;一、AMM 去中心化交易所&lt;/h2&gt;
+&lt;h3 id="什么是-amm"&gt;什么是 AMM&lt;/h3&gt;
+&lt;p&gt;自动做市商（Automated Market Maker, AMM）用&lt;strong&gt;数学公式&lt;/strong&gt;替代传统订单簿，由流动性池按公式定价。与传统做市商相比，AMM 无需人工报价，任何人都可以向池子注入流动性成为&amp;quot;做市商&amp;quot;。&lt;/p&gt;
+&lt;h3 id="恒定乘积公式uniswap-v2"&gt;恒定乘积公式（Uniswap V2）&lt;/h3&gt;
+&lt;p&gt;Uniswap V2 采用最经典的 &lt;code&gt;x * y = k&lt;/code&gt; 公式：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 核心做市逻辑
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getAmountOut&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amountIn, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; reserveIn, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; reserveOut) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;pure&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;returns&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amountOut) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(amountIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;INSUFFICIENT_INPUT_AMOUNT&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(reserveIn &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; reserveOut &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;INSUFFICIENT_LIQUIDITY&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;997&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// 0.3% 手续费
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; amountInWithFee &lt;span style="color:#f92672"&gt;*&lt;/span&gt; reserveOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; denominator &lt;span style="color:#f92672"&gt;=&lt;/span&gt; reserveIn &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; amountInWithFee;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; amountOut &lt;span style="color:#f92672"&gt;=&lt;/span&gt; numerator &lt;span style="color:#f92672"&gt;/&lt;/span&gt; denominator;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;核心特性&lt;/strong&gt;：&lt;/p&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;特性&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;x * y = k&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;价格公式，k 恒定（忽略手续费时）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;0.3% 手续费&lt;/td&gt;
+ &lt;td&gt;每笔交易扣除，作为流动性提供者收益&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;无常损失&lt;/td&gt;
+ &lt;td&gt;流动性提供者的持仓价值可能低于简单持有&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="恒定乘积曲线的价格特性"&gt;恒定乘积曲线的价格特性&lt;/h3&gt;
+&lt;p&gt;当 &lt;code&gt;x/y = 1&lt;/code&gt; 时价格约为 1:1。若大量买入 Token A：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/developer/06_contract_testing_deploy/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/developer/06_contract_testing_deploy/</guid><description>&lt;h1 id="智能合约测试与部署从测试网到主网"&gt;智能合约测试与部署：从测试网到主网&lt;/h1&gt;
+&lt;h2 id="为什么测试至关重要"&gt;为什么测试至关重要&lt;/h2&gt;
+&lt;p&gt;智能合约一旦部署就无法修改（除非使用代理模式），任何漏洞都可能导致不可逆的资产损失。2021 年 Poly Network 被盗 6.11 亿美元，2022 年 Ronin Network 被盗 6.2 亿美元——这些事故几乎都与合约漏洞有关。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;智能合约测试是守门员，不是可选项。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="测试框架概述"&gt;测试框架概述&lt;/h2&gt;
+&lt;h3 id="hardhat-测试"&gt;Hardhat 测试&lt;/h3&gt;
+&lt;p&gt;Hardhat 原生支持使用 Waffle 库进行智能合约测试，基于 Mocha 测试框架：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;expect&lt;/span&gt; } &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;require&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;chai&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;ethers&lt;/span&gt; } &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;require&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;hardhat&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;describe&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Token Contract&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; () {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;let&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;token&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;let&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;owner&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;let&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;beforeEach&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; () {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; [&lt;span style="color:#a6e22e"&gt;owner&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ethers&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;getSigners&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Token&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ethers&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;getContractFactory&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;MyToken&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;token&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Token&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;deploy&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;ethers&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;parseEther&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;1000000&amp;#34;&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;token&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;waitForDeployment&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;describe&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Deployment&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; () {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;it&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;should set the correct name and symbol&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; () {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;expect&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;token&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;()).&lt;span style="color:#a6e22e"&gt;to&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;equal&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;MyToken&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;expect&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;token&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;symbol&lt;/span&gt;()).&lt;span style="color:#a6e22e"&gt;to&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;equal&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;MTK&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;it&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;should assign total supply to owner&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; () {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ownerBalance&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;token&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;balanceOf&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;owner&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;expect&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;ownerBalance&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;to&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;equal&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;ethers&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;parseEther&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;1000000&amp;#34;&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="foundry-测试"&gt;Foundry 测试&lt;/h3&gt;
+&lt;p&gt;Foundry 的测试用 Solidity 编写，执行速度极快：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/developer/07_common_vulnerabilities/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/developer/07_common_vulnerabilities/</guid><description>&lt;h1 id="智能合约常见安全漏洞与防范"&gt;智能合约常见安全漏洞与防范&lt;/h1&gt;
+&lt;h2 id="安全是-defi-的生命线"&gt;安全是 DeFi 的生命线&lt;/h2&gt;
+&lt;p&gt;智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。&lt;/p&gt;
+&lt;h2 id="一重入攻击reentrancy"&gt;一、重入攻击（Reentrancy）&lt;/h2&gt;
+&lt;h3 id="攻击原理"&gt;攻击原理&lt;/h3&gt;
+&lt;p&gt;攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数。&lt;/p&gt;
+&lt;h3 id="防御措施"&gt;防御措施&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;1. CEI 模式（Checks-Effects-Interactions）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;先检查条件，再更新状态，最后做外部调用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2. 引入互斥锁&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;使用 ReentrancyGuard 修饰器。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3. 使用 OpenZeppelin 的 ReentrancyGuard&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;@openzeppelin/contracts/utils/ReentrancyGuard.sol&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;SecureBank&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;is&lt;/span&gt; ReentrancyGuard {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;withdraw&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; nonReentrant {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// ...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="二预言机价格操控"&gt;二、预言机价格操控&lt;/h2&gt;
+&lt;h3 id="攻击原理-1"&gt;攻击原理&lt;/h3&gt;
+&lt;p&gt;攻击者利用闪电贷在短时间内操控交易对价格，使预言机返回错误价格，然后在其他协议中套利。&lt;/p&gt;
+&lt;h3 id="防御措施-1"&gt;防御措施&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;1. 使用 TWAP（时间加权平均价格）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2. 多预言机聚合&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3. 设置价格波动检查&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="三整数溢出下溢"&gt;三、整数溢出/下溢&lt;/h2&gt;
+&lt;h3 id="攻击原理-2"&gt;攻击原理&lt;/h3&gt;
+&lt;p&gt;Solidity 0.8 之前的版本不内置溢出检查，攻击者可利用溢出绕过金额检查。&lt;/p&gt;
+&lt;h3 id="防御措施-2"&gt;防御措施&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;升级到 Solidity 0.8+&lt;/strong&gt; —— 内置溢出检查会在溢出时自动 revert。&lt;/p&gt;
+&lt;h2 id="四访问控制漏洞"&gt;四、访问控制漏洞&lt;/h2&gt;
+&lt;h3 id="攻击原理-3"&gt;攻击原理&lt;/h3&gt;
+&lt;p&gt;忘记添加权限检查，任何人都可以调用管理员函数。&lt;/p&gt;
+&lt;h3 id="防御措施-3"&gt;防御措施&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;1. 显式声明访问控制&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;modifier&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;onlyOwner&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(msg.sender &lt;span style="color:#f92672"&gt;==&lt;/span&gt; owner, &lt;span style="color:#e6db74"&gt;&amp;#34;Not authorized&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;_&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;2. 使用 OpenZeppelin AccessControl&lt;/strong&gt;&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/developer/08_gas_optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/developer/08_gas_optimization/</guid><description>&lt;h1 id="gas-优化技巧写出省油的智能合约"&gt;Gas 优化技巧：写出省油的智能合约&lt;/h1&gt;
+&lt;h2 id="什么是-gas"&gt;什么是 Gas&lt;/h2&gt;
+&lt;p&gt;Gas 是以太坊网络上执行操作的成本单位。每个 EVM 操作码都有对应的 Gas 消耗：简单的存储读写约 20,000 Gas，复杂的椭圆曲线签名验证可能需要数百万 Gas。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Gas 优化的目标&lt;/strong&gt;：在保持功能正确性和安全性的前提下，最小化 Gas 消耗，降低用户成本并提高合约吞吐量。&lt;/p&gt;
+&lt;h2 id="存储优化"&gt;存储优化&lt;/h2&gt;
+&lt;p&gt;存储是 Gas 消耗最高的部分，一次存储写入约 20,000 Gas，读取约 200-800 Gas。&lt;/p&gt;
+&lt;h3 id="使用-events-代替-storage-存储"&gt;使用 events 代替 storage 存储&lt;/h3&gt;
+&lt;p&gt;如果你只需要记录历史数据而不需要合约后续读取，用 events 更省 Gas：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 高 Gas：存储每笔历史记录
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;mapping&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[]) &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; depositHistory;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 低 Gas：仅记录事件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Deposit&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;indexed&lt;/span&gt; user, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount, &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; timestamp);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="packing-结构体成员"&gt;packing 结构体成员&lt;/h3&gt;
+&lt;p&gt;EVM 以 32 字节（256 bits）为单位存储变量。将大小不同的变量紧凑排列可以减少存储槽数：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 优化：紧密排列
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;GoodConfig&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint128&lt;/span&gt; a; &lt;span style="color:#75715e"&gt;// 槽1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint128&lt;/span&gt; c; &lt;span style="color:#75715e"&gt;// 槽1的后16字节（和a pack在一起）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; b; &lt;span style="color:#75715e"&gt;// 槽2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="批量读写"&gt;批量读写&lt;/h3&gt;
+&lt;p&gt;批量操作比分次操作省 Gas。&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/developer/09_upgradeable_patterns/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/developer/09_upgradeable_patterns/</guid><description>&lt;h1 id="升级型合约设计模式代理模式深度解析"&gt;升级型合约设计模式：代理模式深度解析&lt;/h1&gt;
+&lt;h2 id="为什么需要可升级合约"&gt;为什么需要可升级合约&lt;/h2&gt;
+&lt;p&gt;智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将&lt;strong&gt;逻辑代码&lt;/strong&gt;与&lt;strong&gt;存储状态&lt;/strong&gt;分离，实现了合约的&amp;quot;升级&amp;quot;能力。&lt;/p&gt;
+&lt;h2 id="代理模式核心原理"&gt;代理模式核心原理&lt;/h2&gt;
+&lt;h3 id="evm-的-delegatecall"&gt;EVM 的 DELEGATECALL&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;DELEGATECALL&lt;/code&gt; 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文。&lt;/p&gt;
+&lt;h2 id="代理模式家族"&gt;代理模式家族&lt;/h2&gt;
+&lt;h3 id="1-透明代理transparent-proxy"&gt;1. 透明代理（Transparent Proxy）&lt;/h3&gt;
+&lt;p&gt;最简单但有限制：管理员可以升级，但不能普通调用。&lt;/p&gt;
+&lt;h3 id="2-uups-代理erc-1967"&gt;2. UUPS 代理（ERC-1967）&lt;/h3&gt;
+&lt;p&gt;目前最流行的模式，升级逻辑放在实现合约本身：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;abstract&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;UUPSUpgradeable&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;is&lt;/span&gt; IERC1822Proxiable {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;upgradeToAndCall&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; newImplementation,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;bytes&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;memory&lt;/span&gt; data
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;payable&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;virtual&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; _authorizeUpgrade(newImplementation);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; _upgradeToAndCall(newImplementation, data);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;UUPS vs 透明代理&lt;/strong&gt;：&lt;/p&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;特性&lt;/th&gt;
+ &lt;th&gt;UUPS&lt;/th&gt;
+ &lt;th&gt;透明代理&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;升级逻辑位置&lt;/td&gt;
+ &lt;td&gt;实现合约&lt;/td&gt;
+ &lt;td&gt;代理合约&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;代理合约复杂度&lt;/td&gt;
+ &lt;td&gt;简单&lt;/td&gt;
+ &lt;td&gt;复杂&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;部署 Gas&lt;/td&gt;
+ &lt;td&gt;较低&lt;/td&gt;
+ &lt;td&gt;较高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="3-钻石代理diamond-patterneip-2535"&gt;3. 钻石代理（Diamond Pattern，EIP-2535）&lt;/h3&gt;
+&lt;p&gt;支持多个实现模块，适合大型项目。&lt;/p&gt;
+&lt;h2 id="存储布局的挑战"&gt;存储布局的挑战&lt;/h2&gt;
+&lt;p&gt;DELEGATECALL 的最大陷阱：&lt;strong&gt;代理合约和实现合约共享同一个存储空间&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id="存储槽冲突"&gt;存储槽冲突&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 实现合约 V1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ImplementationV1&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; value; &lt;span style="color:#75715e"&gt;// 槽 0
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 实现合约 V2（错误示例：新增变量导致槽错位）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ImplementationV2Bad&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; owner; &lt;span style="color:#75715e"&gt;// 槽 0 ← 冲突！覆盖了 V1 的 value
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; value; &lt;span style="color:#75715e"&gt;// 槽 1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="正确做法继承存储安全基线"&gt;正确做法：继承存储安全基线&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;abstract&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Initializable&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt;[&lt;span style="color:#ae81ff"&gt;49&lt;/span&gt;] &lt;span style="color:#66d9ef"&gt;private&lt;/span&gt; __gap; &lt;span style="color:#75715e"&gt;// 保留前50个槽，避免与子合约冲突
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="完整开发流程"&gt;完整开发流程&lt;/h2&gt;
+&lt;h3 id="1-安装依赖"&gt;1. 安装依赖&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;npm install @openzeppelin/contracts @openzeppelin/contracts-upgradeable
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="2-编写可升级合约"&gt;2. 编写可升级合约&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;MyTokenV1&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;is&lt;/span&gt; Initializable, ERC20Upgradeable {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;initialize&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; initialSupply) &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; initializer {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; __ERC20_init(&lt;span style="color:#e6db74"&gt;&amp;#34;MyToken&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;MTK&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; _mint(msg.sender, initialSupply);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-部署与升级脚本"&gt;3. 部署与升级脚本&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;ethers&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;upgrades&lt;/span&gt; } &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;require&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;hardhat&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 部署 V1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;TokenV1&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ethers&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;getContractFactory&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;MyTokenV1&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;tokenV1&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;upgrades&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;deployProxy&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;TokenV1&lt;/span&gt;, [&lt;span style="color:#a6e22e"&gt;ethers&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;parseEther&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;1000000&amp;#34;&lt;/span&gt;)]);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 升级到 V2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;TokenV2&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ethers&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;getContractFactory&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;MyTokenV2&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;upgrades&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;upgradeProxy&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;tokenV1&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;getAddress&lt;/span&gt;(), &lt;span style="color:#a6e22e"&gt;TokenV2&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="常见陷阱"&gt;常见陷阱&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;陷阱&lt;/th&gt;
+ &lt;th&gt;后果&lt;/th&gt;
+ &lt;th&gt;解决方案&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;构造函数中使用 immutable&lt;/td&gt;
+ &lt;td&gt;升级后值丢失&lt;/td&gt;
+ &lt;td&gt;用 initializer 替代&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;修改已有变量顺序&lt;/td&gt;
+ &lt;td&gt;存储错位，数据损坏&lt;/td&gt;
+ &lt;td&gt;严格遵守存储布局规则&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;忘记 _disableInitializers&lt;/td&gt;
+ &lt;td&gt;可被重新初始化&lt;/td&gt;
+ &lt;td&gt;在所有实现合约的构造函数中调用&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="总结"&gt;总结&lt;/h2&gt;
+&lt;p&gt;代理模式让智能合约具备了&amp;quot;升级&amp;quot;能力，但也带来了复杂度：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/developer/10_contract_audit/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/developer/10_contract_audit/</guid><description>&lt;h1 id="智能合约审计实战从自检到专业审计"&gt;智能合约审计实战：从自检到专业审计&lt;/h1&gt;
+&lt;h2 id="为什么需要审计"&gt;为什么需要审计&lt;/h2&gt;
+&lt;p&gt;智能合约审计是对合约代码进行系统性安全检查的过程，目的是在部署前发现并修复漏洞。2022 年 Web3 因安全问题损失超过 37 亿美元，&lt;strong&gt;绝大多数损失本可以通过审计避免&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id="目标合约simplelending"&gt;目标合约：SimpleLending&lt;/h2&gt;
+&lt;p&gt;本文以一个借贷协议的简化版本为例，演示从自检到专业审计的完整流程。&lt;/p&gt;
+&lt;h2 id="第一阶段自检清单"&gt;第一阶段：自检清单&lt;/h2&gt;
+&lt;h3 id="快速检查清单"&gt;快速检查清单&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;✅&lt;/th&gt;
+ &lt;th&gt;检查项&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;⬜&lt;/td&gt;
+ &lt;td&gt;重入保护&lt;/td&gt;
+ &lt;td&gt;所有外部调用是否在状态更新后？是否使用 ReentrancyGuard？&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;⬜&lt;/td&gt;
+ &lt;td&gt;权限控制&lt;/td&gt;
+ &lt;td&gt;onlyOwner 修饰器是否正确使用？构造函数是否调用 _disableInitializers？&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;⬜&lt;/td&gt;
+ &lt;td&gt;输入验证&lt;/td&gt;
+ &lt;td&gt;零值检查、边界检查、状态检查&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;⬜&lt;/td&gt;
+ &lt;td&gt;整数溢出&lt;/td&gt;
+ &lt;td&gt;Solidity 0.8+ 自动检查，或使用 SafeMath&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;⬜&lt;/td&gt;
+ &lt;td&gt;预言机&lt;/td&gt;
+ &lt;td&gt;是否依赖外部价格？是否有操控风险？&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;⬜&lt;/td&gt;
+ &lt;td&gt;事件&lt;/td&gt;
+ &lt;td&gt;所有状态变更是否触发事件？&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;⬜&lt;/td&gt;
+ &lt;td&gt;错误处理&lt;/td&gt;
+ &lt;td&gt;revert 消息是否清晰？&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;⬜&lt;/td&gt;
+ &lt;td&gt;代理兼容性&lt;/td&gt;
+ &lt;td&gt;是否有 initializer？存储是否安全？&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="第二阶段工具扫描"&gt;第二阶段：工具扫描&lt;/h2&gt;
+&lt;h3 id="slither-静态分析"&gt;Slither 静态分析&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 安装&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pip install slither-analyzer
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 运行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;slither . --exclude-dependencies
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="mythril-符号执行"&gt;Mythril 符号执行&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pip install mythril
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;myth analyze contracts/SimpleLending.sol
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="第三阶段手动审计要点"&gt;第三阶段：手动审计要点&lt;/h2&gt;
+&lt;h3 id="漏洞-1repay-函数的部分还款逻辑缺陷"&gt;漏洞 1：repay 函数的部分还款逻辑缺陷&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 问题代码
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (amount &lt;span style="color:#f92672"&gt;&amp;gt;=&lt;/span&gt; col.borrowedAmount) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; col.borrowedAmount &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;} &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; col.borrowedAmount &lt;span style="color:#f92672"&gt;-=&lt;/span&gt; amount;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;totalBorrowed[token] &lt;span style="color:#f92672"&gt;-=&lt;/span&gt; amount; &lt;span style="color:#75715e"&gt;// 潜在问题：未考虑部分还款
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;修复建议&lt;/strong&gt;：&lt;/p&gt;</description></item></channel></rss>

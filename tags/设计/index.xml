@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>设计 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E8%AE%BE%E8%AE%A1/</link><description>Recent content in 设计 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:40:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E8%AE%BE%E8%AE%A1/index.xml" rel="self" type="application/rss+xml"/><item><title>DEX 经济模型设计 - 代币排放与激励机制</title><link>https://tiao0303.github.io/dex-bok/posts/t6_master/28_dex_tokenomics_design/</link><pubDate>Thu, 19 Mar 2026 01:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t6_master/28_dex_tokenomics_design/</guid><description>&lt;h2 id="代币经济核心要素"&gt;代币经济核心要素&lt;/h2&gt;
+&lt;h3 id="1-代币用途utility"&gt;1. 代币用途（Utility）&lt;/h3&gt;
+&lt;h4 id="基本用途"&gt;基本用途&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;用途&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;th&gt;价值捕获&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;治理投票&lt;/td&gt;
+ &lt;td&gt;参与协议决策&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;费用折扣&lt;/td&gt;
+ &lt;td&gt;交易手续费减免&lt;/td&gt;
+ &lt;td&gt;高 ✅&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;质押奖励&lt;/td&gt;
+ &lt;td&gt;获得代币排放&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;流动性挖矿&lt;/td&gt;
+ &lt;td&gt;额外收益激励&lt;/td&gt;
+ &lt;td&gt;高 ✅&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="高级用途"&gt;高级用途&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;- 费用分成：持有代币获得协议收入
+- 保险基金：代币作为风险储备
+- 抵押品：借贷协议接受作为抵押
+- 白名单：持有代币获得新资产访问权
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="2-供应量设计"&gt;2. 供应量设计&lt;/h3&gt;
+&lt;h4 id="固定供应-vs-通胀模型"&gt;固定供应 vs 通胀模型&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;模型&lt;/th&gt;
+ &lt;th&gt;代表&lt;/th&gt;
+ &lt;th&gt;优点&lt;/th&gt;
+ &lt;th&gt;缺点&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;固定供应&lt;/td&gt;
+ &lt;td&gt;UNI(10 亿)&lt;/td&gt;
+ &lt;td&gt;通缩预期&lt;/td&gt;
+ &lt;td&gt;激励不可持续&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;温和通胀&lt;/td&gt;
+ &lt;td&gt;AAVE(1600 万/年)&lt;/td&gt;
+ &lt;td&gt;持续激励&lt;/td&gt;
+ &lt;td&gt;稀释持有者&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;动态调整&lt;/td&gt;
+ &lt;td&gt;算法稳定币&lt;/td&gt;
+ &lt;td&gt;灵活&lt;/td&gt;
+ &lt;td&gt;复杂，风险高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="分配结构建议"&gt;分配结构建议&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;健康分配：
+- 社区/生态：40-60%
+- 团队：10-20%（4 年解锁）
+- 投资人：15-25%（1-2 年解锁）
+- 预留：10-15%
+
+危险信号：
+- 团队 + 投资人 &amp;gt;50%
+- 解锁期&amp;lt;1 年
+- 无锁仓直接流通
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="3-解锁计划"&gt;3. 解锁计划&lt;/h3&gt;
+&lt;h4 id="标准解锁曲线"&gt;标准解锁曲线&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;TGE（代币生成事件）：10-15%
+6 个月后：每月 5%
+4 年解锁完毕
+
+示例（1 亿代币）：
+TGE: 1000 万（10%）
+7-12 月：每月 500 万
+13-48 月：每月 250 万
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="解锁影响分析"&gt;解锁影响分析&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;大量解锁 → 抛压增加 → 价格下跌
+
+缓解措施：
+- 分期解锁（避免集中）
+- 解锁前通知市场
+- 配合回购/销毁
+- 提供质押选项（延迟卖出）
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="激励机制设计"&gt;激励机制设计&lt;/h2&gt;
+&lt;h3 id="流动性挖矿设计"&gt;流动性挖矿设计&lt;/h3&gt;
+&lt;h4 id="奖励分配公式"&gt;奖励分配公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;每个池子奖励 = 总奖励 × (该池子 TVL / 总 TVL) × 乘数
+
+乘数设计：
+- 稳定币池：0.5x（低风险）
+- 主流币池：1.0x（标准）
+- 长尾资产：2.0x（高风险，需要更多激励）
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="排放率设计"&gt;排放率设计&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;目标：
+- 早期：高排放（吸引流动性）
+- 中期：稳定排放（维持流动性）
+- 长期：低排放（靠手续费）
+
+示例曲线：
+年第 1 年：5000 万代币/年
+年第 2 年：2500 万代币/年
+年第 3 年：1250 万代币/年
+年第 4 年+：500 万代币/年（永久）
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="费用分成模型"&gt;费用分成模型&lt;/h3&gt;
+&lt;h4 id="模型一全部给-lp"&gt;模型一：全部给 LP&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;代表：Uniswap V3
+
+分配：
+- LP：100%
+- 协议：0%
+
+优点：
+- 流动性最大化
+- 简单透明
+
+缺点：
+- 协议无收入
+- 代币价值捕获弱
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="模型二协议分成"&gt;模型二：协议分成&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;代表：SushiSwap、Curve
+
+分配：
+- LP：70-90%
+- 协议：10-30%
+- 协议收入用于：回购销毁/国库/开发
+
+优点：
+- 协议可持续
+- 代币有实际价值
+
+缺点：
+- LP 收益降低
+- 可能影响流动性
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="模型三代币持有者分成"&gt;模型三：代币持有者分成&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;代表：GMX、GNS
+
+分配：
+- LP：70%
+- 代币质押者：30%
+
+优点：
+- 激励长期持有
+- 减少流通抛压
+
+缺点：
+- 复杂度高
+- LP 可能不满
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="真实案例分析"&gt;真实案例分析&lt;/h2&gt;
+&lt;h3 id="案例一uniswapuni"&gt;案例一：Uniswap（UNI）&lt;/h3&gt;
+&lt;h4 id="代币经济"&gt;代币经济&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;总供应：10 亿 UNI
+分配：
+- 社区：60%（6 亿）
+- 团队：21%（2.1 亿，4 年解锁）
+- 投资人：18%（1.8 亿，4 年解锁）
+- 顾问：1%（1000 万，4 年解锁）
+
+解锁：
+- TGE: 1%
+- 之后 4 年线性解锁
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="问题与改进"&gt;问题与改进&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;问题：
+- 无费用分成（代币价值捕获弱）
+- 排放已结束（激励不足）
+- 治理参与度低
+
+改进提案（未通过）：
+- 开启费用开关（10-25% 给协议）
+- 重启流动性挖矿
+- 质押 UNI 获得分成
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="案例二curvecrv"&gt;案例二：Curve（CRV）&lt;/h3&gt;
+&lt;h4 id="代币经济-1"&gt;代币经济&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;总供应：30 亿 CRV
+分配：
+- 社区：62%
+- 团队：30%（2-6 年解锁）
+- 投资人：3%
+- 储备：5%
+
+排放：
+- 初始：~400 万 CRV/天
+- 每年减半
+- 60 年后排放完毕
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="vecrv-模型创新"&gt;veCRV 模型（创新）&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;机制：
+- 锁仓 CRV 获得 veCRV
+- 锁仓时间越长，veCRV 越多
+- 最多锁 4 年，获得 3x boost
+
+用途：
+1. 治理投票
+2. 获得交易手续费分成
+3. 获得 CRV 奖励 boost
+4. 接收贿赂（Vote Locker）
+
+效果：
+- 长期锁仓&amp;gt;60%
+- 流通供应减少
+- 治理参与度高
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id="案例三gmxgmx"&gt;案例三：GMX（GMX）&lt;/h3&gt;
+&lt;h4 id="代币经济-2"&gt;代币经济&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;总供应：1325 万 GMX
+分配：
+- 流动性挖矿：60%
+- 团队：15%
+- 顾问：10%
+- treasury：15%
+
+解锁：
+- 无 TGE 解锁
+- 全部通过挖矿释放
+- 团队/顾问线性解锁 1 年
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="价值捕获"&gt;价值捕获&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;协议收入分配：
+- 30%：GMX 质押者（ETH 形式）
+- 30%：GLP 提供者
+- 40%：国库
+
+效果：
+- GMX 质押 APY 10-20%
+- 直接获得 ETH（非代币）
+- 真实收益模型
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="经济模型设计框架"&gt;经济模型设计框架&lt;/h2&gt;
+&lt;h3 id="步骤一定义目标"&gt;步骤一：定义目标&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;问题：
+- 需要吸引什么？（流动性/用户/开发者）
+- 代币价值来源？（费用/治理/其他）
+- 长期可持续性？
+
+目标示例：
+- 6 个月内 TVL 达到$1 亿
+- 日交易量$5000 万
+- 代币持有者&amp;gt;10 万
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="步骤二设计代币用途"&gt;步骤二：设计代币用途&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;必选项（至少 2 个）：
+□ 治理投票
+□ 费用折扣
+□ 质押奖励
+□ 流动性挖矿
+
+可选项（差异化）：
+□ 费用分成
+□ 白名单访问
+□ 保险基金
+□ 跨链治理
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="步骤三确定供应量"&gt;步骤三：确定供应量&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;考虑因素：
+- 目标市值（代币价格 × 供应量）
+- 心理价位（$1-10 更易接受）
+- 竞品对比（参考类似项目）
+
+示例计算：
+目标市值：$5 亿
+目标价格：$5
+总供应：1 亿代币
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="步骤四设计分配"&gt;步骤四：设计分配&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;原则：
+- 社区占比最大（&amp;gt;50%）
+- 团队/投资人锁仓&amp;gt;2 年
+- 预留应急资金
+
+示例：
+- 社区挖矿：50%
+- 团队：15%（4 年解锁）
+- 投资人：15%（2 年解锁）
+- 国库：10%
+- 空投：10%
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="步骤五设计排放"&gt;步骤五：设计排放&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;考虑：
+- 早期需要高激励
+- 长期依赖手续费
+- 避免通胀过高
+
+示例曲线：
+年第 1 年：20% 供应（高激励）
+年第 2 年：15% 供应
+年第 3 年：10% 供应
+年第 4 年：5% 供应
+年第 5 年+：2% 供应（长期维持）
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="步骤六模拟验证"&gt;步骤六：模拟验证&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;工具：
+- Excel/Python 建模
+- 不同场景压力测试
+
+测试场景：
+- 牛市（价格涨 10 倍）
+- 熊市（价格跌 90%）
+- 横盘（价格不变）
+
+验证指标：
+- 通胀率是否可持续
+- 激励是否足够
+- 抛压是否可控
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="常见陷阱与规避"&gt;常见陷阱与规避&lt;/h2&gt;
+&lt;h3 id="陷阱一过度通胀"&gt;陷阱一：过度通胀&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;问题：
+- 排放过高（&amp;gt;50% 年通胀）
+- 代币价格持续下跌
+- 形成死亡螺旋
+
+案例：
+- 许多 Farm 项目年通胀 100%+
+- 3 个月后代币跌 95%
+- 项目归零
+
+规避：
+- 年通胀控制在 20% 以内
+- 设计通缩机制（回购销毁）
+- 逐步降低排放
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="陷阱二价值捕获弱"&gt;陷阱二：价值捕获弱&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;问题：
+- 代币只有治理用途
+- 协议收入不分给持有者
+- 代币价格无支撑
+
+案例：
+- Uniswap（无费用分成）
+- 许多 DAO 代币（纯治理）
+
+规避：
+- 费用分成给质押者
+- 回购销毁机制
+- 多种用途设计
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="陷阱三解锁集中"&gt;陷阱三：解锁集中&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;问题：
+- 团队/投资人解锁集中
+- 大量抛压
+- 价格暴跌
+
+案例：
+- 多个项目解锁日跌 30%+
+
+规避：
+- 分期解锁（每月/每周）
+- 提前通知市场
+- 配合回购计划
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="我的评估框架"&gt;我的评估框架&lt;/h2&gt;
+&lt;h3 id="代币经济评分卡"&gt;代币经济评分卡&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;指标&lt;/th&gt;
+ &lt;th&gt;权重&lt;/th&gt;
+ &lt;th&gt;评分标准&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;代币用途&lt;/td&gt;
+ &lt;td&gt;25%&lt;/td&gt;
+ &lt;td&gt;4+ 用途=满分&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;分配结构&lt;/td&gt;
+ &lt;td&gt;20%&lt;/td&gt;
+ &lt;td&gt;社区&amp;gt;50%=满分&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;解锁计划&lt;/td&gt;
+ &lt;td&gt;20%&lt;/td&gt;
+ &lt;td&gt;4 年+=满分&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;排放曲线&lt;/td&gt;
+ &lt;td&gt;20%&lt;/td&gt;
+ &lt;td&gt;可持续=满分&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;价值捕获&lt;/td&gt;
+ &lt;td&gt;15%&lt;/td&gt;
+ &lt;td&gt;费用分成=满分&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="投资决策"&gt;投资决策&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;总分 &amp;gt;80：强烈买入
+总分 60-80：谨慎买入
+总分 40-60：观望
+总分 &amp;lt;40：避免
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="总结"&gt;总结&lt;/h2&gt;
+&lt;p&gt;代币经济设计核心：&lt;/p&gt;</description></item></channel></rss>

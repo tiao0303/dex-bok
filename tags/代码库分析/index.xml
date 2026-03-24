@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>代码库分析 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E4%BB%A3%E7%A0%81%E5%BA%93%E5%88%86%E6%9E%90/</link><description>Recent content in 代码库分析 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Tue, 24 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E4%BB%A3%E7%A0%81%E5%BA%93%E5%88%86%E6%9E%90/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code 大仓库导航：让 AI 深度理解你的代码库</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/03_claude_code_repo_navigation/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/03_claude_code_repo_navigation/</guid><description>&lt;h1 id="claude-code-大仓库导航让-ai-深度理解你的代码库"&gt;Claude Code 大仓库导航：让 AI 深度理解你的代码库&lt;/h1&gt;
+&lt;h2 id="面对大仓库的挑战"&gt;面对大仓库的挑战&lt;/h2&gt;
+&lt;p&gt;当你接手一个数万行的代码库时，Claude Code 是最好的导航工具。&lt;/p&gt;
+&lt;h2 id="文件理解"&gt;文件理解&lt;/h2&gt;
+&lt;h3 id="快速了解项目结构"&gt;快速了解项目结构&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;claude
+帮我了解这个项目的整体结构，重点关注：
+1. 入口文件在哪里
+2. 主要模块有哪些
+3. 配置文件在哪里
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="深度理解单个文件"&gt;深度理解单个文件&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;读取 @src/core/Exchange.sol 并解释：
+- 这个合约的核心数据存储结构
+- 主要的外部调用接口
+- 安全相关的设计
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="代码搜索"&gt;代码搜索&lt;/h2&gt;
+&lt;h3 id="grep-搜索"&gt;Grep 搜索&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;帮我搜索所有调用了 Uniswap V3 Quoter 的地方，
+输出每个调用的文件位置、行号和上下文
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="语义搜索"&gt;语义搜索&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;找出所有&amp;#34;授权转账&amp;#34;相关的代码（approve + transferFrom），
+标注出可能的安全风险点
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="跨文件追踪"&gt;跨文件追踪&lt;/h2&gt;
+&lt;h3 id="追踪数据流"&gt;追踪数据流&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;追踪一笔 USDT 转账的完整路径：
+从用户点击 Swap 开始，到合约最终执行
+经过哪些文件？哪些函数？
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="理解依赖关系"&gt;理解依赖关系&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;帮我画出 @src/core/ 目录下各合约的依赖关系图，
+用文字描述即可
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="安全审查"&gt;安全审查&lt;/h2&gt;
+&lt;h3 id="常用审查模式"&gt;常用审查模式&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;对这个目录 @contracts/security/ 做全面安全审查：
+1. 重入攻击风险
+2. 整数溢出/下溢
+3. 授权绕过
+4. 逻辑错误
+
+对每个问题，说明：文件位置、严重程度、修复建议
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="特定漏洞检查"&gt;特定漏洞检查&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;检查所有 external/public 函数是否有：
+- 非零地址检查
+- 授权检查
+- 余额边界检查
+- reentrancy guard
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="性能分析"&gt;性能分析&lt;/h2&gt;
+&lt;h3 id="gas-优化"&gt;Gas 优化&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;分析 @contracts/SwapAggregator.sol 的 gas 消耗：
+1. 找出最贵的 5 个操作
+2. 提出具体优化方案
+3. 估算每个优化能节省多少 gas
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="实战案例"&gt;实战案例&lt;/h2&gt;
+&lt;h3 id="defi-聚合器代码审查"&gt;DeFi 聚合器代码审查&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;项目路径：~/defi-aggregator
+
+任务：
+1. 理解架构：用户如何发起一笔 Swap，路径是怎样的
+2. 找出风险点：哪些地方可能被 MEV 机器人攻击
+3. 给出安全清单：上线前必须修复的问题
+
+输出格式：
+## 架构理解
+[文字描述]
+
+## 风险点
+| 位置 | 风险 | 严重度 | 建议 |
+|------|------|--------|------|
+
+## 上线前检查清单
+- [ ] ...
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="命令速查"&gt;命令速查&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;需求&lt;/th&gt;
+ &lt;th&gt;命令&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;了解结构&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;claude &amp;quot;分析项目结构&amp;quot;&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;搜索代码&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/grep &amp;quot;pattern&amp;quot; **/*.sol&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;读文件&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;cat @file&lt;/code&gt; 或直接引用&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;查依赖&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;claude &amp;quot;追踪 X 的调用链&amp;quot;&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;安全审查&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/security-review @path&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Gas 分析&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/gas-profile @file&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;</description></item></channel></rss>

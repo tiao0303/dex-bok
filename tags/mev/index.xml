@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MEV on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/mev/</link><description>Recent content in MEV on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:05:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/mev/index.xml" rel="self" type="application/rss+xml"/><item><title>T2 进阶实战 08：MEV 与前端运行防御</title><link>https://tiao0303.github.io/dex-bok/posts/t4_advanced/08_mev_front_running/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4_advanced/08_mev_front_running/</guid><description>&lt;h1 id="mev-与前端运行防御"&gt;MEV 与前端运行防御&lt;/h1&gt;
+&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;MEV（Maximal Extractable Value，最大可提取价值）是区块链生态中的重要概念。理解 MEV 的运作机制和防御策略，对于保护 DEX 用户资金安全至关重要。&lt;/p&gt;
+&lt;h2 id="mev-概述"&gt;MEV 概述&lt;/h2&gt;
+&lt;h3 id="定义"&gt;定义&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;MEV&lt;/strong&gt; = 矿工/验证者通过重新排序、插入或审查交易可提取的额外价值&lt;/p&gt;
+&lt;h3 id="mev-类型"&gt;MEV 类型&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;类型&lt;/th&gt;
+ &lt;th&gt;描述&lt;/th&gt;
+ &lt;th&gt;影响&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;套利&lt;/td&gt;
+ &lt;td&gt;利用不同 DEX 间的价格差异&lt;/td&gt;
+ &lt;td&gt;中性/正面&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;清算&lt;/td&gt;
+ &lt;td&gt;清算不足的抵押头寸&lt;/td&gt;
+ &lt;td&gt;正面&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;前端运行&lt;/td&gt;
+ &lt;td&gt;在目标交易前插入交易&lt;/td&gt;
+ &lt;td&gt;负面&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;三明治攻击&lt;/td&gt;
+ &lt;td&gt;前后夹击目标交易&lt;/td&gt;
+ &lt;td&gt;负面&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;时间带宽套利&lt;/td&gt;
+ &lt;td&gt;利用信息传播延迟&lt;/td&gt;
+ &lt;td&gt;负面&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="前端运行front-running"&gt;前端运行（Front-running）&lt;/h2&gt;
+&lt;h3 id="攻击原理"&gt;攻击原理&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;攻击流程：
+1. 监控待处理交易池（mempool）
+2. 发现有利可图的大额交易
+3. 以更高 Gas 价格提交相同交易
+4. 矿工优先打包攻击者交易
+5. 攻击者获利，受害者承受滑点
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="代码示例被前端运行的交易"&gt;代码示例：被前端运行的交易&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ❌ 容易被前端运行的交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;buyToken&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 任何人都可以看到这笔交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 攻击者可以复制并以更高 Gas 发送
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(token).transferFrom(msg.sender, &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;(this), amount);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; tokens &lt;span style="color:#f92672"&gt;=&lt;/span&gt; calculateTokens(amount);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(token).transfer(msg.sender, tokens);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 攻击者合约
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;FrontRunner&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;frontRun&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; victim, &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amount) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;payable&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 以更高 Gas 发送相同交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; targetContract.buyToken{gas&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;500000&lt;/span&gt;, gasPrice&lt;span style="color:#f92672"&gt;:&lt;/span&gt; tx.gasPrice &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;150&lt;/span&gt;&lt;span style="color:#f92672"&gt;%&lt;/span&gt;}(amount);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="三明治攻击sandwich-attack"&gt;三明治攻击（Sandwich Attack）&lt;/h2&gt;
+&lt;h3 id="攻击流程"&gt;攻击流程&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;步骤：
+1. 受害者提交大额买入交易（待处理）
+2. 攻击者发现并分析交易
+3. 攻击者发送买入交易（更高 Gas）→ 前置
+4. 受害者交易执行，推高价格
+5. 攻击者发送卖出交易 → 后置
+6. 攻击者获利，受害者承受额外滑点
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="可视化示例"&gt;可视化示例&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;初始状态：
+- 池子：1000 ETH / 2,000,000 USDC
+- 价格：2000 USDC/ETH
+
+攻击过程：
+1. 攻击者买入 50 ETH（花费 95,238 USDC）
+ 新价格：2095 USDC/ETH
+
+2. 受害者买入 100 ETH（花费 218,750 USDC）
+ 新价格：2381 USDC/ETH
+ 受害者预期价格：2000 USDC/ETH
+ 受害者实际价格：2187.5 USDC/ETH
+ 受害者损失：18.75% 额外滑点
+
+3. 攻击者卖出 50 ETH（获得 107,143 USDC）
+ 新价格：2095 USDC/ETH
+
+攻击者利润：107,143 - 95,238 = 11,905 USDC
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="检测三明治攻击"&gt;检测三明治攻击&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;event&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;SandwichAttackDetected&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; attacker,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; victim,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; frontRunAmount,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; backRunAmount,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; victimLoss
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;detectSandwichAttack&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; trader,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; amountIn,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; expectedOut,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; actualOut
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;) &lt;span style="color:#66d9ef"&gt;internal&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;view&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; slippage &lt;span style="color:#f92672"&gt;=&lt;/span&gt; ((expectedOut &lt;span style="color:#f92672"&gt;-&lt;/span&gt; actualOut) &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt;) &lt;span style="color:#f92672"&gt;/&lt;/span&gt; expectedOut;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 异常高滑点可能表示三明治攻击
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (slippage &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;500&lt;/span&gt;) { &lt;span style="color:#75715e"&gt;// 超过 5%
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 检查前后是否有可疑交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt;[] &lt;span style="color:#66d9ef"&gt;memory&lt;/span&gt; recentTraders &lt;span style="color:#f92672"&gt;=&lt;/span&gt; getRecentTraders(&lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;uint&lt;/span&gt; i &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; i &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; recentTraders.length; i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (recentTraders[i] &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; trader) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 分析交易模式
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (isSuspiciousPattern(recentTraders[i], trader)) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; emit SandwichAttackDetected(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; recentTraders[i],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; trader,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, slippage
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="防御策略"&gt;防御策略&lt;/h2&gt;
+&lt;h3 id="1-提交隐藏交易private-transactions"&gt;1. 提交隐藏交易（Private Transactions）&lt;/h3&gt;
+&lt;p&gt;使用 Flashbots 等私有交易服务：&lt;/p&gt;</description></item><item><title>MEV 搜索者实战手册 - Flashbots 与私有节点</title><link>https://tiao0303.github.io/dex-bok/posts/t5_institutional/22_mev_searcher_guide/</link><pubDate>Thu, 19 Mar 2026 01:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5_institutional/22_mev_searcher_guide/</guid><description>&lt;h2 id="什么是-mev-搜索者"&gt;什么是 MEV 搜索者&lt;/h2&gt;
+&lt;h3 id="定义"&gt;定义&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;MEV 搜索者&lt;/strong&gt; = 专门寻找和提取链上可提取价值的交易者&lt;/p&gt;
+&lt;h3 id="收益规模"&gt;收益规模&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;年份&lt;/th&gt;
+ &lt;th&gt;总 MEV 收益&lt;/th&gt;
+ &lt;th&gt;顶级搜索者收入&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;2021&lt;/td&gt;
+ &lt;td&gt;$6.8 亿&lt;/td&gt;
+ &lt;td&gt;$5000 万+&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;2022&lt;/td&gt;
+ &lt;td&gt;$3.2 亿&lt;/td&gt;
+ &lt;td&gt;$2000 万+&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;2023&lt;/td&gt;
+ &lt;td&gt;$4.5 亿&lt;/td&gt;
+ &lt;td&gt;$3000 万+&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;2024&lt;/td&gt;
+ &lt;td&gt;$8.1 亿&lt;/td&gt;
+ &lt;td&gt;$8000 万+&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="主要策略"&gt;主要策略&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;策略&lt;/th&gt;
+ &lt;th&gt;难度&lt;/th&gt;
+ &lt;th&gt;收益&lt;/th&gt;
+ &lt;th&gt;竞争度&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;套利&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;清算&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;三明治&lt;/td&gt;
+ &lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+ &lt;td&gt;极高&lt;/td&gt;
+ &lt;td&gt;极高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;NFT 抢跑&lt;/td&gt;
+ &lt;td&gt;⭐⭐&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="技术基础设施"&gt;技术基础设施&lt;/h2&gt;
+&lt;h3 id="1-私有节点-"&gt;1. 私有节点 ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="为什么需要"&gt;为什么需要&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;公开 mempool 会被抢跑&lt;/li&gt;
+&lt;li&gt;需要快速广播交易&lt;/li&gt;
+&lt;li&gt;避免被其他搜索者发现&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="搭建方案"&gt;搭建方案&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;方案一：自建 Geth 节点
+成本：$500/月（服务器）
+延迟：50-100ms
+难度：中等
+
+方案二：租用节点
+提供商：Alchemy、Infura、QuickNode
+成本：$200-1000/月
+延迟：20-50ms
+难度：低
+
+方案三：Flashbots Protect
+成本：免费
+延迟：100-200ms
+难度：低
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="配置示例geth"&gt;配置示例（Geth）&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 启动命令&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;geth --http --http.api eth,net,txpool &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; --ws --ws.api eth,net &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; --txpool.pricelimit &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; --miner.etherbase 0xYOUR_ADDRESS
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id="2-flashbots-bundle-"&gt;2. Flashbots Bundle ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="什么是-bundle"&gt;什么是 Bundle&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;一组打包的交易&lt;/li&gt;
+&lt;li&gt;直接发送给验证者&lt;/li&gt;
+&lt;li&gt;不经过公开 mempool&lt;/li&gt;
+&lt;li&gt;避免被抢跑&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="发送流程"&gt;发送流程&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 构建交易（包含套利逻辑）
+2. 签名
+3. 打包成 Bundle
+4. 发送到 Flashbots Relay
+5. 等待区块包含
+6. 成功则执行，失败则回滚
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="代码示例python"&gt;代码示例（Python）&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;from&lt;/span&gt; flashbots &lt;span style="color:#f92672"&gt;import&lt;/span&gt; Flashbots
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 初始化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;flashbots &lt;span style="color:#f92672"&gt;=&lt;/span&gt; Flashbots(provider, signer)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 构建 Bundle&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;bundle &lt;span style="color:#f92672"&gt;=&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;from&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;0x...&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;to&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;0x...&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;value&amp;#34;&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;data&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;0x...&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;gasPrice&amp;#34;&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;1000000000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 发送&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;result &lt;span style="color:#f92672"&gt;=&lt;/span&gt; flashbots&lt;span style="color:#f92672"&gt;.&lt;/span&gt;send_bundle(bundle, target_block_number)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id="3-智能合约-"&gt;3. 智能合约 ⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="为什么需要合约"&gt;为什么需要合约&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;原子性执行（多步操作）&lt;/li&gt;
+&lt;li&gt;Gas 优化&lt;/li&gt;
+&lt;li&gt;逻辑复杂度高&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="套利合约模板"&gt;套利合约模板&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// SPDX-License-Identifier: MIT
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;pragma solidity&lt;/span&gt; &lt;span style="color:#f92672"&gt;^&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;.&lt;span style="color:#ae81ff"&gt;8&lt;/span&gt;.&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;IUniswapV2Router&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;swapExactTokensForTokens&lt;/span&gt;(...) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;contract&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Arbitrage&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; owner;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;constructor&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; owner &lt;span style="color:#f92672"&gt;=&lt;/span&gt; msg.sender;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;executeArbitrage&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; tokenA,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;address&lt;/span&gt; tokenB,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;uint256&lt;/span&gt; amount
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ) &lt;span style="color:#66d9ef"&gt;external&lt;/span&gt; onlyOwner {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 步骤 1: 在 Uniswap 买入
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IUniswapV2Router(uniswapRouter).swapExactTokensForTokens(...);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 步骤 2: 在 Sushiswap 卖出
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IUniswapV2Router(sushiRouter).swapExactTokensForTokens(...);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 步骤 3: 利润转回 owner
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IERC20(tokenA).transfer(owner, profit);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;modifier&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;onlyOwner&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; require(msg.sender &lt;span style="color:#f92672"&gt;==&lt;/span&gt; owner, &lt;span style="color:#e6db74"&gt;&amp;#34;Not owner&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;_&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="策略详解"&gt;策略详解&lt;/h2&gt;
+&lt;h3 id="策略一dex-套利-"&gt;策略一：DEX 套利 ⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="原理"&gt;原理&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;发现价格差异：
+Uniswap: ETH = $1800
+Sushiswap: ETH = $1810
+
+执行：
+1. Uniswap 买入 ETH
+2. Sushiswap 卖出 ETH
+3. 利润 = $10/ETH - Gas - 手续费
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="监控脚本"&gt;监控脚本&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;monitor_prices&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; uniswap_price &lt;span style="color:#f92672"&gt;=&lt;/span&gt; get_price(&lt;span style="color:#e6db74"&gt;&amp;#39;Uniswap&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;ETH/USDC&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; sushi_price &lt;span style="color:#f92672"&gt;=&lt;/span&gt; get_price(&lt;span style="color:#e6db74"&gt;&amp;#39;Sushi&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;ETH/USDC&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; spread &lt;span style="color:#f92672"&gt;=&lt;/span&gt; (sushi_price &lt;span style="color:#f92672"&gt;-&lt;/span&gt; uniswap_price) &lt;span style="color:#f92672"&gt;/&lt;/span&gt; uniswap_price
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; spread &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0.005&lt;/span&gt;: &lt;span style="color:#75715e"&gt;# 0.5% 价差&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; profit &lt;span style="color:#f92672"&gt;=&lt;/span&gt; calculate_profit(spread, amount)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; profit &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; gas_cost:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; execute_arbitrage()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="关键参数"&gt;关键参数&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;参数&lt;/th&gt;
+ &lt;th&gt;值&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;最小价差&lt;/td&gt;
+ &lt;td&gt;0.3-0.5%&lt;/td&gt;
+ &lt;td&gt;覆盖成本&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;单笔金额&lt;/td&gt;
+ &lt;td&gt;$10k-100k&lt;/td&gt;
+ &lt;td&gt;平衡滑点&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Gas 上限&lt;/td&gt;
+ &lt;td&gt;100-300 Gwei&lt;/td&gt;
+ &lt;td&gt;确保打包&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;滑点容忍&lt;/td&gt;
+ &lt;td&gt;0.5-1%&lt;/td&gt;
+ &lt;td&gt;避免失败&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="策略二清算套利-"&gt;策略二：清算套利 ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="原理-1"&gt;原理&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;监控借贷协议：
+- Aave 健康因子&amp;lt;1
+- Compound 抵押率&amp;gt;阈值
+
+执行清算：
+1. 调用清算函数
+2. 偿还部分债务
+3. 获得抵押品 + 清算奖励
+4. 卖出抵押品获利
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="清算奖励"&gt;清算奖励&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;协议&lt;/th&gt;
+ &lt;th&gt;奖励比例&lt;/th&gt;
+ &lt;th&gt;最低门槛&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Aave&lt;/td&gt;
+ &lt;td&gt;5-10%&lt;/td&gt;
+ &lt;td&gt;$1&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Compound&lt;/td&gt;
+ &lt;td&gt;8%&lt;/td&gt;
+ &lt;td&gt;$50&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;MakerDAO&lt;/td&gt;
+ &lt;td&gt;13%&lt;/td&gt;
+ &lt;td&gt;$5000&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="监控条件"&gt;监控条件&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;check_liquidation&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; position &lt;span style="color:#f92672"&gt;in&lt;/span&gt; all_positions:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; health_factor &lt;span style="color:#f92672"&gt;=&lt;/span&gt; get_health_factor(position)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; health_factor &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1.0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; profit &lt;span style="color:#f92672"&gt;=&lt;/span&gt; calculate_liquidation_profit(position)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; profit &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; gas_cost:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; liquidate(position)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="竞争要点"&gt;竞争要点&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;速度第一&lt;/strong&gt;：毫秒级响应&lt;/li&gt;
+&lt;li&gt;Gas 价格战：愿意出更高 Gas&lt;/li&gt;
+&lt;li&gt;提前计算：预执行验证&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="策略三三明治攻击-"&gt;策略三：三明治攻击 ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="-道德警示"&gt;⚠️ 道德警示&lt;/h4&gt;
+&lt;p&gt;三明治攻击是有争议的策略，可能被视为对普通用户的剥削。本文仅作技术说明，不鼓励使用。&lt;/p&gt;</description></item><item><title>MEV 防护指南 - 避免被机器人收割</title><link>https://tiao0303.github.io/dex-bok/posts/t1_beginner/05_mev_protection/</link><pubDate>Wed, 18 Mar 2026 21:22:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t1_beginner/05_mev_protection/</guid><description>&lt;h2 id="什么是-mev"&gt;什么是 MEV&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;MEV&lt;/strong&gt;（Maximal Extractable Value）= 矿工/验证者可提取价值&lt;/p&gt;
+&lt;p&gt;简单说：机器人监控公开交易池，通过特殊手段从你的交易中获利。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="常见-mev-攻击"&gt;常见 MEV 攻击&lt;/h2&gt;
+&lt;h3 id="1-抢跑front-running"&gt;1. 抢跑（Front-running）&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;手法&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;机器人发现你的大额买单&lt;/li&gt;
+&lt;li&gt;出更高 Gas 抢先买入&lt;/li&gt;
+&lt;li&gt;价格被推高后，卖给你获利&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;损失&lt;/strong&gt;：滑点增加 0.5-5%&lt;/p&gt;
+&lt;h3 id="2-三明治攻击sandwich"&gt;2. 三明治攻击（Sandwich）&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;手法&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;你的交易：买入 10 ETH 的 Token A
+
+机器人操作：
+1. 抢先买入 Token A（推高价格）
+2. 你的买单执行（价格更高）
+3. 立即卖出 Token A（获利）
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;损失&lt;/strong&gt;：可达 10%+&lt;/p&gt;
+&lt;h3 id="3-清算抢跑"&gt;3. 清算抢跑&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;手法&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;监控借贷协议清算线&lt;/li&gt;
+&lt;li&gt;发现可清算仓位&lt;/li&gt;
+&lt;li&gt;抢先执行清算获利&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;影响&lt;/strong&gt;：借款人损失清算罚金&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="防护工具"&gt;防护工具&lt;/h2&gt;
+&lt;h3 id="1-flashbots-protect-"&gt;1. Flashbots Protect ⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;原理&lt;/strong&gt;：私有 RPC，交易不公开到 mempool&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;使用&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;RPC 地址：
+https://rpc.flashbots.net
+
+MetaMask 设置：
+1. 添加新网络
+2. 输入上述 RPC
+3. 切换到 Flashbots 网络交易
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;效果&lt;/strong&gt;：免疫 99% MEV 攻击&lt;/p&gt;</description></item></channel></rss>

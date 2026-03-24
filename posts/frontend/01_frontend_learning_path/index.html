@@ -1,0 +1,60 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="Web3 前端开发入门路径：从零到初识去中心化世界
+
+难度：🌱 入门 | 字数：约 850 字 | 预计阅读：5 分钟
+
+前言
+Web3 正在重新定义互联网的前端形态。不同于传统 Web 开发，Web3 前端开发者需要理解区块链的基本概念，掌握与智能合约交互的能力，并将去中心化思维融入产品设计。本系列文章将带你从传统前端出发，逐步深入 Web3 前端开发的内核。
+
+第一阶段：夯实传统前端基础
+1.1 HTML / CSS / JavaScript
+一切 Web 界面的起点。无论框架如何演进，HTML 语义化、CSS 布局与响应式设计、JavaScript 异步编程（Promise / async-await）都是不可或缺的根基。
+推荐学习资源：
+
+MDN Web Docs（权威文档）
+freeCodeCamp（免费实战练习）
+《JavaScript 高级程序设计》（红宝书）
+
+每日练习目标：
+
+能独立实现一个移动端适配的个人主页
+能用 Fetch API 发起网络请求并处理响应
+理解事件冒泡、闭包、原型链
+
+1.2 现代前端框架
+React 和 Vue 是目前生态最成熟的两大框架。建议优先选择 React，原因如下：
+
+React 是以太坊生态（ethers.js / wagmi / viem）的默认前端框架
+技术文档、教程、社区插件更丰富
+就业市场认可度更高
+
+学习路线：
+组件化思想 → JSX 语法 → State / Props → Hooks → 虚拟 DOM → 生态系统
+1.3 TypeScript
+几乎所有正经的 Web3 前端项目都使用 TypeScript。它带来的类型安全能有效降低与链上数据交互时的出错概率。"><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/frontend/01_frontend_learning_path/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/frontend/01_frontend_learning_path/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/frontend/01_frontend_learning_path/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/frontend/01_frontend_learning_path/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="Web3 前端开发入门路径：从零到初识去中心化世界 难度：🌱 入门 | 字数：约 850 字 | 预计阅读：5 分钟
+前言 Web3 正在重新定义互联网的前端形态。不同于传统 Web 开发，Web3 前端开发者需要理解区块链的基本概念，掌握与智能合约交互的能力，并将去中心化思维融入产品设计。本系列文章将带你从传统前端出发，逐步深入 Web3 前端开发的内核。
+第一阶段：夯实传统前端基础 1.1 HTML / CSS / JavaScript 一切 Web 界面的起点。无论框架如何演进，HTML 语义化、CSS 布局与响应式设计、JavaScript 异步编程（Promise / async-await）都是不可或缺的根基。
+推荐学习资源：
+MDN Web Docs（权威文档） freeCodeCamp（免费实战练习） 《JavaScript 高级程序设计》（红宝书） 每日练习目标：
+能独立实现一个移动端适配的个人主页 能用 Fetch API 发起网络请求并处理响应 理解事件冒泡、闭包、原型链 1.2 现代前端框架 React 和 Vue 是目前生态最成熟的两大框架。建议优先选择 React，原因如下：
+React 是以太坊生态（ethers.js / wagmi / viem）的默认前端框架 技术文档、教程、社区插件更丰富 就业市场认可度更高 学习路线：
+组件化思想 → JSX 语法 → State / Props → Hooks → 虚拟 DOM → 生态系统 1.3 TypeScript 几乎所有正经的 Web3 前端项目都使用 TypeScript。它带来的类型安全能有效降低与链上数据交互时的出错概率。"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="Web3 前端开发入门路径：从零到初识去中心化世界 难度：🌱 入门 | 字数：约 850 字 | 预计阅读：5 分钟
+前言 Web3 正在重新定义互联网的前端形态。不同于传统 Web 开发，Web3 前端开发者需要理解区块链的基本概念，掌握与智能合约交互的能力，并将去中心化思维融入产品设计。本系列文章将带你从传统前端出发，逐步深入 Web3 前端开发的内核。
+第一阶段：夯实传统前端基础 1.1 HTML / CSS / JavaScript 一切 Web 界面的起点。无论框架如何演进，HTML 语义化、CSS 布局与响应式设计、JavaScript 异步编程（Promise / async-await）都是不可或缺的根基。
+推荐学习资源：
+MDN Web Docs（权威文档） freeCodeCamp（免费实战练习） 《JavaScript 高级程序设计》（红宝书） 每日练习目标：
+能独立实现一个移动端适配的个人主页 能用 Fetch API 发起网络请求并处理响应 理解事件冒泡、闭包、原型链 1.2 现代前端框架 React 和 Vue 是目前生态最成熟的两大框架。建议优先选择 React，原因如下：
+React 是以太坊生态（ethers.js / wagmi / viem）的默认前端框架 技术文档、教程、社区插件更丰富 就业市场认可度更高 学习路线：
+组件化思想 → JSX 语法 → State / Props → Hooks → 虚拟 DOM → 生态系统 1.3 TypeScript 几乎所有正经的 Web3 前端项目都使用 TypeScript。它带来的类型安全能有效降低与链上数据交互时的出错概率。"><meta itemprop=wordCount content="180"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="Web3 前端开发入门路径：从零到初识去中心化世界 难度：🌱 入门 | 字数：约 850 字 | 预计阅读：5 分钟
+前言 Web3 正在重新定义互联网的前端形态。不同于传统 Web 开发，Web3 前端开发者需要理解区块链的基本概念，掌握与智能合约交互的能力，并将去中心化思维融入产品设计。本系列文章将带你从传统前端出发，逐步深入 Web3 前端开发的内核。
+第一阶段：夯实传统前端基础 1.1 HTML / CSS / JavaScript 一切 Web 界面的起点。无论框架如何演进，HTML 语义化、CSS 布局与响应式设计、JavaScript 异步编程（Promise / async-await）都是不可或缺的根基。
+推荐学习资源：
+MDN Web Docs（权威文档） freeCodeCamp（免费实战练习） 《JavaScript 高级程序设计》（红宝书） 每日练习目标：
+能独立实现一个移动端适配的个人主页 能用 Fetch API 发起网络请求并处理响应 理解事件冒泡、闭包、原型链 1.2 现代前端框架 React 和 Vue 是目前生态最成熟的两大框架。建议优先选择 React，原因如下：
+React 是以太坊生态（ethers.js / wagmi / viem）的默认前端框架 技术文档、教程、社区插件更丰富 就业市场认可度更高 学习路线：
+组件化思想 → JSX 语法 → State / Props → Hooks → 虚拟 DOM → 生态系统 1.3 TypeScript 几乎所有正经的 Web3 前端项目都使用 TypeScript。它带来的类型安全能有效降低与链上数据交互时的出错概率。"><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-01_frontend_learning_path"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#第一阶段夯实传统前端基础>第一阶段：夯实传统前端基础</a><ul><li><a href=#11-html--css--javascript>1.1 HTML / CSS / JavaScript</a></li><li><a href=#12-现代前端框架>1.2 现代前端框架</a></li><li><a href=#13-typescript>1.3 TypeScript</a></li></ul></li><li><a href=#第二阶段理解区块链世界观>第二阶段：理解区块链世界观</a><ul><li><a href=#21-区块链是什么>2.1 区块链是什么？</a></li><li><a href=#22-智能合约是什么>2.2 智能合约是什么？</a></li><li><a href=#23-钱包的角色>2.3 钱包的角色</a></li></ul></li><li><a href=#第三阶段web3-前端技术栈>第三阶段：Web3 前端技术栈</a></li><li><a href=#第四阶段构建你的第一个-dapp>第四阶段：构建你的第一个 DApp</a></li><li><a href=#结语>结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>180 字</span></div></header><h1 id=web3-前端开发入门路径从零到初识去中心化世界>Web3 前端开发入门路径：从零到初识去中心化世界</h1><blockquote><p>难度：🌱 入门 | 字数：约 850 字 | 预计阅读：5 分钟</p></blockquote><h2 id=前言>前言</h2><p>Web3 正在重新定义互联网的前端形态。不同于传统 Web 开发，Web3 前端开发者需要理解区块链的基本概念，掌握与智能合约交互的能力，并将去中心化思维融入产品设计。本系列文章将带你从传统前端出发，逐步深入 Web3 前端开发的内核。</p><hr><h2 id=第一阶段夯实传统前端基础>第一阶段：夯实传统前端基础</h2><h3 id=11-html--css--javascript>1.1 HTML / CSS / JavaScript</h3><p>一切 Web 界面的起点。无论框架如何演进，HTML 语义化、CSS 布局与响应式设计、JavaScript 异步编程（Promise / async-await）都是不可或缺的根基。</p><p><strong>推荐学习资源：</strong></p><ul><li>MDN Web Docs（权威文档）</li><li>freeCodeCamp（免费实战练习）</li><li>《JavaScript 高级程序设计》（红宝书）</li></ul><p><strong>每日练习目标：</strong></p><ul><li>能独立实现一个移动端适配的个人主页</li><li>能用 Fetch API 发起网络请求并处理响应</li><li>理解事件冒泡、闭包、原型链</li></ul><h3 id=12-现代前端框架>1.2 现代前端框架</h3><p>React 和 Vue 是目前生态最成熟的两大框架。<strong>建议优先选择 React</strong>，原因如下：</p><ul><li>React 是以太坊生态（ethers.js / wagmi / viem）的默认前端框架</li><li>技术文档、教程、社区插件更丰富</li><li>就业市场认可度更高</li></ul><p><strong>学习路线：</strong></p><pre tabindex=0><code>组件化思想 → JSX 语法 → State / Props → Hooks → 虚拟 DOM → 生态系统
+</code></pre><h3 id=13-typescript>1.3 TypeScript</h3><p>几乎所有正经的 Web3 前端项目都使用 TypeScript。它带来的类型安全能有效降低与链上数据交互时的出错概率。</p><pre tabindex=0><code>基础类型 → 接口 / 类型别名 → 泛型 → 工具类型（Partial / Omit / Pick）
+</code></pre><hr><h2 id=第二阶段理解区块链世界观>第二阶段：理解区块链世界观</h2><p>在写第一行 Web3 代码之前，你需要理解几个核心概念：</p><h3 id=21-区块链是什么>2.1 区块链是什么？</h3><p>一个由多方共同维护、不可篡改的分布式账本。数据按区块顺序存储，通过共识机制确保一致性。</p><h3 id=22-智能合约是什么>2.2 智能合约是什么？</h3><p>部署在区块链上的程序代码。以太坊上的智能合约用 Solidity 编写，前端通过 ABI（Application Binary Interface）与合约通信。</p><h3 id=23-钱包的角色>2.3 钱包的角色</h3><p>MetaMask 是目前最流行的浏览器钱包插件。它管理用户的私钥（通过助记词生成），并为网页提供签名能力。前端通过 <code>window.ethereum</code> API 与钱包通信。</p><hr><h2 id=第三阶段web3-前端技术栈>第三阶段：Web3 前端技术栈</h2><p>当你对传统前端有了扎实的掌握，就可以正式进入 Web3 世界了。本系列后续文章将逐一深入以下技术点：</p><table><thead><tr><th>层级</th><th>技术</th><th>说明</th></tr></thead><tbody><tr><td>库</td><td>ethers.js / viem</td><td>链交互核心库</td></tr><tr><td>框架</td><td>wagmi / RainbowKit</td><td>React 生态 Web3 工具</td></tr><tr><td>合约</td><td>Hardhat / Foundry</td><td>合约开发与测试</td></tr><tr><td>存储</td><td>IPFS / Filecoin</td><td>去中心化存储</td></tr></tbody></table><hr><h2 id=第四阶段构建你的第一个-dapp>第四阶段：构建你的第一个 DApp</h2><p>学习路径的最终目标是独立完成一个完整的 DApp（去中心化应用）。建议从以下小项目开始：</p><ol><li><strong>Hello World</strong> — 连接 MetaMask 并显示钱包地址</li><li><strong>代币查询</strong> — 输入合约地址查询 ERC-20 代币余额</li><li><strong>简单的存/取</strong> — 与一个存/取合约交互</li></ol><p>每个项目都是对前端能力与链上认知的双重锻炼。</p><hr><h2 id=结语>结语</h2><p>Web3 前端开发并不是对传统前端的颠覆，而是叠加。HTML/CSS/JS 是底座，框架是骨架，Web3 库是通向去中心化世界的桥梁。保持耐心，按阶段推进，你会在这个领域找到独特的成就感。</p><p>下一篇文章我们将深入讲解 HTML/CSS/JS 在 Web3 环境下的特殊用武之地。敬请期待。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/02_html_css_js_basics/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

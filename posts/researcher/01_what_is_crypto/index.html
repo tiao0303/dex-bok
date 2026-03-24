@@ -1,0 +1,106 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='什么是加密货币？（入门）
+
+难度：⭐ 入门 | 字数：约 1,200 字 | 预计阅读时间：5 分钟
+
+
+一、货币的演变史
+在讨论加密货币之前，我们先回顾一下货币本身。
+人类历史上，货币形态经历了数次重大演变：
+
+  
+      
+          阶段
+          形态
+          核心特征
+      
+  
+  
+      
+          物物交换
+          贝壳、牲畜、谷物
+          需求双重巧合
+      
+      
+          金属货币
+          铜、银、金
+          稀缺、易分割、便携
+      
+      
+          纸币
+          银行券
+          政府信用背书
+      
+      
+          电子货币
+          银行存款、支付宝
+          数字化、中心化账本
+      
+      
+          加密货币
+          BTC、ETH 等
+          去中心化、密码学保障
+      
+  
+
+每一次演变，货币都在朝着更高效、更易用的方向进化。而加密货币，正是数字化时代对"货币应该是什么"这一问题的重新回答。
+
+二、加密货币到底是什么？
+加密货币（Cryptocurrency） 是一种基于密码学原理和分布式网络技术发行的数字资产，它不依赖任何中央机构（如政府或银行），而是通过网络中所有参与者的共识来维持运转。
+简单理解：加密货币 = 密码学 + 分布式网络 + 经济激励机制
+以最著名的比特币（Bitcoin, BTC）为例：
+
+去中心化：没有央行发行，没有单一服务器，数以万计的节点共同维护网络
+总量固定：比特币总量被永久限制在 2100 万枚，不存在通货膨胀
+透明可验证：所有交易记录公开可查，任何人可随时验证
+不可篡改：历史交易一旦确认，几乎无法被修改或撤销
+
+
+三、加密货币的核心要素
+1. 私钥与公钥
+每个加密货币持有者都拥有一对钥匙：
+
+公钥（Public Key）：相当于你的"银行账号"，可以公开给任何人，用于接收资金
+私钥（Private Key）：相当于你的"密码+签名"，必须妥善保管，用于花费资金
+
+
+⚠️ 重要提醒：私钥丢失 = 资产永久丢失。私钥泄露 = 资产被他人窃取。没有"找回密码"机制。
+
+2. 区块链
+区块链是加密货币的底层技术，可以理解为一本人人可查阅、但无法私自篡改的"公共账本"。每个"区块"记录了一段时间内的所有交易，多个区块按时间顺序串联成"链"。
+3. 挖矿与共识机制
+为了在没有中心化机构的情况下确保账本的真实可靠，网络中的参与者需要达成共识。比特币采用的 工作量证明（Proof of Work, PoW） 机制，要求参与者（矿工）通过计算竞争来添加新区块：'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/researcher/01_what_is_crypto/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/researcher/01_what_is_crypto/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/researcher/01_what_is_crypto/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/researcher/01_what_is_crypto/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='什么是加密货币？（入门） 难度：⭐ 入门 | 字数：约 1,200 字 | 预计阅读时间：5 分钟
+一、货币的演变史 在讨论加密货币之前，我们先回顾一下货币本身。
+人类历史上，货币形态经历了数次重大演变：
+阶段 形态 核心特征 物物交换 贝壳、牲畜、谷物 需求双重巧合 金属货币 铜、银、金 稀缺、易分割、便携 纸币 银行券 政府信用背书 电子货币 银行存款、支付宝 数字化、中心化账本 加密货币 BTC、ETH 等 去中心化、密码学保障 每一次演变，货币都在朝着更高效、更易用的方向进化。而加密货币，正是数字化时代对"货币应该是什么"这一问题的重新回答。
+二、加密货币到底是什么？ 加密货币（Cryptocurrency） 是一种基于密码学原理和分布式网络技术发行的数字资产，它不依赖任何中央机构（如政府或银行），而是通过网络中所有参与者的共识来维持运转。
+简单理解：加密货币 = 密码学 + 分布式网络 + 经济激励机制
+以最著名的比特币（Bitcoin, BTC）为例：
+去中心化：没有央行发行，没有单一服务器，数以万计的节点共同维护网络 总量固定：比特币总量被永久限制在 2100 万枚，不存在通货膨胀 透明可验证：所有交易记录公开可查，任何人可随时验证 不可篡改：历史交易一旦确认，几乎无法被修改或撤销 三、加密货币的核心要素 1. 私钥与公钥 每个加密货币持有者都拥有一对钥匙：
+公钥（Public Key）：相当于你的"银行账号"，可以公开给任何人，用于接收资金 私钥（Private Key）：相当于你的"密码+签名"，必须妥善保管，用于花费资金 ⚠️ 重要提醒：私钥丢失 = 资产永久丢失。私钥泄露 = 资产被他人窃取。没有"找回密码"机制。
+2. 区块链 区块链是加密货币的底层技术，可以理解为一本人人可查阅、但无法私自篡改的"公共账本"。每个"区块"记录了一段时间内的所有交易，多个区块按时间顺序串联成"链"。
+3. 挖矿与共识机制 为了在没有中心化机构的情况下确保账本的真实可靠，网络中的参与者需要达成共识。比特币采用的 工作量证明（Proof of Work, PoW） 机制，要求参与者（矿工）通过计算竞争来添加新区块：'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='什么是加密货币？（入门） 难度：⭐ 入门 | 字数：约 1,200 字 | 预计阅读时间：5 分钟
+一、货币的演变史 在讨论加密货币之前，我们先回顾一下货币本身。
+人类历史上，货币形态经历了数次重大演变：
+阶段 形态 核心特征 物物交换 贝壳、牲畜、谷物 需求双重巧合 金属货币 铜、银、金 稀缺、易分割、便携 纸币 银行券 政府信用背书 电子货币 银行存款、支付宝 数字化、中心化账本 加密货币 BTC、ETH 等 去中心化、密码学保障 每一次演变，货币都在朝着更高效、更易用的方向进化。而加密货币，正是数字化时代对"货币应该是什么"这一问题的重新回答。
+二、加密货币到底是什么？ 加密货币（Cryptocurrency） 是一种基于密码学原理和分布式网络技术发行的数字资产，它不依赖任何中央机构（如政府或银行），而是通过网络中所有参与者的共识来维持运转。
+简单理解：加密货币 = 密码学 + 分布式网络 + 经济激励机制
+以最著名的比特币（Bitcoin, BTC）为例：
+去中心化：没有央行发行，没有单一服务器，数以万计的节点共同维护网络 总量固定：比特币总量被永久限制在 2100 万枚，不存在通货膨胀 透明可验证：所有交易记录公开可查，任何人可随时验证 不可篡改：历史交易一旦确认，几乎无法被修改或撤销 三、加密货币的核心要素 1. 私钥与公钥 每个加密货币持有者都拥有一对钥匙：
+公钥（Public Key）：相当于你的"银行账号"，可以公开给任何人，用于接收资金 私钥（Private Key）：相当于你的"密码+签名"，必须妥善保管，用于花费资金 ⚠️ 重要提醒：私钥丢失 = 资产永久丢失。私钥泄露 = 资产被他人窃取。没有"找回密码"机制。
+2. 区块链 区块链是加密货币的底层技术，可以理解为一本人人可查阅、但无法私自篡改的"公共账本"。每个"区块"记录了一段时间内的所有交易，多个区块按时间顺序串联成"链"。
+3. 挖矿与共识机制 为了在没有中心化机构的情况下确保账本的真实可靠，网络中的参与者需要达成共识。比特币采用的 工作量证明（Proof of Work, PoW） 机制，要求参与者（矿工）通过计算竞争来添加新区块：'><meta itemprop=wordCount content="142"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='什么是加密货币？（入门） 难度：⭐ 入门 | 字数：约 1,200 字 | 预计阅读时间：5 分钟
+一、货币的演变史 在讨论加密货币之前，我们先回顾一下货币本身。
+人类历史上，货币形态经历了数次重大演变：
+阶段 形态 核心特征 物物交换 贝壳、牲畜、谷物 需求双重巧合 金属货币 铜、银、金 稀缺、易分割、便携 纸币 银行券 政府信用背书 电子货币 银行存款、支付宝 数字化、中心化账本 加密货币 BTC、ETH 等 去中心化、密码学保障 每一次演变，货币都在朝着更高效、更易用的方向进化。而加密货币，正是数字化时代对"货币应该是什么"这一问题的重新回答。
+二、加密货币到底是什么？ 加密货币（Cryptocurrency） 是一种基于密码学原理和分布式网络技术发行的数字资产，它不依赖任何中央机构（如政府或银行），而是通过网络中所有参与者的共识来维持运转。
+简单理解：加密货币 = 密码学 + 分布式网络 + 经济激励机制
+以最著名的比特币（Bitcoin, BTC）为例：
+去中心化：没有央行发行，没有单一服务器，数以万计的节点共同维护网络 总量固定：比特币总量被永久限制在 2100 万枚，不存在通货膨胀 透明可验证：所有交易记录公开可查，任何人可随时验证 不可篡改：历史交易一旦确认，几乎无法被修改或撤销 三、加密货币的核心要素 1. 私钥与公钥 每个加密货币持有者都拥有一对钥匙：
+公钥（Public Key）：相当于你的"银行账号"，可以公开给任何人，用于接收资金 私钥（Private Key）：相当于你的"密码+签名"，必须妥善保管，用于花费资金 ⚠️ 重要提醒：私钥丢失 = 资产永久丢失。私钥泄露 = 资产被他人窃取。没有"找回密码"机制。
+2. 区块链 区块链是加密货币的底层技术，可以理解为一本人人可查阅、但无法私自篡改的"公共账本"。每个"区块"记录了一段时间内的所有交易，多个区块按时间顺序串联成"链"。
+3. 挖矿与共识机制 为了在没有中心化机构的情况下确保账本的真实可靠，网络中的参与者需要达成共识。比特币采用的 工作量证明（Proof of Work, PoW） 机制，要求参与者（矿工）通过计算竞争来添加新区块：'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-01_what_is_crypto"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#一货币的演变史>一、货币的演变史</a></li><li><a href=#二加密货币到底是什么>二、加密货币到底是什么？</a></li><li><a href=#三加密货币的核心要素>三、加密货币的核心要素</a><ul><li><a href=#1-私钥与公钥>1. 私钥与公钥</a></li><li><a href=#2-区块链>2. 区块链</a></li><li><a href=#3-挖矿与共识机制>3. 挖矿与共识机制</a></li></ul></li><li><a href=#四主流加密货币一览>四、主流加密货币一览</a><ul><li><a href=#比特币btc数字黄金>比特币（BTC）——数字黄金</a></li><li><a href=#以太坊eth智能合约平台>以太坊（ETH）——智能合约平台</a></li><li><a href=#稳定币usdtusdc加密世界的法币>稳定币（USDT/USDC）——加密世界的"法币"</a></li></ul></li><li><a href=#五加密货币能用来做什么>五、加密货币能用来做什么？</a></li><li><a href=#六风险与注意事项>六、风险与注意事项</a></li><li><a href=#七结语>七、结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>142 字</span></div></header><h1 id=什么是加密货币入门>什么是加密货币？（入门）</h1><blockquote><p><strong>难度：⭐ 入门</strong> | 字数：约 1,200 字 | 预计阅读时间：5 分钟</p></blockquote><hr><h2 id=一货币的演变史>一、货币的演变史</h2><p>在讨论加密货币之前，我们先回顾一下货币本身。</p><p>人类历史上，货币形态经历了数次重大演变：</p><table><thead><tr><th>阶段</th><th>形态</th><th>核心特征</th></tr></thead><tbody><tr><td>物物交换</td><td>贝壳、牲畜、谷物</td><td>需求双重巧合</td></tr><tr><td>金属货币</td><td>铜、银、金</td><td>稀缺、易分割、便携</td></tr><tr><td>纸币</td><td>银行券</td><td>政府信用背书</td></tr><tr><td>电子货币</td><td>银行存款、支付宝</td><td>数字化、中心化账本</td></tr><tr><td><strong>加密货币</strong></td><td>BTC、ETH 等</td><td><strong>去中心化、密码学保障</strong></td></tr></tbody></table><p>每一次演变，货币都在朝着更高效、更易用的方向进化。而加密货币，正是数字化时代对"货币应该是什么"这一问题的重新回答。</p><hr><h2 id=二加密货币到底是什么>二、加密货币到底是什么？</h2><p><strong>加密货币（Cryptocurrency）</strong> 是一种基于密码学原理和分布式网络技术发行的数字资产，它不依赖任何中央机构（如政府或银行），而是通过网络中所有参与者的共识来维持运转。</p><p>简单理解：<strong>加密货币 = 密码学 + 分布式网络 + 经济激励机制</strong></p><p>以最著名的比特币（Bitcoin, BTC）为例：</p><ul><li><strong>去中心化</strong>：没有央行发行，没有单一服务器，数以万计的节点共同维护网络</li><li><strong>总量固定</strong>：比特币总量被永久限制在 2100 万枚，不存在通货膨胀</li><li><strong>透明可验证</strong>：所有交易记录公开可查，任何人可随时验证</li><li><strong>不可篡改</strong>：历史交易一旦确认，几乎无法被修改或撤销</li></ul><hr><h2 id=三加密货币的核心要素>三、加密货币的核心要素</h2><h3 id=1-私钥与公钥>1. 私钥与公钥</h3><p>每个加密货币持有者都拥有一对钥匙：</p><ul><li><strong>公钥（Public Key）</strong>：相当于你的"银行账号"，可以公开给任何人，用于接收资金</li><li><strong>私钥（Private Key）</strong>：相当于你的"密码+签名"，必须妥善保管，用于花费资金</li></ul><blockquote><p>⚠️ <strong>重要提醒</strong>：私钥丢失 = 资产永久丢失。私钥泄露 = 资产被他人窃取。没有"找回密码"机制。</p></blockquote><h3 id=2-区块链>2. 区块链</h3><p>区块链是加密货币的底层技术，可以理解为一本人人可查阅、但无法私自篡改的"公共账本"。每个"区块"记录了一段时间内的所有交易，多个区块按时间顺序串联成"链"。</p><h3 id=3-挖矿与共识机制>3. 挖矿与共识机制</h3><p>为了在没有中心化机构的情况下确保账本的真实可靠，网络中的参与者需要达成共识。比特币采用的 <strong>工作量证明（Proof of Work, PoW）</strong> 机制，要求参与者（矿工）通过计算竞争来添加新区块：</p><blockquote><p>矿工解一道数学难题 → 第一个解出的人获得记账权 + 奖励新发行的比特币</p></blockquote><p>这既是比特币的"发行机制"，也是其安全屏障。</p><hr><h2 id=四主流加密货币一览>四、主流加密货币一览</h2><h3 id=比特币btc数字黄金>比特币（BTC）——数字黄金</h3><ul><li>2009 年由中本聪创立</li><li>定位：价值存储，数字黄金</li><li>市值最大，流动性最好</li><li>适合：长期持有、资产保值</li></ul><h3 id=以太坊eth智能合约平台>以太坊（ETH）——智能合约平台</h3><ul><li>2015 年由 Vitalik Buterin 创建</li><li>定位：全球计算机，DeFi 和 NFT 的基础设施</li><li>支持智能合约，可编程</li><li>适合：开发者、DeFi 参与者</li></ul><h3 id=稳定币usdtusdc加密世界的法币>稳定币（USDT/USDC）——加密世界的"法币"</h3><ul><li>与美元 1:1 锚定，1 USDT ≈ 1 美元</li><li>用途：交易对中介、跨境转账、DeFi 收益</li><li>注意：发行方需持有对应美元储备</li></ul><hr><h2 id=五加密货币能用来做什么>五、加密货币能用来做什么？</h2><ol><li><strong>价值转移</strong>：几分钟内完成跨境转账，成本远低于传统银行</li><li><strong>投资与交易</strong>：在交易所买卖加密货币，赚取价格波动收益</li><li><strong>DeFi 应用</strong>：存款、借贷、交易，无需银行作为中介</li><li><strong>NFT 与数字资产</strong>：购买数字艺术品、游戏道具</li><li><strong>抗审查</strong>：没有任何单一机构能冻结你的资产</li></ol><hr><h2 id=六风险与注意事项>六、风险与注意事项</h2><table><thead><tr><th>风险类型</th><th>说明</th></tr></thead><tbody><tr><td>价格波动</td><td>加密货币价格可能在短期内大幅下跌</td></tr><tr><td>安全风险</td><td>交易所被攻击、私钥泄露导致资产损失</td></tr><tr><td>监管风险</td><td>部分国家禁止或限制加密货币使用</td></tr><tr><td>项目风险</td><td>大量项目最终归零甚至属于骗局</td></tr></tbody></table><p><strong>建议</strong>：</p><ul><li>只投入能承受损失的资金</li><li>大额资产建议使用硬件钱包存储</li><li>选择主流、受监管的交易所</li><li>警惕"保本高收益"等诈骗话术</li></ul><hr><h2 id=七结语>七、结语</h2><p>加密货币不仅仅是一种投资标的，更代表了一种全新的价值存储和转移范式。它让我们第一次可以在不需要任何中介的情况下，真正"拥有"自己的财产。</p><p>当然，作为一种新兴资产类别，它也伴随着高波动性和不确定性。深入学习、理解原理，才是在这个市场中长期生存的关键。</p><p>在接下来的文章中，我们将深入探讨区块链技术原理，敬请期待。</p><hr><p><em>如果你觉得这篇文章有帮助，欢迎收藏、转发。如有问题，欢迎留言交流。</em></p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/researcher/02_blockchain_principles/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/researcher/12-cross-chain-bridge/>跨链桥安全指南 - 如何安全转移资产</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

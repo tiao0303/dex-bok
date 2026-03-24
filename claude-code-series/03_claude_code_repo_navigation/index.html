@@ -1,0 +1,169 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>Claude Code 大仓库导航：让 AI 深度理解你的代码库 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='Claude Code 大仓库导航：让 AI 深度理解你的代码库
+面对大仓库的挑战
+当你接手一个数万行的代码库时，Claude Code 是最好的导航工具。
+文件理解
+快速了解项目结构
+claude
+帮我了解这个项目的整体结构，重点关注：
+1. 入口文件在哪里
+2. 主要模块有哪些
+3. 配置文件在哪里
+深度理解单个文件
+读取 @src/core/Exchange.sol 并解释：
+- 这个合约的核心数据存储结构
+- 主要的外部调用接口
+- 安全相关的设计
+代码搜索
+Grep 搜索
+帮我搜索所有调用了 Uniswap V3 Quoter 的地方，
+输出每个调用的文件位置、行号和上下文
+语义搜索
+找出所有"授权转账"相关的代码（approve + transferFrom），
+标注出可能的安全风险点
+跨文件追踪
+追踪数据流
+追踪一笔 USDT 转账的完整路径：
+从用户点击 Swap 开始，到合约最终执行
+经过哪些文件？哪些函数？
+理解依赖关系
+帮我画出 @src/core/ 目录下各合约的依赖关系图，
+用文字描述即可
+安全审查
+常用审查模式
+对这个目录 @contracts/security/ 做全面安全审查：
+1. 重入攻击风险
+2. 整数溢出/下溢
+3. 授权绕过
+4. 逻辑错误
+
+对每个问题，说明：文件位置、严重程度、修复建议
+特定漏洞检查
+检查所有 external/public 函数是否有：
+- 非零地址检查
+- 授权检查
+- 余额边界检查
+- reentrancy guard
+性能分析
+Gas 优化
+分析 @contracts/SwapAggregator.sol 的 gas 消耗：
+1. 找出最贵的 5 个操作
+2. 提出具体优化方案
+3. 估算每个优化能节省多少 gas
+实战案例
+DeFi 聚合器代码审查
+项目路径：~/defi-aggregator
+
+任务：
+1. 理解架构：用户如何发起一笔 Swap，路径是怎样的
+2. 找出风险点：哪些地方可能被 MEV 机器人攻击
+3. 给出安全清单：上线前必须修复的问题
+
+输出格式：
+## 架构理解
+[文字描述]
+
+## 风险点
+| 位置 | 风险 | 严重度 | 建议 |
+|------|------|--------|------|
+
+## 上线前检查清单
+- [ ] ...
+命令速查
+
+  
+      
+          需求
+          命令
+      
+  
+  
+      
+          了解结构
+          claude "分析项目结构"
+      
+      
+          搜索代码
+          /grep "pattern" **/*.sol
+      
+      
+          读文件
+          cat @file 或直接引用
+      
+      
+          查依赖
+          claude "追踪 X 的调用链"
+      
+      
+          安全审查
+          /security-review @path
+      
+      
+          Gas 分析
+          /gas-profile @file
+      
+  
+'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/claude-code-series/03_claude_code_repo_navigation/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/claude-code-series/03_claude_code_repo_navigation/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/claude-code-series/03_claude_code_repo_navigation/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/claude-code-series/03_claude_code_repo_navigation/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="Claude Code 大仓库导航：让 AI 深度理解你的代码库"><meta property="og:description" content='Claude Code 大仓库导航：让 AI 深度理解你的代码库 面对大仓库的挑战 当你接手一个数万行的代码库时，Claude Code 是最好的导航工具。
+文件理解 快速了解项目结构 claude 帮我了解这个项目的整体结构，重点关注： 1. 入口文件在哪里 2. 主要模块有哪些 3. 配置文件在哪里 深度理解单个文件 读取 @src/core/Exchange.sol 并解释： - 这个合约的核心数据存储结构 - 主要的外部调用接口 - 安全相关的设计 代码搜索 Grep 搜索 帮我搜索所有调用了 Uniswap V3 Quoter 的地方， 输出每个调用的文件位置、行号和上下文 语义搜索 找出所有"授权转账"相关的代码（approve + transferFrom）， 标注出可能的安全风险点 跨文件追踪 追踪数据流 追踪一笔 USDT 转账的完整路径： 从用户点击 Swap 开始，到合约最终执行 经过哪些文件？哪些函数？ 理解依赖关系 帮我画出 @src/core/ 目录下各合约的依赖关系图， 用文字描述即可 安全审查 常用审查模式 对这个目录 @contracts/security/ 做全面安全审查： 1. 重入攻击风险 2. 整数溢出/下溢 3. 授权绕过 4. 逻辑错误 对每个问题，说明：文件位置、严重程度、修复建议 特定漏洞检查 检查所有 external/public 函数是否有： - 非零地址检查 - 授权检查 - 余额边界检查 - reentrancy guard 性能分析 Gas 优化 分析 @contracts/SwapAggregator.sol 的 gas 消耗： 1. 找出最贵的 5 个操作 2. 提出具体优化方案 3. 估算每个优化能节省多少 gas 实战案例 DeFi 聚合器代码审查 项目路径：~/defi-aggregator 任务： 1. 理解架构：用户如何发起一笔 Swap，路径是怎样的 2. 找出风险点：哪些地方可能被 MEV 机器人攻击 3. 给出安全清单：上线前必须修复的问题 输出格式： ## 架构理解 [文字描述] ## 风险点 | 位置 | 风险 | 严重度 | 建议 | |------|------|--------|------| ## 上线前检查清单 - [ ] ... 命令速查 需求 命令 了解结构 claude "分析项目结构" 搜索代码 /grep "pattern" **/*.sol 读文件 cat @file 或直接引用 查依赖 claude "追踪 X 的调用链" 安全审查 /security-review @path Gas 分析 /gas-profile @file'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="claude-code-series"><meta property="article:published_time" content="2026-03-24T00:00:00+08:00"><meta property="article:modified_time" content="2026-03-24T00:00:00+08:00"><meta property="article:tag" content="Claude Code"><meta property="article:tag" content="AI"><meta property="article:tag" content="代码库分析"><meta itemprop=name content="Claude Code 大仓库导航：让 AI 深度理解你的代码库"><meta itemprop=description content='Claude Code 大仓库导航：让 AI 深度理解你的代码库 面对大仓库的挑战 当你接手一个数万行的代码库时，Claude Code 是最好的导航工具。
+文件理解 快速了解项目结构 claude 帮我了解这个项目的整体结构，重点关注： 1. 入口文件在哪里 2. 主要模块有哪些 3. 配置文件在哪里 深度理解单个文件 读取 @src/core/Exchange.sol 并解释： - 这个合约的核心数据存储结构 - 主要的外部调用接口 - 安全相关的设计 代码搜索 Grep 搜索 帮我搜索所有调用了 Uniswap V3 Quoter 的地方， 输出每个调用的文件位置、行号和上下文 语义搜索 找出所有"授权转账"相关的代码（approve + transferFrom）， 标注出可能的安全风险点 跨文件追踪 追踪数据流 追踪一笔 USDT 转账的完整路径： 从用户点击 Swap 开始，到合约最终执行 经过哪些文件？哪些函数？ 理解依赖关系 帮我画出 @src/core/ 目录下各合约的依赖关系图， 用文字描述即可 安全审查 常用审查模式 对这个目录 @contracts/security/ 做全面安全审查： 1. 重入攻击风险 2. 整数溢出/下溢 3. 授权绕过 4. 逻辑错误 对每个问题，说明：文件位置、严重程度、修复建议 特定漏洞检查 检查所有 external/public 函数是否有： - 非零地址检查 - 授权检查 - 余额边界检查 - reentrancy guard 性能分析 Gas 优化 分析 @contracts/SwapAggregator.sol 的 gas 消耗： 1. 找出最贵的 5 个操作 2. 提出具体优化方案 3. 估算每个优化能节省多少 gas 实战案例 DeFi 聚合器代码审查 项目路径：~/defi-aggregator 任务： 1. 理解架构：用户如何发起一笔 Swap，路径是怎样的 2. 找出风险点：哪些地方可能被 MEV 机器人攻击 3. 给出安全清单：上线前必须修复的问题 输出格式： ## 架构理解 [文字描述] ## 风险点 | 位置 | 风险 | 严重度 | 建议 | |------|------|--------|------| ## 上线前检查清单 - [ ] ... 命令速查 需求 命令 了解结构 claude "分析项目结构" 搜索代码 /grep "pattern" **/*.sol 读文件 cat @file 或直接引用 查依赖 claude "追踪 X 的调用链" 安全审查 /security-review @path Gas 分析 /gas-profile @file'><meta itemprop=datePublished content="2026-03-24T00:00:00+08:00"><meta itemprop=dateModified content="2026-03-24T00:00:00+08:00"><meta itemprop=wordCount content="163"><meta itemprop=keywords content="Claude Code,AI,代码库分析"><meta name=twitter:card content="summary"><meta name=twitter:title content="Claude Code 大仓库导航：让 AI 深度理解你的代码库"><meta name=twitter:description content='Claude Code 大仓库导航：让 AI 深度理解你的代码库 面对大仓库的挑战 当你接手一个数万行的代码库时，Claude Code 是最好的导航工具。
+文件理解 快速了解项目结构 claude 帮我了解这个项目的整体结构，重点关注： 1. 入口文件在哪里 2. 主要模块有哪些 3. 配置文件在哪里 深度理解单个文件 读取 @src/core/Exchange.sol 并解释： - 这个合约的核心数据存储结构 - 主要的外部调用接口 - 安全相关的设计 代码搜索 Grep 搜索 帮我搜索所有调用了 Uniswap V3 Quoter 的地方， 输出每个调用的文件位置、行号和上下文 语义搜索 找出所有"授权转账"相关的代码（approve + transferFrom）， 标注出可能的安全风险点 跨文件追踪 追踪数据流 追踪一笔 USDT 转账的完整路径： 从用户点击 Swap 开始，到合约最终执行 经过哪些文件？哪些函数？ 理解依赖关系 帮我画出 @src/core/ 目录下各合约的依赖关系图， 用文字描述即可 安全审查 常用审查模式 对这个目录 @contracts/security/ 做全面安全审查： 1. 重入攻击风险 2. 整数溢出/下溢 3. 授权绕过 4. 逻辑错误 对每个问题，说明：文件位置、严重程度、修复建议 特定漏洞检查 检查所有 external/public 函数是否有： - 非零地址检查 - 授权检查 - 余额边界检查 - reentrancy guard 性能分析 Gas 优化 分析 @contracts/SwapAggregator.sol 的 gas 消耗： 1. 找出最贵的 5 个操作 2. 提出具体优化方案 3. 估算每个优化能节省多少 gas 实战案例 DeFi 聚合器代码审查 项目路径：~/defi-aggregator 任务： 1. 理解架构：用户如何发起一笔 Swap，路径是怎样的 2. 找出风险点：哪些地方可能被 MEV 机器人攻击 3. 给出安全清单：上线前必须修复的问题 输出格式： ## 架构理解 [文字描述] ## 风险点 | 位置 | 风险 | 严重度 | 建议 | |------|------|--------|------| ## 上线前检查清单 - [ ] ... 命令速查 需求 命令 了解结构 claude "分析项目结构" 搜索代码 /grep "pattern" **/*.sol 读文件 cat @file 或直接引用 查依赖 claude "追踪 X 的调用链" 安全审查 /security-review @path Gas 分析 /gas-profile @file'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-03_claude_code_repo_navigation"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#面对大仓库的挑战>面对大仓库的挑战</a></li><li><a href=#文件理解>文件理解</a><ul><li><a href=#快速了解项目结构>快速了解项目结构</a></li><li><a href=#深度理解单个文件>深度理解单个文件</a></li></ul></li><li><a href=#代码搜索>代码搜索</a><ul><li><a href=#grep-搜索>Grep 搜索</a></li><li><a href=#语义搜索>语义搜索</a></li></ul></li><li><a href=#跨文件追踪>跨文件追踪</a><ul><li><a href=#追踪数据流>追踪数据流</a></li><li><a href=#理解依赖关系>理解依赖关系</a></li></ul></li><li><a href=#安全审查>安全审查</a><ul><li><a href=#常用审查模式>常用审查模式</a></li><li><a href=#特定漏洞检查>特定漏洞检查</a></li></ul></li><li><a href=#性能分析>性能分析</a><ul><li><a href=#gas-优化>Gas 优化</a></li></ul></li><li><a href=#实战案例>实战案例</a><ul><li><a href=#defi-聚合器代码审查>DeFi 聚合器代码审查</a></li></ul></li><li><a href=#命令速查>命令速查</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>Claude Code 大仓库导航：让 AI 深度理解你的代码库</h1><div class=article-meta><time datetime=2026-03-24>2026-03-24</time>
+<span>•</span>
+<span>163 字</span>
+<span>•</span>
+<span>Claude Code 专题</span></div><div class=article-tags><a href=/dex-bok/tags/claude-code/ class=article-tag>Claude Code</a>
+<a href=/dex-bok/tags/ai/ class=article-tag>AI</a>
+<a href=/dex-bok/tags/%E4%BB%A3%E7%A0%81%E5%BA%93%E5%88%86%E6%9E%90/ class=article-tag>代码库分析</a></div></header><h1 id=claude-code-大仓库导航让-ai-深度理解你的代码库>Claude Code 大仓库导航：让 AI 深度理解你的代码库</h1><h2 id=面对大仓库的挑战>面对大仓库的挑战</h2><p>当你接手一个数万行的代码库时，Claude Code 是最好的导航工具。</p><h2 id=文件理解>文件理解</h2><h3 id=快速了解项目结构>快速了解项目结构</h3><pre tabindex=0><code>claude
+帮我了解这个项目的整体结构，重点关注：
+1. 入口文件在哪里
+2. 主要模块有哪些
+3. 配置文件在哪里
+</code></pre><h3 id=深度理解单个文件>深度理解单个文件</h3><pre tabindex=0><code>读取 @src/core/Exchange.sol 并解释：
+- 这个合约的核心数据存储结构
+- 主要的外部调用接口
+- 安全相关的设计
+</code></pre><h2 id=代码搜索>代码搜索</h2><h3 id=grep-搜索>Grep 搜索</h3><pre tabindex=0><code>帮我搜索所有调用了 Uniswap V3 Quoter 的地方，
+输出每个调用的文件位置、行号和上下文
+</code></pre><h3 id=语义搜索>语义搜索</h3><pre tabindex=0><code>找出所有&#34;授权转账&#34;相关的代码（approve + transferFrom），
+标注出可能的安全风险点
+</code></pre><h2 id=跨文件追踪>跨文件追踪</h2><h3 id=追踪数据流>追踪数据流</h3><pre tabindex=0><code>追踪一笔 USDT 转账的完整路径：
+从用户点击 Swap 开始，到合约最终执行
+经过哪些文件？哪些函数？
+</code></pre><h3 id=理解依赖关系>理解依赖关系</h3><pre tabindex=0><code>帮我画出 @src/core/ 目录下各合约的依赖关系图，
+用文字描述即可
+</code></pre><h2 id=安全审查>安全审查</h2><h3 id=常用审查模式>常用审查模式</h3><pre tabindex=0><code>对这个目录 @contracts/security/ 做全面安全审查：
+1. 重入攻击风险
+2. 整数溢出/下溢
+3. 授权绕过
+4. 逻辑错误
+
+对每个问题，说明：文件位置、严重程度、修复建议
+</code></pre><h3 id=特定漏洞检查>特定漏洞检查</h3><pre tabindex=0><code>检查所有 external/public 函数是否有：
+- 非零地址检查
+- 授权检查
+- 余额边界检查
+- reentrancy guard
+</code></pre><h2 id=性能分析>性能分析</h2><h3 id=gas-优化>Gas 优化</h3><pre tabindex=0><code>分析 @contracts/SwapAggregator.sol 的 gas 消耗：
+1. 找出最贵的 5 个操作
+2. 提出具体优化方案
+3. 估算每个优化能节省多少 gas
+</code></pre><h2 id=实战案例>实战案例</h2><h3 id=defi-聚合器代码审查>DeFi 聚合器代码审查</h3><pre tabindex=0><code>项目路径：~/defi-aggregator
+
+任务：
+1. 理解架构：用户如何发起一笔 Swap，路径是怎样的
+2. 找出风险点：哪些地方可能被 MEV 机器人攻击
+3. 给出安全清单：上线前必须修复的问题
+
+输出格式：
+## 架构理解
+[文字描述]
+
+## 风险点
+| 位置 | 风险 | 严重度 | 建议 |
+|------|------|--------|------|
+
+## 上线前检查清单
+- [ ] ...
+</code></pre><h2 id=命令速查>命令速查</h2><table><thead><tr><th>需求</th><th>命令</th></tr></thead><tbody><tr><td>了解结构</td><td><code>claude "分析项目结构"</code></td></tr><tr><td>搜索代码</td><td><code>/grep "pattern" **/*.sol</code></td></tr><tr><td>读文件</td><td><code>cat @file</code> 或直接引用</td></tr><tr><td>查依赖</td><td><code>claude "追踪 X 的调用链"</code></td></tr><tr><td>安全审查</td><td><code>/security-review @path</code></td></tr><tr><td>Gas 分析</td><td><code>/gas-profile @file</code></td></tr></tbody></table><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/claude-code-series/04_claude_code_automation/>Claude Code 自动化与自定义：把 AI 变成你的专属开发助手</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/claude-code-series/01_claude_code_getting_started/>Claude Code 入门指南：AI 编程第一课，让 AI 替你写代码</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

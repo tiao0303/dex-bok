@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>投资分析 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/%E6%8A%95%E8%B5%84%E5%88%86%E6%9E%90/</link><description>Recent content in 投资分析 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:10:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/%E6%8A%95%E8%B5%84%E5%88%86%E6%9E%90/index.xml" rel="self" type="application/rss+xml"/><item><title>代币经济学分析 - 识别优质项目</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/13-token-economics/</link><pubDate>Thu, 19 Mar 2026 00:10:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/13-token-economics/</guid><description>&lt;h2 id="代币经济学核心要素"&gt;代币经济学核心要素&lt;/h2&gt;
+&lt;h3 id="1-供应量"&gt;1. 供应量&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;类型&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;th&gt;风险&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;固定供应&lt;/td&gt;
+ &lt;td&gt;如 BTC 2100 万&lt;/td&gt;
+ &lt;td&gt;低&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;通胀模型&lt;/td&gt;
+ &lt;td&gt;如 ETH 无上限&lt;/td&gt;
+ &lt;td&gt;中&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;动态调整&lt;/td&gt;
+ &lt;td&gt;算法稳定币&lt;/td&gt;
+ &lt;td&gt;高&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="2-分配结构"&gt;2. 分配结构&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;健康分配&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;社区/生态：40-60%&lt;/li&gt;
+&lt;li&gt;团队：10-20%（4 年解锁）&lt;/li&gt;
+&lt;li&gt;投资人：15-25%（1-2 年解锁）&lt;/li&gt;
+&lt;li&gt;预留：10-15%&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;危险信号&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;团队 + 投资人 &amp;gt;50%&lt;/li&gt;
+&lt;li&gt;解锁期&amp;lt;1 年&lt;/li&gt;
+&lt;li&gt;无锁仓直接流通&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="3-解锁计划"&gt;3. 解锁计划&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;示例：健康解锁曲线
+TGE: 10%
+6 个月后：每月 5%
+4 年解锁完毕
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="4-代币效用"&gt;4. 代币效用&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;治理投票&lt;/li&gt;
+&lt;li&gt;费用折扣&lt;/li&gt;
+&lt;li&gt;质押奖励&lt;/li&gt;
+&lt;li&gt;流动性挖矿&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="分析工具"&gt;分析工具&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Token Unlocks：解锁时间表&lt;/li&gt;
+&lt;li&gt;Token Terminal：收入数据&lt;/li&gt;
+&lt;li&gt;Coingecko：市场数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;作者&lt;/strong&gt;：阿白
+&lt;strong&gt;邮箱&lt;/strong&gt;：qingxin0919@gmail.com&lt;/p&gt;</description></item></channel></rss>

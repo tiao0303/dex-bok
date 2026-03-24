@@ -1,0 +1,276 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='升级型合约设计模式：代理模式深度解析
+为什么需要可升级合约
+智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将逻辑代码与存储状态分离，实现了合约的"升级"能力。
+代理模式核心原理
+EVM 的 DELEGATECALL
+DELEGATECALL 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文：
+用户调用 Proxy.transfer()
+     ↓
+Proxy 使用 DELEGATECALL 调用 Implementation.transfer()
+     ↓
+执行 Implementation 的代码
+但所有状态读写发生在 Proxy 的存储中
+这意味着：同一个存储可以承载不同版本的逻辑代码。
+代理模式家族
+1. 透明代理（Transparent Proxy）
+最简单但有限制：管理员可以升级，但不能普通调用。
+// Proxy 合约
+contract TransparentUpgradeableProxy {
+    bytes32 private constant IMPLEMENTATION_SLOT = 
+        bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1);
+    
+    address public implementation;
+    
+    fallback() external payable {
+        // 仅当调用者不是管理员时，才转发到实现合约
+        if (msg.sender != admin()) {
+            _delegate(implementation);
+        }
+    }
+    
+    function _delegate(address impl) internal virtual {
+        assembly {
+            let ptr := mload(0x40)
+            calldatacopy(ptr, 0, calldatasize())
+            let result := delegatecall(gas(), impl, ptr, calldatasize(), 0, 0)
+            returndatacopy(ptr, 0, returndatasize())
+            if iszero(result) { revert(ptr, returndatasize()) }
+            return(ptr, returndatasize())
+        }
+    }
+}
+2. UUPS 代理（ERC-1967）
+目前最流行的模式，升级逻辑放在实现合约本身：'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/developer/09_upgradeable_patterns/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/developer/09_upgradeable_patterns/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/developer/09_upgradeable_patterns/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/developer/09_upgradeable_patterns/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='升级型合约设计模式：代理模式深度解析 为什么需要可升级合约 智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将逻辑代码与存储状态分离，实现了合约的"升级"能力。
+代理模式核心原理 EVM 的 DELEGATECALL DELEGATECALL 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文：
+用户调用 Proxy.transfer() ↓ Proxy 使用 DELEGATECALL 调用 Implementation.transfer() ↓ 执行 Implementation 的代码 但所有状态读写发生在 Proxy 的存储中 这意味着：同一个存储可以承载不同版本的逻辑代码。
+代理模式家族 1. 透明代理（Transparent Proxy） 最简单但有限制：管理员可以升级，但不能普通调用。
+// Proxy 合约 contract TransparentUpgradeableProxy { bytes32 private constant IMPLEMENTATION_SLOT = bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1); address public implementation; fallback() external payable { // 仅当调用者不是管理员时，才转发到实现合约 if (msg.sender != admin()) { _delegate(implementation); } } function _delegate(address impl) internal virtual { assembly { let ptr := mload(0x40) calldatacopy(ptr, 0, calldatasize()) let result := delegatecall(gas(), impl, ptr, calldatasize(), 0, 0) returndatacopy(ptr, 0, returndatasize()) if iszero(result) { revert(ptr, returndatasize()) } return(ptr, returndatasize()) } } } 2. UUPS 代理（ERC-1967） 目前最流行的模式，升级逻辑放在实现合约本身：'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='升级型合约设计模式：代理模式深度解析 为什么需要可升级合约 智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将逻辑代码与存储状态分离，实现了合约的"升级"能力。
+代理模式核心原理 EVM 的 DELEGATECALL DELEGATECALL 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文：
+用户调用 Proxy.transfer() ↓ Proxy 使用 DELEGATECALL 调用 Implementation.transfer() ↓ 执行 Implementation 的代码 但所有状态读写发生在 Proxy 的存储中 这意味着：同一个存储可以承载不同版本的逻辑代码。
+代理模式家族 1. 透明代理（Transparent Proxy） 最简单但有限制：管理员可以升级，但不能普通调用。
+// Proxy 合约 contract TransparentUpgradeableProxy { bytes32 private constant IMPLEMENTATION_SLOT = bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1); address public implementation; fallback() external payable { // 仅当调用者不是管理员时，才转发到实现合约 if (msg.sender != admin()) { _delegate(implementation); } } function _delegate(address impl) internal virtual { assembly { let ptr := mload(0x40) calldatacopy(ptr, 0, calldatasize()) let result := delegatecall(gas(), impl, ptr, calldatasize(), 0, 0) returndatacopy(ptr, 0, returndatasize()) if iszero(result) { revert(ptr, returndatasize()) } return(ptr, returndatasize()) } } } 2. UUPS 代理（ERC-1967） 目前最流行的模式，升级逻辑放在实现合约本身：'><meta itemprop=wordCount content="690"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='升级型合约设计模式：代理模式深度解析 为什么需要可升级合约 智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将逻辑代码与存储状态分离，实现了合约的"升级"能力。
+代理模式核心原理 EVM 的 DELEGATECALL DELEGATECALL 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文：
+用户调用 Proxy.transfer() ↓ Proxy 使用 DELEGATECALL 调用 Implementation.transfer() ↓ 执行 Implementation 的代码 但所有状态读写发生在 Proxy 的存储中 这意味着：同一个存储可以承载不同版本的逻辑代码。
+代理模式家族 1. 透明代理（Transparent Proxy） 最简单但有限制：管理员可以升级，但不能普通调用。
+// Proxy 合约 contract TransparentUpgradeableProxy { bytes32 private constant IMPLEMENTATION_SLOT = bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1); address public implementation; fallback() external payable { // 仅当调用者不是管理员时，才转发到实现合约 if (msg.sender != admin()) { _delegate(implementation); } } function _delegate(address impl) internal virtual { assembly { let ptr := mload(0x40) calldatacopy(ptr, 0, calldatasize()) let result := delegatecall(gas(), impl, ptr, calldatasize(), 0, 0) returndatacopy(ptr, 0, returndatasize()) if iszero(result) { revert(ptr, returndatasize()) } return(ptr, returndatasize()) } } } 2. UUPS 代理（ERC-1967） 目前最流行的模式，升级逻辑放在实现合约本身：'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-09_upgradeable_patterns"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#为什么需要可升级合约>为什么需要可升级合约</a></li><li><a href=#代理模式核心原理>代理模式核心原理</a><ul><li><a href=#evm-的-delegatecall>EVM 的 DELEGATECALL</a></li></ul></li><li><a href=#代理模式家族>代理模式家族</a><ul><li><a href=#1-透明代理transparent-proxy>1. 透明代理（Transparent Proxy）</a></li><li><a href=#2-uups-代理erc-1967>2. UUPS 代理（ERC-1967）</a></li><li><a href=#3-钻石代理diamond-patterneip-2535>3. 钻石代理（Diamond Pattern，EIP-2535）</a></li></ul></li><li><a href=#存储布局的挑战>存储布局的挑战</a><ul><li><a href=#存储槽冲突>存储槽冲突</a></li><li><a href=#正确做法继承存储安全基线>正确做法：继承存储安全基线</a></li><li><a href=#新增变量的正确姿势>新增变量的正确姿势</a></li><li><a href=#非结构化存储unstructured-storage>非结构化存储（Unstructured Storage）</a></li></ul></li><li><a href=#完整开发流程>完整开发流程</a><ul><li><a href=#1-安装依赖>1. 安装依赖</a></li><li><a href=#2-编写可升级合约>2. 编写可升级合约</a></li><li><a href=#3-升级版本>3. 升级版本</a></li><li><a href=#4-部署与升级脚本>4. 部署与升级脚本</a></li></ul></li><li><a href=#权限管理>权限管理</a></li><li><a href=#测试注意事项>测试注意事项</a></li><li><a href=#常见陷阱>常见陷阱</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>690 字</span></div></header><h1 id=升级型合约设计模式代理模式深度解析>升级型合约设计模式：代理模式深度解析</h1><h2 id=为什么需要可升级合约>为什么需要可升级合约</h2><p>智能合约部署后代码不可修改，但业务逻辑必然演进：修复 bug、添加功能、优化 Gas、响应安全事件。代理模式（Proxy Pattern）通过将<strong>逻辑代码</strong>与<strong>存储状态</strong>分离，实现了合约的"升级"能力。</p><h2 id=代理模式核心原理>代理模式核心原理</h2><h3 id=evm-的-delegatecall>EVM 的 DELEGATECALL</h3><p><code>DELEGATECALL</code> 是代理模式的基石：调用者借用被调用者的逻辑执行，但保留调用者的存储上下文：</p><pre tabindex=0><code>用户调用 Proxy.transfer()
+     ↓
+Proxy 使用 DELEGATECALL 调用 Implementation.transfer()
+     ↓
+执行 Implementation 的代码
+但所有状态读写发生在 Proxy 的存储中
+</code></pre><p>这意味着：<strong>同一个存储可以承载不同版本的逻辑代码</strong>。</p><h2 id=代理模式家族>代理模式家族</h2><h3 id=1-透明代理transparent-proxy>1. 透明代理（Transparent Proxy）</h3><p>最简单但有限制：管理员可以升级，但不能普通调用。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// Proxy 合约
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>TransparentUpgradeableProxy</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes32</span> <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>constant</span> IMPLEMENTATION_SLOT <span style=color:#f92672>=</span> 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>bytes32</span>(<span style=color:#66d9ef>uint256</span>(keccak256(<span style=color:#e6db74>&#34;eip1967.proxy.implementation&#34;</span>)) <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>public</span> implementation;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    fallback() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>payable</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 仅当调用者不是管理员时，才转发到实现合约
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> (msg.sender <span style=color:#f92672>!=</span> admin()) {
+</span></span><span style=display:flex><span>            _delegate(implementation);
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>_delegate</span>(<span style=color:#66d9ef>address</span> impl) <span style=color:#66d9ef>internal</span> <span style=color:#66d9ef>virtual</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>assembly</span> {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>let</span> ptr <span style=color:#f92672>:=</span> <span style=color:#a6e22e>mload</span>(<span style=color:#ae81ff>0x40</span>)
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>calldatacopy</span>(ptr, <span style=color:#ae81ff>0</span>, <span style=color:#a6e22e>calldatasize</span>())
+</span></span><span style=display:flex><span>            <span style=color:#f92672>let</span> result <span style=color:#f92672>:=</span> <span style=color:#a6e22e>delegatecall</span>(<span style=color:#a6e22e>gas</span>(), impl, ptr, <span style=color:#a6e22e>calldatasize</span>(), <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>0</span>)
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>returndatacopy</span>(ptr, <span style=color:#ae81ff>0</span>, <span style=color:#a6e22e>returndatasize</span>())
+</span></span><span style=display:flex><span>            if <span style=color:#a6e22e>iszero</span>(result) { <span style=color:#a6e22e>revert</span>(ptr, <span style=color:#a6e22e>returndatasize</span>()) }
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>return</span>(ptr, <span style=color:#a6e22e>returndatasize</span>())
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=2-uups-代理erc-1967>2. UUPS 代理（ERC-1967）</h3><p>目前最流行的模式，升级逻辑放在实现合约本身：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 实现合约包含升级逻辑
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>abstract</span> <span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>UUPSUpgradeable</span> <span style=color:#66d9ef>is</span> IERC1822Proxiable {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes32</span> <span style=color:#66d9ef>internal</span> <span style=color:#66d9ef>constant</span> IMPLEMENTATION_SLOT <span style=color:#f92672>=</span> 
+</span></span><span style=display:flex><span>        <span style=color:#ae81ff>0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>upgradeToAndCall</span>(
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span> newImplementation,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>bytes</span> <span style=color:#66d9ef>memory</span> data
+</span></span><span style=display:flex><span>    ) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>payable</span> <span style=color:#66d9ef>virtual</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 仅授权升级器可调用
+</span></span></span><span style=display:flex><span>        _authorizeUpgrade(newImplementation);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        _upgradeToAndCall(newImplementation, data);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>_authorizeUpgrade</span>(<span style=color:#66d9ef>address</span> newImplementation) <span style=color:#66d9ef>internal</span> <span style=color:#66d9ef>virtual</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>UUPS vs 透明代理</strong>：</p><table><thead><tr><th>特性</th><th>UUPS</th><th>透明代理</th></tr></thead><tbody><tr><td>升级逻辑位置</td><td>实现合约</td><td>代理合约</td></tr><tr><td>代理合约复杂度</td><td>简单</td><td>复杂</td></tr><tr><td>部署 Gas</td><td>较低</td><td>较高</td></tr><tr><td>版本锁定</td><td>可实现</td><td>需额外控制</td></tr><tr><td>OpenZeppelin 支持</td><td>✅</td><td>✅</td></tr></tbody></table><h3 id=3-钻石代理diamond-patterneip-2535>3. 钻石代理（Diamond Pattern，EIP-2535）</h3><p>支持多个实现模块，适合大型项目：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 钻石代理可以分片管理不同功能模块
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Diamond</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>FacetAddressAndPosition</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span> facetAddress;
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint96</span> functionPosition;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>DiamondStorage</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>bytes4</span> <span style=color:#f92672>=&gt;</span> FacetAddressAndPosition) facetFunctionPosition;
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>bytes4</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>bool</span>)) facetFunctionIds;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>diamondCut</span>(
+</span></span><span style=display:flex><span>        FacetCut[] calldata _diamondCut,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span> _init,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>bytes</span> <span style=color:#66d9ef>memory</span> _calldata
+</span></span><span style=display:flex><span>    ) <span style=color:#66d9ef>external</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>一个 Diamond 可以有多个 Facet（切面），每个 Facet 实现一组相关功能。升级时只需替换部分 Facet，不影响其他功能。</p><h2 id=存储布局的挑战>存储布局的挑战</h2><p>DELEGATECALL 的最大陷阱：<strong>代理合约和实现合约共享同一个存储空间</strong>。</p><h3 id=存储槽冲突>存储槽冲突</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 实现合约 V1
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>ImplementationV1</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> value;  <span style=color:#75715e>// 槽 0
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setValue</span>(<span style=color:#66d9ef>uint256</span> _value) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>        value <span style=color:#f92672>=</span> _value;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 实现合约 V2（错误示例：新增变量导致槽错位）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>ImplementationV2Bad</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>public</span> owner;  <span style=color:#75715e>// 槽 0 ← 冲突！覆盖了 V1 的 value
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> value;  <span style=color:#75715e>// 槽 1
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setValue</span>(<span style=color:#66d9ef>uint256</span> _value) <span style=color:#66d9ef>external</span> {
+</span></span><span style=display:flex><span>        value <span style=color:#f92672>=</span> _value;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=正确做法继承存储安全基线>正确做法：继承存储安全基线</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// OpenZeppelin 存储隔离
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>abstract</span> <span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Initializable</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span>[<span style=color:#ae81ff>49</span>] <span style=color:#66d9ef>private</span> __gap; <span style=color:#75715e>// 保留前50个槽，避免与子合约冲突
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyUpgradeableContract</span> <span style=color:#66d9ef>is</span> Initializable {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> value;  <span style=color:#75715e>// 从槽 50 开始
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>initialize</span>() <span style=color:#66d9ef>public</span> initializer {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 构造函数逻辑放这里
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=新增变量的正确姿势>新增变量的正确姿势</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// V2 继承原合约，新增变量时使用新的存储槽
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>ImplementationV2</span> <span style=color:#66d9ef>is</span> ImplementationV1 {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> newValue;  <span style=color:#75715e>// 槽 1（在 V1 的槽 0 之后）
+</span></span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 不能修改 V1 中已有变量的位置
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=非结构化存储unstructured-storage>非结构化存储（Unstructured Storage）</h3><p>另一种避免冲突的方法：使用哈希计算存储位置，而非依赖声明顺序：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>UnstructuredProxy</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bytes32</span> <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>constant</span> IMPLEMENTATION_SLOT <span style=color:#f92672>=</span> 
+</span></span><span style=display:flex><span>        keccak256(<span style=color:#e6db74>&#34;org.zeppelinos.proxy.implementation&#34;</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>implementation</span>() <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>address</span> impl) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>bytes32</span> slot <span style=color:#f92672>=</span> IMPLEMENTATION_SLOT;
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>assembly</span> { impl <span style=color:#f92672>:=</span> <span style=color:#a6e22e>sload</span>(slot) }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=完整开发流程>完整开发流程</h2><h3 id=1-安装依赖>1. 安装依赖</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm install @openzeppelin/contracts @openzeppelin/contracts-upgradeable
+</span></span></code></pre></div><h3 id=2-编写可升级合约>2. 编写可升级合约</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// contracts/MyTokenV1.sol
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// SPDX-License-Identifier: MIT
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>pragma solidity</span> <span style=color:#f92672>^</span><span style=color:#ae81ff>0</span>.<span style=color:#ae81ff>8</span>.<span style=color:#ae81ff>24</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol&#34;</span>;
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyTokenV1</span> <span style=color:#66d9ef>is</span> Initializable, ERC20Upgradeable {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>/// @custom:oz-upgrades-unsafe-allow constructor
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>constructor</span>() {
+</span></span><span style=display:flex><span>        _disableInitializers();
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>initialize</span>(<span style=color:#66d9ef>uint256</span> initialSupply) <span style=color:#66d9ef>public</span> initializer {
+</span></span><span style=display:flex><span>        __ERC20_init(<span style=color:#e6db74>&#34;MyToken&#34;</span>, <span style=color:#e6db74>&#34;MTK&#34;</span>);
+</span></span><span style=display:flex><span>        _mint(msg.sender, initialSupply);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// V1 只有一个基础转账功能
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=3-升级版本>3. 升级版本</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// contracts/MyTokenV2.sol
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyTokenV2</span> <span style=color:#66d9ef>is</span> Initializable, ERC20Upgradeable {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>bool</span>) <span style=color:#66d9ef>public</span> blacklisted;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>/// @notice V2 新增黑名单功能
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>addBlacklist</span>(<span style=color:#66d9ef>address</span> _user) <span style=color:#66d9ef>external</span> onlyOwner {
+</span></span><span style=display:flex><span>        blacklisted[_user] <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// V2 需要更新 _beforeTokenTransfer
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>_beforeTokenTransfer</span>(
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>from</span>,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>address</span> to,
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>uint256</span> amount
+</span></span><span style=display:flex><span>    ) <span style=color:#66d9ef>internal</span> <span style=color:#66d9ef>override</span> {
+</span></span><span style=display:flex><span>        super._beforeTokenTransfer(<span style=color:#66d9ef>from</span>, to, amount);
+</span></span><span style=display:flex><span>        require(<span style=color:#f92672>!</span>blacklisted[<span style=color:#66d9ef>from</span>] <span style=color:#f92672>&amp;&amp;</span> <span style=color:#f92672>!</span>blacklisted[to], <span style=color:#e6db74>&#34;Blacklisted&#34;</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=4-部署与升级脚本>4. 部署与升级脚本</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>ethers</span>, <span style=color:#a6e22e>upgrades</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#34;hardhat&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 部署 V1
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>TokenV1</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;MyTokenV1&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>tokenV1</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>upgrades</span>.<span style=color:#a6e22e>deployProxy</span>(<span style=color:#a6e22e>TokenV1</span>, [<span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>parseEther</span>(<span style=color:#e6db74>&#34;1000000&#34;</span>)]);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>tokenV1</span>.<span style=color:#a6e22e>waitForDeployment</span>();
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;Token V1 deployed to:&#34;</span>, <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>tokenV1</span>.<span style=color:#a6e22e>getAddress</span>());
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 升级到 V2
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>TokenV2</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;MyTokenV2&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>tokenV2</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>upgrades</span>.<span style=color:#a6e22e>upgradeProxy</span>(
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>tokenV1</span>.<span style=color:#a6e22e>getAddress</span>(),
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>TokenV2</span>
+</span></span><span style=display:flex><span>    );
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;Token upgraded to V2 at:&#34;</span>, <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>tokenV2</span>.<span style=color:#a6e22e>getAddress</span>());
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 验证代理地址
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>implV2</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>upgrades</span>.<span style=color:#a6e22e>erc1967</span>.<span style=color:#a6e22e>getImplementationAddress</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>tokenV1</span>.<span style=color:#a6e22e>getAddress</span>());
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;Implementation:&#34;</span>, <span style=color:#a6e22e>implV2</span>);
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>main</span>();
+</span></span></code></pre></div><h2 id=权限管理>权限管理</h2><p>升级权限必须严格控制：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyTokenV3</span> <span style=color:#66d9ef>is</span> Initializable, OwnableUpgradeable {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>initialize</span>() <span style=color:#66d9ef>public</span> initializer {
+</span></span><span style=display:flex><span>        __Ownable_init(msg.sender);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 升级需要 owner 权限
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>_authorizeUpgrade</span>(<span style=color:#66d9ef>address</span> newImplementation) 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>internal</span> <span style=color:#66d9ef>override</span> onlyOwner {}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=测试注意事项>测试注意事项</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#a6e22e>describe</span>(<span style=color:#e6db74>&#34;Upgradeable Contract&#34;</span>, <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>token</span>;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>beforeEach</span>(<span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>Token</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;MyTokenV1&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>token</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>upgrades</span>.<span style=color:#a6e22e>deployProxy</span>(<span style=color:#a6e22e>Token</span>, [<span style=color:#ae81ff>1000</span>]);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>waitForDeployment</span>();
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should preserve state after upgrade&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// V1 设置值
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>setValue</span>(<span style=color:#ae81ff>100</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 升级到 V2
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>TokenV2</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;MyTokenV2&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>upgrades</span>.<span style=color:#a6e22e>upgradeProxy</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>getAddress</span>(), <span style=color:#a6e22e>TokenV2</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// V2 仍能读取 V1 设置的值
+</span></span></span><span style=display:flex><span>        <span style=color:#a6e22e>expect</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>value</span>()).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>equal</span>(<span style=color:#ae81ff>100</span>);
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>it</span>(<span style=color:#e6db74>&#34;should support new features in V2&#34;</span>, <span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 升级
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>TokenV2</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>ethers</span>.<span style=color:#a6e22e>getContractFactory</span>(<span style=color:#e6db74>&#34;MyTokenV2&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>upgrades</span>.<span style=color:#a6e22e>upgradeProxy</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>getAddress</span>(), <span style=color:#a6e22e>TokenV2</span>);
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// V2 新功能
+</span></span></span><span style=display:flex><span>        <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>addBlacklist</span>(<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>address</span>);
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>expect</span>(<span style=color:#66d9ef>await</span> <span style=color:#a6e22e>token</span>.<span style=color:#a6e22e>blacklisted</span>(<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>address</span>)).<span style=color:#a6e22e>to</span>.<span style=color:#a6e22e>be</span>.<span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><h2 id=常见陷阱>常见陷阱</h2><table><thead><tr><th>陷阱</th><th>后果</th><th>解决方案</th></tr></thead><tbody><tr><td>构造函数中使用 immutable</td><td>升级后值丢失</td><td>用 initializer 替代</td></tr><tr><td>修改已有变量顺序</td><td>存储错位，数据损坏</td><td>严格遵守存储布局规则</td></tr><tr><td>忘记 _disableInitializers</td><td>可被重新初始化</td><td>在所有实现合约的构造函数中调用</td></tr><tr><td>跨版本接口不兼容</td><td>升级后前端断裂</td><td>使用接口抽象，保持 API 稳定</td></tr></tbody></table><h2 id=总结>总结</h2><p>代理模式让智能合约具备了"升级"能力，但也带来了复杂度：</p><ol><li><strong>UUPS</strong> 是目前最主流的选择</li><li><strong>存储布局</strong>是代理模式的核心风险点</li><li>升级前必须<strong>充分测试</strong>，确保存储正确迁移</li><li>权限控制至关重要，升级权泄露等于资产归零</li></ol><p>下一篇文章我们将通过一个完整案例，讲解智能合约审计的实战流程。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/developer/10_contract_audit/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/developer/08_gas_optimization/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

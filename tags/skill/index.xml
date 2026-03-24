@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Skill on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/skill/</link><description>Recent content in Skill on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Tue, 24 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/skill/index.xml" rel="self" type="application/rss+xml"/><item><title>Skill 写作深度调研：如何构建真正好用的 AI 插件</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/05_skill_writing_research/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/05_skill_writing_research/</guid><description>&lt;h1 id="skill-写作深度调研如何构建真正好用的-ai-插件"&gt;Skill 写作深度调研：如何构建真正好用的 AI 插件&lt;/h1&gt;
+&lt;h2 id="什么是-skill"&gt;什么是 Skill&lt;/h2&gt;
+&lt;p&gt;Skill 是 AI 智能体的&amp;quot;插件系统&amp;quot;——把专业领域的知识、工作流程和工具封装成可复用的模块。OpenClaw 的 Skill 本质上是一个目录，包含：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;skill-name/
+├── SKILL.md (必需) # 触发条件和执行指南
+├── scripts/ # 可执行脚本（Python/Bash 等）
+├── references/ # 参考文档（按需加载）
+└── assets/ # 静态资源（模板、图标等）
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Skill 让 AI 不再是通用模型，而是能胜任特定专业任务的专家。&lt;/p&gt;
+&lt;h2 id="为什么-skill-如此重要"&gt;为什么 Skill 如此重要&lt;/h2&gt;
+&lt;p&gt;模型本身再强，也无法凭空知道：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;你的内部 API 接口和认证方式&lt;/li&gt;
+&lt;li&gt;公司特有的代码规范和业务逻辑&lt;/li&gt;
+&lt;li&gt;需要特定序列操作的复杂工作流&lt;/li&gt;
+&lt;li&gt;特定工具的调用方式和错误处理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Skill 就是填补这个缺口的机制。把&amp;quot;只有你知道&amp;quot;的知识注入 AI 的执行上下文。&lt;/p&gt;
+&lt;h2 id="skill-的核心设计原则"&gt;Skill 的核心设计原则&lt;/h2&gt;
+&lt;h3 id="原则-1越简洁越好"&gt;原则 1：越简洁越好&lt;/h3&gt;
+&lt;p&gt;Context window 是公共资源。Skill 和所有内容共享有限的上下文空间：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;系统提示词&lt;/li&gt;
+&lt;li&gt;对话历史&lt;/li&gt;
+&lt;li&gt;其他 Skill 的元数据&lt;/li&gt;
+&lt;li&gt;用户的实际请求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;每个 Skill 应当只提供 AI 真正不知道的内容。&lt;/strong&gt; 每写一段话都要问自己：AI 真的需要这个解释吗？这段文字值得花多少 token？&lt;/p&gt;</description></item></channel></rss>

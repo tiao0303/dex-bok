@@ -1,0 +1,199 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="Solidity 基础语法：从变量到函数
+概述
+Solidity 是以太坊智能合约开发的首选语言，语法融合了 JavaScript 的简洁与 Java 的强类型特性。本文将系统讲解 Solidity 的基础语法，帮助你快速上手智能合约编写。
+第一个 Solidity 合约
+每个 Solidity 源文件通常以许可证声明和版本约束开头：
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+SPDX-License-Identifier：声明代码许可证，主流项目多用 MIT 或 GPL-3.0
+pragma solidity ^0.8.24：约束编译器版本，^ 表示兼容 0.8.24 及以上 0.8.x 版本
+
+数据类型
+Solidity 是一门静态类型语言，变量必须在声明时指定类型。
+值类型
+
+  
+      
+          类型
+          说明
+          示例
+      
+  
+  
+      
+          bool
+          布尔值
+          bool public isActive = true;
+      
+      
+          int/uint
+          有/无符号整数
+          int256 public balance = -100;
+      
+      
+          address
+          20字节以太坊地址
+          address public owner = msg.sender;
+      
+      
+          bytes1~bytes32
+          固定长度字节数组
+          bytes32 public hash;
+      
+  
+
+引用类型
+// 数组（动态大小）
+uint[] public numbers;
+address[] public investors;
+
+// 结构体
+struct Token {
+    string name;
+    uint256 supply;
+    address creator;
+}
+
+// 映射：键值对，类似哈希表
+mapping(address => uint256) public balances;
+mapping(address => mapping(address => uint256)) public allowances;
+
+⚠️ 重要：声明映射时，值类型的默认值为 0，地址类型为 address(0)，布尔为 false。"><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/developer/02_solidity_basics/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/developer/02_solidity_basics/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/developer/02_solidity_basics/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/developer/02_solidity_basics/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="Solidity 基础语法：从变量到函数 概述 Solidity 是以太坊智能合约开发的首选语言，语法融合了 JavaScript 的简洁与 Java 的强类型特性。本文将系统讲解 Solidity 的基础语法，帮助你快速上手智能合约编写。
+第一个 Solidity 合约 每个 Solidity 源文件通常以许可证声明和版本约束开头：
+// SPDX-License-Identifier: MIT pragma solidity ^0.8.24; SPDX-License-Identifier：声明代码许可证，主流项目多用 MIT 或 GPL-3.0 pragma solidity ^0.8.24：约束编译器版本，^ 表示兼容 0.8.24 及以上 0.8.x 版本 数据类型 Solidity 是一门静态类型语言，变量必须在声明时指定类型。
+值类型 类型 说明 示例 bool 布尔值 bool public isActive = true; int/uint 有/无符号整数 int256 public balance = -100; address 20字节以太坊地址 address public owner = msg.sender; bytes1~bytes32 固定长度字节数组 bytes32 public hash; 引用类型 // 数组（动态大小） uint[] public numbers; address[] public investors; // 结构体 struct Token { string name; uint256 supply; address creator; } // 映射：键值对，类似哈希表 mapping(address => uint256) public balances; mapping(address => mapping(address => uint256)) public allowances; ⚠️ 重要：声明映射时，值类型的默认值为 0，地址类型为 address(0)，布尔为 false。"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="Solidity 基础语法：从变量到函数 概述 Solidity 是以太坊智能合约开发的首选语言，语法融合了 JavaScript 的简洁与 Java 的强类型特性。本文将系统讲解 Solidity 的基础语法，帮助你快速上手智能合约编写。
+第一个 Solidity 合约 每个 Solidity 源文件通常以许可证声明和版本约束开头：
+// SPDX-License-Identifier: MIT pragma solidity ^0.8.24; SPDX-License-Identifier：声明代码许可证，主流项目多用 MIT 或 GPL-3.0 pragma solidity ^0.8.24：约束编译器版本，^ 表示兼容 0.8.24 及以上 0.8.x 版本 数据类型 Solidity 是一门静态类型语言，变量必须在声明时指定类型。
+值类型 类型 说明 示例 bool 布尔值 bool public isActive = true; int/uint 有/无符号整数 int256 public balance = -100; address 20字节以太坊地址 address public owner = msg.sender; bytes1~bytes32 固定长度字节数组 bytes32 public hash; 引用类型 // 数组（动态大小） uint[] public numbers; address[] public investors; // 结构体 struct Token { string name; uint256 supply; address creator; } // 映射：键值对，类似哈希表 mapping(address => uint256) public balances; mapping(address => mapping(address => uint256)) public allowances; ⚠️ 重要：声明映射时，值类型的默认值为 0，地址类型为 address(0)，布尔为 false。"><meta itemprop=wordCount content="529"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="Solidity 基础语法：从变量到函数 概述 Solidity 是以太坊智能合约开发的首选语言，语法融合了 JavaScript 的简洁与 Java 的强类型特性。本文将系统讲解 Solidity 的基础语法，帮助你快速上手智能合约编写。
+第一个 Solidity 合约 每个 Solidity 源文件通常以许可证声明和版本约束开头：
+// SPDX-License-Identifier: MIT pragma solidity ^0.8.24; SPDX-License-Identifier：声明代码许可证，主流项目多用 MIT 或 GPL-3.0 pragma solidity ^0.8.24：约束编译器版本，^ 表示兼容 0.8.24 及以上 0.8.x 版本 数据类型 Solidity 是一门静态类型语言，变量必须在声明时指定类型。
+值类型 类型 说明 示例 bool 布尔值 bool public isActive = true; int/uint 有/无符号整数 int256 public balance = -100; address 20字节以太坊地址 address public owner = msg.sender; bytes1~bytes32 固定长度字节数组 bytes32 public hash; 引用类型 // 数组（动态大小） uint[] public numbers; address[] public investors; // 结构体 struct Token { string name; uint256 supply; address creator; } // 映射：键值对，类似哈希表 mapping(address => uint256) public balances; mapping(address => mapping(address => uint256)) public allowances; ⚠️ 重要：声明映射时，值类型的默认值为 0，地址类型为 address(0)，布尔为 false。"><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-02_solidity_basics"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#概述>概述</a></li><li><a href=#第一个-solidity-合约>第一个 Solidity 合约</a></li><li><a href=#数据类型>数据类型</a><ul><li><a href=#值类型>值类型</a></li><li><a href=#引用类型>引用类型</a></li></ul></li><li><a href=#函数>函数</a><ul><li><a href=#函数声明与可见性>函数声明与可见性</a></li><li><a href=#可见性修饰符>可见性修饰符</a></li><li><a href=#状态可变性>状态可变性</a></li></ul></li><li><a href=#控制流与错误处理>控制流与错误处理</a><ul><li><a href=#条件判断>条件判断</a></li><li><a href=#循环>循环</a></li><li><a href=#错误处理>错误处理</a></li></ul></li><li><a href=#事件events>事件（Events）</a></li><li><a href=#函数修饰器modifiers>函数修饰器（Modifiers）</a></li><li><a href=#继承与接口>继承与接口</a><ul><li><a href=#继承>继承</a></li><li><a href=#接口>接口</a></li></ul></li><li><a href=#全局变量与函数>全局变量与函数</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>529 字</span></div></header><h1 id=solidity-基础语法从变量到函数>Solidity 基础语法：从变量到函数</h1><h2 id=概述>概述</h2><p>Solidity 是以太坊智能合约开发的首选语言，语法融合了 JavaScript 的简洁与 Java 的强类型特性。本文将系统讲解 Solidity 的基础语法，帮助你快速上手智能合约编写。</p><h2 id=第一个-solidity-合约>第一个 Solidity 合约</h2><p>每个 Solidity 源文件通常以许可证声明和版本约束开头：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// SPDX-License-Identifier: MIT
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>pragma solidity</span> <span style=color:#f92672>^</span><span style=color:#ae81ff>0</span>.<span style=color:#ae81ff>8</span>.<span style=color:#ae81ff>24</span>;
+</span></span></code></pre></div><ul><li><code>SPDX-License-Identifier</code>：声明代码许可证，主流项目多用 MIT 或 GPL-3.0</li><li><code>pragma solidity ^0.8.24</code>：约束编译器版本，<code>^</code> 表示兼容 0.8.24 及以上 0.8.x 版本</li></ul><h2 id=数据类型>数据类型</h2><p>Solidity 是一门静态类型语言，变量必须在声明时指定类型。</p><h3 id=值类型>值类型</h3><table><thead><tr><th>类型</th><th>说明</th><th>示例</th></tr></thead><tbody><tr><td><code>bool</code></td><td>布尔值</td><td><code>bool public isActive = true;</code></td></tr><tr><td><code>int/uint</code></td><td>有/无符号整数</td><td><code>int256 public balance = -100;</code></td></tr><tr><td><code>address</code></td><td>20字节以太坊地址</td><td><code>address public owner = msg.sender;</code></td></tr><tr><td><code>bytes1~bytes32</code></td><td>固定长度字节数组</td><td><code>bytes32 public hash;</code></td></tr></tbody></table><h3 id=引用类型>引用类型</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 数组（动态大小）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>uint</span>[] <span style=color:#66d9ef>public</span> numbers;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>address</span>[] <span style=color:#66d9ef>public</span> investors;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 结构体
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Token</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>string</span> name;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> supply;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> creator;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 映射：键值对，类似哈希表
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>) <span style=color:#66d9ef>public</span> balances;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>)) <span style=color:#66d9ef>public</span> allowances;
+</span></span></code></pre></div><blockquote><p>⚠️ <strong>重要</strong>：声明映射时，值类型的默认值为 <code>0</code>，地址类型为 <code>address(0)</code>，布尔为 <code>false</code>。</p></blockquote><h2 id=函数>函数</h2><h3 id=函数声明与可见性>函数声明与可见性</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// 完整语法
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>functionName</span>(params) [visibility] [stateMutability] [modifiers] <span style=color:#66d9ef>returns</span> (returnType) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 函数体
+</span></span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 示例
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>transfer</span>(<span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>) {
+</span></span><span style=display:flex><span>    require(balances[msg.sender] <span style=color:#f92672>&gt;=</span> amount, <span style=color:#e6db74>&#34;Insufficient balance&#34;</span>);
+</span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>-=</span> amount;
+</span></span><span style=display:flex><span>    balances[to] <span style=color:#f92672>+=</span> amount;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=可见性修饰符>可见性修饰符</h3><ul><li><strong>public</strong>：可被内部调用或外部账户调用，自动生成 getter 函数</li><li><strong>external</strong>：只能从外部调用，不能内部调用（省 Gas）</li><li><strong>internal</strong>：只能从当前合约或派生合约调用</li><li><strong>private</strong>：只能从当前合约调用，派生合约也无法访问</li></ul><h3 id=状态可变性>状态可变性</h3><ul><li><strong>view</strong>：读取状态变量但不修改，不消耗 Gas（外部调用仍需付费）</li><li><strong>pure</strong>：既不读取也不修改状态，完全是纯计算</li><li><strong>payable</strong>：允许接收 ETH，标记此修饰符的函数可接收转账</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Example</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> totalSupply;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>public</span> owner;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>constructor</span>() {
+</span></span><span style=display:flex><span>        owner <span style=color:#f92672>=</span> msg.sender; <span style=color:#75715e>// constructor 只在部署时执行一次
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// view 函数：读取状态
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getBalance</span>(<span style=color:#66d9ef>address</span> _addr) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>address</span>(_addr).balance;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// pure 函数：纯计算
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>add</span>(<span style=color:#66d9ef>uint256</span> a, <span style=color:#66d9ef>uint256</span> b) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>pure</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> a <span style=color:#f92672>+</span> b;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// payable 函数：可接收 ETH
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>deposit</span>() <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>payable</span> {
+</span></span><span style=display:flex><span>        totalSupply <span style=color:#f92672>+=</span> msg.value;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=控制流与错误处理>控制流与错误处理</h2><h3 id=条件判断>条件判断</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>if</span> (condition) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// do something
+</span></span></span><span style=display:flex><span>} <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// do other
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=循环>循环</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>uint256</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>10</span>; i<span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 避免在循环中调用外部合约（重入风险）
+</span></span></span><span style=display:flex><span>    <span style=color:#75715e>// 注意循环中的存储读写操作会消耗大量 Gas
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=错误处理>错误处理</h3><p>Solidity 的错误处理与其他语言不同，失败时<strong>回退所有状态变更</strong>。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// require：推荐用于验证输入条件和权限
+</span></span></span><span style=display:flex><span>    require(balances[msg.sender] <span style=color:#f92672>&gt;=</span> amount, <span style=color:#e6db74>&#34;Insufficient balance&#34;</span>);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// revert：适合复杂条件或分支判断
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (amount <span style=color:#f92672>&gt;</span> maxWithdrawAmount) {
+</span></span><span style=display:flex><span>        revert(<span style=color:#e6db74>&#34;Amount exceeds maximum limit&#34;</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// assert：仅用于检查不应该发生的内部错误
+</span></span></span><span style=display:flex><span>    assert(totalSupply <span style=color:#f92672>&gt;=</span> amount);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>-=</span> amount;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>payable</span>(msg.sender).transfer(amount);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><blockquote><p>💡 <strong>Gas 优化提示</strong>：<code>require</code> 失败会退还剩余 Gas，而 <code>assert</code> 失败会消耗所有 Gas。</p></blockquote><h2 id=事件events>事件（Events）</h2><p>事件是 Solidity 中重要的日志机制，用于记录链上发生的重要操作：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Token</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>event</span> <span style=color:#a6e22e>Transfer</span>(<span style=color:#66d9ef>address</span> <span style=color:#66d9ef>indexed</span> <span style=color:#66d9ef>from</span>, <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>indexed</span> to, <span style=color:#66d9ef>uint256</span> value);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>event</span> <span style=color:#a6e22e>Approval</span>(<span style=color:#66d9ef>address</span> <span style=color:#66d9ef>indexed</span> owner, <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>indexed</span> spender, <span style=color:#66d9ef>uint256</span> value);
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint256</span>) <span style=color:#66d9ef>public</span> balanceOf;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>transfer</span>(<span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>        balanceOf[msg.sender] <span style=color:#f92672>-=</span> amount;
+</span></span><span style=display:flex><span>        balanceOf[to] <span style=color:#f92672>+=</span> amount;
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// 触发事件：前端可通过 web3.js/ethers.js 监听
+</span></span></span><span style=display:flex><span>        emit Transfer(msg.sender, to, amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><code>indexed</code> 参数允许在 Etherscan 等平台进行过滤搜索，每个事件最多有 3 个 <code>indexed</code> 参数。</p><h2 id=函数修饰器modifiers>函数修饰器（Modifiers）</h2><p>修饰器用于在函数执行前插入检查逻辑，实现代码复用：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Ownable</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>address</span> <span style=color:#66d9ef>public</span> owner;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>modifier</span> <span style=color:#a6e22e>onlyOwner</span>() {
+</span></span><span style=display:flex><span>        require(msg.sender <span style=color:#f92672>==</span> owner, <span style=color:#e6db74>&#34;Caller is not the owner&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>_</span>; <span style=color:#75715e>// 下划线表示函数体执行位置
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>transferOwnership</span>(<span style=color:#66d9ef>address</span> newOwner) <span style=color:#66d9ef>public</span> onlyOwner {
+</span></span><span style=display:flex><span>        owner <span style=color:#f92672>=</span> newOwner;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=继承与接口>继承与接口</h2><h3 id=继承>继承</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Base</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> value;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setValue</span>(<span style=color:#66d9ef>uint256</span> _value) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>virtual</span> {
+</span></span><span style=display:flex><span>        value <span style=color:#f92672>=</span> _value;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Derived</span> <span style=color:#66d9ef>is</span> Base {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// override 表示重写基类函数
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setValue</span>(<span style=color:#66d9ef>uint256</span> _value) <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>override</span> {
+</span></span><span style=display:flex><span>        value <span style=color:#f92672>=</span> _value <span style=color:#f92672>*</span> <span style=color:#ae81ff>2</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=接口>接口</h3><p>接口定义了一组函数签名，用于与其他合约交互：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>IERC20</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>totalSupply</span>() <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>balanceOf</span>(<span style=color:#66d9ef>address</span> account) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>transfer</span>(<span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>allowance</span>(<span style=color:#66d9ef>address</span> owner, <span style=color:#66d9ef>address</span> spender) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>view</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>uint256</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>approve</span>(<span style=color:#66d9ef>address</span> spender, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>transferFrom</span>(<span style=color:#66d9ef>address</span> <span style=color:#66d9ef>from</span>, <span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> <span style=color:#66d9ef>returns</span> (<span style=color:#66d9ef>bool</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=全局变量与函数>全局变量与函数</h2><p>EVM 提供了一系列内置变量和函数：</p><table><thead><tr><th>变量</th><th>说明</th></tr></thead><tbody><tr><td><code>msg.sender</code></td><td>调用者地址</td></tr><tr><td><code>msg.value</code></td><td>调用时发送的 ETH 数量（单位：wei）</td></tr><tr><td><code>msg.data</code></td><td>调用数据负载</td></tr><tr><td><code>block.number</code></td><td>当前区块高度</td></tr><tr><td><code>block.timestamp</code></td><td>当前区块时间戳</td></tr><tr><td><code>gasleft()</code></td><td>剩余 Gas 量</td></tr><tr><td><code>tx.origin</code></td><td>原始交易发送者（慎用！）</td></tr></tbody></table><h2 id=总结>总结</h2><p>本文涵盖了 Solidity 最核心的语法要素：数据类型、函数、错误处理、事件、修饰器与继承。下一篇文章我们将讨论如何搭建完整的智能合约开发环境，包括编辑器配置、私链测试、框架使用等内容。</p><p><strong>核心要点回顾</strong>：</p><ul><li>Solidity 是静态类型语言，状态变量存储在链上</li><li><code>view/pure</code> 函数不修改状态，<code>payable</code> 函数可接收 ETH</li><li><code>require/revert/assert</code> 用于错误处理，失败时全部回退</li><li>事件是链上日志，前端通过监听事件获取合约状态变化</li></ul><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/developer/03_smart_contract_env/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/developer/01_programming_path/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

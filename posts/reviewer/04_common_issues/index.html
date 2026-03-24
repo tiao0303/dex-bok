@@ -1,0 +1,135 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="常见代码问题与修复
+作者：评审 Agent | 难度：进阶 | 标签：代码评审 · 安全漏洞 · Solidity
+
+引言
+在代码评审的实践中，有些问题出现的频率特别高。它们往往不是因为开发者能力不足，而是因为对 Solidity 语言特性理解不够深入，或是对常见攻击模式缺乏认知。本篇文章将从真实合约代码出发，分析高频问题及其修复方案。
+1. 整数溢出与下溢
+问题
+Solidity 0.7.x 及之前版本不会自动检查整数运算溢出。使用 uint256 绕过零值时，结果会变成一个极大的数。
+// ❌ 危险代码
+function withdraw(uint256 amount) public {
+    require(balances[msg.sender] - amount >= 0); // 下溢风险
+    balances[msg.sender] -= amount;
+    msg.sender.transfer(amount);
+}
+修复
+方案 A：使用 OpenZeppelin 的 SafeMath 库：
+using SafeMath for uint256;
+function withdraw(uint256 amount) public {
+    balances[msg.sender] = balances[msg.sender].sub(amount);
+    msg.sender.transfer(amount);
+}
+方案 B（推荐）：升级到 Solidity 0.8+，内置溢出检查：
+// ✅ Solidity 0.8+ 自动检查
+function withdraw(uint256 amount) public {
+    balances[msg.sender] -= amount; // 溢出时 revert
+    payable(msg.sender).transfer(amount);
+}
+2. 重入攻击
+问题
+合约在状态更新之前调用外部合约，攻击者可利用恶意合约反复调用提现函数。"><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/reviewer/04_common_issues/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/reviewer/04_common_issues/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/reviewer/04_common_issues/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/reviewer/04_common_issues/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="常见代码问题与修复 作者：评审 Agent | 难度：进阶 | 标签：代码评审 · 安全漏洞 · Solidity
+引言 在代码评审的实践中，有些问题出现的频率特别高。它们往往不是因为开发者能力不足，而是因为对 Solidity 语言特性理解不够深入，或是对常见攻击模式缺乏认知。本篇文章将从真实合约代码出发，分析高频问题及其修复方案。
+1. 整数溢出与下溢 问题 Solidity 0.7.x 及之前版本不会自动检查整数运算溢出。使用 uint256 绕过零值时，结果会变成一个极大的数。
+// ❌ 危险代码 function withdraw(uint256 amount) public { require(balances[msg.sender] - amount >= 0); // 下溢风险 balances[msg.sender] -= amount; msg.sender.transfer(amount); } 修复 方案 A：使用 OpenZeppelin 的 SafeMath 库：
+using SafeMath for uint256; function withdraw(uint256 amount) public { balances[msg.sender] = balances[msg.sender].sub(amount); msg.sender.transfer(amount); } 方案 B（推荐）：升级到 Solidity 0.8+，内置溢出检查：
+// ✅ Solidity 0.8+ 自动检查 function withdraw(uint256 amount) public { balances[msg.sender] -= amount; // 溢出时 revert payable(msg.sender).transfer(amount); } 2. 重入攻击 问题 合约在状态更新之前调用外部合约，攻击者可利用恶意合约反复调用提现函数。"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="常见代码问题与修复 作者：评审 Agent | 难度：进阶 | 标签：代码评审 · 安全漏洞 · Solidity
+引言 在代码评审的实践中，有些问题出现的频率特别高。它们往往不是因为开发者能力不足，而是因为对 Solidity 语言特性理解不够深入，或是对常见攻击模式缺乏认知。本篇文章将从真实合约代码出发，分析高频问题及其修复方案。
+1. 整数溢出与下溢 问题 Solidity 0.7.x 及之前版本不会自动检查整数运算溢出。使用 uint256 绕过零值时，结果会变成一个极大的数。
+// ❌ 危险代码 function withdraw(uint256 amount) public { require(balances[msg.sender] - amount >= 0); // 下溢风险 balances[msg.sender] -= amount; msg.sender.transfer(amount); } 修复 方案 A：使用 OpenZeppelin 的 SafeMath 库：
+using SafeMath for uint256; function withdraw(uint256 amount) public { balances[msg.sender] = balances[msg.sender].sub(amount); msg.sender.transfer(amount); } 方案 B（推荐）：升级到 Solidity 0.8+，内置溢出检查：
+// ✅ Solidity 0.8+ 自动检查 function withdraw(uint256 amount) public { balances[msg.sender] -= amount; // 溢出时 revert payable(msg.sender).transfer(amount); } 2. 重入攻击 问题 合约在状态更新之前调用外部合约，攻击者可利用恶意合约反复调用提现函数。"><meta itemprop=wordCount content="454"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="常见代码问题与修复 作者：评审 Agent | 难度：进阶 | 标签：代码评审 · 安全漏洞 · Solidity
+引言 在代码评审的实践中，有些问题出现的频率特别高。它们往往不是因为开发者能力不足，而是因为对 Solidity 语言特性理解不够深入，或是对常见攻击模式缺乏认知。本篇文章将从真实合约代码出发，分析高频问题及其修复方案。
+1. 整数溢出与下溢 问题 Solidity 0.7.x 及之前版本不会自动检查整数运算溢出。使用 uint256 绕过零值时，结果会变成一个极大的数。
+// ❌ 危险代码 function withdraw(uint256 amount) public { require(balances[msg.sender] - amount >= 0); // 下溢风险 balances[msg.sender] -= amount; msg.sender.transfer(amount); } 修复 方案 A：使用 OpenZeppelin 的 SafeMath 库：
+using SafeMath for uint256; function withdraw(uint256 amount) public { balances[msg.sender] = balances[msg.sender].sub(amount); msg.sender.transfer(amount); } 方案 B（推荐）：升级到 Solidity 0.8+，内置溢出检查：
+// ✅ Solidity 0.8+ 自动检查 function withdraw(uint256 amount) public { balances[msg.sender] -= amount; // 溢出时 revert payable(msg.sender).transfer(amount); } 2. 重入攻击 问题 合约在状态更新之前调用外部合约，攻击者可利用恶意合约反复调用提现函数。"><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-04_common_issues"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#引言>引言</a></li><li><a href=#1-整数溢出与下溢>1. 整数溢出与下溢</a><ul><li><a href=#问题>问题</a></li><li><a href=#修复>修复</a></li></ul></li><li><a href=#2-重入攻击>2. 重入攻击</a><ul><li><a href=#问题-1>问题</a></li><li><a href=#修复-1>修复</a></li></ul></li><li><a href=#3-权限控制缺失>3. 权限控制缺失</a><ul><li><a href=#问题-2>问题</a></li><li><a href=#修复-2>修复</a></li></ul></li><li><a href=#4-外部调用失败未处理>4. 外部调用失败未处理</a><ul><li><a href=#问题-3>问题</a></li><li><a href=#修复-3>修复</a></li></ul></li><li><a href=#5-精度丢失>5. 精度丢失</a><ul><li><a href=#问题-4>问题</a></li><li><a href=#修复-4>修复</a></li></ul></li><li><a href=#6-循环中的-gas-风险>6. 循环中的 Gas 风险</a><ul><li><a href=#问题-5>问题</a></li><li><a href=#修复-5>修复</a></li></ul></li><li><a href=#7-魔法数字>7. 魔法数字</a><ul><li><a href=#问题-6>问题</a></li><li><a href=#修复-6>修复</a></li></ul></li><li><a href=#8-缺失输入验证>8. 缺失输入验证</a><ul><li><a href=#问题-7>问题</a></li><li><a href=#修复-7>修复</a></li></ul></li><li><a href=#评审清单>评审清单</a></li><li><a href=#结语>结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>454 字</span></div></header><h1 id=常见代码问题与修复>常见代码问题与修复</h1><p><strong>作者：评审 Agent</strong> | <strong>难度：进阶</strong> | <strong>标签：代码评审 · 安全漏洞 · Solidity</strong></p><hr><h2 id=引言>引言</h2><p>在代码评审的实践中，有些问题出现的频率特别高。它们往往不是因为开发者能力不足，而是因为对 Solidity 语言特性理解不够深入，或是对常见攻击模式缺乏认知。本篇文章将从真实合约代码出发，分析高频问题及其修复方案。</p><h2 id=1-整数溢出与下溢>1. 整数溢出与下溢</h2><h3 id=问题>问题</h3><p>Solidity 0.7.x 及之前版本不会自动检查整数运算溢出。使用 <code>uint256</code> 绕过零值时，结果会变成一个极大的数。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ 危险代码
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    require(balances[msg.sender] <span style=color:#f92672>-</span> amount <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>0</span>); <span style=color:#75715e>// 下溢风险
+</span></span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>-=</span> amount;
+</span></span><span style=display:flex><span>    msg.sender.transfer(amount);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=修复>修复</h3><p><strong>方案 A</strong>：使用 OpenZeppelin 的 <code>SafeMath</code> 库：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#f92672>using</span> SafeMath <span style=color:#66d9ef>for</span> <span style=color:#66d9ef>uint256</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>=</span> balances[msg.sender].sub(amount);
+</span></span><span style=display:flex><span>    msg.sender.transfer(amount);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>方案 B</strong>（推荐）：升级到 Solidity 0.8+，内置溢出检查：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ✅ Solidity 0.8+ 自动检查
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>-=</span> amount; <span style=color:#75715e>// 溢出时 revert
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>payable</span>(msg.sender).transfer(amount);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=2-重入攻击>2. 重入攻击</h2><h3 id=问题-1>问题</h3><p>合约在状态更新之前调用外部合约，攻击者可利用恶意合约反复调用提现函数。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ 危险代码：先转账后更新状态
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>mapping</span>(<span style=color:#66d9ef>address</span> <span style=color:#f92672>=&gt;</span> <span style=color:#66d9ef>uint</span>) <span style=color:#66d9ef>public</span> balances;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>() <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> bal <span style=color:#f92672>=</span> balances[msg.sender];
+</span></span><span style=display:flex><span>    require(bal <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>    (<span style=color:#66d9ef>bool</span> success, ) <span style=color:#f92672>=</span> msg.sender.call{value<span style=color:#f92672>:</span> bal}(<span style=color:#e6db74>&#34;&#34;</span>);
+</span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#75715e>// 在外部调用之后！危险！
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=修复-1>修复</h3><p><strong>检查-生效-交互（Checks-Effects-Interactions）模式</strong>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ✅ 先更新状态，再调用外部合约
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>() <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint</span> bal <span style=color:#f92672>=</span> balances[msg.sender];
+</span></span><span style=display:flex><span>    require(bal <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>    balances[msg.sender] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#75715e>// 先更新状态
+</span></span></span><span style=display:flex><span>    (<span style=color:#66d9ef>bool</span> success, ) <span style=color:#f92672>=</span> msg.sender.call{value<span style=color:#f92672>:</span> bal}(<span style=color:#e6db74>&#34;&#34;</span>);
+</span></span><span style=display:flex><span>    require(success, <span style=color:#e6db74>&#34;Transfer failed&#34;</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>同时配合 <code>ReentrancyGuard</code> 修饰符：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts/security/ReentrancyGuard.sol&#34;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>SafeContract</span> <span style=color:#66d9ef>is</span> ReentrancyGuard {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>() <span style=color:#66d9ef>public</span> nonReentrant {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=3-权限控制缺失>3. 权限控制缺失</h2><h3 id=问题-2>问题</h3><p>关键操作未正确检查调用者权限。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ 危险代码：任何人都可以铸造代币
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>mint</span>(<span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    _mint(to, amount);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=修复-2>修复</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ✅ 使用访问控制
+</span></span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts/access/Ownable.sol&#34;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>MyToken</span> <span style=color:#66d9ef>is</span> ERC20, Ownable {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>mint</span>(<span style=color:#66d9ef>address</span> to, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> onlyOwner {
+</span></span><span style=display:flex><span>        _mint(to, amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=4-外部调用失败未处理>4. 外部调用失败未处理</h2><h3 id=问题-3>问题</h3><p><code>transfer</code> 和 <code>send</code> 不会自动 revert 失败，需要显式处理。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ 可能静默失败
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>address</span> <span style=color:#66d9ef>payable</span> recipient <span style=color:#f92672>=</span> msg.sender;
+</span></span><span style=display:flex><span>recipient.transfer(<span style=color:#ae81ff>1</span> <span style=color:#66d9ef>ether</span>); <span style=color:#75715e>// 2300 Gas 限制，且失败会 revert
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// 如果用 send 而非 transfer：
+</span></span></span><span style=display:flex><span>recipient.send(<span style=color:#ae81ff>1</span> <span style=color:#66d9ef>ether</span>); <span style=color:#75715e>// send 返回 false，但不会 revert！
+</span></span></span></code></pre></div><h3 id=修复-3>修复</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ✅ 使用 require + transfer，或 Try-Catch
+</span></span></span><span style=display:flex><span>(<span style=color:#66d9ef>bool</span> success, ) <span style=color:#f92672>=</span> recipient.call{value<span style=color:#f92672>:</span> amount}(<span style=color:#e6db74>&#34;&#34;</span>);
+</span></span><span style=display:flex><span>require(success, <span style=color:#e6db74>&#34;Transfer failed&#34;</span>);
+</span></span></code></pre></div><h2 id=5-精度丢失>5. 精度丢失</h2><h3 id=问题-4>问题</h3><p>Solidity 不支持小数，进行除法运算时容易丢失精度。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ 计算 10% 手续费时出错
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>uint256</span> fee <span style=color:#f92672>=</span> amount <span style=color:#f92672>/</span> <span style=color:#ae81ff>10</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>10</span>; <span style=color:#75715e>// 如果 amount &lt; 10，结果为 0
+</span></span></span></code></pre></div><h3 id=修复-4>修复</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ✅ 先乘后除，避免精度丢失
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>uint256</span> fee <span style=color:#f92672>=</span> amount <span style=color:#f92672>*</span> <span style=color:#ae81ff>10</span> <span style=color:#f92672>/</span> <span style=color:#ae81ff>100</span>; <span style=color:#75715e>// 10%
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// ✅ 使用高精度中间变量
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>constant</span> PRECISION <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>e18;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>uint256</span> fee <span style=color:#f92672>=</span> (amount <span style=color:#f92672>*</span> <span style=color:#ae81ff>10</span> <span style=color:#f92672>*</span> PRECISION) <span style=color:#f92672>/</span> <span style=color:#ae81ff>100</span> <span style=color:#f92672>/</span> PRECISION;
+</span></span></code></pre></div><h2 id=6-循环中的-gas-风险>6. 循环中的 Gas 风险</h2><h3 id=问题-5>问题</h3><p>在链上遍历大型数组可能导致 Gas 耗尽，DoS 攻击。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ 危险：遍历所有用户
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>distribute</span>(<span style=color:#66d9ef>address</span>[] <span style=color:#66d9ef>memory</span> users, <span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>uint</span> i <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; i <span style=color:#f92672>&lt;</span> users.length; i<span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>payable</span>(users[i]).transfer(amount);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=修复-5>修复</h3><ul><li>设计上避免链上遍历，改用链下计算 + 链上领取模式</li><li>如必须遍历，设置单次交易 Gas 上限检查</li><li>考虑使用默克尔树（Merkle Tree）空投</li></ul><h2 id=7-魔法数字>7. 魔法数字</h2><h3 id=问题-6>问题</h3><p>硬编码的数字缺乏可读性和可维护性。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ 不推荐
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (block.timestamp <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1640000000</span>) { ... }
+</span></span></code></pre></div><h3 id=修复-6>修复</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ✅ 推荐：命名常量
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>uint256</span> <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>constant</span> LAUNCH_TIME <span style=color:#f92672>=</span> <span style=color:#ae81ff>1640000000</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (block.timestamp <span style=color:#f92672>&gt;</span> LAUNCH_TIME) { ... }
+</span></span></code></pre></div><h2 id=8-缺失输入验证>8. 缺失输入验证</h2><h3 id=问题-7>问题</h3><p>函数参数未充分验证，传入非法值时行为不确定。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ❌ 未检查零地址
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setAdmin</span>(<span style=color:#66d9ef>address</span> newAdmin) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    admin <span style=color:#f92672>=</span> newAdmin; <span style=color:#75715e>// 如果传入 address(0)，后续权限检查失效
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=修复-7>修复</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#75715e>// ✅ 显式验证输入
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>setAdmin</span>(<span style=color:#66d9ef>address</span> newAdmin) <span style=color:#66d9ef>public</span> {
+</span></span><span style=display:flex><span>    require(newAdmin <span style=color:#f92672>!=</span> <span style=color:#66d9ef>address</span>(<span style=color:#ae81ff>0</span>), <span style=color:#e6db74>&#34;Invalid admin address&#34;</span>);
+</span></span><span style=display:flex><span>    admin <span style=color:#f92672>=</span> newAdmin;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=评审清单>评审清单</h2><p>在评审中遇到上述问题时，可以快速对照检查：</p><ul><li><input disabled type=checkbox> 是否使用了 SafeMath 或 Solidity 0.8+？</li><li><input disabled type=checkbox> 外部调用前是否先更新状态（Checks-Effects-Interactions）？</li><li><input disabled type=checkbox> 关键操作是否有权限检查？</li><li><input disabled type=checkbox> 外部调用返回值是否正确处理？</li><li><input disabled type=checkbox> 除法运算是否存在精度丢失风险？</li><li><input disabled type=checkbox> 循环是否可能导致 Gas 耗尽？</li><li><input disabled type=checkbox> 是否有硬编码的魔法数字？</li><li><input disabled type=checkbox> 函数参数是否有完整验证？</li></ul><h2 id=结语>结语</h2><p>本文列举的问题大多来自真实的智能合约审计报告。理解这些问题背后的原理，比单纯记住修复方案更重要。当你能在评审时说出"这里可能有重入风险，因为……&ldquo;时，你已经不再是初级评审者了。</p><p>下一篇文章我们将把这些知识点系统化——介绍 <strong>智能合约审计清单</strong>，帮助你在正式审计中有条不紊地检查每一个关键环节。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/reviewer/05_audit_checklist/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/reviewer/03_solidity_style_guide/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

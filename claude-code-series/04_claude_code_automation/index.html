@@ -1,0 +1,133 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>Claude Code 自动化与自定义：把 AI 变成你的专属开发助手 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="Claude Code 自动化与自定义：把 AI 变成你的专属开发助手
+CLAUDE.md：项目级上下文
+在项目根目录创建 CLAUDE.md，定义项目的技术栈、规范和工作流程。
+# CLAUDE.md
+
+## 项目概述
+这是一个 Uniswap V3 风格的 DEX 合约项目，使用 Foundry 开发。
+
+## 技术栈
+- Solidity ^0.8.20
+- Foundry (forge/cast/chisel)
+- TypeScript + Hardhat (前端)
+
+## 代码规范
+- 所有 external 函数必须有 NatSpec 注释
+- 安全函数必须使用 SafeMath 或 0.8+ 的内置检查
+- 测试覆盖率必须 > 90%
+
+## 常用命令
+- `forge build` - 编译
+- `forge test` - 运行测试
+- `forge coverage` - 覆盖率
+- `forge script Deploy.s.sol` - 部署
+
+## 项目结构
+- `contracts/` - 合约源码
+- `test/` - 测试文件
+- `script/` - 部署脚本
+- `src/` - 前端源码
+Claude Code 会自动读取 CLAUDE.md，在整个对话中保持一致上下文。"><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/claude-code-series/04_claude_code_automation/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/claude-code-series/04_claude_code_automation/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/claude-code-series/04_claude_code_automation/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/claude-code-series/04_claude_code_automation/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="Claude Code 自动化与自定义：把 AI 变成你的专属开发助手"><meta property="og:description" content="Claude Code 自动化与自定义：把 AI 变成你的专属开发助手 CLAUDE.md：项目级上下文 在项目根目录创建 CLAUDE.md，定义项目的技术栈、规范和工作流程。
+# CLAUDE.md ## 项目概述 这是一个 Uniswap V3 风格的 DEX 合约项目，使用 Foundry 开发。 ## 技术栈 - Solidity ^0.8.20 - Foundry (forge/cast/chisel) - TypeScript + Hardhat (前端) ## 代码规范 - 所有 external 函数必须有 NatSpec 注释 - 安全函数必须使用 SafeMath 或 0.8+ 的内置检查 - 测试覆盖率必须 > 90% ## 常用命令 - `forge build` - 编译 - `forge test` - 运行测试 - `forge coverage` - 覆盖率 - `forge script Deploy.s.sol` - 部署 ## 项目结构 - `contracts/` - 合约源码 - `test/` - 测试文件 - `script/` - 部署脚本 - `src/` - 前端源码 Claude Code 会自动读取 CLAUDE.md，在整个对话中保持一致上下文。"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="claude-code-series"><meta property="article:published_time" content="2026-03-24T00:00:00+08:00"><meta property="article:modified_time" content="2026-03-24T00:00:00+08:00"><meta property="article:tag" content="Claude Code"><meta property="article:tag" content="AI"><meta property="article:tag" content="自动化"><meta property="article:tag" content="DevOps"><meta itemprop=name content="Claude Code 自动化与自定义：把 AI 变成你的专属开发助手"><meta itemprop=description content="Claude Code 自动化与自定义：把 AI 变成你的专属开发助手 CLAUDE.md：项目级上下文 在项目根目录创建 CLAUDE.md，定义项目的技术栈、规范和工作流程。
+# CLAUDE.md ## 项目概述 这是一个 Uniswap V3 风格的 DEX 合约项目，使用 Foundry 开发。 ## 技术栈 - Solidity ^0.8.20 - Foundry (forge/cast/chisel) - TypeScript + Hardhat (前端) ## 代码规范 - 所有 external 函数必须有 NatSpec 注释 - 安全函数必须使用 SafeMath 或 0.8+ 的内置检查 - 测试覆盖率必须 > 90% ## 常用命令 - `forge build` - 编译 - `forge test` - 运行测试 - `forge coverage` - 覆盖率 - `forge script Deploy.s.sol` - 部署 ## 项目结构 - `contracts/` - 合约源码 - `test/` - 测试文件 - `script/` - 部署脚本 - `src/` - 前端源码 Claude Code 会自动读取 CLAUDE.md，在整个对话中保持一致上下文。"><meta itemprop=datePublished content="2026-03-24T00:00:00+08:00"><meta itemprop=dateModified content="2026-03-24T00:00:00+08:00"><meta itemprop=wordCount content="318"><meta itemprop=keywords content="Claude Code,AI,自动化,DevOps"><meta name=twitter:card content="summary"><meta name=twitter:title content="Claude Code 自动化与自定义：把 AI 变成你的专属开发助手"><meta name=twitter:description content="Claude Code 自动化与自定义：把 AI 变成你的专属开发助手 CLAUDE.md：项目级上下文 在项目根目录创建 CLAUDE.md，定义项目的技术栈、规范和工作流程。
+# CLAUDE.md ## 项目概述 这是一个 Uniswap V3 风格的 DEX 合约项目，使用 Foundry 开发。 ## 技术栈 - Solidity ^0.8.20 - Foundry (forge/cast/chisel) - TypeScript + Hardhat (前端) ## 代码规范 - 所有 external 函数必须有 NatSpec 注释 - 安全函数必须使用 SafeMath 或 0.8+ 的内置检查 - 测试覆盖率必须 > 90% ## 常用命令 - `forge build` - 编译 - `forge test` - 运行测试 - `forge coverage` - 覆盖率 - `forge script Deploy.s.sol` - 部署 ## 项目结构 - `contracts/` - 合约源码 - `test/` - 测试文件 - `script/` - 部署脚本 - `src/` - 前端源码 Claude Code 会自动读取 CLAUDE.md，在整个对话中保持一致上下文。"><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-04_claude_code_automation"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#claudemd项目级上下文>CLAUDE.md：项目级上下文</a></li><li><a href=#git-hooks-集成>Git Hooks 集成</a><ul><li><a href=#pre-commit-hook>pre-commit hook</a></li><li><a href=#commit-msg-hook自动生成-commit-message>commit-msg hook（自动生成 commit message）</a></li></ul></li><li><a href=#cicd-集成>CI/CD 集成</a><ul><li><a href=#github-actions-示例>GitHub Actions 示例</a></li></ul></li><li><a href=#快捷脚本>快捷脚本</a><ul><li><a href=#自动化代码审查>自动化代码审查</a></li><li><a href=#自动化测试生成>自动化测试生成</a></li></ul></li><li><a href=#环境变量配置>环境变量配置</a></li><li><a href=#自定义指令模板>自定义指令模板</a><ul><li><a href=#solidity-审查模板>Solidity 审查模板</a></li><li><a href=#react-组件模板>React 组件模板</a></li></ul></li><li><a href=#生产力技巧>生产力技巧</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>Claude Code 自动化与自定义：把 AI 变成你的专属开发助手</h1><div class=article-meta><time datetime=2026-03-24>2026-03-24</time>
+<span>•</span>
+<span>318 字</span>
+<span>•</span>
+<span>Claude Code 专题</span></div><div class=article-tags><a href=/dex-bok/tags/claude-code/ class=article-tag>Claude Code</a>
+<a href=/dex-bok/tags/ai/ class=article-tag>AI</a>
+<a href=/dex-bok/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/ class=article-tag>自动化</a>
+<a href=/dex-bok/tags/devops/ class=article-tag>DevOps</a></div></header><h1 id=claude-code-自动化与自定义把-ai-变成你的专属开发助手>Claude Code 自动化与自定义：把 AI 变成你的专属开发助手</h1><h2 id=claudemd项目级上下文>CLAUDE.md：项目级上下文</h2><p>在项目根目录创建 <code>CLAUDE.md</code>，定义项目的技术栈、规范和工作流程。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-markdown data-lang=markdown><span style=display:flex><span># CLAUDE.md
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## 项目概述
+</span></span></span><span style=display:flex><span>这是一个 Uniswap V3 风格的 DEX 合约项目，使用 Foundry 开发。
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## 技术栈
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> Solidity ^0.8.20
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> Foundry (forge/cast/chisel)
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> TypeScript + Hardhat (前端)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## 代码规范
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 所有 external 函数必须有 NatSpec 注释
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 安全函数必须使用 SafeMath 或 0.8+ 的内置检查
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 测试覆盖率必须 &gt; 90%
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## 常用命令
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`forge build`</span> - 编译
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`forge test`</span> - 运行测试
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`forge coverage`</span> - 覆盖率
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`forge script Deploy.s.sol`</span> - 部署
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## 项目结构
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`contracts/`</span> - 合约源码
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`test/`</span> - 测试文件
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`script/`</span> - 部署脚本
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> <span style=color:#e6db74>`src/`</span> - 前端源码
+</span></span></code></pre></div><p>Claude Code 会自动读取 CLAUDE.md，在整个对话中保持一致上下文。</p><h2 id=git-hooks-集成>Git Hooks 集成</h2><h3 id=pre-commit-hook>pre-commit hook</h3><p>创建 <code>.git/hooks/pre-commit</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e>#!/bin/bash
+</span></span></span><span style=display:flex><span>claude --print <span style=color:#e6db74>&#34;检查代码风格和安全问题&#34;</span>
+</span></span></code></pre></div><h3 id=commit-msg-hook自动生成-commit-message>commit-msg hook（自动生成 commit message）</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e>#!/bin/bash
+</span></span></span><span style=display:flex><span>claude --print <span style=color:#e6db74>&#34;为以下 diff 生成一句简洁的 commit message：</span><span style=color:#66d9ef>$(</span>git diff --staged<span style=color:#66d9ef>)</span><span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>git commit -m <span style=color:#e6db74>&#34;</span><span style=color:#66d9ef>$(</span>claude --print <span style=color:#e6db74>&#34;生成 commit message&#34;</span><span style=color:#66d9ef>)</span><span style=color:#e6db74>&#34;</span>
+</span></span></code></pre></div><h2 id=cicd-集成>CI/CD 集成</h2><h3 id=github-actions-示例>GitHub Actions 示例</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#75715e># .github/workflows/ci.yml</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>name</span>: <span style=color:#ae81ff>CI</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>on</span>: [<span style=color:#ae81ff>push, pull_request]</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>jobs</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>test</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>ubuntu-latest</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>steps</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v4</span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>foundry-rs/foundry-toolchain@v1</span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Run tests</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>run</span>: <span style=color:#ae81ff>forge test</span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Security audit</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>run</span>: |<span style=color:#e6db74>
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>          claude --print &#34;对 contracts/ 做安全审查，输出问题列表&#34;</span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Gas snapshot</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>run</span>: <span style=color:#ae81ff>forge snapshot</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>if</span>: <span style=color:#ae81ff>github.event_name == &#39;pull_request&#39;</span>
+</span></span></code></pre></div><h2 id=快捷脚本>快捷脚本</h2><h3 id=自动化代码审查>自动化代码审查</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e>#!/bin/bash
+</span></span></span><span style=display:flex><span><span style=color:#75715e># claude-review.sh</span>
+</span></span><span style=display:flex><span>claude --print <span style=color:#e6db74>&#34;审查 </span>$1<span style=color:#e6db74> 文件，重点检查：
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>1. 安全性（授权、重入、溢出）
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>2. 代码风格（命名、注释）
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>3. 错误处理
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>输出格式化的审查报告&#34;</span>
+</span></span></code></pre></div><h3 id=自动化测试生成>自动化测试生成</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e>#!/bin/bash
+</span></span></span><span style=display:flex><span><span style=color:#75715e># claude-test.sh - 为指定合约生成测试</span>
+</span></span><span style=display:flex><span>claude --print <span style=color:#e6db74>&#34;为 </span>$1<span style=color:#e6db74> 合约生成完整的 Foundry 测试：
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- 正常路径测试
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- 边界条件测试  
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- 失败路径测试
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>- Gas 基准测试&#34;</span>
+</span></span></code></pre></div><h2 id=环境变量配置>环境变量配置</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># ~/.claude/settings.json</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;model&#34;</span>: <span style=color:#e6db74>&#34;claude-opus-4-20241120&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;max_tokens&#34;</span>: 8192,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;temperature&#34;</span>: 0.3,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;api_key&#34;</span>: <span style=color:#e6db74>&#34;sk-ant-...&#34;</span>  // 推荐用环境变量
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><h2 id=自定义指令模板>自定义指令模板</h2><h3 id=solidity-审查模板>Solidity 审查模板</h3><pre tabindex=0><code>## Solidity 合约审查清单
+- [ ] 合约继承关系是否正确
+- [ ] 函数可见性是否最小权限
+- [ ] 是否有非零地址检查
+- [ ] 是否有 Pause 机制
+- [ ] 授权是否检查了 approve 额度
+- [ ] 是否使用了 SafeERC20
+- [ ] 重入防护是否到位
+- [ ] 数学运算是否防溢出
+</code></pre><h3 id=react-组件模板>React 组件模板</h3><pre tabindex=0><code>## React 组件规范
+- 使用 TypeScript，props 要有类型
+- 使用 React Query 做数据获取
+- 使用 Zustand 做状态管理
+- 错误边界要处理
+- Loading/Error/Success 三状态
+- 响应式设计（移动优先）
+</code></pre><h2 id=生产力技巧>生产力技巧</h2><ol><li><strong>常用任务存为脚本</strong>：频繁执行的任务写成 <code>claude-xxx.sh</code></li><li><strong>CLAUDE.md 要具体</strong>：越详细的规范，Claude 执行越准确</li><li><strong>设置快捷别名</strong>：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>alias cc<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;claude&#34;</span>
+</span></span><span style=display:flex><span>alias ccr<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;claude-review&#34;</span>
+</span></span><span style=display:flex><span>alias cct<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;claude-test&#34;</span>
+</span></span></code></pre></div></li><li><strong>会话存档</strong>：重要项目决策记录到 <code>docs/DECISIONS.md</code></li></ol><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/claude-code-series/05_skill_writing_research/>Skill 写作深度调研：如何构建真正好用的 AI 插件</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/claude-code-series/03_claude_code_repo_navigation/>Claude Code 大仓库导航：让 AI 深度理解你的代码库</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

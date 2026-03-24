@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AI on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/ai/</link><description>Recent content in AI on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Tue, 24 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/ai/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code 交互模式：多轮对话完成复杂任务</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/02_claude_code_interactive_mode/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/02_claude_code_interactive_mode/</guid><description>&lt;h1 id="claude-code-交互模式多轮对话完成复杂任务"&gt;Claude Code 交互模式：多轮对话完成复杂任务&lt;/h1&gt;
+&lt;h2 id="单次模式-vs-交互模式"&gt;单次模式 vs 交互模式&lt;/h2&gt;
+&lt;p&gt;Claude Code 支持两种主要工作模式：&lt;/p&gt;
+&lt;h3 id="单次任务模式"&gt;单次任务模式&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude &lt;span style="color:#e6db74"&gt;&amp;#34;帮我写一个排序算法&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;适合简单、独立的编程任务。&lt;/p&gt;
+&lt;h3 id="交互模式"&gt;交互模式&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 进入交互式对话&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;适合复杂、多步骤的项目开发。&lt;/p&gt;
+&lt;h2 id="多轮对话的艺术"&gt;多轮对话的艺术&lt;/h2&gt;
+&lt;h3 id="1-上下文累积"&gt;1. 上下文累积&lt;/h3&gt;
+&lt;p&gt;Claude Code 会自动维护对话上下文：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;gt; claude
+# 第一轮：创建项目结构
+帮我初始化一个 React + TypeScript 项目
+
+# 第二轮：继续开发
+现在添加一个用户登录页面
+
+# 第三轮：添加功能
+登录成功后跳转到 dashboard
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Claude 知道项目已经初始化、已有哪些文件，所以每次新请求都在正确上下文中执行。&lt;/p&gt;
+&lt;h3 id="2-精确引用文件"&gt;2. 精确引用文件&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;@&lt;/code&gt; 符号精确引用文件：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;帮我改进 @src/utils/auth.ts 里的 token 刷新逻辑
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Claude 会直接读取该文件内容并提出改进建议。&lt;/p&gt;
+&lt;h3 id="3-分步骤执行"&gt;3. 分步骤执行&lt;/h3&gt;
+&lt;p&gt;不要一次让 Claude 做太多事：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 建议：分步骤
+第一步：设计数据库 Schema
+第二步：写 API 路由
+第三步：写前端组件
+第四步：测试集成
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="4-tdd-开发流程"&gt;4. TDD 开发流程&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 1. 先写测试
+帮我为 calculateSwap() 函数写 Foundry 测试，覆盖：
+- 正常路径
+- 余额不足
+- 无授权
+
+# 2. 运行测试确认失败
+forge test
+
+# 3. 实现功能
+帮我实现 calculateSwap() 函数，让测试通过
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="常用交互命令"&gt;常用交互命令&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;命令&lt;/th&gt;
+ &lt;th&gt;作用&lt;/th&gt;
+ &lt;th&gt;示例&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;@file&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;引用文件&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;@src/app.ts&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/web&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;搜索网络&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/web latest Next.js release&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/grep&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;搜索代码&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/grep &amp;quot;TODO&amp;quot; **/*.ts&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/ask&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;简单问题&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/ask React useEffect vs useLayoutEffect&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/review&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;代码审查&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/review @src/auth.ts&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="实战重构一个大文件"&gt;实战：重构一个大文件&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 第一轮：让 Claude 分析
+帮我分析 @src的大型文件.ts 的结构，列出主要函数和依赖关系
+
+# 第二轮：制定拆分计划
+根据分析结果，我要把这个文件拆成 3 个模块：
+- validators/ - 数据验证
+- processors/ - 业务逻辑
+- handlers/ - 外部接口
+
+# 第三轮：执行拆分
+按上述计划拆分，每完成一个模块我来确认
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="最佳实践"&gt;最佳实践&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;每次任务明确&lt;/strong&gt;：不要模糊请求，给出具体输入输出&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;及时纠正&lt;/strong&gt;：Claude 理解错了马上说&amp;quot;不对，应该是&amp;hellip;&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;检查中间结果&lt;/strong&gt;：大任务中途让它暂停，确认后再继续&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;保留上下文&lt;/strong&gt;：重要决策记录在 CLAUDE.md 里&lt;/li&gt;
+&lt;/ol&gt;</description></item><item><title>Claude Code 入门指南：AI 编程第一课，让 AI 替你写代码</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/01_claude_code_getting_started/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/01_claude_code_getting_started/</guid><description>&lt;h1 id="claude-code-入门指南ai-编程第一课让-ai-替你写代码"&gt;Claude Code 入门指南：AI 编程第一课，让 AI 替你写代码&lt;/h1&gt;
+&lt;h2 id="什么是-claude-code"&gt;什么是 Claude Code&lt;/h2&gt;
+&lt;p&gt;Claude Code 是 Anthropic 官方推出的命令行工具，让你直接在终端里调用 Claude 进行编程任务。本质上是一个本地 AI 编程伴侣，支持 macOS、Linux、Windows（WSL）。&lt;/p&gt;
+&lt;p&gt;核心能力：读写文件、执行命令、搜索代码、多轮对话。&lt;/p&gt;
+&lt;h2 id="安装与初始化"&gt;安装与初始化&lt;/h2&gt;
+&lt;p&gt;npm 安装：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;npm install -g @anthropic-ai/claude-code
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude --version
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;认证：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude auth login
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;export ANTHROPIC_API_KEY&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;sk-ant-...&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="第一个项目"&gt;第一个项目&lt;/h2&gt;
+&lt;p&gt;启动会话：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd ~/my-project
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Claude 会分析请求、创建/修改文件、展示改动，等你确认（y/n）。&lt;/p&gt;
+&lt;h2 id="核心命令"&gt;核心命令&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;命令&lt;/th&gt;
+ &lt;th&gt;作用&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;claude&lt;/td&gt;
+ &lt;td&gt;启动交互会话&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;claude &amp;ldquo;任务&amp;rdquo;&lt;/td&gt;
+ &lt;td&gt;单次任务模式&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;claude &amp;ndash;print&lt;/td&gt;
+ &lt;td&gt;非交互模式&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/clear&lt;/td&gt;
+ &lt;td&gt;清空对话&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/compact&lt;/td&gt;
+ &lt;td&gt;压缩上下文&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/review&lt;/td&gt;
+ &lt;td&gt;审查当前文件&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;/test&lt;/td&gt;
+ &lt;td&gt;运行测试&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="与-git-集成"&gt;与 Git 集成&lt;/h2&gt;
+&lt;p&gt;Claude Code 与 Git 无缝集成，可以自动生成 commit message：&lt;/p&gt;</description></item><item><title>Claude Code 大仓库导航：让 AI 深度理解你的代码库</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/03_claude_code_repo_navigation/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/03_claude_code_repo_navigation/</guid><description>&lt;h1 id="claude-code-大仓库导航让-ai-深度理解你的代码库"&gt;Claude Code 大仓库导航：让 AI 深度理解你的代码库&lt;/h1&gt;
+&lt;h2 id="面对大仓库的挑战"&gt;面对大仓库的挑战&lt;/h2&gt;
+&lt;p&gt;当你接手一个数万行的代码库时，Claude Code 是最好的导航工具。&lt;/p&gt;
+&lt;h2 id="文件理解"&gt;文件理解&lt;/h2&gt;
+&lt;h3 id="快速了解项目结构"&gt;快速了解项目结构&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;claude
+帮我了解这个项目的整体结构，重点关注：
+1. 入口文件在哪里
+2. 主要模块有哪些
+3. 配置文件在哪里
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="深度理解单个文件"&gt;深度理解单个文件&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;读取 @src/core/Exchange.sol 并解释：
+- 这个合约的核心数据存储结构
+- 主要的外部调用接口
+- 安全相关的设计
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="代码搜索"&gt;代码搜索&lt;/h2&gt;
+&lt;h3 id="grep-搜索"&gt;Grep 搜索&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;帮我搜索所有调用了 Uniswap V3 Quoter 的地方，
+输出每个调用的文件位置、行号和上下文
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="语义搜索"&gt;语义搜索&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;找出所有&amp;#34;授权转账&amp;#34;相关的代码（approve + transferFrom），
+标注出可能的安全风险点
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="跨文件追踪"&gt;跨文件追踪&lt;/h2&gt;
+&lt;h3 id="追踪数据流"&gt;追踪数据流&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;追踪一笔 USDT 转账的完整路径：
+从用户点击 Swap 开始，到合约最终执行
+经过哪些文件？哪些函数？
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="理解依赖关系"&gt;理解依赖关系&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;帮我画出 @src/core/ 目录下各合约的依赖关系图，
+用文字描述即可
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="安全审查"&gt;安全审查&lt;/h2&gt;
+&lt;h3 id="常用审查模式"&gt;常用审查模式&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;对这个目录 @contracts/security/ 做全面安全审查：
+1. 重入攻击风险
+2. 整数溢出/下溢
+3. 授权绕过
+4. 逻辑错误
+
+对每个问题，说明：文件位置、严重程度、修复建议
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="特定漏洞检查"&gt;特定漏洞检查&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;检查所有 external/public 函数是否有：
+- 非零地址检查
+- 授权检查
+- 余额边界检查
+- reentrancy guard
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="性能分析"&gt;性能分析&lt;/h2&gt;
+&lt;h3 id="gas-优化"&gt;Gas 优化&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;分析 @contracts/SwapAggregator.sol 的 gas 消耗：
+1. 找出最贵的 5 个操作
+2. 提出具体优化方案
+3. 估算每个优化能节省多少 gas
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="实战案例"&gt;实战案例&lt;/h2&gt;
+&lt;h3 id="defi-聚合器代码审查"&gt;DeFi 聚合器代码审查&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;项目路径：~/defi-aggregator
+
+任务：
+1. 理解架构：用户如何发起一笔 Swap，路径是怎样的
+2. 找出风险点：哪些地方可能被 MEV 机器人攻击
+3. 给出安全清单：上线前必须修复的问题
+
+输出格式：
+## 架构理解
+[文字描述]
+
+## 风险点
+| 位置 | 风险 | 严重度 | 建议 |
+|------|------|--------|------|
+
+## 上线前检查清单
+- [ ] ...
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="命令速查"&gt;命令速查&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;需求&lt;/th&gt;
+ &lt;th&gt;命令&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;了解结构&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;claude &amp;quot;分析项目结构&amp;quot;&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;搜索代码&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/grep &amp;quot;pattern&amp;quot; **/*.sol&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;读文件&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;cat @file&lt;/code&gt; 或直接引用&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;查依赖&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;claude &amp;quot;追踪 X 的调用链&amp;quot;&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;安全审查&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/security-review @path&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Gas 分析&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/gas-profile @file&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;</description></item><item><title>Claude Code 自动化与自定义：把 AI 变成你的专属开发助手</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/04_claude_code_automation/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/04_claude_code_automation/</guid><description>&lt;h1 id="claude-code-自动化与自定义把-ai-变成你的专属开发助手"&gt;Claude Code 自动化与自定义：把 AI 变成你的专属开发助手&lt;/h1&gt;
+&lt;h2 id="claudemd项目级上下文"&gt;CLAUDE.md：项目级上下文&lt;/h2&gt;
+&lt;p&gt;在项目根目录创建 &lt;code&gt;CLAUDE.md&lt;/code&gt;，定义项目的技术栈、规范和工作流程。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;# CLAUDE.md
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 项目概述
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;这是一个 Uniswap V3 风格的 DEX 合约项目，使用 Foundry 开发。
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 技术栈
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; Solidity ^0.8.20
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; Foundry (forge/cast/chisel)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; TypeScript + Hardhat (前端)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 代码规范
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 所有 external 函数必须有 NatSpec 注释
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 安全函数必须使用 SafeMath 或 0.8+ 的内置检查
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 测试覆盖率必须 &amp;gt; 90%
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 常用命令
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge build`&lt;/span&gt; - 编译
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge test`&lt;/span&gt; - 运行测试
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge coverage`&lt;/span&gt; - 覆盖率
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`forge script Deploy.s.sol`&lt;/span&gt; - 部署
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 项目结构
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`contracts/`&lt;/span&gt; - 合约源码
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`test/`&lt;/span&gt; - 测试文件
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`script/`&lt;/span&gt; - 部署脚本
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`src/`&lt;/span&gt; - 前端源码
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Claude Code 会自动读取 CLAUDE.md，在整个对话中保持一致上下文。&lt;/p&gt;</description></item><item><title>OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/</guid><description>&lt;h1 id="openclaw-skills-插件系统实战从零构建你的第一个-skill"&gt;OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / Skills / 插件 / 实战&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="什么是-skills"&gt;什么是 Skills&lt;/h2&gt;
+&lt;p&gt;Skills 是 OpenClaw 的&lt;strong&gt;扩展工具层&lt;/strong&gt;，它让 AI Agent 能够执行具体的外部操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生成图片 → 调用 &lt;code&gt;image-generation&lt;/code&gt; Skill&lt;/li&gt;
+&lt;li&gt;发飞书消息 → 调用 &lt;code&gt;feishu-doc&lt;/code&gt; Skill&lt;/li&gt;
+&lt;li&gt;搜索 GitHub → 调用 &lt;code&gt;github&lt;/code&gt; Skill&lt;/li&gt;
+&lt;li&gt;发送邮件 → 调用 &lt;code&gt;gog&lt;/code&gt; Skill&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;本质上，Skill 就是一个&lt;strong&gt;封装好的命令行工具&lt;/strong&gt;，AI Agent 通过标准化接口调用它。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="skills-的标准结构"&gt;Skills 的标准结构&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;~/.openclaw/workspace/skills/
+└── my-skill/
+ ├── SKILL.md # 技能说明文档（AI 会读取）
+ ├── scripts/ # 可执行脚本
+ │ └── run.sh
+ └── references/ # 参考文档
+ └── examples.md
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="skillmd-的标准格式"&gt;SKILL.md 的标准格式&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;name: my-skill
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;description: 技能的简短描述，激活关键词
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;# My Skill
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 激活场景
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;当用户提到以下内容时使用本技能：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 生成图片
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 画一张图
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; AI 画图
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 工作流程
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;1.&lt;/span&gt; 理解需求
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;2.&lt;/span&gt; 调用脚本
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;3.&lt;/span&gt; 返回结果
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 使用方式
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 基本用法
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;```bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python3 my_skill.py --param value
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="示例"&gt;示例&lt;/h2&gt;
+&lt;p&gt;python3 my_skill.py &amp;ndash;prompt &amp;ldquo;一只猫&amp;rdquo; &amp;ndash;output ~/Downloads/cat.png&lt;/p&gt;</description></item><item><title>OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/01_openclaw_getting_started/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/01_openclaw_getting_started/</guid><description>&lt;h1 id="openclaw-入门指南自托管-ai-网关让任何聊天应用都变成你的私人助手"&gt;OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 工具 / 入门&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="为什么需要-openclaw"&gt;为什么需要 OpenClaw&lt;/h2&gt;
+&lt;p&gt;在 AI 时代，我们每天在不同的聊天应用中切换：Telegram 处理工作、Discord 参与社区、WhatsApp 联系家人。但 AI 助手呢？ChatGPT 在网页里，Claude 在单独窗口，Copilot 在 VS Code 里。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;问题&lt;/strong&gt;：AI 助手和你的日常聊天工具是割裂的。&lt;/p&gt;
+&lt;p&gt;OpenClaw 解决的就是这个问题：它是一个&lt;strong&gt;自托管网关&lt;/strong&gt;，桥接你的聊天应用（Telegram、Discord、WhatsApp、飞书等）和 AI 智能体，让你在任何一个常用聊天软件里，都能召唤你的私人 AI 助手。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="什么是-openclaw"&gt;什么是 OpenClaw&lt;/h2&gt;
+&lt;h3 id="核心定义"&gt;核心定义&lt;/h3&gt;
+&lt;p&gt;OpenClaw 是一个运行在你本地机器（或服务器）上的&lt;strong&gt;网关进程&lt;/strong&gt;，它同时连接多个聊天平台和多个 AI 模型/智能体。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;你的手机/电脑
+ ├── Telegram ──┐
+ ├── Discord ──┼──▶ OpenClaw Gateway ──▶ AI Agent (Claude/GPT/MiniMax...)
+ ├── 飞书 ──┤ │
+ └── WhatsApp ──┘ ▼
+ 本地文件系统
+ (你的数据)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="关键特性"&gt;关键特性&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;特性&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;自托管&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;数据留在你自己的机器上，不经过第三方服务器&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;多渠道&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;同时支持 Telegram、Discord、WhatsApp、飞书、iMessage 等&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;多智能体&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;可以运行多个专业角色（研究员、架构师、开发者等）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;插件生态&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;支持 Skills 扩展，可自定义工作流&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;跨平台&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;macOS、Linux、树莓派都能跑&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="5-分钟快速上手"&gt;5 分钟快速上手&lt;/h2&gt;
+&lt;h3 id="第一步安装"&gt;第一步：安装&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;npm install -g openclaw
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二步启动网关"&gt;第二步：启动网关&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;openclaw gateway start
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第三步配置聊天渠道"&gt;第三步：配置聊天渠道&lt;/h3&gt;
+&lt;p&gt;以 Telegram 为例：&lt;/p&gt;</description></item><item><title>OpenClaw 安全实践：自托管数据控制与权限管理</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/05_openclaw_local_deployment/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/05_openclaw_local_deployment/</guid><description>&lt;h1 id="openclaw-安全实践自托管数据控制与权限管理"&gt;OpenClaw 安全实践：自托管数据控制与权限管理&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 安全 / 隐私 / 深度&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="自托管的核心价值你的数据你做主"&gt;自托管的核心价值：你的数据你做主&lt;/h2&gt;
+&lt;p&gt;很多人问我：为什么不用 ChatGPT？答案很简单：&lt;strong&gt;数据控制&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;用第三方 AI 服务，你的对话历史、文件、偏好都会被服务商存储和分析。OpenClaw 的自托管模式，让所有数据都留在你自己的机器上——这是它与 SaaS AI 工具最本质的区别。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="数据安全的多层防护"&gt;数据安全的多层防护&lt;/h2&gt;
+&lt;h3 id="第一层本地存储"&gt;第一层：本地存储&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;~/.openclaw/
+├── agents/ # Agent 工作区
+│ ├── main/
+│ ├── researcher/
+│ └── developer/
+├── credentials/ # 加密存储的凭证
+├── workspace/ # 项目文件
+└── venv/ # Python 虚拟环境
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;关键原则&lt;/strong&gt;：所有文件都在本地，只有 AI API 调用走网络。&lt;/p&gt;
+&lt;h3 id="第二层凭证隔离"&gt;第二层：凭证隔离&lt;/h3&gt;
+&lt;p&gt;API Keys 和 Bot Tokens 存在 &lt;code&gt;~/.openclaw/credentials/&lt;/code&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;~/.openclaw/credentials/
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;├── feishu-main-allowFrom.json &lt;span style="color:#75715e"&gt;# 飞书凭证（只允许特定用户）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;├── telegram-allowFrom.json &lt;span style="color:#75715e"&gt;# Telegram 凭证&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└── .env &lt;span style="color:#75715e"&gt;# API Keys（不提交 git）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这些文件权限设置为 &lt;code&gt;600&lt;/code&gt;，防止其他用户读取：&lt;/p&gt;</description></item><item><title>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/02_openclaw_architecture/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/02_openclaw_architecture/</guid><description>&lt;h1 id="openclaw-架构解析gatewayagentchannel-三层架构深度剖析"&gt;OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 架构 / 深度&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="为什么理解架构很重要"&gt;为什么理解架构很重要&lt;/h2&gt;
+&lt;p&gt;很多用户把 OpenClaw 当作&amp;quot;飞书/Telegram 接入 AI&amp;quot;的简单工具。但真正理解它的架构后，你会发现它本质上是一个&lt;strong&gt;本地 AI 智能体运行平台&lt;/strong&gt;——有调度器、有工作区隔离、有多渠道分发。&lt;/p&gt;
+&lt;p&gt;理解架构，才能用好 OpenClaw 的高级特性（多智能体、Skills、cron 定时任务等）。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="整体架构"&gt;整体架构&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌─────────────────────────────────────────────────────────────┐
+│ OpenClaw Gateway │
+│ │
+│ ┌──────────────┐ ┌─────────────┐ ┌────────────┐ │
+│ │ Channel │ │ Agent │ │ Skills │ │
+│ │ (消息收发) │ ──▶ │ (智能体) │ ──▶ │ (工具) │ │
+│ └──────────────┘ └─────────────┘ └────────────┘ │
+│ │ │ │ │
+│ └───────────────────┴────────────────────┘ │
+│ │ │
+│ ┌────────▼────────┐ │
+│ │ Message Bus │ │
+│ │ (消息总线) │ │
+│ └─────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="第一层channel渠道"&gt;第一层：Channel（渠道）&lt;/h2&gt;
+&lt;p&gt;Channel 负责&lt;strong&gt;与外部聊天平台通信&lt;/strong&gt;。&lt;/p&gt;</description></item><item><title>用 OpenClaw 构建多智能体团队：角色划分与任务协调实战</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/03_openclaw_multi_agent/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/03_openclaw_multi_agent/</guid><description>&lt;h1 id="用-openclaw-构建多智能体团队角色划分与任务协调实战"&gt;用 OpenClaw 构建多智能体团队：角色划分与任务协调实战&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 多智能体 / 实战&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="从单兵作战到团队协作"&gt;从单兵作战到团队协作&lt;/h2&gt;
+&lt;p&gt;用 AI 写代码不难，但用 AI 做复杂项目（调研 → 架构 → 开发 → 评审 → 决策）就复杂了。一个通用的 AI 无法同时精通所有领域。&lt;/p&gt;
+&lt;p&gt;OpenClaw 的解决方案是：&lt;strong&gt;多智能体团队&lt;/strong&gt;——每个 Agent 专注一个角色，协同完成复杂任务。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="团队角色设计"&gt;团队角色设计&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; ┌─────────────────────────────┐
+ │ main (协调员) │
+ │ 接收任务 → 分析 → 分派 → 汇总 │
+ └──────────┬──────────────────┘
+ │
+ ┌──────────────┼──────────────────────┐
+ ▼ ▼ ▼
+ researcher architect developer
+ (调研员) (架构师) (开发者)
+ │ │ │
+ ▼ ▼ ▼
+ reviewer frontend security
+ (评审) (前端) (安全)
+ │
+ ▼ decider
+ (决策者)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="各角色职责"&gt;各角色职责&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;角色&lt;/th&gt;
+ &lt;th&gt;输入&lt;/th&gt;
+ &lt;th&gt;输出&lt;/th&gt;
+ &lt;th&gt;特点&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;researcher&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;问题/背景&lt;/td&gt;
+ &lt;td&gt;调研报告、市场分析&lt;/td&gt;
+ &lt;td&gt;广度优先，信息挖掘&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;architect&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;需求&lt;/td&gt;
+ &lt;td&gt;架构设计、技术选型&lt;/td&gt;
+ &lt;td&gt;系统性、前瞻性&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;developer&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;设计稿&lt;/td&gt;
+ &lt;td&gt;代码实现&lt;/td&gt;
+ &lt;td&gt;可执行、可测试&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;frontend&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;需求&lt;/td&gt;
+ &lt;td&gt;UI设计方案、组件规范&lt;/td&gt;
+ &lt;td&gt;用户视角&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;reviewer&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;方案/代码&lt;/td&gt;
+ &lt;td&gt;评审报告、改进建议&lt;/td&gt;
+ &lt;td&gt;批判性思维&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;security&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;方案/代码&lt;/td&gt;
+ &lt;td&gt;风险矩阵、安全建议&lt;/td&gt;
+ &lt;td&gt;底线思维&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;decider&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;各方意见&lt;/td&gt;
+ &lt;td&gt;最终决策&lt;/td&gt;
+ &lt;td&gt;权衡利弊、拍板&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="任务分配流程"&gt;任务分配流程&lt;/h2&gt;
+&lt;h3 id="案例dex-聚合器项目"&gt;案例：DEX 聚合器项目&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户（阿白）
+ │
+ ▼ 发起项目请求
+main (协调员)
+ │
+ ├── 解析任务 → 需要：调研 + 架构 + 开发 + 前端 + 安全 + 评审 + 决策
+ │
+ ▼ 并行派发（5路同时）
+ ┌─────────┬──────────┬─────────┬────────┬────────┐
+ ▼ ▼ ▼ ▼ ▼ │
+researcher architect developer frontend security │
+ │ │ │ │ │ │
+ │ │ │ │ │ │
+ │ │ │ │ │ │
+ └─────────┴──────────┴─────────┴────────┴────────┘
+ │
+ ▼ 各自输出报告
+ reviewer (综合评审)
+ │
+ ▼ 评审结论
+ decider (最终决策)
+ │
+ ▼
+ 汇总报告 → 发给用户
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实际执行命令"&gt;实际执行命令&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# main 协调员收到 阿白 的请求后&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;main: @architect @researcher @developer @frontend @security 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 基于DEX聚合器项目，各自输出方案
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 各 Agent 并行工作&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;researcher → 输出 RESEARCH.md（竞品分析）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;architect → 输出 ARCHITECTURE.md（系统架构）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;developer → 输出 DEVELOP.md（合约设计）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;frontend → 输出 FRONTEND.md（UI设计）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security → 输出 SECURITY.md（风险矩阵）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 评审汇总&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;reviewer → 输出 REVIEW.md（综合评审）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 最终决策&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;decider → 输出 DECISION.md（Go/No-Go）
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="工作区隔离设计"&gt;工作区隔离设计&lt;/h2&gt;
+&lt;p&gt;每个 Agent 的工作区完全独立：&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,198 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>AMM 数学原理深究 - 曲线设计与资本效率 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="深入理解 AMM 的数学原理，从恒定乘积到集中流动性，掌握资本效率优化方法"><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/t6_master/26_amm_math_deep_dive/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/t6_master/26_amm_math_deep_dive/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/t6_master/26_amm_math_deep_dive/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/t6_master/26_amm_math_deep_dive/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="AMM 数学原理深究 - 曲线设计与资本效率"><meta property="og:description" content="深入理解 AMM 的数学原理，从恒定乘积到集中流动性，掌握资本效率优化方法"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-03-19T01:30:00+08:00"><meta property="article:modified_time" content="2026-03-19T01:30:00+08:00"><meta property="article:tag" content="AMM"><meta property="article:tag" content="数学"><meta property="article:tag" content="原理"><meta itemprop=name content="AMM 数学原理深究 - 曲线设计与资本效率"><meta itemprop=description content="深入理解 AMM 的数学原理，从恒定乘积到集中流动性，掌握资本效率优化方法"><meta itemprop=datePublished content="2026-03-19T01:30:00+08:00"><meta itemprop=dateModified content="2026-03-19T01:30:00+08:00"><meta itemprop=wordCount content="741"><meta itemprop=keywords content="AMM,数学,原理"><meta name=twitter:card content="summary"><meta name=twitter:title content="AMM 数学原理深究 - 曲线设计与资本效率"><meta name=twitter:description content="深入理解 AMM 的数学原理，从恒定乘积到集中流动性，掌握资本效率优化方法"><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-26_amm_math_deep_dive"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#amm-核心公式推导>AMM 核心公式推导</a><ul><li><a href=#恒定乘积公式uniswap-v2>恒定乘积公式（Uniswap V2）</a></li><li><a href=#恒定和公式curve-stableswap>恒定和公式（Curve StableSwap）</a></li><li><a href=#集中流动性公式uniswap-v3>集中流动性公式（Uniswap V3）</a></li></ul></li><li><a href=#无常损失数学分析>无常损失数学分析</a><ul><li><a href=#无常损失公式推导>无常损失公式推导</a></li><li><a href=#v3-无常损失分析>V3 无常损失分析</a></li></ul></li><li><a href=#最优费用率设计>最优费用率设计</a><ul><li><a href=#费用率对-lp-收益影响>费用率对 LP 收益影响</a></li></ul></li><li><a href=#资本效率优化>资本效率优化</a><ul><li><a href=#效率定义>效率定义</a></li><li><a href=#最优区间选择>最优区间选择</a></li><li><a href=#动态再平衡策略>动态再平衡策略</a></li></ul></li><li><a href=#高级-amm-设计>高级 AMM 设计</a><ul><li><a href=#曲线参数优化>曲线参数优化</a></li><li><a href=#预言机集成>预言机集成</a></li></ul></li><li><a href=#数学工具与代码>数学工具与代码</a><ul><li><a href=#python-实现-il-计算器>Python 实现 IL 计算器</a></li></ul></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>AMM 数学原理深究 - 曲线设计与资本效率</h1><div class=article-meta><time datetime=2026-03-19>2026-03-19</time>
+<span>•</span>
+<span>741 字</span>
+<span>•</span>
+<span>大师级</span></div><div class=article-tags><a href=/dex-bok/tags/amm/ class=article-tag>AMM</a>
+<a href=/dex-bok/tags/%E6%95%B0%E5%AD%A6/ class=article-tag>数学</a>
+<a href=/dex-bok/tags/%E5%8E%9F%E7%90%86/ class=article-tag>原理</a></div></header><h2 id=amm-核心公式推导>AMM 核心公式推导</h2><h3 id=恒定乘积公式uniswap-v2>恒定乘积公式（Uniswap V2）</h3><h4 id=基本公式>基本公式</h4><pre tabindex=0><code>x * y = k
+
+其中：
+x = Token A 数量
+y = Token B 数量
+k = 常数
+</code></pre><h4 id=价格推导>价格推导</h4><pre tabindex=0><code>边际价格 = dy/dx
+
+对 x * y = k 求导：
+y + x * dy/dx = 0
+dy/dx = -y/x
+
+所以：价格 P = y/x
+</code></pre><h4 id=滑点公式>滑点公式</h4><pre tabindex=0><code>买入 Δx 的 Token A：
+新价格 P&#39; = (y - Δy) / (x + Δx)
+
+滑点 = (P&#39; - P) / P
+     = Δx / (x + Δx)
+
+结论：
+- 池子越小，滑点越大
+- 交易越大，滑点越大
+</code></pre><hr><h3 id=恒定和公式curve-stableswap>恒定和公式（Curve StableSwap）</h3><h4 id=基本公式-1>基本公式</h4><pre tabindex=0><code>x + y = k
+
+价格恒定为 1:1
+适合稳定币交易
+</code></pre><h4 id=stableswap-混合公式>StableSwap 混合公式</h4><pre tabindex=0><code>A * n^n * Σx_i + D = A * D * n^n + D^(n+1) / (n^n * Πx_i)
+
+其中：
+A = 放大系数
+n = 资产数量
+D = 不变量
+x_i = 各资产数量
+
+A → ∞ 时：趋近恒定和
+A → 0 时：趋近恒定积
+</code></pre><h4 id=放大系数-a-的作用>放大系数 A 的作用</h4><table><thead><tr><th>A 值</th><th>曲线形状</th><th>适用场景</th></tr></thead><tbody><tr><td>1</td><td>标准恒定积</td><td>波动资产</td></tr><tr><td>100</td><td>中间态</td><td>弱相关资产</td></tr><tr><td>10000</td><td>接近恒定和</td><td>稳定币</td></tr></tbody></table><hr><h3 id=集中流动性公式uniswap-v3>集中流动性公式（Uniswap V3）</h3><h4 id=核心创新>核心创新</h4><pre tabindex=0><code>只在价格区间 [P_a, P_b] 内提供流动性
+
+公式：
+L = √(x * y) （在价格范围内）
+
+实际流动性 = L * (√P_b - √P_a)
+</code></pre><h4 id=资本效率提升>资本效率提升</h4><pre tabindex=0><code>效率提升倍数 = P_b / (P_b - P_a)
+
+示例：
+当前价格 P = $1800
+区间 [1600, 2000]
+效率提升 = 2000 / (2000-1600) = 5 倍
+
+区间 [1700, 1900]
+效率提升 = 1900 / (1900-1700) = 9.5 倍
+</code></pre><h4 id=虚拟储备推导>虚拟储备推导</h4><pre tabindex=0><code>在区间 [P_a, P_b] 内：
+x_real = L * (1/√P - 1/√P_b)
+y_real = L * (√P - √P_a)
+
+当 P 超出区间：
+- P &lt; P_a：全部为 x（Token A）
+- P &gt; P_b：全部为 y（Token B）
+</code></pre><hr><h2 id=无常损失数学分析>无常损失数学分析</h2><h3 id=无常损失公式推导>无常损失公式推导</h3><h4 id=基础推导>基础推导</h4><pre tabindex=0><code>初始状态：
+- 价格 P0
+- 存入 x0 个 Token A，y0 个 Token B
+- 总价值 V0 = x0 * P0 + y0
+
+价格变化后：
+- 新价格 P1 = r * P0（r 为价格变化倍数）
+- 池子自动调整：x1 * y1 = k
+
+LP 价值：
+V_lp = x1 * P1 + y1
+
+持有价值：
+V_hold = x0 * P1 + y0
+</code></pre><h4 id=无常损失公式>无常损失公式</h4><pre tabindex=0><code>IL = V_lp / V_hold - 1
+
+简化后：
+IL = 2√r / (1+r) - 1
+
+其中 r = P1/P0（价格变化倍数）
+</code></pre><h4 id=数值验证>数值验证</h4><table><thead><tr><th>价格变化</th><th>r</th><th>IL 计算</th><th>IL 结果</th></tr></thead><tbody><tr><td>+10%</td><td>1.1</td><td>2√1.1/2.1 - 1</td><td>-0.23%</td></tr><tr><td>+25%</td><td>1.25</td><td>2√1.25/2.25 - 1</td><td>-1.4%</td></tr><tr><td>+50%</td><td>1.5</td><td>2√1.5/2.5 - 1</td><td>-5.7%</td></tr><tr><td>+100%</td><td>2.0</td><td>2√2/3 - 1</td><td>-21.5%</td></tr><tr><td>-50%</td><td>0.5</td><td>2√0.5/1.5 - 1</td><td>-21.5%</td></tr></tbody></table><hr><h3 id=v3-无常损失分析>V3 无常损失分析</h3><h4 id=区间内-il>区间内 IL</h4><pre tabindex=0><code>IL_v3 = IL_v2 * (P_b - P_a) / (√P_b - √P_a)²
+
+结论：
+- 区间越窄，IL 越大
+- 但收益也越高
+- 需要权衡
+</code></pre><h4 id=被甩出损失>被甩出损失</h4><pre tabindex=0><code>当价格超出区间 [P_a, P_b]：
+
+P &lt; P_a：
+- 全部变为 Token A
+- 损失 = (P0 - P) / P0
+
+P &gt; P_b：
+- 全部变为 Token B
+- 踏空收益 = (P - P0) / P0
+</code></pre><hr><h2 id=最优费用率设计>最优费用率设计</h2><h3 id=费用率对-lp-收益影响>费用率对 LP 收益影响</h3><h4 id=收益公式>收益公式</h4><pre tabindex=0><code>LP 收益 = 交易量 × 费用率 × LP 份额
+
+年化 APY = (日交易量 × 365 × 费用率) / TVL
+</code></pre><h4 id=费用率与交易量关系>费用率与交易量关系</h4><pre tabindex=0><code>交易量 = f(费用率)
+
+费用率↑ → 单笔收益↑ → 交易量↓
+费用率↓ → 单笔收益↓ → 交易量↑
+
+最优费用率 = argmax(费用率 × 交易量)
+</code></pre><h4 id=v3-多档位设计>V3 多档位设计</h4><table><thead><tr><th>档位</th><th>适合资产</th><th>理论依据</th></tr></thead><tbody><tr><td>0.01%</td><td>稳定币</td><td>低波动，高频率</td></tr><tr><td>0.05%</td><td>主流币</td><td>中等波动</td></tr><tr><td>0.30%</td><td>长尾资产</td><td>高波动，低频率</td></tr><tr><td>1.00%</td><td>Meme 币</td><td>极高波动</td></tr></tbody></table><hr><h2 id=资本效率优化>资本效率优化</h2><h3 id=效率定义>效率定义</h3><pre tabindex=0><code>资本效率 = 相同交易量所需资金 / 实际所需资金
+
+V2 效率 = 1x
+V3 效率 = P_b / (P_b - P_a)
+</code></pre><h3 id=最优区间选择>最优区间选择</h3><h4 id=基于波动率>基于波动率</h4><pre tabindex=0><code>最优区间宽度 = 2 × 日波动率 × √T
+
+示例：
+ETH 日波动率 = 5%
+预期持有期 T = 7 天
+最优宽度 = 2 × 5% × √7 = 26.5%
+
+区间：[P×0.87, P×1.13]
+</code></pre><h4 id=基于历史数据>基于历史数据</h4><pre tabindex=0><code>步骤：
+1. 统计过去 30 天价格范围
+2. 计算 95% 置信区间
+3. 设置略宽于该区间的 LP 区间
+4. 平衡被甩风险与效率
+</code></pre><h3 id=动态再平衡策略>动态再平衡策略</h3><h4 id=再平衡触发条件>再平衡触发条件</h4><pre tabindex=0><code>条件 1：价格接近区间边界
+if P &lt; P_a × 1.1 or P &gt; P_b × 0.9:
+    rebalance()
+
+条件 2：效率下降过多
+if 当前效率 &lt; 初始效率 × 0.5:
+    rebalance()
+
+条件 3：固定时间间隔
+if days_since_last_rebalance &gt; 7:
+    rebalance()
+</code></pre><h4 id=再平衡成本>再平衡成本</h4><pre tabindex=0><code>成本 = Gas 费 + 滑点损失 + 手续费
+
+收益 = 效率提升带来的额外收益
+
+决策：
+if 收益 &gt; 成本：
+    执行再平衡
+</code></pre><hr><h2 id=高级-amm-设计>高级 AMM 设计</h2><h3 id=曲线参数优化>曲线参数优化</h3><h4 id=动态-a-值curve>动态 A 值（Curve）</h4><pre tabindex=0><code>A = f(池子不平衡度)
+
+池子平衡时：A 值高（低滑点）
+池子不平衡时：A 值低（保护流动性）
+
+公式：
+A = A_base × (1 + imbalance_factor)
+</code></pre><h4 id=动态费用uniswap-v3-改进>动态费用（Uniswap V3 改进）</h4><pre tabindex=0><code>费用率 = f(波动率，交易量)
+
+高波动时：费用率↑（保护 LP）
+低波动时：费用率↓（吸引交易）
+
+实现：
+fee = base_fee × (1 + volatility_multiplier)
+</code></pre><hr><h3 id=预言机集成>预言机集成</h3><h4 id=twap-预言机>TWAP 预言机</h4><pre tabindex=0><code>时间加权平均价格（TWAP）
+
+计算：
+TWAP = Σ(price_i × time_i) / Σtime_i
+
+用途：
+- 防止价格操纵
+- 衍生品结算
+- 跨链价格参考
+</code></pre><h4 id=预言机操纵攻击>预言机操纵攻击</h4><pre tabindex=0><code>攻击方式：
+1. 闪电贷大额交易
+2. 瞬间改变池子价格
+3. 利用被操纵价格借贷/清算
+
+防御：
+- 使用 TWAP（多区块平均）
+- 增加操纵成本
+- 多预言机聚合
+</code></pre><hr><h2 id=数学工具与代码>数学工具与代码</h2><h3 id=python-实现-il-计算器>Python 实现 IL 计算器</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> math
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>impermanent_loss</span>(price_ratio):
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;计算无常损失&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>*</span> math<span style=color:#f92672>.</span>sqrt(price_ratio) <span style=color:#f92672>/</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>+</span> price_ratio) <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>v3_capital_efficiency</span>(price_lower, price_upper, price_current):
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;计算 V3 资本效率&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> price_lower <span style=color:#f92672>&gt;=</span> price_upper:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> price_upper <span style=color:#f92672>/</span> (price_upper <span style=color:#f92672>-</span> price_lower)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>optimal_fee_rate</span>(volume_elasticity, base_volume):
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;计算最优费用率&#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># volume = base_volume * (1 - elasticity * fee_rate)</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># revenue = fee_rate * volume</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 求导得最优解</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>/</span> (<span style=color:#ae81ff>2</span> <span style=color:#f92672>*</span> volume_elasticity)
+</span></span></code></pre></div><hr><h2 id=总结>总结</h2><p>AMM 数学核心：</p><ol><li><strong>理解公式</strong>：恒定积/恒定和/集中流动性</li><li><strong>计算 IL</strong>：量化无常损失</li><li><strong>优化效率</strong>：选择合适区间</li><li><strong>动态调整</strong>：根据市场变化</li></ol><hr><p><strong>作者</strong>：阿白
+<strong>邮箱</strong>：qingxin0919@gmail.com</p><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/t6_master/27_formal_verification/>智能合约形式化验证 - Certora 与 Spec 语言</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

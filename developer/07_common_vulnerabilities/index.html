@@ -1,0 +1,110 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='智能合约常见安全漏洞与防范
+安全是 DeFi 的生命线
+智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。
+一、重入攻击（Reentrancy）
+攻击原理
+攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数。
+防御措施
+1. CEI 模式（Checks-Effects-Interactions）
+先检查条件，再更新状态，最后做外部调用。
+2. 引入互斥锁
+使用 ReentrancyGuard 修饰器。
+3. 使用 OpenZeppelin 的 ReentrancyGuard
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract SecureBank is ReentrancyGuard {
+    function withdraw(uint256 amount) external nonReentrant {
+        // ...
+    }
+}
+二、预言机价格操控
+攻击原理
+攻击者利用闪电贷在短时间内操控交易对价格，使预言机返回错误价格，然后在其他协议中套利。
+防御措施
+1. 使用 TWAP（时间加权平均价格）
+2. 多预言机聚合
+3. 设置价格波动检查
+三、整数溢出/下溢
+攻击原理
+Solidity 0.8 之前的版本不内置溢出检查，攻击者可利用溢出绕过金额检查。
+防御措施
+升级到 Solidity 0.8+ —— 内置溢出检查会在溢出时自动 revert。
+四、访问控制漏洞
+攻击原理
+忘记添加权限检查，任何人都可以调用管理员函数。
+防御措施
+1. 显式声明访问控制
+modifier onlyOwner() {
+    require(msg.sender == owner, "Not authorized");
+    _;
+}
+2. 使用 OpenZeppelin AccessControl'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/developer/07_common_vulnerabilities/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/developer/07_common_vulnerabilities/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/developer/07_common_vulnerabilities/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/developer/07_common_vulnerabilities/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='智能合约常见安全漏洞与防范 安全是 DeFi 的生命线 智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。
+一、重入攻击（Reentrancy） 攻击原理 攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数。
+防御措施 1. CEI 模式（Checks-Effects-Interactions）
+先检查条件，再更新状态，最后做外部调用。
+2. 引入互斥锁
+使用 ReentrancyGuard 修饰器。
+3. 使用 OpenZeppelin 的 ReentrancyGuard
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol"; contract SecureBank is ReentrancyGuard { function withdraw(uint256 amount) external nonReentrant { // ... } } 二、预言机价格操控 攻击原理 攻击者利用闪电贷在短时间内操控交易对价格，使预言机返回错误价格，然后在其他协议中套利。
+防御措施 1. 使用 TWAP（时间加权平均价格）
+2. 多预言机聚合
+3. 设置价格波动检查
+三、整数溢出/下溢 攻击原理 Solidity 0.8 之前的版本不内置溢出检查，攻击者可利用溢出绕过金额检查。
+防御措施 升级到 Solidity 0.8+ —— 内置溢出检查会在溢出时自动 revert。
+四、访问控制漏洞 攻击原理 忘记添加权限检查，任何人都可以调用管理员函数。
+防御措施 1. 显式声明访问控制
+modifier onlyOwner() { require(msg.sender == owner, "Not authorized"); _; } 2. 使用 OpenZeppelin AccessControl'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="developer"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='智能合约常见安全漏洞与防范 安全是 DeFi 的生命线 智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。
+一、重入攻击（Reentrancy） 攻击原理 攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数。
+防御措施 1. CEI 模式（Checks-Effects-Interactions）
+先检查条件，再更新状态，最后做外部调用。
+2. 引入互斥锁
+使用 ReentrancyGuard 修饰器。
+3. 使用 OpenZeppelin 的 ReentrancyGuard
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol"; contract SecureBank is ReentrancyGuard { function withdraw(uint256 amount) external nonReentrant { // ... } } 二、预言机价格操控 攻击原理 攻击者利用闪电贷在短时间内操控交易对价格，使预言机返回错误价格，然后在其他协议中套利。
+防御措施 1. 使用 TWAP（时间加权平均价格）
+2. 多预言机聚合
+3. 设置价格波动检查
+三、整数溢出/下溢 攻击原理 Solidity 0.8 之前的版本不内置溢出检查，攻击者可利用溢出绕过金额检查。
+防御措施 升级到 Solidity 0.8+ —— 内置溢出检查会在溢出时自动 revert。
+四、访问控制漏洞 攻击原理 忘记添加权限检查，任何人都可以调用管理员函数。
+防御措施 1. 显式声明访问控制
+modifier onlyOwner() { require(msg.sender == owner, "Not authorized"); _; } 2. 使用 OpenZeppelin AccessControl'><meta itemprop=wordCount content="138"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='智能合约常见安全漏洞与防范 安全是 DeFi 的生命线 智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。
+一、重入攻击（Reentrancy） 攻击原理 攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数。
+防御措施 1. CEI 模式（Checks-Effects-Interactions）
+先检查条件，再更新状态，最后做外部调用。
+2. 引入互斥锁
+使用 ReentrancyGuard 修饰器。
+3. 使用 OpenZeppelin 的 ReentrancyGuard
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol"; contract SecureBank is ReentrancyGuard { function withdraw(uint256 amount) external nonReentrant { // ... } } 二、预言机价格操控 攻击原理 攻击者利用闪电贷在短时间内操控交易对价格，使预言机返回错误价格，然后在其他协议中套利。
+防御措施 1. 使用 TWAP（时间加权平均价格）
+2. 多预言机聚合
+3. 设置价格波动检查
+三、整数溢出/下溢 攻击原理 Solidity 0.8 之前的版本不内置溢出检查，攻击者可利用溢出绕过金额检查。
+防御措施 升级到 Solidity 0.8+ —— 内置溢出检查会在溢出时自动 revert。
+四、访问控制漏洞 攻击原理 忘记添加权限检查，任何人都可以调用管理员函数。
+防御措施 1. 显式声明访问控制
+modifier onlyOwner() { require(msg.sender == owner, "Not authorized"); _; } 2. 使用 OpenZeppelin AccessControl'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-07_common_vulnerabilities"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#安全是-defi-的生命线>安全是 DeFi 的生命线</a></li><li><a href=#一重入攻击reentrancy>一、重入攻击（Reentrancy）</a><ul><li><a href=#攻击原理>攻击原理</a></li><li><a href=#防御措施>防御措施</a></li></ul></li><li><a href=#二预言机价格操控>二、预言机价格操控</a><ul><li><a href=#攻击原理-1>攻击原理</a></li><li><a href=#防御措施-1>防御措施</a></li></ul></li><li><a href=#三整数溢出下溢>三、整数溢出/下溢</a><ul><li><a href=#攻击原理-2>攻击原理</a></li><li><a href=#防御措施-2>防御措施</a></li></ul></li><li><a href=#四访问控制漏洞>四、访问控制漏洞</a><ul><li><a href=#攻击原理-3>攻击原理</a></li><li><a href=#防御措施-3>防御措施</a></li></ul></li><li><a href=#五闪电贷攻击>五、闪电贷攻击</a><ul><li><a href=#攻击原理-4>攻击原理</a></li><li><a href=#防御措施-4>防御措施</a></li></ul></li><li><a href=#六前端绕过攻击>六、前端绕过攻击</a><ul><li><a href=#攻击原理-5>攻击原理</a></li><li><a href=#防御措施-5>防御措施</a></li></ul></li><li><a href=#七应急响应计划>七、应急响应计划</a></li><li><a href=#安全检查清单>安全检查清单</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>138 字</span></div></header><h1 id=智能合约常见安全漏洞与防范>智能合约常见安全漏洞与防范</h1><h2 id=安全是-defi-的生命线>安全是 DeFi 的生命线</h2><p>智能合约安全漏洞的后果远比传统软件严重。代码一旦部署，攻击者就可以利用漏洞盗走价值，而且由于区块链的不可篡改性，被盗资产几乎无法追回。</p><h2 id=一重入攻击reentrancy>一、重入攻击（Reentrancy）</h2><h3 id=攻击原理>攻击原理</h3><p>攻击者构造一个恶意合约，在合约余额更新前反复调用受害合约的提款函数。</p><h3 id=防御措施>防御措施</h3><p><strong>1. CEI 模式（Checks-Effects-Interactions）</strong></p><p>先检查条件，再更新状态，最后做外部调用。</p><p><strong>2. 引入互斥锁</strong></p><p>使用 ReentrancyGuard 修饰器。</p><p><strong>3. 使用 OpenZeppelin 的 ReentrancyGuard</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;@openzeppelin/contracts/utils/ReentrancyGuard.sol&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>SecureBank</span> <span style=color:#66d9ef>is</span> ReentrancyGuard {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>withdraw</span>(<span style=color:#66d9ef>uint256</span> amount) <span style=color:#66d9ef>external</span> nonReentrant {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=二预言机价格操控>二、预言机价格操控</h2><h3 id=攻击原理-1>攻击原理</h3><p>攻击者利用闪电贷在短时间内操控交易对价格，使预言机返回错误价格，然后在其他协议中套利。</p><h3 id=防御措施-1>防御措施</h3><p><strong>1. 使用 TWAP（时间加权平均价格）</strong></p><p><strong>2. 多预言机聚合</strong></p><p><strong>3. 设置价格波动检查</strong></p><h2 id=三整数溢出下溢>三、整数溢出/下溢</h2><h3 id=攻击原理-2>攻击原理</h3><p>Solidity 0.8 之前的版本不内置溢出检查，攻击者可利用溢出绕过金额检查。</p><h3 id=防御措施-2>防御措施</h3><p><strong>升级到 Solidity 0.8+</strong> —— 内置溢出检查会在溢出时自动 revert。</p><h2 id=四访问控制漏洞>四、访问控制漏洞</h2><h3 id=攻击原理-3>攻击原理</h3><p>忘记添加权限检查，任何人都可以调用管理员函数。</p><h3 id=防御措施-3>防御措施</h3><p><strong>1. 显式声明访问控制</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>modifier</span> <span style=color:#a6e22e>onlyOwner</span>() {
+</span></span><span style=display:flex><span>    require(msg.sender <span style=color:#f92672>==</span> owner, <span style=color:#e6db74>&#34;Not authorized&#34;</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>_</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>2. 使用 OpenZeppelin AccessControl</strong></p><h2 id=五闪电贷攻击>五、闪电贷攻击</h2><h3 id=攻击原理-4>攻击原理</h3><p>闪电贷允许你在一个交易内借出巨款、进行操作、归还借款。</p><h3 id=防御措施-4>防御措施</h3><p><strong>1. 价格延迟生效</strong></p><p><strong>2. 检查交易来源</strong></p><h2 id=六前端绕过攻击>六、前端绕过攻击</h2><h3 id=攻击原理-5>攻击原理</h3><p>前端限制最小交易额，但合约层没有校验。</p><h3 id=防御措施-5>防御措施</h3><p><strong>服务端校验必须同步到合约层</strong></p><h2 id=七应急响应计划>七、应急响应计划</h2><p>即使做了充分防御，也要准备应急响应：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-solidity data-lang=solidity><span style=display:flex><span><span style=color:#66d9ef>contract</span> <span style=color:#a6e22e>Pausable</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>bool</span> <span style=color:#66d9ef>public</span> paused;
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>modifier</span> <span style=color:#a6e22e>whenNotPaused</span>() {
+</span></span><span style=display:flex><span>        require(<span style=color:#f92672>!</span>paused, <span style=color:#e6db74>&#34;Contract is paused&#34;</span>);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>_</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=安全检查清单>安全检查清单</h2><table><thead><tr><th>类别</th><th>检查项</th></tr></thead><tbody><tr><td>重入</td><td>是否使用 CEI 模式？是否有互斥锁？</td></tr><tr><td>访问控制</td><td>关键函数是否都有权限检查？</td></tr><tr><td>整数</td><td>是否使用 SafeMath 或 Solidity 0.8+？</td></tr><tr><td>预言机</td><td>是否使用 TWAP？是否有多数据源聚合？</td></tr><tr><td>闪电贷</td><td>价格是否有延迟生效机制？</td></tr><tr><td>前端</td><td>关键参数在合约层是否校验？</td></tr></tbody></table><h2 id=总结>总结</h2><p>智能合约安全需要"纵深防御"——每一层都可能失效，但多层防护让攻击者无懈可击。最重要的是：<strong>永远假设你的代码会被攻击，永远不要相信用户输入，永远保持谦逊</strong>。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/developer/08_gas_optimization/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/developer/06_contract_testing_deploy/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

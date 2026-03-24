@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>链上分析 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E9%93%BE%E4%B8%8A%E5%88%86%E6%9E%90/</link><description>Recent content in 链上分析 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:50:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E9%93%BE%E4%B8%8A%E5%88%86%E6%9E%90/index.xml" rel="self" type="application/rss+xml"/><item><title>链上数据分析实战 - 像侦探一样追踪资金</title><link>https://tiao0303.github.io/dex-bok/posts/t4_advanced/20_onchain_analysis_tutorial/</link><pubDate>Thu, 19 Mar 2026 00:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t4_advanced/20_onchain_analysis_tutorial/</guid><description>&lt;h2 id="为什么需要链上分析"&gt;为什么需要链上分析&lt;/h2&gt;
+&lt;h3 id="区块链的优势"&gt;区块链的优势&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 所有交易公开透明&lt;/li&gt;
+&lt;li&gt;✅ 数据不可篡改&lt;/li&gt;
+&lt;li&gt;✅ 实时可查&lt;/li&gt;
+&lt;li&gt;✅ 无信息不对称&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="能发现什么"&gt;能发现什么&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;信息&lt;/th&gt;
+ &lt;th&gt;价值&lt;/th&gt;
+ &lt;th&gt;例子&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;大户动向&lt;/td&gt;
+ &lt;td&gt;提前布局&lt;/td&gt;
+ &lt;td&gt;鲸鱼买入→跟投&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;项目方行为&lt;/td&gt;
+ &lt;td&gt;识别风险&lt;/td&gt;
+ &lt;td&gt;团队转账→警惕&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;资金流向&lt;/td&gt;
+ &lt;td&gt;发现趋势&lt;/td&gt;
+ &lt;td&gt;流入某协议→机会&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;聪明钱追踪&lt;/td&gt;
+ &lt;td&gt;抄作业&lt;/td&gt;
+ &lt;td&gt;KOL 持仓→参考&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="工具一etherscan-"&gt;工具一：Etherscan ⭐⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="基础功能"&gt;基础功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;查询交易记录&lt;/li&gt;
+&lt;li&gt;查看持币地址&lt;/li&gt;
+&lt;li&gt;监控大额转账&lt;/li&gt;
+&lt;li&gt;合约代码审计&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="实战技巧"&gt;实战技巧&lt;/h3&gt;
+&lt;h4 id="1-追踪大户钱包"&gt;1. 追踪大户钱包&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;步骤：
+1. 找到知名大户地址（如 V 神、a16z）
+2. 添加到 Watch List
+3. 设置邮件提醒
+4. 定期查看持仓变化
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="2-发现聪明钱"&gt;2. 发现聪明钱&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;方法：
+1. 找到早期买入某币的地址
+2. 查看该地址其他持仓
+3. 发现潜在机会
+4. 验证后跟投
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="3-监控项目方"&gt;3. 监控项目方&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;关注：
+- 团队钱包转账
+- 国库资金动向
+- 解锁代币流向
+- 异常大额转出
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="高级功能"&gt;高级功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;API 接口&lt;/strong&gt;：自动化监控&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;标签系统&lt;/strong&gt;：识别地址身份&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gas Tracker&lt;/strong&gt;：优化交易时机&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="工具二dune-analytics-"&gt;工具二：Dune Analytics ⭐⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="什么是-dune"&gt;什么是 Dune&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;链上数据 SQL 查询平台&lt;/li&gt;
+&lt;li&gt;社区创建 Dashboard&lt;/li&gt;
+&lt;li&gt;免费使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="核心功能"&gt;核心功能&lt;/h3&gt;
+&lt;h4 id="1-查询数据"&gt;1. 查询数据&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;-- 示例：查询 Uniswap V3 日交易量
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;SELECT&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; DATE_TRUNC(&lt;span style="color:#e6db74"&gt;&amp;#39;day&amp;#39;&lt;/span&gt;, evt_block_time) &lt;span style="color:#66d9ef"&gt;AS&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;day&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;SUM&lt;/span&gt;(amount_usd) &lt;span style="color:#66d9ef"&gt;AS&lt;/span&gt; volume
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;FROM&lt;/span&gt; uniswap_v3_ethereum.evt_swap
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;GROUP&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;BY&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;ORDER&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;BY&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;DESC&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;LIMIT&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;30&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="2-创建-dashboard"&gt;2. 创建 Dashboard&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;可视化展示&lt;/li&gt;
+&lt;li&gt;实时更新&lt;/li&gt;
+&lt;li&gt;分享链接&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="3-订阅警报"&gt;3. 订阅警报&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;价格突破&lt;/li&gt;
+&lt;li&gt;大额交易&lt;/li&gt;
+&lt;li&gt;TVL 变化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="热门-dashboard-推荐"&gt;热门 Dashboard 推荐&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;Dashboard&lt;/th&gt;
+ &lt;th&gt;用途&lt;/th&gt;
+ &lt;th&gt;链接&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Uniswap V3 Overview&lt;/td&gt;
+ &lt;td&gt;DEX 数据&lt;/td&gt;
+ &lt;td&gt;dune.com/uniswap&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;NFT Marketplace&lt;/td&gt;
+ &lt;td&gt;NFT 交易&lt;/td&gt;
+ &lt;td&gt;dune.com/nft&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;L2 Beat&lt;/td&gt;
+ &lt;td&gt;Layer2 数据&lt;/td&gt;
+ &lt;td&gt;dune.com/l2beat&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="工具三nansen-"&gt;工具三：Nansen ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="核心优势"&gt;核心优势&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;地址标签库（2 亿+）&lt;/li&gt;
+&lt;li&gt;聪明钱追踪&lt;/li&gt;
+&lt;li&gt;机构持仓分析&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="功能详解"&gt;功能详解&lt;/h3&gt;
+&lt;h4 id="1-smart-money"&gt;1. Smart Money&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;追踪对象：
+- 顶级基金（a16z、Paradigm）
+- 知名 KOL
+- 早期投资者
+- 成功交易者
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="2-token-god-mode"&gt;2. Token God Mode&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;查看：
+- 持有人分布
+- 大户增减仓
+- 交易所流入流出
+- 持仓盈亏
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="3-nft-god-mode"&gt;3. NFT God Mode&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;分析：
+- 稀有度排名
+- 大户收藏
+- 地板价趋势
+- 交易量变化
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="价格"&gt;价格&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;计划&lt;/th&gt;
+ &lt;th&gt;价格&lt;/th&gt;
+ &lt;th&gt;适合人群&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Free&lt;/td&gt;
+ &lt;td&gt;$0&lt;/td&gt;
+ &lt;td&gt;新手体验&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Standard&lt;/td&gt;
+ &lt;td&gt;$199/月&lt;/td&gt;
+ &lt;td&gt;个人投资者&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;VIP&lt;/td&gt;
+ &lt;td&gt;$999/月&lt;/td&gt;
+ &lt;td&gt;专业机构&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="工具四debank-"&gt;工具四：DeBank ⭐⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="核心功能-1"&gt;核心功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;多链资产总览&lt;/li&gt;
+&lt;li&gt;DeFi 持仓追踪&lt;/li&gt;
+&lt;li&gt;历史交易记录&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="使用场景"&gt;使用场景&lt;/h3&gt;
+&lt;h4 id="1-查看自己资产"&gt;1. 查看自己资产&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;支持链：
+- Ethereum
+- BSC
+- Polygon
+- Arbitrum
+- Optimism
+- 等 10+ 链
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="2-追踪大户"&gt;2. 追踪大户&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;步骤：
+1. 搜索大户地址
+2. 查看完整持仓
+3. 分析投资策略
+4. 学习参考
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="3-协议分析"&gt;3. 协议分析&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;数据：
+- TVL 趋势
+- 用户数
+- 交易量
+- 收入
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="优点"&gt;优点&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 完全免费&lt;/li&gt;
+&lt;li&gt;✅ 界面友好&lt;/li&gt;
+&lt;li&gt;✅ 多链支持&lt;/li&gt;
+&lt;li&gt;✅ 实时更新&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="工具五token-terminal-"&gt;工具五：Token Terminal ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="专注方向"&gt;专注方向&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;协议收入分析&lt;/li&gt;
+&lt;li&gt;财务指标对比&lt;/li&gt;
+&lt;li&gt;估值模型&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="核心指标"&gt;核心指标&lt;/h3&gt;
+&lt;h4 id="1-收入指标"&gt;1. 收入指标&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;指标&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;th&gt;用途&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Revenue&lt;/td&gt;
+ &lt;td&gt;协议收入&lt;/td&gt;
+ &lt;td&gt;盈利能力&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Fees&lt;/td&gt;
+ &lt;td&gt;用户付费&lt;/td&gt;
+ &lt;td&gt;需求强度&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Token Emission&lt;/td&gt;
+ &lt;td&gt;代币释放&lt;/td&gt;
+ &lt;td&gt;通胀压力&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id="2-估值指标"&gt;2. 估值指标&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;指标&lt;/th&gt;
+ &lt;th&gt;公式&lt;/th&gt;
+ &lt;th&gt;用途&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;P/S&lt;/td&gt;
+ &lt;td&gt;市值/收入&lt;/td&gt;
+ &lt;td&gt;估值高低&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;P/E&lt;/td&gt;
+ &lt;td&gt;市值/利润&lt;/td&gt;
+ &lt;td&gt;回本周期&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;FDV/TVL&lt;/td&gt;
+ &lt;td&gt;全流通/锁仓&lt;/td&gt;
+ &lt;td&gt;泡沫程度&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="实战应用"&gt;实战应用&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;筛选低估协议：
+1. P/S &amp;lt; 5
+2. 收入增长 &amp;gt;50%
+3. TVL 稳定增长
+4. 代币释放少
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="工具六arkham-intelligence-"&gt;工具六：Arkham Intelligence ⭐⭐⭐⭐&lt;/h2&gt;
+&lt;h3 id="特色功能"&gt;特色功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;实体标注（交易所、基金、项目方）&lt;/li&gt;
+&lt;li&gt;资金流向可视化&lt;/li&gt;
+&lt;li&gt;大额警报&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="实战案例"&gt;实战案例&lt;/h3&gt;
+&lt;h4 id="追踪交易所"&gt;追踪交易所&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;监控：
+- Binance 热钱包
+- Coinbase 机构钱包
+- FTX（暴雷前可提前发现）
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="发现异常"&gt;发现异常&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;警报条件：
+- 单笔&amp;gt;$1000 万转账
+- 项目方钱包异动
+- 交易所大额流入（可能砸盘）
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="我的分析工作流"&gt;我的分析工作流&lt;/h2&gt;
+&lt;h3 id="每日例行30-分钟"&gt;每日例行（30 分钟）&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. DeBank 查看持仓变化 (5min)
+2. Etherscan 检查警报 (5min)
+3. Dune 浏览热门 Dashboard (10min)
+4. Twitter 关注链上 KOL (10min)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="每周深度2-小时"&gt;每周深度（2 小时）&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. Nansen 分析聪明钱动向 (30min)
+2. Token Terminal 更新估值表 (30min)
+3. 撰写分析笔记 (30min)
+4. 调整持仓 (30min)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="每月复盘4-小时"&gt;每月复盘（4 小时）&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;1. 统计收益率
+2. 分析成功/失败案例
+3. 优化策略
+4. 制定下月计划
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="实战案例发现投资机会"&gt;实战案例：发现投资机会&lt;/h2&gt;
+&lt;h3 id="案例一提前发现-arbitrum-空投"&gt;案例一：提前发现 Arbitrum 空投&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;线索：
+1. Nansen 显示聪明钱大量使用 Arbitrum
+2. Dune 数据显示 TVL 快速增长
+3. 官方 Twitter 暗示空投
+
+行动：
+- 桥接资金到 Arbitrum
+- 使用主流 DEX
+- 获得$5000 空投
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="案例二识别-luna-风险"&gt;案例二：识别 Luna 风险&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;警报信号：
+1. 项目方钱包大额转账
+2. UST 池子不平衡
+3. 聪明钱提前出逃
+
+行动：
+- 提前卖出 LUNA
+- 兑换成 USDC
+- 避免归零损失
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="数据分析模板"&gt;数据分析模板&lt;/h2&gt;
+&lt;h3 id="项目调研清单"&gt;项目调研清单&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;基础信息：
+□ 团队背景
+□ 投资人
+□ 代币分配
+□ 解锁时间表
+
+链上数据：
+□ TVL 趋势
+□ 用户数增长
+□ 交易量
+□ 收入
+
+持仓分析：
+□ 大户持仓变化
+□ 聪明钱动向
+□ 交易所流向
+□ 社交媒体情绪
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="总结"&gt;总结&lt;/h2&gt;
+&lt;p&gt;链上分析核心：&lt;/p&gt;</description></item></channel></rss>

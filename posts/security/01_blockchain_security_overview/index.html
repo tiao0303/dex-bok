@@ -1,0 +1,126 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='区块链安全概述：为什么去中心化不等于无风险
+引言
+&ldquo;区块链是安全的&rdquo;——这是许多人入局加密世界时听到的第一句话。这句话既对也不对。区块链本身的共识机制确实提供了前所未有的数据不可篡改性，但一旦我们把目光从链层移开，移到智能合约、DApp、钱包和交易所，整个图景就完全不同了。
+本文作为系列开篇，带你建立对区块链安全的整体认知框架，理解风险究竟藏在哪里。
+信任的重新分配
+传统金融系统中，你信任银行、支付机构、监管机构——中心化的中介机构。在区块链世界中，我们用代码和密码学替代了这些中介。但这不意味着"无需信任"，而是把信任从人转移到了代码。
+关键区别在于：
+
+传统系统：你可以起诉银行、申请退款、冻结账户
+区块链系统：代码即法律。一旦漏洞被利用，资金可能永久丢失，没有撤销按钮
+
+这意味着智能合约的安全直接决定了用户资产的安全等级。
+区块链安全的三层风险模型
+第一层：链层（Layer 1）
+共识协议级别的攻击，如 51% 攻击、日食攻击等。主要影响小市值链，对主流公链威胁有限。
+第二层：协议层
+智能合约的代码逻辑漏洞。这是目前损失最大的风险源——据 Dune Analytics 数据，DeFi 历史上因合约漏洞损失已超过 60 亿美元。
+第三层：应用层
+钓鱼攻击、私钥泄露、社交工程。Web3 用户最大的实际威胁往往来自这一层。
+智能合约：安全的关键战场
+智能合约是部署在区块链上、自动执行的程序。当用户向合约转入加密资产，合约代码决定了这些资产如何被处理——正是这种"代码即金库"的特性，使得任何逻辑漏洞都可能直接转化为资产损失。
+高风险场景包括：
+
+DeFi 协议：AMM（自动做市商）、借贷平台、衍生品
+NFT 合约：批量铸造、随机数生成
+跨链桥：多链资产映射的复杂性带来额外风险
+DAO 治理：投票机制被操纵
+
+2024 年的教训：十大攻击事件回顾
+过去一年发生了多起震惊行业的安全事件：
+
+Bybit 前端攻击：利用多签钱包更新逻辑缺陷，损失约 14 亿美元（2025年2月）
+Ronin Bridge 攻击：社会工程+私钥管理缺陷
+多项闪电贷攻击：利用价格预言机漏洞获利
+社交工程持续威胁：Discord 被入侵、钓鱼链接泛滥
+
+这些事件的共同点：绝大多数攻击并非区块链本身被攻破，而是其上层的合约或运营环节出了问题。
+为什么安全很难
+区块链安全面临几个独特的挑战：
+
+不可逆性：链上交易无法撤销，发现漏洞时可能已有资产被盗
+透明性双刃剑：代码公开意味着漏洞也被公开可见（虽然同时也是众人可审计）
+组合性风险：DeFi 协议之间相互集成，一个协议的漏洞可能拖垮整个生态
+快速迭代压力：Competitive DeFi 环境下，项目方往往在安全审计未完成时急于上线
+
+如何评估一个项目的安全性
+作为普通用户，你可以从以下几个维度做初步判断：
+
+  
+      
+          评估维度
+          检查要点
+      
+  
+  
+      
+          审计报告
+          是否经过知名审计公司（如 Trail of Bits、OpenZeppelin、Certik）审计
+      
+      
+          代码开源
+          是否在 GitHub 等平台开源并有活跃维护
+      
+      
+          Bug Bounty
+          是否设有漏洞赏金计划
+      
+      
+          团队背景
+          核心开发者是否有安全从业背景
+      
+      
+          合约升级机制
+          是否有紧急暂停、速率限制等保护机制
+      
+  
+
+结语
+区块链安全不是"有了就行"的附属品，而是整个生态的地基。本文系列后续将深入剖析各类漏洞的原理、攻击案例和防御策略。无论你是开发者还是用户，理解这些风险都是保护自身资产的必修课。'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/security/01_blockchain_security_overview/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/security/01_blockchain_security_overview/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/security/01_blockchain_security_overview/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/security/01_blockchain_security_overview/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='区块链安全概述：为什么去中心化不等于无风险 引言 “区块链是安全的”——这是许多人入局加密世界时听到的第一句话。这句话既对也不对。区块链本身的共识机制确实提供了前所未有的数据不可篡改性，但一旦我们把目光从链层移开，移到智能合约、DApp、钱包和交易所，整个图景就完全不同了。
+本文作为系列开篇，带你建立对区块链安全的整体认知框架，理解风险究竟藏在哪里。
+信任的重新分配 传统金融系统中，你信任银行、支付机构、监管机构——中心化的中介机构。在区块链世界中，我们用代码和密码学替代了这些中介。但这不意味着"无需信任"，而是把信任从人转移到了代码。
+关键区别在于：
+传统系统：你可以起诉银行、申请退款、冻结账户 区块链系统：代码即法律。一旦漏洞被利用，资金可能永久丢失，没有撤销按钮 这意味着智能合约的安全直接决定了用户资产的安全等级。
+区块链安全的三层风险模型 第一层：链层（Layer 1） 共识协议级别的攻击，如 51% 攻击、日食攻击等。主要影响小市值链，对主流公链威胁有限。
+第二层：协议层 智能合约的代码逻辑漏洞。这是目前损失最大的风险源——据 Dune Analytics 数据，DeFi 历史上因合约漏洞损失已超过 60 亿美元。
+第三层：应用层 钓鱼攻击、私钥泄露、社交工程。Web3 用户最大的实际威胁往往来自这一层。
+智能合约：安全的关键战场 智能合约是部署在区块链上、自动执行的程序。当用户向合约转入加密资产，合约代码决定了这些资产如何被处理——正是这种"代码即金库"的特性，使得任何逻辑漏洞都可能直接转化为资产损失。
+高风险场景包括：
+DeFi 协议：AMM（自动做市商）、借贷平台、衍生品 NFT 合约：批量铸造、随机数生成 跨链桥：多链资产映射的复杂性带来额外风险 DAO 治理：投票机制被操纵 2024 年的教训：十大攻击事件回顾 过去一年发生了多起震惊行业的安全事件：
+Bybit 前端攻击：利用多签钱包更新逻辑缺陷，损失约 14 亿美元（2025年2月） Ronin Bridge 攻击：社会工程+私钥管理缺陷 多项闪电贷攻击：利用价格预言机漏洞获利 社交工程持续威胁：Discord 被入侵、钓鱼链接泛滥 这些事件的共同点：绝大多数攻击并非区块链本身被攻破，而是其上层的合约或运营环节出了问题。
+为什么安全很难 区块链安全面临几个独特的挑战：
+不可逆性：链上交易无法撤销，发现漏洞时可能已有资产被盗 透明性双刃剑：代码公开意味着漏洞也被公开可见（虽然同时也是众人可审计） 组合性风险：DeFi 协议之间相互集成，一个协议的漏洞可能拖垮整个生态 快速迭代压力：Competitive DeFi 环境下，项目方往往在安全审计未完成时急于上线 如何评估一个项目的安全性 作为普通用户，你可以从以下几个维度做初步判断：
+评估维度 检查要点 审计报告 是否经过知名审计公司（如 Trail of Bits、OpenZeppelin、Certik）审计 代码开源 是否在 GitHub 等平台开源并有活跃维护 Bug Bounty 是否设有漏洞赏金计划 团队背景 核心开发者是否有安全从业背景 合约升级机制 是否有紧急暂停、速率限制等保护机制 结语 区块链安全不是"有了就行"的附属品，而是整个生态的地基。本文系列后续将深入剖析各类漏洞的原理、攻击案例和防御策略。无论你是开发者还是用户，理解这些风险都是保护自身资产的必修课。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='区块链安全概述：为什么去中心化不等于无风险 引言 “区块链是安全的”——这是许多人入局加密世界时听到的第一句话。这句话既对也不对。区块链本身的共识机制确实提供了前所未有的数据不可篡改性，但一旦我们把目光从链层移开，移到智能合约、DApp、钱包和交易所，整个图景就完全不同了。
+本文作为系列开篇，带你建立对区块链安全的整体认知框架，理解风险究竟藏在哪里。
+信任的重新分配 传统金融系统中，你信任银行、支付机构、监管机构——中心化的中介机构。在区块链世界中，我们用代码和密码学替代了这些中介。但这不意味着"无需信任"，而是把信任从人转移到了代码。
+关键区别在于：
+传统系统：你可以起诉银行、申请退款、冻结账户 区块链系统：代码即法律。一旦漏洞被利用，资金可能永久丢失，没有撤销按钮 这意味着智能合约的安全直接决定了用户资产的安全等级。
+区块链安全的三层风险模型 第一层：链层（Layer 1） 共识协议级别的攻击，如 51% 攻击、日食攻击等。主要影响小市值链，对主流公链威胁有限。
+第二层：协议层 智能合约的代码逻辑漏洞。这是目前损失最大的风险源——据 Dune Analytics 数据，DeFi 历史上因合约漏洞损失已超过 60 亿美元。
+第三层：应用层 钓鱼攻击、私钥泄露、社交工程。Web3 用户最大的实际威胁往往来自这一层。
+智能合约：安全的关键战场 智能合约是部署在区块链上、自动执行的程序。当用户向合约转入加密资产，合约代码决定了这些资产如何被处理——正是这种"代码即金库"的特性，使得任何逻辑漏洞都可能直接转化为资产损失。
+高风险场景包括：
+DeFi 协议：AMM（自动做市商）、借贷平台、衍生品 NFT 合约：批量铸造、随机数生成 跨链桥：多链资产映射的复杂性带来额外风险 DAO 治理：投票机制被操纵 2024 年的教训：十大攻击事件回顾 过去一年发生了多起震惊行业的安全事件：
+Bybit 前端攻击：利用多签钱包更新逻辑缺陷，损失约 14 亿美元（2025年2月） Ronin Bridge 攻击：社会工程+私钥管理缺陷 多项闪电贷攻击：利用价格预言机漏洞获利 社交工程持续威胁：Discord 被入侵、钓鱼链接泛滥 这些事件的共同点：绝大多数攻击并非区块链本身被攻破，而是其上层的合约或运营环节出了问题。
+为什么安全很难 区块链安全面临几个独特的挑战：
+不可逆性：链上交易无法撤销，发现漏洞时可能已有资产被盗 透明性双刃剑：代码公开意味着漏洞也被公开可见（虽然同时也是众人可审计） 组合性风险：DeFi 协议之间相互集成，一个协议的漏洞可能拖垮整个生态 快速迭代压力：Competitive DeFi 环境下，项目方往往在安全审计未完成时急于上线 如何评估一个项目的安全性 作为普通用户，你可以从以下几个维度做初步判断：
+评估维度 检查要点 审计报告 是否经过知名审计公司（如 Trail of Bits、OpenZeppelin、Certik）审计 代码开源 是否在 GitHub 等平台开源并有活跃维护 Bug Bounty 是否设有漏洞赏金计划 团队背景 核心开发者是否有安全从业背景 合约升级机制 是否有紧急暂停、速率限制等保护机制 结语 区块链安全不是"有了就行"的附属品，而是整个生态的地基。本文系列后续将深入剖析各类漏洞的原理、攻击案例和防御策略。无论你是开发者还是用户，理解这些风险都是保护自身资产的必修课。'><meta itemprop=wordCount content="83"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='区块链安全概述：为什么去中心化不等于无风险 引言 “区块链是安全的”——这是许多人入局加密世界时听到的第一句话。这句话既对也不对。区块链本身的共识机制确实提供了前所未有的数据不可篡改性，但一旦我们把目光从链层移开，移到智能合约、DApp、钱包和交易所，整个图景就完全不同了。
+本文作为系列开篇，带你建立对区块链安全的整体认知框架，理解风险究竟藏在哪里。
+信任的重新分配 传统金融系统中，你信任银行、支付机构、监管机构——中心化的中介机构。在区块链世界中，我们用代码和密码学替代了这些中介。但这不意味着"无需信任"，而是把信任从人转移到了代码。
+关键区别在于：
+传统系统：你可以起诉银行、申请退款、冻结账户 区块链系统：代码即法律。一旦漏洞被利用，资金可能永久丢失，没有撤销按钮 这意味着智能合约的安全直接决定了用户资产的安全等级。
+区块链安全的三层风险模型 第一层：链层（Layer 1） 共识协议级别的攻击，如 51% 攻击、日食攻击等。主要影响小市值链，对主流公链威胁有限。
+第二层：协议层 智能合约的代码逻辑漏洞。这是目前损失最大的风险源——据 Dune Analytics 数据，DeFi 历史上因合约漏洞损失已超过 60 亿美元。
+第三层：应用层 钓鱼攻击、私钥泄露、社交工程。Web3 用户最大的实际威胁往往来自这一层。
+智能合约：安全的关键战场 智能合约是部署在区块链上、自动执行的程序。当用户向合约转入加密资产，合约代码决定了这些资产如何被处理——正是这种"代码即金库"的特性，使得任何逻辑漏洞都可能直接转化为资产损失。
+高风险场景包括：
+DeFi 协议：AMM（自动做市商）、借贷平台、衍生品 NFT 合约：批量铸造、随机数生成 跨链桥：多链资产映射的复杂性带来额外风险 DAO 治理：投票机制被操纵 2024 年的教训：十大攻击事件回顾 过去一年发生了多起震惊行业的安全事件：
+Bybit 前端攻击：利用多签钱包更新逻辑缺陷，损失约 14 亿美元（2025年2月） Ronin Bridge 攻击：社会工程+私钥管理缺陷 多项闪电贷攻击：利用价格预言机漏洞获利 社交工程持续威胁：Discord 被入侵、钓鱼链接泛滥 这些事件的共同点：绝大多数攻击并非区块链本身被攻破，而是其上层的合约或运营环节出了问题。
+为什么安全很难 区块链安全面临几个独特的挑战：
+不可逆性：链上交易无法撤销，发现漏洞时可能已有资产被盗 透明性双刃剑：代码公开意味着漏洞也被公开可见（虽然同时也是众人可审计） 组合性风险：DeFi 协议之间相互集成，一个协议的漏洞可能拖垮整个生态 快速迭代压力：Competitive DeFi 环境下，项目方往往在安全审计未完成时急于上线 如何评估一个项目的安全性 作为普通用户，你可以从以下几个维度做初步判断：
+评估维度 检查要点 审计报告 是否经过知名审计公司（如 Trail of Bits、OpenZeppelin、Certik）审计 代码开源 是否在 GitHub 等平台开源并有活跃维护 Bug Bounty 是否设有漏洞赏金计划 团队背景 核心开发者是否有安全从业背景 合约升级机制 是否有紧急暂停、速率限制等保护机制 结语 区块链安全不是"有了就行"的附属品，而是整个生态的地基。本文系列后续将深入剖析各类漏洞的原理、攻击案例和防御策略。无论你是开发者还是用户，理解这些风险都是保护自身资产的必修课。'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-01_blockchain_security_overview"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#引言>引言</a></li><li><a href=#信任的重新分配>信任的重新分配</a></li><li><a href=#区块链安全的三层风险模型>区块链安全的三层风险模型</a><ul><li><a href=#第一层链层layer-1>第一层：链层（Layer 1）</a></li><li><a href=#第二层协议层>第二层：协议层</a></li><li><a href=#第三层应用层>第三层：应用层</a></li></ul></li><li><a href=#智能合约安全的关键战场>智能合约：安全的关键战场</a></li><li><a href=#2024-年的教训十大攻击事件回顾>2024 年的教训：十大攻击事件回顾</a></li><li><a href=#为什么安全很难>为什么安全很难</a></li><li><a href=#如何评估一个项目的安全性>如何评估一个项目的安全性</a></li><li><a href=#结语>结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>83 字</span></div></header><h1 id=区块链安全概述为什么去中心化不等于无风险>区块链安全概述：为什么去中心化不等于无风险</h1><h2 id=引言>引言</h2><p>&ldquo;区块链是安全的&rdquo;——这是许多人入局加密世界时听到的第一句话。这句话既对也不对。区块链本身的共识机制确实提供了前所未有的数据不可篡改性，但一旦我们把目光从链层移开，移到智能合约、DApp、钱包和交易所，整个图景就完全不同了。</p><p>本文作为系列开篇，带你建立对区块链安全的整体认知框架，理解风险究竟藏在哪里。</p><h2 id=信任的重新分配>信任的重新分配</h2><p>传统金融系统中，你信任银行、支付机构、监管机构——中心化的中介机构。在区块链世界中，我们用代码和密码学替代了这些中介。但这不意味着"无需信任"，而是把信任从人转移到了代码。</p><p><strong>关键区别在于：</strong></p><ul><li>传统系统：你可以起诉银行、申请退款、冻结账户</li><li>区块链系统：代码即法律。一旦漏洞被利用，资金可能永久丢失，没有撤销按钮</li></ul><p>这意味着智能合约的安全直接决定了用户资产的安全等级。</p><h2 id=区块链安全的三层风险模型>区块链安全的三层风险模型</h2><h3 id=第一层链层layer-1>第一层：链层（Layer 1）</h3><p>共识协议级别的攻击，如 51% 攻击、日食攻击等。主要影响小市值链，对主流公链威胁有限。</p><h3 id=第二层协议层>第二层：协议层</h3><p>智能合约的代码逻辑漏洞。这是目前损失最大的风险源——据 Dune Analytics 数据，DeFi 历史上因合约漏洞损失已超过 <strong>60 亿美元</strong>。</p><h3 id=第三层应用层>第三层：应用层</h3><p>钓鱼攻击、私钥泄露、社交工程。Web3 用户最大的实际威胁往往来自这一层。</p><h2 id=智能合约安全的关键战场>智能合约：安全的关键战场</h2><p>智能合约是部署在区块链上、自动执行的程序。当用户向合约转入加密资产，合约代码决定了这些资产如何被处理——正是这种"代码即金库"的特性，使得任何逻辑漏洞都可能直接转化为资产损失。</p><p><strong>高风险场景包括：</strong></p><ul><li><strong>DeFi 协议</strong>：AMM（自动做市商）、借贷平台、衍生品</li><li><strong>NFT 合约</strong>：批量铸造、随机数生成</li><li><strong>跨链桥</strong>：多链资产映射的复杂性带来额外风险</li><li><strong>DAO 治理</strong>：投票机制被操纵</li></ul><h2 id=2024-年的教训十大攻击事件回顾>2024 年的教训：十大攻击事件回顾</h2><p>过去一年发生了多起震惊行业的安全事件：</p><ol><li><strong>Bybit 前端攻击</strong>：利用多签钱包更新逻辑缺陷，损失约 14 亿美元（2025年2月）</li><li><strong>Ronin Bridge 攻击</strong>：社会工程+私钥管理缺陷</li><li><strong>多项闪电贷攻击</strong>：利用价格预言机漏洞获利</li><li><strong>社交工程持续威胁</strong>：Discord 被入侵、钓鱼链接泛滥</li></ol><p>这些事件的共同点：<strong>绝大多数攻击并非区块链本身被攻破，而是其上层的合约或运营环节出了问题。</strong></p><h2 id=为什么安全很难>为什么安全很难</h2><p>区块链安全面临几个独特的挑战：</p><ul><li><strong>不可逆性</strong>：链上交易无法撤销，发现漏洞时可能已有资产被盗</li><li><strong>透明性双刃剑</strong>：代码公开意味着漏洞也被公开可见（虽然同时也是众人可审计）</li><li><strong>组合性风险</strong>：DeFi 协议之间相互集成，一个协议的漏洞可能拖垮整个生态</li><li><strong>快速迭代压力</strong>：Competitive DeFi 环境下，项目方往往在安全审计未完成时急于上线</li></ul><h2 id=如何评估一个项目的安全性>如何评估一个项目的安全性</h2><p>作为普通用户，你可以从以下几个维度做初步判断：</p><table><thead><tr><th>评估维度</th><th>检查要点</th></tr></thead><tbody><tr><td>审计报告</td><td>是否经过知名审计公司（如 Trail of Bits、OpenZeppelin、Certik）审计</td></tr><tr><td>代码开源</td><td>是否在 GitHub 等平台开源并有活跃维护</td></tr><tr><td>Bug Bounty</td><td>是否设有漏洞赏金计划</td></tr><tr><td>团队背景</td><td>核心开发者是否有安全从业背景</td></tr><tr><td>合约升级机制</td><td>是否有紧急暂停、速率限制等保护机制</td></tr></tbody></table><h2 id=结语>结语</h2><p>区块链安全不是"有了就行"的附属品，而是整个生态的地基。本文系列后续将深入剖析各类漏洞的原理、攻击案例和防御策略。无论你是开发者还是用户，理解这些风险都是保护自身资产的必修课。</p><blockquote><p>下一篇文章我们将深入探讨智能合约中最常见的漏洞类型——整数溢出、访问控制缺陷、拒绝服务等。</p></blockquote><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/security/02_common_vulnerabilities/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/security/11_dex_security_audit/>DEX 智能合约审计入门 - 避开 90% 的坑</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

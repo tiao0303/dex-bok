@@ -1,0 +1,250 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>用 OpenClaw 构建多智能体团队：角色划分与任务协调实战 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="用 OpenClaw 构建多智能体团队：角色划分与任务协调实战
+
+标签：OpenClaw / 多智能体 / 实战
+日期：2026-03-23
+专题：OpenClaw 深度探索
+
+
+从单兵作战到团队协作
+用 AI 写代码不难，但用 AI 做复杂项目（调研 → 架构 → 开发 → 评审 → 决策）就复杂了。一个通用的 AI 无法同时精通所有领域。
+OpenClaw 的解决方案是：多智能体团队——每个 Agent 专注一个角色，协同完成复杂任务。
+
+团队角色设计
+        ┌─────────────────────────────┐
+        │     main (协调员)             │
+        │  接收任务 → 分析 → 分派 → 汇总   │
+        └──────────┬──────────────────┘
+                   │
+    ┌──────────────┼──────────────────────┐
+    ▼              ▼                      ▼
+ researcher    architect              developer
+ (调研员)       (架构师)               (开发者)
+    │              │                      │
+    ▼              ▼                      ▼
+  reviewer     frontend             security
+ (评审)        (前端)               (安全)
+                   │
+                   ▼                decider
+               (决策者)
+各角色职责
+
+  
+      
+          角色
+          输入
+          输出
+          特点
+      
+  
+  
+      
+          researcher
+          问题/背景
+          调研报告、市场分析
+          广度优先，信息挖掘
+      
+      
+          architect
+          需求
+          架构设计、技术选型
+          系统性、前瞻性
+      
+      
+          developer
+          设计稿
+          代码实现
+          可执行、可测试
+      
+      
+          frontend
+          需求
+          UI设计方案、组件规范
+          用户视角
+      
+      
+          reviewer
+          方案/代码
+          评审报告、改进建议
+          批判性思维
+      
+      
+          security
+          方案/代码
+          风险矩阵、安全建议
+          底线思维
+      
+      
+          decider
+          各方意见
+          最终决策
+          权衡利弊、拍板
+      
+  
+
+
+任务分配流程
+案例：DEX 聚合器项目
+用户（阿白）
+    │
+    ▼ 发起项目请求
+main (协调员)
+    │
+    ├── 解析任务 → 需要：调研 + 架构 + 开发 + 前端 + 安全 + 评审 + 决策
+    │
+    ▼ 并行派发（5路同时）
+    ┌─────────┬──────────┬─────────┬────────┬────────┐
+    ▼         ▼          ▼         ▼        ▼        │
+researcher architect developer frontend security        │
+    │         │          │         │        │        │
+    │         │          │         │        │        │
+    │         │          │         │        │        │
+    └─────────┴──────────┴─────────┴────────┴────────┘
+                        │
+                        ▼ 各自输出报告
+                    reviewer (综合评审)
+                        │
+                        ▼ 评审结论
+                     decider (最终决策)
+                        │
+                        ▼
+                    汇总报告 → 发给用户
+实际执行命令
+# main 协调员收到 阿白 的请求后
+main: @architect @researcher @developer @frontend @security 
+      基于DEX聚合器项目，各自输出方案
+
+# 各 Agent 并行工作
+researcher  → 输出 RESEARCH.md（竞品分析）
+architect   → 输出 ARCHITECTURE.md（系统架构）
+developer   → 输出 DEVELOP.md（合约设计）
+frontend   → 输出 FRONTEND.md（UI设计）
+security   → 输出 SECURITY.md（风险矩阵）
+
+# 评审汇总
+reviewer   → 输出 REVIEW.md（综合评审）
+
+# 最终决策
+decider    → 输出 DECISION.md（Go/No-Go）
+
+工作区隔离设计
+每个 Agent 的工作区完全独立："><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/openclaw-series/03_openclaw_multi_agent/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/openclaw-series/03_openclaw_multi_agent/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/openclaw-series/03_openclaw_multi_agent/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/openclaw-series/03_openclaw_multi_agent/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="用 OpenClaw 构建多智能体团队：角色划分与任务协调实战"><meta property="og:description" content="用 OpenClaw 构建多智能体团队：角色划分与任务协调实战 标签：OpenClaw / 多智能体 / 实战
+日期：2026-03-23
+专题：OpenClaw 深度探索
+从单兵作战到团队协作 用 AI 写代码不难，但用 AI 做复杂项目（调研 → 架构 → 开发 → 评审 → 决策）就复杂了。一个通用的 AI 无法同时精通所有领域。
+OpenClaw 的解决方案是：多智能体团队——每个 Agent 专注一个角色，协同完成复杂任务。
+团队角色设计 ┌─────────────────────────────┐ │ main (协调员) │ │ 接收任务 → 分析 → 分派 → 汇总 │ └──────────┬──────────────────┘ │ ┌──────────────┼──────────────────────┐ ▼ ▼ ▼ researcher architect developer (调研员) (架构师) (开发者) │ │ │ ▼ ▼ ▼ reviewer frontend security (评审) (前端) (安全) │ ▼ decider (决策者) 各角色职责 角色 输入 输出 特点 researcher 问题/背景 调研报告、市场分析 广度优先，信息挖掘 architect 需求 架构设计、技术选型 系统性、前瞻性 developer 设计稿 代码实现 可执行、可测试 frontend 需求 UI设计方案、组件规范 用户视角 reviewer 方案/代码 评审报告、改进建议 批判性思维 security 方案/代码 风险矩阵、安全建议 底线思维 decider 各方意见 最终决策 权衡利弊、拍板 任务分配流程 案例：DEX 聚合器项目 用户（阿白） │ ▼ 发起项目请求 main (协调员) │ ├── 解析任务 → 需要：调研 + 架构 + 开发 + 前端 + 安全 + 评审 + 决策 │ ▼ 并行派发（5路同时） ┌─────────┬──────────┬─────────┬────────┬────────┐ ▼ ▼ ▼ ▼ ▼ │ researcher architect developer frontend security │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ └─────────┴──────────┴─────────┴────────┴────────┘ │ ▼ 各自输出报告 reviewer (综合评审) │ ▼ 评审结论 decider (最终决策) │ ▼ 汇总报告 → 发给用户 实际执行命令 # main 协调员收到 阿白 的请求后 main: @architect @researcher @developer @frontend @security 基于DEX聚合器项目，各自输出方案 # 各 Agent 并行工作 researcher → 输出 RESEARCH.md（竞品分析） architect → 输出 ARCHITECTURE.md（系统架构） developer → 输出 DEVELOP.md（合约设计） frontend → 输出 FRONTEND.md（UI设计） security → 输出 SECURITY.md（风险矩阵） # 评审汇总 reviewer → 输出 REVIEW.md（综合评审） # 最终决策 decider → 输出 DECISION.md（Go/No-Go） 工作区隔离设计 每个 Agent 的工作区完全独立："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="openclaw-series"><meta property="article:published_time" content="2026-03-23T00:00:00+00:00"><meta property="article:modified_time" content="2026-03-23T00:00:00+00:00"><meta property="article:tag" content="OpenClaw"><meta property="article:tag" content="AI"><meta property="article:tag" content="工具"><meta itemprop=name content="用 OpenClaw 构建多智能体团队：角色划分与任务协调实战"><meta itemprop=description content="用 OpenClaw 构建多智能体团队：角色划分与任务协调实战 标签：OpenClaw / 多智能体 / 实战
+日期：2026-03-23
+专题：OpenClaw 深度探索
+从单兵作战到团队协作 用 AI 写代码不难，但用 AI 做复杂项目（调研 → 架构 → 开发 → 评审 → 决策）就复杂了。一个通用的 AI 无法同时精通所有领域。
+OpenClaw 的解决方案是：多智能体团队——每个 Agent 专注一个角色，协同完成复杂任务。
+团队角色设计 ┌─────────────────────────────┐ │ main (协调员) │ │ 接收任务 → 分析 → 分派 → 汇总 │ └──────────┬──────────────────┘ │ ┌──────────────┼──────────────────────┐ ▼ ▼ ▼ researcher architect developer (调研员) (架构师) (开发者) │ │ │ ▼ ▼ ▼ reviewer frontend security (评审) (前端) (安全) │ ▼ decider (决策者) 各角色职责 角色 输入 输出 特点 researcher 问题/背景 调研报告、市场分析 广度优先，信息挖掘 architect 需求 架构设计、技术选型 系统性、前瞻性 developer 设计稿 代码实现 可执行、可测试 frontend 需求 UI设计方案、组件规范 用户视角 reviewer 方案/代码 评审报告、改进建议 批判性思维 security 方案/代码 风险矩阵、安全建议 底线思维 decider 各方意见 最终决策 权衡利弊、拍板 任务分配流程 案例：DEX 聚合器项目 用户（阿白） │ ▼ 发起项目请求 main (协调员) │ ├── 解析任务 → 需要：调研 + 架构 + 开发 + 前端 + 安全 + 评审 + 决策 │ ▼ 并行派发（5路同时） ┌─────────┬──────────┬─────────┬────────┬────────┐ ▼ ▼ ▼ ▼ ▼ │ researcher architect developer frontend security │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ └─────────┴──────────┴─────────┴────────┴────────┘ │ ▼ 各自输出报告 reviewer (综合评审) │ ▼ 评审结论 decider (最终决策) │ ▼ 汇总报告 → 发给用户 实际执行命令 # main 协调员收到 阿白 的请求后 main: @architect @researcher @developer @frontend @security 基于DEX聚合器项目，各自输出方案 # 各 Agent 并行工作 researcher → 输出 RESEARCH.md（竞品分析） architect → 输出 ARCHITECTURE.md（系统架构） developer → 输出 DEVELOP.md（合约设计） frontend → 输出 FRONTEND.md（UI设计） security → 输出 SECURITY.md（风险矩阵） # 评审汇总 reviewer → 输出 REVIEW.md（综合评审） # 最终决策 decider → 输出 DECISION.md（Go/No-Go） 工作区隔离设计 每个 Agent 的工作区完全独立："><meta itemprop=datePublished content="2026-03-23T00:00:00+00:00"><meta itemprop=dateModified content="2026-03-23T00:00:00+00:00"><meta itemprop=wordCount content="436"><meta itemprop=keywords content="OpenClaw,AI,工具"><meta name=twitter:card content="summary"><meta name=twitter:title content="用 OpenClaw 构建多智能体团队：角色划分与任务协调实战"><meta name=twitter:description content="用 OpenClaw 构建多智能体团队：角色划分与任务协调实战 标签：OpenClaw / 多智能体 / 实战
+日期：2026-03-23
+专题：OpenClaw 深度探索
+从单兵作战到团队协作 用 AI 写代码不难，但用 AI 做复杂项目（调研 → 架构 → 开发 → 评审 → 决策）就复杂了。一个通用的 AI 无法同时精通所有领域。
+OpenClaw 的解决方案是：多智能体团队——每个 Agent 专注一个角色，协同完成复杂任务。
+团队角色设计 ┌─────────────────────────────┐ │ main (协调员) │ │ 接收任务 → 分析 → 分派 → 汇总 │ └──────────┬──────────────────┘ │ ┌──────────────┼──────────────────────┐ ▼ ▼ ▼ researcher architect developer (调研员) (架构师) (开发者) │ │ │ ▼ ▼ ▼ reviewer frontend security (评审) (前端) (安全) │ ▼ decider (决策者) 各角色职责 角色 输入 输出 特点 researcher 问题/背景 调研报告、市场分析 广度优先，信息挖掘 architect 需求 架构设计、技术选型 系统性、前瞻性 developer 设计稿 代码实现 可执行、可测试 frontend 需求 UI设计方案、组件规范 用户视角 reviewer 方案/代码 评审报告、改进建议 批判性思维 security 方案/代码 风险矩阵、安全建议 底线思维 decider 各方意见 最终决策 权衡利弊、拍板 任务分配流程 案例：DEX 聚合器项目 用户（阿白） │ ▼ 发起项目请求 main (协调员) │ ├── 解析任务 → 需要：调研 + 架构 + 开发 + 前端 + 安全 + 评审 + 决策 │ ▼ 并行派发（5路同时） ┌─────────┬──────────┬─────────┬────────┬────────┐ ▼ ▼ ▼ ▼ ▼ │ researcher architect developer frontend security │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ └─────────┴──────────┴─────────┴────────┴────────┘ │ ▼ 各自输出报告 reviewer (综合评审) │ ▼ 评审结论 decider (最终决策) │ ▼ 汇总报告 → 发给用户 实际执行命令 # main 协调员收到 阿白 的请求后 main: @architect @researcher @developer @frontend @security 基于DEX聚合器项目，各自输出方案 # 各 Agent 并行工作 researcher → 输出 RESEARCH.md（竞品分析） architect → 输出 ARCHITECTURE.md（系统架构） developer → 输出 DEVELOP.md（合约设计） frontend → 输出 FRONTEND.md（UI设计） security → 输出 SECURITY.md（风险矩阵） # 评审汇总 reviewer → 输出 REVIEW.md（综合评审） # 最终决策 decider → 输出 DECISION.md（Go/No-Go） 工作区隔离设计 每个 Agent 的工作区完全独立："><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-03_openclaw_multi_agent"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#从单兵作战到团队协作>从单兵作战到团队协作</a></li><li><a href=#团队角色设计>团队角色设计</a><ul><li><a href=#各角色职责>各角色职责</a></li></ul></li><li><a href=#任务分配流程>任务分配流程</a><ul><li><a href=#案例dex-聚合器项目>案例：DEX 聚合器项目</a></li><li><a href=#实际执行命令>实际执行命令</a></li></ul></li><li><a href=#工作区隔离设计>工作区隔离设计</a></li><li><a href=#通信机制sessions>通信机制：sessions</a></li><li><a href=#协同的黄金法则>协同的黄金法则</a><ul><li><a href=#-正确做法>✅ 正确做法</a></li><li><a href=#-错误做法>❌ 错误做法</a></li></ul></li><li><a href=#实战技巧>实战技巧</a><ul><li><a href=#技巧-1利用-soulmd-定义角色>技巧 1：利用 SOUL.md 定义角色</a></li><li><a href=#技巧-2利用-agentsmd-定义工作流>技巧 2：利用 AGENTS.md 定义工作流</a></li><li><a href=#技巧-3利用-heartbeat-做周期性工作>技巧 3：利用 HEARTBEAT 做周期性工作</a></li></ul></li><li><a href=#适用场景-vs-不适用场景>适用场景 vs 不适用场景</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>用 OpenClaw 构建多智能体团队：角色划分与任务协调实战</h1><div class=article-meta><time datetime=2026-03-23>2026-03-23</time>
+<span>•</span>
+<span>436 字</span>
+<span>•</span>
+<span>OpenClaw 深度探索</span></div><div class=article-tags><a href=/dex-bok/tags/openclaw/ class=article-tag>OpenClaw</a>
+<a href=/dex-bok/tags/ai/ class=article-tag>AI</a>
+<a href=/dex-bok/tags/%E5%B7%A5%E5%85%B7/ class=article-tag>工具</a></div></header><h1 id=用-openclaw-构建多智能体团队角色划分与任务协调实战>用 OpenClaw 构建多智能体团队：角色划分与任务协调实战</h1><blockquote><p><strong>标签</strong>：OpenClaw / 多智能体 / 实战<br><strong>日期</strong>：2026-03-23<br><strong>专题</strong>：OpenClaw 深度探索</p></blockquote><hr><h2 id=从单兵作战到团队协作>从单兵作战到团队协作</h2><p>用 AI 写代码不难，但用 AI 做复杂项目（调研 → 架构 → 开发 → 评审 → 决策）就复杂了。一个通用的 AI 无法同时精通所有领域。</p><p>OpenClaw 的解决方案是：<strong>多智能体团队</strong>——每个 Agent 专注一个角色，协同完成复杂任务。</p><hr><h2 id=团队角色设计>团队角色设计</h2><pre tabindex=0><code>        ┌─────────────────────────────┐
+        │     main (协调员)             │
+        │  接收任务 → 分析 → 分派 → 汇总   │
+        └──────────┬──────────────────┘
+                   │
+    ┌──────────────┼──────────────────────┐
+    ▼              ▼                      ▼
+ researcher    architect              developer
+ (调研员)       (架构师)               (开发者)
+    │              │                      │
+    ▼              ▼                      ▼
+  reviewer     frontend             security
+ (评审)        (前端)               (安全)
+                   │
+                   ▼                decider
+               (决策者)
+</code></pre><h3 id=各角色职责>各角色职责</h3><table><thead><tr><th>角色</th><th>输入</th><th>输出</th><th>特点</th></tr></thead><tbody><tr><td><strong>researcher</strong></td><td>问题/背景</td><td>调研报告、市场分析</td><td>广度优先，信息挖掘</td></tr><tr><td><strong>architect</strong></td><td>需求</td><td>架构设计、技术选型</td><td>系统性、前瞻性</td></tr><tr><td><strong>developer</strong></td><td>设计稿</td><td>代码实现</td><td>可执行、可测试</td></tr><tr><td><strong>frontend</strong></td><td>需求</td><td>UI设计方案、组件规范</td><td>用户视角</td></tr><tr><td><strong>reviewer</strong></td><td>方案/代码</td><td>评审报告、改进建议</td><td>批判性思维</td></tr><tr><td><strong>security</strong></td><td>方案/代码</td><td>风险矩阵、安全建议</td><td>底线思维</td></tr><tr><td><strong>decider</strong></td><td>各方意见</td><td>最终决策</td><td>权衡利弊、拍板</td></tr></tbody></table><hr><h2 id=任务分配流程>任务分配流程</h2><h3 id=案例dex-聚合器项目>案例：DEX 聚合器项目</h3><pre tabindex=0><code>用户（阿白）
+    │
+    ▼ 发起项目请求
+main (协调员)
+    │
+    ├── 解析任务 → 需要：调研 + 架构 + 开发 + 前端 + 安全 + 评审 + 决策
+    │
+    ▼ 并行派发（5路同时）
+    ┌─────────┬──────────┬─────────┬────────┬────────┐
+    ▼         ▼          ▼         ▼        ▼        │
+researcher architect developer frontend security        │
+    │         │          │         │        │        │
+    │         │          │         │        │        │
+    │         │          │         │        │        │
+    └─────────┴──────────┴─────────┴────────┴────────┘
+                        │
+                        ▼ 各自输出报告
+                    reviewer (综合评审)
+                        │
+                        ▼ 评审结论
+                     decider (最终决策)
+                        │
+                        ▼
+                    汇总报告 → 发给用户
+</code></pre><h3 id=实际执行命令>实际执行命令</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># main 协调员收到 阿白 的请求后</span>
+</span></span><span style=display:flex><span>main: @architect @researcher @developer @frontend @security 
+</span></span><span style=display:flex><span>      基于DEX聚合器项目，各自输出方案
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 各 Agent 并行工作</span>
+</span></span><span style=display:flex><span>researcher  → 输出 RESEARCH.md（竞品分析）
+</span></span><span style=display:flex><span>architect   → 输出 ARCHITECTURE.md（系统架构）
+</span></span><span style=display:flex><span>developer   → 输出 DEVELOP.md（合约设计）
+</span></span><span style=display:flex><span>frontend   → 输出 FRONTEND.md（UI设计）
+</span></span><span style=display:flex><span>security   → 输出 SECURITY.md（风险矩阵）
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 评审汇总</span>
+</span></span><span style=display:flex><span>reviewer   → 输出 REVIEW.md（综合评审）
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 最终决策</span>
+</span></span><span style=display:flex><span>decider    → 输出 DECISION.md（Go/No-Go）
+</span></span></code></pre></div><hr><h2 id=工作区隔离设计>工作区隔离设计</h2><p>每个 Agent 的工作区完全独立：</p><pre tabindex=0><code>~/.openclaw/workspace/
+├── projects/
+│   └── dex-aggregator/
+│       ├── architect/ARCHITECTURE.md
+│       ├── researcher/RESEARCH.md
+│       ├── developer/DEVELOP.md
+│       ├── frontend/FRONTEND.md
+│       ├── security/SECURITY.md
+│       ├── reviewer/REVIEW.md
+│       └── decider/DECISION.md
+│
+~/.openclaw/workspace-researcher/
+├── SOUL.md     # 研究员人格
+├── USER.md     # 用户偏好
+└── projects/   # 研究员自己的项目
+</code></pre><p>这样做的好处：</p><ul><li>研究员写的文档不会覆盖开发者的代码</li><li>每个 Agent 可以独立重置，不影响其他 Agent</li><li>敏感信息（如 API Key）可以在不同 Agent 间差异化配置</li></ul><hr><h2 id=通信机制sessions>通信机制：sessions</h2><p>Agent 之间通过 <code>sessions</code> 传递消息和结果：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># main 向 researcher 派发任务</span>
+</span></span><span style=display:flex><span>sessions_send<span style=color:#f92672>(</span>sessionKey<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;agent:researcher:xxx&#34;</span>, message<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;任务描述&#34;</span><span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># researcher 完成任务后汇报</span>
+</span></span><span style=display:flex><span>sessions_send<span style=color:#f92672>(</span>sessionKey<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;agent:main:yyy&#34;</span>, message<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;调研完成，报告已落盘&#34;</span><span style=color:#f92672>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># main 收到结果后继续下一步</span>
+</span></span></code></pre></div><hr><h2 id=协同的黄金法则>协同的黄金法则</h2><h3 id=-正确做法>✅ 正确做法</h3><ol><li><strong>并行优先</strong>：多任务互不依赖 → 同时派给多个 Agent</li><li><strong>专业事派专业角色</strong>：调研 → researcher，架构 → architect</li><li><strong>对内直接做，对外先确认</strong>：内部读文件/分析直接做，对外发消息/发布先确认</li><li><strong>交付物落盘</strong>：所有输出必须写到文件，不能只存在于对话中</li></ol><h3 id=-错误做法>❌ 错误做法</h3><ul><li>串行等待：等 researcher 完再让 developer 开始（应该并行）</li><li>一个 Agent 干所有事：main 既做调研又写代码又做安全（应该分派）</li><li>不写文件：所有结论只存在于聊天中（应该落盘到 workspace）</li></ul><hr><h2 id=实战技巧>实战技巧</h2><h3 id=技巧-1利用-soulmd-定义角色>技巧 1：利用 SOUL.md 定义角色</h3><p>每个 Agent 的 <code>SOUL.md</code> 定义了它的性格和风格，确保输出符合预期：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-markdown data-lang=markdown><span style=display:flex><span># SOUL.md - 研究员
+</span></span><span style=display:flex><span>角色：研究员
+</span></span><span style=display:flex><span>职责：深度调研、竞品分析、数据挖掘
+</span></span><span style=display:flex><span>风格：结构化、引用来源、数据驱动
+</span></span></code></pre></div><h3 id=技巧-2利用-agentsmd-定义工作流>技巧 2：利用 AGENTS.md 定义工作流</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-markdown data-lang=markdown><span style=display:flex><span><span style=color:#75715e>## 效率
+</span></span></span><span style=display:flex><span><span style=color:#75715e>### 并行优先
+</span></span></span><span style=display:flex><span>多任务互不依赖 → 同时派给多个角色，不要串行
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>### 专业事派专业角色
+</span></span></span><span style=display:flex><span>| 任务类型 | 派给 |
+</span></span><span style=display:flex><span>|----------|------|
+</span></span><span style=display:flex><span>| 调研/查资料 | researcher |
+</span></span><span style=display:flex><span>| 架构/方案设计 | architect |
+</span></span><span style=display:flex><span>| 开发/写代码 | developer |
+</span></span></code></pre></div><h3 id=技巧-3利用-heartbeat-做周期性工作>技巧 3：利用 HEARTBEAT 做周期性工作</h3><p>配置 <code>HEARTBEAT.md</code> 让 Agent 定期自动执行任务：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-markdown data-lang=markdown><span style=display:flex><span><span style=color:#66d9ef>-</span> 每 4 小时：检查邮件
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 每天早上 8 点：收集新闻摘要
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 每周一：生成周报
+</span></span></code></pre></div><hr><h2 id=适用场景-vs-不适用场景>适用场景 vs 不适用场景</h2><table><thead><tr><th>场景</th><th>适合多智能体？</th></tr></thead><tbody><tr><td>复杂项目（需要架构+开发+评审）</td><td>✅ 非常适合</td></tr><tr><td>快速问答</td><td>❌ 单 Agent 即可</td></tr><tr><td>简单代码生成</td><td>❌ 单 Developer 即可</td></tr><tr><td>需要多轮讨论的决策</td><td>✅ 需要 Decider</td></tr><tr><td>纯写作/文案</td><td>❌ 单 Agent 即可</td></tr></tbody></table><hr><p><em>系列下一篇：<a href=../openclaw-series/04-skills.md>OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill</a></em></p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/openclaw-series/06_openclaw_memory_system/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/openclaw-series/02_openclaw_architecture/>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

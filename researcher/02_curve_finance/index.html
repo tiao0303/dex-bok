@@ -1,0 +1,100 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="Curve Finance：稳定币之王的护城河与系统性风险
+
+数据来源：本文数据来源于 Curve Finance 官方文档、Dune Analytics、DeFiLlama、Nansen、Token Terminal、CoinMarketCap 及各安全审计机构报告，截至 2025 年 Q4-Q1。数据均为多源交叉参考，读者应关注数据量级而非精确数值。
+
+
+一、协议定位：专为「同类资产」打造的 AMM 引擎
+Curve Finance 于 2020 年 1 月上线，定位极为清晰——做稳定币与同类资产（wrapped BTC、锚定币）之间最高效的兑换场所。
+其核心算法是经过改良的 StableSwap，在传统 AMM 的 x * y = k 公式基础上加入了线性不变量，使得在锚定资产价格相对稳定时，交易滑点极低——理论上甚至接近于零。
+Curve 的核心逻辑可以这样理解：
+
+Uniswap V2：适合任意两种 ERC-20 代币，滑点随交易量线性增长
+Curve StableSwap：专为 1:1 锚定资产设计，在正常价格区间内几乎没有滑点
+
+Curve V2（2021 年）则将算法扩展到波动性资产，通过动态定价模型让稳定币 AMM 的优势延伸到非稳定币交易对。
+截至 2025 年，Curve 已发展为一个多产品生态系统：
+
+  
+      
+          产品
+          功能
+      
+  
+  
+      
+          Curve DEX
+          稳定币/同类资产兑换，核心业务
+      
+      
+          crvUSD
+          去中心化稳定币（软清算机制）
+      
+      
+          LlamaLend
+          借贷协议（借款/存款 crvUSD）
+      
+      
+          多链部署
+          Ethereum、Arbitrum、Optimism、Polygon、Fantom、Avalanche
+      
+  
+
+
+二、代币经济学：veCRV 的锁仓即权力模型
+CRV 代币分配（总供应量上限 30.3 亿枚）
+
+  
+      
+          分配对象
+          比例
+          解锁状态
+      
+  
+  
+      
+          社区 LP 奖励
+          62%
+          持续释放中
+      
+      
+          股东（团队+投资者）
+          30%
+          2024 年 8 月全部解锁完毕
+      
+      
+          社区储备
+          5%
+          已全部解锁
+      
+      
+          员工
+          3%
+          2022 年已全部解锁
+      
+  
+
+veCRV 机制：锁仓换影响力
+CRV 持有者可以将代币锁仓（最多 4 年），获得 veCRV（Vote-Escrowed CRV）："><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/researcher/02_curve_finance/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/researcher/02_curve_finance/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/researcher/02_curve_finance/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/researcher/02_curve_finance/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="Curve Finance：稳定币之王的护城河与系统性风险 数据来源：本文数据来源于 Curve Finance 官方文档、Dune Analytics、DeFiLlama、Nansen、Token Terminal、CoinMarketCap 及各安全审计机构报告，截至 2025 年 Q4-Q1。数据均为多源交叉参考，读者应关注数据量级而非精确数值。
+一、协议定位：专为「同类资产」打造的 AMM 引擎 Curve Finance 于 2020 年 1 月上线，定位极为清晰——做稳定币与同类资产（wrapped BTC、锚定币）之间最高效的兑换场所。
+其核心算法是经过改良的 StableSwap，在传统 AMM 的 x * y = k 公式基础上加入了线性不变量，使得在锚定资产价格相对稳定时，交易滑点极低——理论上甚至接近于零。
+Curve 的核心逻辑可以这样理解：
+Uniswap V2：适合任意两种 ERC-20 代币，滑点随交易量线性增长 Curve StableSwap：专为 1:1 锚定资产设计，在正常价格区间内几乎没有滑点 Curve V2（2021 年）则将算法扩展到波动性资产，通过动态定价模型让稳定币 AMM 的优势延伸到非稳定币交易对。
+截至 2025 年，Curve 已发展为一个多产品生态系统：
+产品 功能 Curve DEX 稳定币/同类资产兑换，核心业务 crvUSD 去中心化稳定币（软清算机制） LlamaLend 借贷协议（借款/存款 crvUSD） 多链部署 Ethereum、Arbitrum、Optimism、Polygon、Fantom、Avalanche 二、代币经济学：veCRV 的锁仓即权力模型 CRV 代币分配（总供应量上限 30.3 亿枚） 分配对象 比例 解锁状态 社区 LP 奖励 62% 持续释放中 股东（团队+投资者） 30% 2024 年 8 月全部解锁完毕 社区储备 5% 已全部解锁 员工 3% 2022 年已全部解锁 veCRV 机制：锁仓换影响力 CRV 持有者可以将代币锁仓（最多 4 年），获得 veCRV（Vote-Escrowed CRV）："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="researcher"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="Curve Finance：稳定币之王的护城河与系统性风险 数据来源：本文数据来源于 Curve Finance 官方文档、Dune Analytics、DeFiLlama、Nansen、Token Terminal、CoinMarketCap 及各安全审计机构报告，截至 2025 年 Q4-Q1。数据均为多源交叉参考，读者应关注数据量级而非精确数值。
+一、协议定位：专为「同类资产」打造的 AMM 引擎 Curve Finance 于 2020 年 1 月上线，定位极为清晰——做稳定币与同类资产（wrapped BTC、锚定币）之间最高效的兑换场所。
+其核心算法是经过改良的 StableSwap，在传统 AMM 的 x * y = k 公式基础上加入了线性不变量，使得在锚定资产价格相对稳定时，交易滑点极低——理论上甚至接近于零。
+Curve 的核心逻辑可以这样理解：
+Uniswap V2：适合任意两种 ERC-20 代币，滑点随交易量线性增长 Curve StableSwap：专为 1:1 锚定资产设计，在正常价格区间内几乎没有滑点 Curve V2（2021 年）则将算法扩展到波动性资产，通过动态定价模型让稳定币 AMM 的优势延伸到非稳定币交易对。
+截至 2025 年，Curve 已发展为一个多产品生态系统：
+产品 功能 Curve DEX 稳定币/同类资产兑换，核心业务 crvUSD 去中心化稳定币（软清算机制） LlamaLend 借贷协议（借款/存款 crvUSD） 多链部署 Ethereum、Arbitrum、Optimism、Polygon、Fantom、Avalanche 二、代币经济学：veCRV 的锁仓即权力模型 CRV 代币分配（总供应量上限 30.3 亿枚） 分配对象 比例 解锁状态 社区 LP 奖励 62% 持续释放中 股东（团队+投资者） 30% 2024 年 8 月全部解锁完毕 社区储备 5% 已全部解锁 员工 3% 2022 年已全部解锁 veCRV 机制：锁仓换影响力 CRV 持有者可以将代币锁仓（最多 4 年），获得 veCRV（Vote-Escrowed CRV）："><meta itemprop=wordCount content="360"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="Curve Finance：稳定币之王的护城河与系统性风险 数据来源：本文数据来源于 Curve Finance 官方文档、Dune Analytics、DeFiLlama、Nansen、Token Terminal、CoinMarketCap 及各安全审计机构报告，截至 2025 年 Q4-Q1。数据均为多源交叉参考，读者应关注数据量级而非精确数值。
+一、协议定位：专为「同类资产」打造的 AMM 引擎 Curve Finance 于 2020 年 1 月上线，定位极为清晰——做稳定币与同类资产（wrapped BTC、锚定币）之间最高效的兑换场所。
+其核心算法是经过改良的 StableSwap，在传统 AMM 的 x * y = k 公式基础上加入了线性不变量，使得在锚定资产价格相对稳定时，交易滑点极低——理论上甚至接近于零。
+Curve 的核心逻辑可以这样理解：
+Uniswap V2：适合任意两种 ERC-20 代币，滑点随交易量线性增长 Curve StableSwap：专为 1:1 锚定资产设计，在正常价格区间内几乎没有滑点 Curve V2（2021 年）则将算法扩展到波动性资产，通过动态定价模型让稳定币 AMM 的优势延伸到非稳定币交易对。
+截至 2025 年，Curve 已发展为一个多产品生态系统：
+产品 功能 Curve DEX 稳定币/同类资产兑换，核心业务 crvUSD 去中心化稳定币（软清算机制） LlamaLend 借贷协议（借款/存款 crvUSD） 多链部署 Ethereum、Arbitrum、Optimism、Polygon、Fantom、Avalanche 二、代币经济学：veCRV 的锁仓即权力模型 CRV 代币分配（总供应量上限 30.3 亿枚） 分配对象 比例 解锁状态 社区 LP 奖励 62% 持续释放中 股东（团队+投资者） 30% 2024 年 8 月全部解锁完毕 社区储备 5% 已全部解锁 员工 3% 2022 年已全部解锁 veCRV 机制：锁仓换影响力 CRV 持有者可以将代币锁仓（最多 4 年），获得 veCRV（Vote-Escrowed CRV）："><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-02_curve_finance"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#一协议定位专为同类资产打造的-amm-引擎>一、协议定位：专为「同类资产」打造的 AMM 引擎</a></li><li><a href=#二代币经济学vecrv-的锁仓即权力模型>二、代币经济学：veCRV 的锁仓即权力模型</a><ul><li><a href=#crv-代币分配总供应量上限-303-亿枚>CRV 代币分配（总供应量上限 30.3 亿枚）</a></li><li><a href=#vecrv-机制锁仓换影响力>veCRV 机制：锁仓换影响力</a></li><li><a href=#2024-年-8-月通胀率的历史性转折>2024 年 8 月：通胀率的历史性转折</a></li></ul></li><li><a href=#三安全审计历史稳定系统的非稳定性>三、安全审计历史：稳定系统的非稳定性</a><ul><li><a href=#2024-2025-年审计动态>2024-2025 年审计动态</a></li><li><a href=#2022-年-mim-池攻击事件>2022 年 MIM 池攻击事件</a></li><li><a href=#2024-年-6-月-crv-流动性危机>2024 年 6 月 CRV 流动性危机</a></li></ul></li><li><a href=#四tvl-与用户数据>四、TVL 与用户数据</a></li><li><a href=#五独特创新点>五、独特创新点</a></li><li><a href=#六潜在风险>六、潜在风险</a></li><li><a href=#七未来发展预期>七、未来发展预期</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>360 字</span></div></header><h1 id=curve-finance稳定币之王的护城河与系统性风险>Curve Finance：稳定币之王的护城河与系统性风险</h1><blockquote><p><strong>数据来源</strong>：本文数据来源于 Curve Finance 官方文档、Dune Analytics、DeFiLlama、Nansen、Token Terminal、CoinMarketCap 及各安全审计机构报告，截至 2025 年 Q4-Q1。数据均为多源交叉参考，读者应关注数据量级而非精确数值。</p></blockquote><hr><h2 id=一协议定位专为同类资产打造的-amm-引擎>一、协议定位：专为「同类资产」打造的 AMM 引擎</h2><p>Curve Finance 于 2020 年 1 月上线，定位极为清晰——<strong>做稳定币与同类资产（wrapped BTC、锚定币）之间最高效的兑换场所</strong>。</p><p>其核心算法是经过改良的 <strong>StableSwap</strong>，在传统 AMM 的 <code>x * y = k</code> 公式基础上加入了<strong>线性不变量</strong>，使得在锚定资产价格相对稳定时，交易滑点极低——理论上甚至接近于零。</p><p>Curve 的核心逻辑可以这样理解：</p><ul><li><strong>Uniswap V2</strong>：适合任意两种 ERC-20 代币，滑点随交易量线性增长</li><li><strong>Curve StableSwap</strong>：专为 1:1 锚定资产设计，在正常价格区间内几乎没有滑点</li></ul><p>Curve V2（2021 年）则将算法扩展到<strong>波动性资产</strong>，通过动态定价模型让稳定币 AMM 的优势延伸到非稳定币交易对。</p><p>截至 2025 年，Curve 已发展为一个<strong>多产品生态系统</strong>：</p><table><thead><tr><th>产品</th><th>功能</th></tr></thead><tbody><tr><td><strong>Curve DEX</strong></td><td>稳定币/同类资产兑换，核心业务</td></tr><tr><td><strong>crvUSD</strong></td><td>去中心化稳定币（软清算机制）</td></tr><tr><td><strong>LlamaLend</strong></td><td>借贷协议（借款/存款 crvUSD）</td></tr><tr><td><strong>多链部署</strong></td><td>Ethereum、Arbitrum、Optimism、Polygon、Fantom、Avalanche</td></tr></tbody></table><hr><h2 id=二代币经济学vecrv-的锁仓即权力模型>二、代币经济学：veCRV 的锁仓即权力模型</h2><h3 id=crv-代币分配总供应量上限-303-亿枚>CRV 代币分配（总供应量上限 30.3 亿枚）</h3><table><thead><tr><th>分配对象</th><th>比例</th><th>解锁状态</th></tr></thead><tbody><tr><td>社区 LP 奖励</td><td>62%</td><td>持续释放中</td></tr><tr><td>股东（团队+投资者）</td><td>30%</td><td>2024 年 8 月全部解锁完毕</td></tr><tr><td>社区储备</td><td>5%</td><td>已全部解锁</td></tr><tr><td>员工</td><td>3%</td><td>2022 年已全部解锁</td></tr></tbody></table><h3 id=vecrv-机制锁仓换影响力>veCRV 机制：锁仓换影响力</h3><p>CRV 持有者可以将代币锁仓（最多 4 年），获得 <strong>veCRV（Vote-Escrowed CRV）</strong>：</p><ul><li><strong>锁仓时间越长，veCRV 数量越多</strong>：4 年锁仓 = 1:1 兑换；1 年锁仓 = 0.25 veCRV</li><li><strong>veCRV 持有者的权利</strong>：<ol><li><strong>治理投票权</strong>：决定哪些池子获得 CRV 流动性激励</li><li><strong>手续费分成</strong>：获得 Curve 交易费的一部分（约 50% 的交易费进入 veCRV 持有者池）</li><li><strong>boosted 奖励</strong>：veCRV 持有者的 LP 奖励可提升至 <strong>2.5 倍</strong></li></ol></li></ul><p>这一机制让 Curve 的治理权牢牢掌握在<strong>长期持币者</strong>手中，形成了强大的Tokenholder 利益绑定。</p><h3 id=2024-年-8-月通胀率的历史性转折>2024 年 8 月：通胀率的历史性转折</h3><p>Curve DAO 四周年之际，<strong>所有剩余的股东/团队/员工代币全部一次性解锁完毕</strong>，Curve 官方同时宣布：</p><blockquote><p>未来每年 CRV 排放量减少 <strong>16%</strong>（约每 4 年减半，类比特币机制）</p></blockquote><p>这意味着 CRV 的通胀率从此前超过 <strong>20%/年</strong> 的高位，大幅压降至约 <strong>6%/年</strong>，且持续递减。</p><hr><h2 id=三安全审计历史稳定系统的非稳定性>三、安全审计历史：稳定系统的非稳定性</h2><h3 id=2024-2025-年审计动态>2024-2025 年审计动态</h3><p>Curve 在 2025 年进行了<strong>三轮新审计</strong>，由三家顶级安全公司执行：</p><ul><li><strong>Trail of Bits</strong>：全面代码审计</li><li><strong>Quantstamp</strong>：协议逻辑审计</li><li><strong>ChainSecurity</strong>：经济模型与风险审计</li></ul><p>同时，Curve 通过 <strong>Immunefi</strong> 运营白帽赏金计划，截至 2025 年中已累计支付 <strong>200 万美元</strong>漏洞赏金。</p><h3 id=2022-年-mim-池攻击事件>2022 年 MIM 池攻击事件</h3><p>Curve 历史上最严重的安全事件并非协议本身的漏洞，而是**第三方项目（Abracadabra/MIM）**在与 Curve 池子交互时的风险管理失误，导致 MIM 池流动性被非正常提取。这次事件说明了一个重要问题：<strong>Curve 作为底层基础设施，其安全性与上层应用的风控能力密不可分</strong>。</p><h3 id=2024-年-6-月-crv-流动性危机>2024 年 6 月 CRV 流动性危机</h3><p>这是 Curve 生态最接近"系统性风险"的时刻：</p><ul><li>一位 CRV 大户（Michael Egorow/LLC）的大量 CRV 抵押仓位面临清算</li><li>社区和流动性提供者的恐慌引发 CRV 价格剧烈波动</li><li>LlamaLend 池子经历了大规模流动性撤出考验</li><li><strong>但系统最终稳定了下来</strong>：crvUSD 的软清算机制有效缓冲了极端行情下的连环清算</li></ul><p>这次事件让市场意识到，Curve 作为 DeFi 核心基础设施的<strong>系统性重要性</strong>——它的风险不是局部的，而是会传导到整个生态。</p><hr><h2 id=四tvl-与用户数据>四、TVL 与用户数据</h2><table><thead><tr><th>指标</th><th>数据（2025 年 Q4）</th></tr></thead><tbody><tr><td>TVL（全链汇总）</td><td>~$18 亿美元</td></tr><tr><td>2024 年 TVL 变化</td><td>Q3→Q4 增长 14.2%</td></tr><tr><td>2022 年 TVL 历史峰值</td><td>> $240 亿</td></tr><tr><td>crvUSD 流通量</td><td>持续增长中</td></tr><tr><td>日均交易量（稳定币兑换）</td><td>亿级美元</td></tr><tr><td>活跃池子数量</td><td>100+ 个</td></tr></tbody></table><p><strong>关键洞察</strong>：Curve 的 TVL 从 2022 年峰值下跌超过 90%，主要原因是<strong>稳定币市场整体规模收缩</strong>和<strong>竞争加剧</strong>。但其在稳定币兑换赛道的主导地位并未动摇。</p><hr><h2 id=五独特创新点>五、独特创新点</h2><ol><li><strong>StableSwap 算法</strong>：专为 1:1 锚定资产设计，在正常价格区间内几乎零滑点，是目前最优雅的稳定币 AMM 数学模型</li><li><strong>veCRV 治理模型</strong>：将协议控制权分配给长期锁仓者，形成治理稳定性和 LP 利益一致性，是 DeFi 治理中最成功的机制之一</li><li><strong>crvUSD 软清算机制</strong>：当抵押品价格下跌时，系统采用渐进式"软清算"而非直接强平，保护借款人不受极端行情的毁灭性打击</li><li><strong>动态发行（V2）</strong>：将 StableSwap 的低滑点优势扩展到波动性资产，拓宽了应用场景</li><li><strong>LlamaLend 隔离市场</strong>：为每种资产设置独立的借贷市场，防止单一资产风险扩散为系统性风险</li></ol><hr><h2 id=六潜在风险>六、潜在风险</h2><table><thead><tr><th>风险类型</th><th>具体描述</th><th>严重程度</th></tr></thead><tbody><tr><td>系统性风险</td><td>核心代币（CRV）高度集中，大户清算可能引发连环效应</td><td>高</td></tr><tr><td>治理攻击风险</td><td>veCRV 集中度较高，理论上可被恶意收购</td><td>中</td></tr><tr><td>合约升级风险</td><td>核心逻辑不可升级（安全性保障），但周边合约存在升级路径</td><td>低</td></tr><tr><td>监管风险</td><td>crvUSD 作为去中心化稳定币可能面临监管审查</td><td>中</td></tr><tr><td>竞争风险</td><td>Uniswap V3 稳定币池、Lyra 等期权协议分流</td><td>中</td></tr><tr><td>预言机风险</td><td>crvUSD 依赖外部价格预言机，可能被操纵</td><td>中</td></tr></tbody></table><hr><h2 id=七未来发展预期>七、未来发展预期</h2><ul><li><strong>CRV 排放持续递减</strong>：每年 16% 的减产将使 CRV 逐步走向真正的通缩，veCRV 的稀缺性将进一步增强</li><li><strong>crvUSD 采用率提升</strong>：如果去中心化稳定币赛道持续增长，crvUSD 有潜力成为重要玩家</li><li><strong>跨链扩张</strong>：Curve 在更多 L2 和新公链上的部署将持续，但竞争激烈</li><li><strong>LlamaLend 成熟化</strong>：借贷市场的成熟将为 crvUSD 提供更多应用场景和需求</li><li><strong>治理权分散化</strong>：随着团队和投资者代币全数解锁，Curve DAO 的权力结构将更加去中心化</li></ul><hr><h2 id=总结>总结</h2><p>Curve Finance 是 DeFi 基础设施中"术业有专攻"的典型代表——它不追求成为所有资产的万能 DEX，而是在<strong>稳定币兑换</strong>这一细分场景做到了极致。veCRV 的治理模型是 DeFi 领域最优雅的代币机制之一，而 2024 年的排放减半标志着 CRV 正式进入通缩周期。</p><p>但投资者必须清醒认识到：<strong>Curve 的系统性风险是 DeFi 领域中最高的之一</strong>。它的稳定直接关系到数十个其他协议的存亡。2024 年 6 月的 CRV 清算危机已经给整个市场敲响了警钟。</p><p><strong>核心评价</strong>：如果你相信稳定币是 Crypto 的核心用例，那么 Curve 就是这个用例的基础设施。持有 CRV，本质上是在赌稳定币生态的持续增长。</p><hr><p><em>本文为 DEX 深度研究系列第二篇，涵盖 Curve Finance。数据来源：Curve Finance 官方博客、Dune Analytics、DeFiLlama、Nansen、Token Terminal、Trail of Bits、Quantstamp、ChainSecurity 及 Immunefi 官方报告。</em></p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/researcher/02_stablecoins/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/researcher/01_uniswap_v3/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

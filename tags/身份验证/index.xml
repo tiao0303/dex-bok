@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>身份验证 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81/</link><description>Recent content in 身份验证 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 00:27:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81/index.xml" rel="self" type="application/rss+xml"/><item><title>T3 安全合规系列 (12/15)：KYC/AML 合规流程实现</title><link>https://tiao0303.github.io/dex-bok/posts/t3_security/t3_security_compliance_12/</link><pubDate>Thu, 19 Mar 2026 00:27:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t3_security/t3_security_compliance_12/</guid><description>&lt;h2 id="引言"&gt;引言&lt;/h2&gt;
+&lt;p&gt;KYC（了解你的客户）和 AML（反洗钱）是加密货币交易所合规运营的基础要求。本文详细介绍 T3 如何设计和实现符合全球监管标准的 KYC/AML 流程，在保障合规的同时优化用户体验。&lt;/p&gt;
+&lt;h2 id="监管框架概览"&gt;监管框架概览&lt;/h2&gt;
+&lt;h3 id="主要司法管辖区要求"&gt;主要司法管辖区要求&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;地区&lt;/th&gt;
+ &lt;th&gt;监管机构&lt;/th&gt;
+ &lt;th&gt;核心要求&lt;/th&gt;
+ &lt;th&gt;处罚力度&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;美国&lt;/td&gt;
+ &lt;td&gt;FinCEN, SEC&lt;/td&gt;
+ &lt;td&gt;BSAR 报告、交易监控&lt;/td&gt;
+ &lt;td&gt;最高$1M/次&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;欧盟&lt;/td&gt;
+ &lt;td&gt;各成员国 FIU&lt;/td&gt;
+ &lt;td&gt;5AMLD/6AMLD 合规&lt;/td&gt;
+ &lt;td&gt;最高€5M 或 10% 营收&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;新加坡&lt;/td&gt;
+ &lt;td&gt;MAS&lt;/td&gt;
+ &lt;td&gt;PS Act 牌照要求&lt;/td&gt;
+ &lt;td&gt;吊销牌照 + 罚款&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;香港&lt;/td&gt;
+ &lt;td&gt;SFC, HKMA&lt;/td&gt;
+ &lt;td&gt;VASP 牌照、客户资产隔离&lt;/td&gt;
+ &lt;td&gt;最高$10M HKD&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="t3-合规策略"&gt;T3 合规策略&lt;/h3&gt;
+&lt;p&gt;T3 采用「最高标准」策略，满足最严格司法管辖区要求，实现全球合规：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;enum&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ComplianceLevel&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;BASIC&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;basic&amp;#39;&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// 基础验证（邮箱 + 2FA）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;VERIFIED&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;verified&amp;#39;&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// 身份验证（KYC L1）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;ENHANCED&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;enhanced&amp;#39;&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// 增强验证（KYC L2 + 资金来源）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;INSTITUTIONAL&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;institutional&amp;#39;&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 机构验证（KYB）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;UserTier&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;level&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;ComplianceLevel&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;dailyWithdrawLimit&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;monthlyVolumeLimit&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;requiredVerifications&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;reviewPeriod&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// days
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="kyc-流程设计"&gt;KYC 流程设计&lt;/h2&gt;
+&lt;h3 id="三级验证体系"&gt;三级验证体系&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌─────────────────────────────────────────────────────────────┐
+│ Level 1: 基础验证 │
+│ • 邮箱验证 │
+│ • 手机号验证 │
+│ • 2FA 启用 │
+│ • 限额：$1,000/日 │
+├─────────────────────────────────────────────────────────────┤
+│ Level 2: 身份验证 │
+│ • 政府 ID 上传（护照/驾照/身份证） │
+│ • 人脸识别 │
+│ • 地址证明（可选） │
+│ • 限额：$50,000/日 │
+├─────────────────────────────────────────────────────────────┤
+│ Level 3: 增强验证 │
+│ • 资金来源证明 │
+│ • 职业信息 │
+│ • 财富证明 │
+│ • 限额：无限制 │
+└─────────────────────────────────────────────────────────────┘
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="身份验证技术实现"&gt;身份验证技术实现&lt;/h3&gt;
+&lt;h4 id="1-文档验证"&gt;1. 文档验证&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;DocumentVerification&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;documentType&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;PASSPORT&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;ID_CARD&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;DRIVERS_LICENSE&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;issuingCountry&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;documentNumber&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;expiryDate&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Date&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;images&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;front&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// base64 or URL
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;back?&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;verifyDocument&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;doc&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;DocumentVerification&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Promise&lt;/span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;VerificationResult&lt;/span&gt;&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 1. OCR 提取信息
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ocrResult&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ocrService&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;extract&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;doc&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;images&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;front&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 2. 防伪检测
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;securityCheck&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;detectForgery&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;doc&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;images&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 3. 信息一致性校验
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;consistencyCheck&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;validateConsistency&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;ocrResult&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;doc&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 4. 黑名单检查
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;blacklistCheck&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;checkDocumentBlacklist&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;doc&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;documentNumber&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;passed&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;securityCheck.passed&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;consistencyCheck&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;passed&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style="color:#f92672"&gt;!&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;blacklistCheck&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;match&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;confidence&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;calculateConfidence&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;ocrResult&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;securityCheck&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;extractedData&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;ocrResult&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;risks&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;identifyRisks&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;securityCheck&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;blacklistCheck&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="2-人脸识别"&gt;2. 人脸识别&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;FaceVerification&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;selfieImage&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;livenessCheck&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;boolean&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;faceMatchThreshold&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;verifyFace&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;selfie&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;idPhoto&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Promise&lt;/span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;FaceMatchResult&lt;/span&gt;&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 1. 活体检测
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;liveness&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;performLivenessCheck&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;selfie&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#f92672"&gt;!&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;liveness&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;isLive&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;matched&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;reason&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;LIVENESS_FAILED&amp;#39;&lt;/span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 2. 人脸提取与比对
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;faceEmbedding1&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;extractFaceEmbedding&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;selfie&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;faceEmbedding2&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;extractFaceEmbedding&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;idPhoto&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;similarity&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;calculateSimilarity&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;faceEmbedding1&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;faceEmbedding2&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 3. 阈值判断
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;matched&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;similarity&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;FACE_MATCH_THRESHOLD&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;confidence&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;similarity&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;threshold&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;FACE_MATCH_THRESHOLD&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id="3-地址验证"&gt;3. 地址验证&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;AddressVerification&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;documentType&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;UTILITY_BILL&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;BANK_STATEMENT&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;GOVERNMENT_LETTER&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;documentDate&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Date&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;street&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;city&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;state&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;postalCode&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;country&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;validateAddressProof&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;doc&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;AddressVerification&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ValidationResult&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;checks&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 文档必须在 3 个月内
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;isRecent&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;isWithinMonths&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;doc&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;documentDate&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 地址格式有效
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;isValidFormat&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;validateAddressFormat&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;doc&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 与国家一致
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;isCountryConsistent&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;doc.address.country&lt;/span&gt; &lt;span style="color:#f92672"&gt;===&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;doc&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;issuingCountry&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 文档类型可接受
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;isAcceptedType&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;ACCEPTED_ADDRESS_DOCS.includes&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;doc&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;documentType&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;passed&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Object.values&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;checks&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;every&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;details&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;checks&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="aml-监控体系"&gt;AML 监控体系&lt;/h2&gt;
+&lt;h3 id="风险评分模型"&gt;风险评分模型&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;RiskScore&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;overall&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// 0-100
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;factors&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;geographic&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;transactional&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;behavioral&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;counterparties&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;level&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;LOW&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;MEDIUM&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;HIGH&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;CRITICAL&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;calculateRiskScore&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;User&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;transactions&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Transaction&lt;/span&gt;[])&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;RiskScore&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;factors&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;geographic&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;calculateGeographicRisk&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;country&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;ipHistory&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;transactional&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;calculateTransactionRisk&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;transactions&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;behavioral&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;calculateBehavioralRisk&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;activityPattern&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;counterparties&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;calculateCounterpartyRisk&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;transactions&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;weights&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;geographic&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;0.2&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;transactional&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;0.3&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;behavioral&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;0.25&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;counterparties&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;0.25&lt;/span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;overall&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;weightedSum&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;factors&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;weights&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;overall&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;factors&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;level&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;scoreToLevel&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;overall&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="可疑活动指标"&gt;可疑活动指标&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;SUSPICIOUS_ACTIVITY_INDICATORS&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 结构化交易（Structuring）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;structuring&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;description&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;拆分交易以规避报告阈值&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;pattern&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;multiple transactions just below reporting threshold&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;threshold&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;3&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// 30 天内次数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;timeWindow&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;30&lt;/span&gt; &lt;span style="color:#75715e"&gt;// days
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 快速进出（Rapid Movement）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;rapidMovement&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;description&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;资金快速转入转出&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;pattern&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;deposit followed by immediate withdrawal&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;maxHoldTime&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;24&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// hours
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;minFrequency&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;5&lt;/span&gt; &lt;span style="color:#75715e"&gt;// times per month
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 混币器使用
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;mixerUsage&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;description&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;与已知混币器交互&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;pattern&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;transactions to/from mixer addresses&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;blacklist&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;MIXER_ADDRESS_LIST&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 异常时间交易
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;unusualTiming&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;description&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;在非活跃时段大额交易&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;pattern&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;large transactions outside normal hours&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;deviation&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;3&lt;/span&gt; &lt;span style="color:#75715e"&gt;// standard deviations
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="交易监控规则引擎"&gt;交易监控规则引擎&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;MonitoringRule&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;id&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;condition&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Transaction&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;User&lt;/span&gt;) &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;boolean&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;severity&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;LOW&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;MEDIUM&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;HIGH&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;CRITICAL&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;action&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Transaction&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;alert&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Alert&lt;/span&gt;) &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Promise&lt;/span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;void&lt;/span&gt;&amp;gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;rules&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;MonitoringRule&lt;/span&gt;[] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;id&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;LARGE_CASH_OUT&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;大额提现&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;condition&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;) &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;.&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#f92672"&gt;===&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;WITHDRAWAL&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;amountUSD&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;severity&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;MEDIUM&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;action&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;alert&lt;/span&gt;) &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;requireManualReview&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;notifyCompliance&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;alert&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;id&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;SANCTIONED_ADDRESS&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;制裁地址交易&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;condition&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;) &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;isSanctionedAddress&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;counterparty&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;severity&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;CRITICAL&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;action&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;alert&lt;/span&gt;) &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;freezeTransaction&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;blockUser&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;userId&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;fileSAR&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// Suspicious Activity Report
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;id&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;RAPID_TURNOVER&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;快速周转&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;condition&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;) &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;recentDeposits&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getUserDeposits&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;id&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;24&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;withdrawalRatio&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;amount&lt;/span&gt; &lt;span style="color:#f92672"&gt;/&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;sum&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;recentDeposits&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;withdrawalRatio&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0.9&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;recentDeposits&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;length&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;severity&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;HIGH&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;action&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;alert&lt;/span&gt;) &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;holdTransaction&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;48&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 48 小时冻结
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;requestSourceOfFunds&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;tx&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;userId&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="报告与备案"&gt;报告与备案&lt;/h2&gt;
+&lt;h3 id="sar可疑活动报告"&gt;SAR（可疑活动报告）&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;SuspiciousActivityReport&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;reportId&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;filingDate&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Date&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;reportingEntity&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;subject&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;address&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;idNumber&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;accounts&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;suspiciousActivity&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;type&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;startDate&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Date&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;endDate&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Date&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;totalAmount&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;description&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;involvedAddresses&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;narrative&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;supportingDocuments&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;fileSAR&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;transaction&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Transaction&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Promise&lt;/span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;string&lt;/span&gt;&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;report&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;SuspiciousActivityReport&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;reportId&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;generateReportId&lt;/span&gt;(),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;filingDate&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; Date(),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;reportingEntity&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;T3 Exchange&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;subject&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getUserDetails&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;transaction&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;userId&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;suspiciousActivity&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;type&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;determineActivityType&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;transaction&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;startDate&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;transaction.timestamp&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;endDate&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;transaction.timestamp&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;totalAmount&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;transaction.amountUSD&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;description&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;buildNarrative&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;transaction&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;involvedAddresses&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; [&lt;span style="color:#a6e22e"&gt;transaction&lt;/span&gt;.&lt;span style="color:#66d9ef"&gt;from&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;transaction&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;to&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;narrative&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;buildDetailedNarrative&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;transaction&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;supportingDocuments&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;gatherEvidence&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;transaction&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 提交至监管机构
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;submitToFinCEN&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;report&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 内部记录
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;saveToComplianceDatabase&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;report&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;report&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;reportId&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="ctr货币交易报告"&gt;CTR（货币交易报告）&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;CurrencyTransactionReport&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;transactionId&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;amount&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;currency&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;transactionType&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;DEPOSIT&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;WITHDRAWAL&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;EXCHANGE&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;parties&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;initiator&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;PartyInfo&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;recipient?&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;PartyInfo&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;filingRequired&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;boolean&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 美国：超过$10,000 需报告
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;US_CTR_THRESHOLD&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;10000&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;requiresCTR&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;transaction&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;Transaction&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;User&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;boolean&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;country&lt;/span&gt; &lt;span style="color:#f92672"&gt;!==&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;US&amp;#39;&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;transaction&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;amountUSD&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;US_CTR_THRESHOLD&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="隐私与数据保护"&gt;隐私与数据保护&lt;/h2&gt;
+&lt;h3 id="数据最小化原则"&gt;数据最小化原则&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 仅收集必要信息
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;KYC_DATA_REQUIREMENTS&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;level1&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; [&lt;span style="color:#e6db74"&gt;&amp;#39;email&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;phone&amp;#39;&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;level2&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; [&lt;span style="color:#e6db74"&gt;&amp;#39;fullName&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;dateOfBirth&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;nationality&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;idDocument&amp;#39;&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;level3&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; [&lt;span style="color:#e6db74"&gt;&amp;#39;address&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;occupation&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;sourceOfFunds&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;wealthProof&amp;#39;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;collectOnlyNecessaryData&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;level&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;ComplianceLevel&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;UserData&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;UserData&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;required&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;KYC_DATA_REQUIREMENTS&lt;/span&gt;[&lt;span style="color:#a6e22e"&gt;level&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; Object.&lt;span style="color:#a6e22e"&gt;fromEntries&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Object.&lt;span style="color:#a6e22e"&gt;entries&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;filter&lt;/span&gt;(([&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt;]) &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;required&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;includes&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="加密存储"&gt;加密存储&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;import&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;encrypt&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;decrypt&lt;/span&gt; } &lt;span style="color:#66d9ef"&gt;from&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;./crypto&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;EncryptedUserData&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;encryptedData&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;iv&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;keyId&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;storeSensitiveData&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;userId&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;SensitiveData&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Promise&lt;/span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;void&lt;/span&gt;&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 使用 HSM 管理的密钥加密
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;keyId&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;encryptionKey&lt;/span&gt; } &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getEncryptionKey&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;userId&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;encrypted&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;encrypt&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;encryptionKey&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;database&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;store&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;kyc_encrypted&amp;#39;&lt;/span&gt;, {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;userId&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ...&lt;span style="color:#a6e22e"&gt;encrypted&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;keyId&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;createdAt&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; Date()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="数据保留策略"&gt;数据保留策略&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;DATA_RETENTION_POLICY&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// KYC 数据：账户关闭后 5 年
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;kycData&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;retentionYears&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;5&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;startFrom&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;account_closure&amp;#39;&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 交易记录：永久（监管要求）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;transactionRecords&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;retentionYears&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;permanent&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;startFrom&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;transaction_date&amp;#39;&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 日志数据：2 年
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;auditLogs&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;retentionYears&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;2&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;startFrom&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;log_date&amp;#39;&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 临时数据：30 天
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;temporaryData&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; { &lt;span style="color:#a6e22e"&gt;retentionYears&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;0&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;retentionDays&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;30&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;startFrom&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;creation_date&amp;#39;&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;enforceRetentionPolicy&lt;/span&gt;()&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Promise&lt;/span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;void&lt;/span&gt;&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; [&lt;span style="color:#a6e22e"&gt;dataType&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;policy&lt;/span&gt;] &lt;span style="color:#66d9ef"&gt;of&lt;/span&gt; Object.&lt;span style="color:#a6e22e"&gt;entries&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;DATA_RETENTION_POLICY&lt;/span&gt;)) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;cutoffDate&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;calculateCutoffDate&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;policy&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;deleteExpiredRecords&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;dataType&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;cutoffDate&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="第三方服务集成"&gt;第三方服务集成&lt;/h2&gt;
+&lt;h3 id="合规服务商"&gt;合规服务商&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ComplianceProvider&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;services&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; (&lt;span style="color:#e6db74"&gt;&amp;#39;KYC&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;AML&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;SANCTIONS&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;PEP&amp;#39;&lt;/span&gt;)[];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;coverage&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[]; &lt;span style="color:#75715e"&gt;// countries
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;apiEndpoint&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;COMPLIANCE_PROVIDERS&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;ComplianceProvider&lt;/span&gt;[] &lt;span style="color:#f92672"&gt;=&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;Sumsub&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;services&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; [&lt;span style="color:#e6db74"&gt;&amp;#39;KYC&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;AML&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;SANCTIONS&amp;#39;&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;coverage&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; [&lt;span style="color:#e6db74"&gt;&amp;#39;GLOBAL&amp;#39;&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;apiEndpoint&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;https://api.sumsub.com&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;Chainalysis&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;services&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; [&lt;span style="color:#e6db74"&gt;&amp;#39;AML&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;SANCTIONS&amp;#39;&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;coverage&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; [&lt;span style="color:#e6db74"&gt;&amp;#39;GLOBAL&amp;#39;&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;apiEndpoint&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;https://api.chainalysis.com&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;Elliptic&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;services&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; [&lt;span style="color:#e6db74"&gt;&amp;#39;AML&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;SANCTIONS&amp;#39;&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;coverage&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; [&lt;span style="color:#e6db74"&gt;&amp;#39;GLOBAL&amp;#39;&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;apiEndpoint&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;https://api.elliptic.co&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="多提供商策略"&gt;多提供商策略&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;performKYCCheck&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;User&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Promise&lt;/span&gt;&amp;lt;&lt;span style="color:#f92672"&gt;KYCResult&lt;/span&gt;&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 主提供商
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;try&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;result&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;sumsub&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;verify&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;result&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;confidence&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;HIGH_CONFIDENCE_THRESHOLD&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;result&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#66d9ef"&gt;catch&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;logger&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;warn&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;Primary KYC provider failed&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;error&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 备用提供商
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;try&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;alternativeProvider&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;verify&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; } &lt;span style="color:#66d9ef"&gt;catch&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;logger&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;error&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;All KYC providers failed&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;error&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;throw&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;KYCServiceUnavailableError&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="用户体验优化"&gt;用户体验优化&lt;/h2&gt;
+&lt;h3 id="渐进式验证"&gt;渐进式验证&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 不要一次性要求所有信息
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;PROGRESSIVE_KYC_FLOW&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;step&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;1&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;action&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;email_verification&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;friction&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;low&amp;#39;&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;step&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;2&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;action&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;phone_verification&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;friction&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;low&amp;#39;&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;step&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;3&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;action&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;basic_info&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;friction&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;medium&amp;#39;&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;step&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;4&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;action&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;id_upload&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;friction&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;high&amp;#39;&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; { &lt;span style="color:#a6e22e"&gt;step&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;5&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;action&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;face_scan&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;friction&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;high&amp;#39;&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 根据用户行为动态调整
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;adjustKYCFlow&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;User&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;KYCStep&lt;/span&gt;[] {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;user&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;trustScore&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;HIGH_TRUST_THRESHOLD&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;PROGRESSIVE_KYC_FLOW&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;filter&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;s&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&amp;gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;s&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;friction&lt;/span&gt; &lt;span style="color:#f92672"&gt;!==&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;high&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;PROGRESSIVE_KYC_FLOW&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="实时反馈"&gt;实时反馈&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-typescript" data-lang="typescript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;KYCStatus&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;step&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;status&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;PENDING&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;IN_PROGRESS&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;COMPLETED&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;|&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;REJECTED&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;estimatedTime&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;number&lt;/span&gt;; &lt;span style="color:#75715e"&gt;// seconds
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;requiredActions&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;provideRealTimeFeedback&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;userId&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;)&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;KYCStatus&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;application&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getKYCApplication&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;userId&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;step&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;application.currentStep&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;status&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;application.status&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;estimatedTime&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;estimateCompletionTime&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;application&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;requiredActions&lt;/span&gt;: &lt;span style="color:#66d9ef"&gt;getRequiredActions&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;application&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="最佳实践"&gt;最佳实践&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;自动化优先&lt;/strong&gt;：尽可能自动化验证流程&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;人工复核兜底&lt;/strong&gt;：边缘情况转人工&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;持续监控&lt;/strong&gt;：KYC 不是一次性的&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;全球合规&lt;/strong&gt;：满足最严格标准&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用户友好&lt;/strong&gt;：减少摩擦，提供清晰指引&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据安全&lt;/strong&gt;：加密存储，最小化收集&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;审计追踪&lt;/strong&gt;：所有决策可追溯&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="小结"&gt;小结&lt;/h2&gt;
+&lt;p&gt;KYC/AML 合规是 T3 全球运营的基础。通过三级验证体系、智能风险评分、自动化监控和完善的报告机制，T3 在满足监管要求的同时，为用户提供流畅的验证体验。&lt;/p&gt;</description></item></channel></rss>

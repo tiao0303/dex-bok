@@ -1,0 +1,86 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='借贷协议原理解析（进阶）
+
+难度：⭐⭐ 进阶 | 字数：约 1,400 字 | 预计阅读时间：6 分钟
+
+
+一、DeFi 借贷的核心创新
+传统借贷依赖信用评估：银行需要了解你的收入、负债、信用分数，才能决定是否放贷以及利率几何。
+DeFi 借贷的核心逻辑截然不同：先有抵押，后有贷款。 你必须超额质押加密资产，才能借出另一部分资产。整个过程没有任何身份验证，没有信用审查，没有人工干预——全部由智能合约自动执行。
+这意味着：
+
+信用空白地带（没有银行账户的人）也能获得金融服务
+抵押率（Loan-to-Value Ratio, LTV）决定了你能借多少
+自动清算机制确保出借方永远不会亏损
+
+
+二、借贷协议的两大参与方
+存款人（Supplier / Depositor）
+将加密资产存入协议，赚取由市场供求决定的浮动利率。
+
+你存入 ETH → 协议按比例将利息发放给你
+存款利率取决于市场：借的人多 → 利率高；借的人少 → 利率低
+
+借款人（Borrower）
+提供超额抵押品，借出所需资产。
+
+抵押率（以 Aave 为例）：ETH 通常为 60%–82.5%
+存入价值 $10,000 的 ETH → 最多可借出 $6,000–$8,250 的稳定币
+借出资产后，抵押品仍计入你的账户，但会被"锁定"
+
+
+三、利率模型：供需决定价格
+DeFi 借贷协议的利率并非由某个机构设定，而是由资产供需关系实时计算得出。
+Aave 的利率曲线
+Aave 使用分段线性利率模型：
+利用率 U = 借款额 / 存款额
+
+当 U < 80%（安全区间）：
+  借款利率 = 基础利率 + U × 斜率系数
+
+当 U > 80%（警戒区间）：
+  借款利率 = 大幅上升，激励借款人还款、吸引存款人补仓
+核心逻辑：利用率越高，说明资金越紧缺，利率自然越高。超临界利用率触发利率急剧上升，以保护存款人利益。'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/researcher/05_lending_protocols/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/researcher/05_lending_protocols/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/researcher/05_lending_protocols/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/researcher/05_lending_protocols/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='借贷协议原理解析（进阶） 难度：⭐⭐ 进阶 | 字数：约 1,400 字 | 预计阅读时间：6 分钟
+一、DeFi 借贷的核心创新 传统借贷依赖信用评估：银行需要了解你的收入、负债、信用分数，才能决定是否放贷以及利率几何。
+DeFi 借贷的核心逻辑截然不同：先有抵押，后有贷款。 你必须超额质押加密资产，才能借出另一部分资产。整个过程没有任何身份验证，没有信用审查，没有人工干预——全部由智能合约自动执行。
+这意味着：
+信用空白地带（没有银行账户的人）也能获得金融服务 抵押率（Loan-to-Value Ratio, LTV）决定了你能借多少 自动清算机制确保出借方永远不会亏损 二、借贷协议的两大参与方 存款人（Supplier / Depositor） 将加密资产存入协议，赚取由市场供求决定的浮动利率。
+你存入 ETH → 协议按比例将利息发放给你 存款利率取决于市场：借的人多 → 利率高；借的人少 → 利率低 借款人（Borrower） 提供超额抵押品，借出所需资产。
+抵押率（以 Aave 为例）：ETH 通常为 60%–82.5% 存入价值 $10,000 的 ETH → 最多可借出 $6,000–$8,250 的稳定币 借出资产后，抵押品仍计入你的账户，但会被"锁定" 三、利率模型：供需决定价格 DeFi 借贷协议的利率并非由某个机构设定，而是由资产供需关系实时计算得出。
+Aave 的利率曲线 Aave 使用分段线性利率模型：
+利用率 U = 借款额 / 存款额 当 U < 80%（安全区间）： 借款利率 = 基础利率 + U × 斜率系数 当 U > 80%（警戒区间）： 借款利率 = 大幅上升，激励借款人还款、吸引存款人补仓 核心逻辑：利用率越高，说明资金越紧缺，利率自然越高。超临界利用率触发利率急剧上升，以保护存款人利益。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='借贷协议原理解析（进阶） 难度：⭐⭐ 进阶 | 字数：约 1,400 字 | 预计阅读时间：6 分钟
+一、DeFi 借贷的核心创新 传统借贷依赖信用评估：银行需要了解你的收入、负债、信用分数，才能决定是否放贷以及利率几何。
+DeFi 借贷的核心逻辑截然不同：先有抵押，后有贷款。 你必须超额质押加密资产，才能借出另一部分资产。整个过程没有任何身份验证，没有信用审查，没有人工干预——全部由智能合约自动执行。
+这意味着：
+信用空白地带（没有银行账户的人）也能获得金融服务 抵押率（Loan-to-Value Ratio, LTV）决定了你能借多少 自动清算机制确保出借方永远不会亏损 二、借贷协议的两大参与方 存款人（Supplier / Depositor） 将加密资产存入协议，赚取由市场供求决定的浮动利率。
+你存入 ETH → 协议按比例将利息发放给你 存款利率取决于市场：借的人多 → 利率高；借的人少 → 利率低 借款人（Borrower） 提供超额抵押品，借出所需资产。
+抵押率（以 Aave 为例）：ETH 通常为 60%–82.5% 存入价值 $10,000 的 ETH → 最多可借出 $6,000–$8,250 的稳定币 借出资产后，抵押品仍计入你的账户，但会被"锁定" 三、利率模型：供需决定价格 DeFi 借贷协议的利率并非由某个机构设定，而是由资产供需关系实时计算得出。
+Aave 的利率曲线 Aave 使用分段线性利率模型：
+利用率 U = 借款额 / 存款额 当 U < 80%（安全区间）： 借款利率 = 基础利率 + U × 斜率系数 当 U > 80%（警戒区间）： 借款利率 = 大幅上升，激励借款人还款、吸引存款人补仓 核心逻辑：利用率越高，说明资金越紧缺，利率自然越高。超临界利用率触发利率急剧上升，以保护存款人利益。'><meta itemprop=wordCount content="283"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='借贷协议原理解析（进阶） 难度：⭐⭐ 进阶 | 字数：约 1,400 字 | 预计阅读时间：6 分钟
+一、DeFi 借贷的核心创新 传统借贷依赖信用评估：银行需要了解你的收入、负债、信用分数，才能决定是否放贷以及利率几何。
+DeFi 借贷的核心逻辑截然不同：先有抵押，后有贷款。 你必须超额质押加密资产，才能借出另一部分资产。整个过程没有任何身份验证，没有信用审查，没有人工干预——全部由智能合约自动执行。
+这意味着：
+信用空白地带（没有银行账户的人）也能获得金融服务 抵押率（Loan-to-Value Ratio, LTV）决定了你能借多少 自动清算机制确保出借方永远不会亏损 二、借贷协议的两大参与方 存款人（Supplier / Depositor） 将加密资产存入协议，赚取由市场供求决定的浮动利率。
+你存入 ETH → 协议按比例将利息发放给你 存款利率取决于市场：借的人多 → 利率高；借的人少 → 利率低 借款人（Borrower） 提供超额抵押品，借出所需资产。
+抵押率（以 Aave 为例）：ETH 通常为 60%–82.5% 存入价值 $10,000 的 ETH → 最多可借出 $6,000–$8,250 的稳定币 借出资产后，抵押品仍计入你的账户，但会被"锁定" 三、利率模型：供需决定价格 DeFi 借贷协议的利率并非由某个机构设定，而是由资产供需关系实时计算得出。
+Aave 的利率曲线 Aave 使用分段线性利率模型：
+利用率 U = 借款额 / 存款额 当 U < 80%（安全区间）： 借款利率 = 基础利率 + U × 斜率系数 当 U > 80%（警戒区间）： 借款利率 = 大幅上升，激励借款人还款、吸引存款人补仓 核心逻辑：利用率越高，说明资金越紧缺，利率自然越高。超临界利用率触发利率急剧上升，以保护存款人利益。'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-05_lending_protocols"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#一defi-借贷的核心创新>一、DeFi 借贷的核心创新</a></li><li><a href=#二借贷协议的两大参与方>二、借贷协议的两大参与方</a><ul><li><a href=#存款人supplier--depositor>存款人（Supplier / Depositor）</a></li><li><a href=#借款人borrower>借款人（Borrower）</a></li></ul></li><li><a href=#三利率模型供需决定价格>三、利率模型：供需决定价格</a><ul><li><a href=#aave-的利率曲线>Aave 的利率曲线</a></li><li><a href=#compound-的利率模型>Compound 的利率模型</a></li></ul></li><li><a href=#四清算机制协议的安全阀>四、清算机制：协议的安全阀</a><ul><li><a href=#触发条件>触发条件</a></li><li><a href=#清算过程>清算过程</a></li><li><a href=#2020-年黑色星期四事件>2020 年"黑色星期四"事件</a></li></ul></li><li><a href=#五主流借贷协议对比>五、主流借贷协议对比</a><ul><li><a href=#aave>Aave</a></li><li><a href=#compound>Compound</a></li><li><a href=#makerdaodai>MakerDAO（DAI）</a></li></ul></li><li><a href=#六defi-借贷的进阶玩法>六、DeFi 借贷的进阶玩法</a><ul><li><a href=#1-循环借贷leverage-loop>1. 循环借贷（Leverage Loop）</a></li><li><a href=#2-套利借贷>2. 套利借贷</a></li><li><a href=#3-流动性质押借贷>3. 流动性质押+借贷</a></li></ul></li><li><a href=#七风险汇总>七、风险汇总</a></li><li><a href=#八结语>八、结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>283 字</span></div></header><h1 id=借贷协议原理解析进阶>借贷协议原理解析（进阶）</h1><blockquote><p><strong>难度：⭐⭐ 进阶</strong> | 字数：约 1,400 字 | 预计阅读时间：6 分钟</p></blockquote><hr><h2 id=一defi-借贷的核心创新>一、DeFi 借贷的核心创新</h2><p>传统借贷依赖信用评估：银行需要了解你的收入、负债、信用分数，才能决定是否放贷以及利率几何。</p><p><strong>DeFi 借贷的核心逻辑截然不同：先有抵押，后有贷款。</strong> 你必须超额质押加密资产，才能借出另一部分资产。整个过程没有任何身份验证，没有信用审查，没有人工干预——全部由智能合约自动执行。</p><p>这意味着：</p><ul><li><strong>信用空白地带</strong>（没有银行账户的人）也能获得金融服务</li><li><strong>抵押率</strong>（Loan-to-Value Ratio, LTV）决定了你能借多少</li><li><strong>自动清算机制</strong>确保出借方永远不会亏损</li></ul><hr><h2 id=二借贷协议的两大参与方>二、借贷协议的两大参与方</h2><h3 id=存款人supplier--depositor>存款人（Supplier / Depositor）</h3><p>将加密资产存入协议，赚取由市场供求决定的<strong>浮动利率</strong>。</p><ul><li>你存入 ETH → 协议按比例将利息发放给你</li><li>存款利率取决于市场：<strong>借的人多 → 利率高；借的人少 → 利率低</strong></li></ul><h3 id=借款人borrower>借款人（Borrower）</h3><p>提供超额抵押品，借出所需资产。</p><ul><li>抵押率（以 Aave 为例）：ETH 通常为 60%–82.5%</li><li>存入价值 $10,000 的 ETH → 最多可借出 $6,000–$8,250 的稳定币</li><li>借出资产后，抵押品仍计入你的账户，但会被"锁定"</li></ul><hr><h2 id=三利率模型供需决定价格>三、利率模型：供需决定价格</h2><p>DeFi 借贷协议的利率并非由某个机构设定，而是由资产供需关系实时计算得出。</p><h3 id=aave-的利率曲线>Aave 的利率曲线</h3><p>Aave 使用<strong>分段线性利率模型</strong>：</p><pre tabindex=0><code>利用率 U = 借款额 / 存款额
+
+当 U &lt; 80%（安全区间）：
+  借款利率 = 基础利率 + U × 斜率系数
+
+当 U &gt; 80%（警戒区间）：
+  借款利率 = 大幅上升，激励借款人还款、吸引存款人补仓
+</code></pre><p><strong>核心逻辑</strong>：利用率越高，说明资金越紧缺，利率自然越高。超临界利用率触发利率急剧上升，以保护存款人利益。</p><h3 id=compound-的利率模型>Compound 的利率模型</h3><p>Compound 采用更简洁的<strong>线性利率模型</strong>：</p><pre tabindex=0><code>借款利率 = 利用率 × 利率系数
+</code></pre><p>Compound 的利率随利用率线性增长，没有明显的阶梯式跃升。</p><hr><h2 id=四清算机制协议的安全阀>四、清算机制：协议的安全阀</h2><p>这是 DeFi 借贷中最关键、也最残酷的机制。</p><h3 id=触发条件>触发条件</h3><p>每个借款账户都有一个<strong>健康因子（Health Factor, HF）</strong>：</p><pre tabindex=0><code>Health Factor = (抵押品价值 × 清算阈值) / 借款总额
+
+清算阈值 = 1 / 最大 LTV（通常为 0.825）
+</code></pre><ul><li>HF > 1：正常状态</li><li>HF ≤ 1：<strong>触发清算</strong></li></ul><h3 id=清算过程>清算过程</h3><p>假设 ETH 价格急剧下跌，某借款人：</p><ul><li>抵押品：价值 $10,000 的 ETH</li><li>借款：$7,000 USDC</li><li>清算阈值：82.5%</li><li>健康因子 = 10,000 × 0.825 / 7,000 = <strong>1.18</strong>（即将触发）</li></ul><p>当 HF ≤ 1 时，任何人都可以充当<strong>清算人（Liquidator）</strong>：</p><ol><li>清算人替借款人偿还 $7,000 USDC</li><li>清算人获得借款人的 ETH 抵押品（通常有 <strong>5%–10% 的清算奖励</strong>）</li><li>借款人损失部分甚至全部抵押品</li></ol><blockquote><p>举例：清算人用 $7,000 USDC，换走了价值约 $7,700–$8,400 的 ETH。<strong>这笔差价就是清算利润。</strong></p></blockquote><h3 id=2020-年黑色星期四事件>2020 年"黑色星期四"事件</h3><p>2020 年 3 月 12 日，ETH 价格在几分钟内暴跌 40%。MakerDAO 大量抵押债仓（CDP）同时触发清算，超过 <strong>$830 万</strong> 的抵押品被拍卖。由于市场流动性枯竭，竞拍者极少，出现了"零价成交"——抵押品以近乎零的价格被拍走，引发社区巨大争议。</p><p>这一事件深刻说明了<strong>极端行情下 DeFi 借贷协议清算机制的脆弱性</strong>。</p><hr><h2 id=五主流借贷协议对比>五、主流借贷协议对比</h2><h3 id=aave>Aave</h3><ul><li><strong>定位</strong>：综合借贷平台，支持ETH、USDC、WBTC 等数十种资产</li><li><strong>规模</strong>：TVL 常驻 DeFi 第一，超过 <strong>$200 亿</strong></li><li><strong>特色</strong>：利率市场化程度高，Flash Loan（闪电贷）功能</li></ul><p><strong>闪电贷（Flash Loan）</strong>：在同一笔交易内完成借、用、还三个步骤。如果无法归还，整笔交易回滚，仿佛什么都没发生。这允许无抵押贷出大额资金，常用于套利和清算。</p><h3 id=compound>Compound</h3><ul><li><strong>定位</strong>：简洁、专注的借贷协议</li><li><strong>规模</strong>：TVL 约 $50–80 亿</li><li><strong>特色</strong>：代码简洁，安全性经过长时间验证；是 Aave 之前的市场领导者</li></ul><h3 id=makerdaodai>MakerDAO（DAI）</h3><ul><li><strong>定位</strong>：去中心化稳定币协议（而非借贷平台）</li><li><strong>运作方式</strong>：用户抵押 ETH 生成 DAI（一种去中心化稳定币）</li><li><strong>特色</strong>：DAI 不是"借出某资产获得 DAI"，而是"锁定抵押品创造 DAI 债务"</li></ul><hr><h2 id=六defi-借贷的进阶玩法>六、DeFi 借贷的进阶玩法</h2><h3 id=1-循环借贷leverage-loop>1. 循环借贷（Leverage Loop）</h3><p>利用借贷协议提高仓位杠杆：</p><pre tabindex=0><code>1. 存入 ETH，获得存款利息
+2. 抵押 ETH，借出 USDT
+3. 用 USDT 买入更多 ETH
+4. 将新 ETH 继续存入...（循环）
+</code></pre><p><strong>效果</strong>：总仓位变大，ETH 净敞口增加。行情上涨时收益放大，下跌时损失同样放大。</p><h3 id=2-套利借贷>2. 套利借贷</h3><p>利用不同借贷协议之间的利率差进行套利：</p><ul><li>在 Aave 存款利率 3% 借出 USDC</li><li>在 Compound 存款利率 5% 存入 USDC</li><li>净赚 2% 利率差</li></ul><h3 id=3-流动性质押借贷>3. 流动性质押+借贷</h3><p>将质押中的 ETH（如 Lido stETH）作为抵押品借出稳定币，同时继续获得质押收益。这相当于释放了质押资产的流动性。</p><hr><h2 id=七风险汇总>七、风险汇总</h2><table><thead><tr><th>风险</th><th>描述</th></tr></thead><tbody><tr><td>智能合约风险</td><td>代码漏洞导致资金被盗</td></tr><tr><td>清算风险</td><td>市场急跌导致抵押品被低价清算</td></tr><tr><td>极端行情风险</td><td>流动性枯竭时清算无法执行</td></tr><tr><td>资产脱钩风险</td><td>抵押品（尤其是 LSD）挂钩资产价值偏离</td></tr><tr><td>治理攻击</td><td>通过持有大量治理代币操控协议参数</td></tr></tbody></table><hr><h2 id=八结语>八、结语</h2><p>DeFi 借贷协议是加密行业最精密的金融基础设施之一。它用代码替代了信用评估，用算法替代了利率定价，用自动清算替代了人工催收。</p><p>理解利率模型、清算机制和健康因子，是每一位 DeFi 参与者必须掌握的基本功。在追求收益的路上，风险往往藏在最不起眼的参数背后。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/researcher/06_stablecoins/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/researcher/04_major_dex_analysis/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

@@ -1,0 +1,96 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析
+
+标签：OpenClaw / 架构 / 深度
+日期：2026-03-23
+专题：OpenClaw 深度探索
+
+
+为什么理解架构很重要
+很多用户把 OpenClaw 当作"飞书/Telegram 接入 AI"的简单工具。但真正理解它的架构后，你会发现它本质上是一个本地 AI 智能体运行平台——有调度器、有工作区隔离、有多渠道分发。
+理解架构，才能用好 OpenClaw 的高级特性（多智能体、Skills、cron 定时任务等）。
+
+整体架构
+┌─────────────────────────────────────────────────────────────┐
+│                     OpenClaw Gateway                         │
+│                                                             │
+│  ┌──────────────┐     ┌─────────────┐     ┌────────────┐ │
+│  │   Channel    │     │    Agent   │     │   Skills   │ │
+│  │  (消息收发)   │ ──▶ │  (智能体)   │ ──▶ │  (工具)    │ │
+│  └──────────────┘     └─────────────┘     └────────────┘ │
+│         │                   │                    │        │
+│         └───────────────────┴────────────────────┘        │
+│                            │                              │
+│                   ┌────────▼────────┐                     │
+│                   │   Message Bus    │                     │
+│                   │   (消息总线)     │                     │
+│                   └─────────────────┘                     │
+└─────────────────────────────────────────────────────────────┘
+
+第一层：Channel（渠道）
+Channel 负责与外部聊天平台通信。'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/openclaw-series/02_openclaw_architecture/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/openclaw-series/02_openclaw_architecture/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/openclaw-series/02_openclaw_architecture/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/openclaw-series/02_openclaw_architecture/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析"><meta property="og:description" content='OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析 标签：OpenClaw / 架构 / 深度
+日期：2026-03-23
+专题：OpenClaw 深度探索
+为什么理解架构很重要 很多用户把 OpenClaw 当作"飞书/Telegram 接入 AI"的简单工具。但真正理解它的架构后，你会发现它本质上是一个本地 AI 智能体运行平台——有调度器、有工作区隔离、有多渠道分发。
+理解架构，才能用好 OpenClaw 的高级特性（多智能体、Skills、cron 定时任务等）。
+整体架构 ┌─────────────────────────────────────────────────────────────┐ │ OpenClaw Gateway │ │ │ │ ┌──────────────┐ ┌─────────────┐ ┌────────────┐ │ │ │ Channel │ │ Agent │ │ Skills │ │ │ │ (消息收发) │ ──▶ │ (智能体) │ ──▶ │ (工具) │ │ │ └──────────────┘ └─────────────┘ └────────────┘ │ │ │ │ │ │ │ └───────────────────┴────────────────────┘ │ │ │ │ │ ┌────────▼────────┐ │ │ │ Message Bus │ │ │ │ (消息总线) │ │ │ └─────────────────┘ │ └─────────────────────────────────────────────────────────────┘ 第一层：Channel（渠道） Channel 负责与外部聊天平台通信。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="openclaw-series"><meta property="article:published_time" content="2026-03-23T00:00:00+00:00"><meta property="article:modified_time" content="2026-03-23T00:00:00+00:00"><meta property="article:tag" content="OpenClaw"><meta property="article:tag" content="AI"><meta property="article:tag" content="工具"><meta itemprop=name content="OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析"><meta itemprop=description content='OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析 标签：OpenClaw / 架构 / 深度
+日期：2026-03-23
+专题：OpenClaw 深度探索
+为什么理解架构很重要 很多用户把 OpenClaw 当作"飞书/Telegram 接入 AI"的简单工具。但真正理解它的架构后，你会发现它本质上是一个本地 AI 智能体运行平台——有调度器、有工作区隔离、有多渠道分发。
+理解架构，才能用好 OpenClaw 的高级特性（多智能体、Skills、cron 定时任务等）。
+整体架构 ┌─────────────────────────────────────────────────────────────┐ │ OpenClaw Gateway │ │ │ │ ┌──────────────┐ ┌─────────────┐ ┌────────────┐ │ │ │ Channel │ │ Agent │ │ Skills │ │ │ │ (消息收发) │ ──▶ │ (智能体) │ ──▶ │ (工具) │ │ │ └──────────────┘ └─────────────┘ └────────────┘ │ │ │ │ │ │ │ └───────────────────┴────────────────────┘ │ │ │ │ │ ┌────────▼────────┐ │ │ │ Message Bus │ │ │ │ (消息总线) │ │ │ └─────────────────┘ │ └─────────────────────────────────────────────────────────────┘ 第一层：Channel（渠道） Channel 负责与外部聊天平台通信。'><meta itemprop=datePublished content="2026-03-23T00:00:00+00:00"><meta itemprop=dateModified content="2026-03-23T00:00:00+00:00"><meta itemprop=wordCount content="364"><meta itemprop=keywords content="OpenClaw,AI,工具"><meta name=twitter:card content="summary"><meta name=twitter:title content="OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析"><meta name=twitter:description content='OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析 标签：OpenClaw / 架构 / 深度
+日期：2026-03-23
+专题：OpenClaw 深度探索
+为什么理解架构很重要 很多用户把 OpenClaw 当作"飞书/Telegram 接入 AI"的简单工具。但真正理解它的架构后，你会发现它本质上是一个本地 AI 智能体运行平台——有调度器、有工作区隔离、有多渠道分发。
+理解架构，才能用好 OpenClaw 的高级特性（多智能体、Skills、cron 定时任务等）。
+整体架构 ┌─────────────────────────────────────────────────────────────┐ │ OpenClaw Gateway │ │ │ │ ┌──────────────┐ ┌─────────────┐ ┌────────────┐ │ │ │ Channel │ │ Agent │ │ Skills │ │ │ │ (消息收发) │ ──▶ │ (智能体) │ ──▶ │ (工具) │ │ │ └──────────────┘ └─────────────┘ └────────────┘ │ │ │ │ │ │ │ └───────────────────┴────────────────────┘ │ │ │ │ │ ┌────────▼────────┐ │ │ │ Message Bus │ │ │ │ (消息总线) │ │ │ └─────────────────┘ │ └─────────────────────────────────────────────────────────────┘ 第一层：Channel（渠道） Channel 负责与外部聊天平台通信。'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-02_openclaw_architecture"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#为什么理解架构很重要>为什么理解架构很重要</a></li><li><a href=#整体架构>整体架构</a></li><li><a href=#第一层channel渠道>第一层：Channel（渠道）</a><ul><li><a href=#支持的平台>支持的平台</a></li><li><a href=#channel-的核心职责>Channel 的核心职责</a></li><li><a href=#关键设计消息归一化>关键设计：消息归一化</a></li></ul></li><li><a href=#第二层agent智能体>第二层：Agent（智能体）</a><ul><li><a href=#agent-的结构>Agent 的结构</a></li><li><a href=#内置-agent-类型>内置 Agent 类型</a></li><li><a href=#任务调度机制>任务调度机制</a></li></ul></li><li><a href=#第三层skills技能系统>第三层：Skills（技能系统）</a><ul><li><a href=#内置-skills>内置 Skills</a></li><li><a href=#skills-调用机制>Skills 调用机制</a></li></ul></li><li><a href=#消息总线message-bus>消息总线（Message Bus）</a></li><li><a href=#持久化层>持久化层</a></li><li><a href=#架构带来的优势>架构带来的优势</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析</h1><div class=article-meta><time datetime=2026-03-23>2026-03-23</time>
+<span>•</span>
+<span>364 字</span>
+<span>•</span>
+<span>OpenClaw 深度探索</span></div><div class=article-tags><a href=/dex-bok/tags/openclaw/ class=article-tag>OpenClaw</a>
+<a href=/dex-bok/tags/ai/ class=article-tag>AI</a>
+<a href=/dex-bok/tags/%E5%B7%A5%E5%85%B7/ class=article-tag>工具</a></div></header><h1 id=openclaw-架构解析gatewayagentchannel-三层架构深度剖析>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析</h1><blockquote><p><strong>标签</strong>：OpenClaw / 架构 / 深度<br><strong>日期</strong>：2026-03-23<br><strong>专题</strong>：OpenClaw 深度探索</p></blockquote><hr><h2 id=为什么理解架构很重要>为什么理解架构很重要</h2><p>很多用户把 OpenClaw 当作"飞书/Telegram 接入 AI"的简单工具。但真正理解它的架构后，你会发现它本质上是一个<strong>本地 AI 智能体运行平台</strong>——有调度器、有工作区隔离、有多渠道分发。</p><p>理解架构，才能用好 OpenClaw 的高级特性（多智能体、Skills、cron 定时任务等）。</p><hr><h2 id=整体架构>整体架构</h2><pre tabindex=0><code>┌─────────────────────────────────────────────────────────────┐
+│                     OpenClaw Gateway                         │
+│                                                             │
+│  ┌──────────────┐     ┌─────────────┐     ┌────────────┐ │
+│  │   Channel    │     │    Agent   │     │   Skills   │ │
+│  │  (消息收发)   │ ──▶ │  (智能体)   │ ──▶ │  (工具)    │ │
+│  └──────────────┘     └─────────────┘     └────────────┘ │
+│         │                   │                    │        │
+│         └───────────────────┴────────────────────┘        │
+│                            │                              │
+│                   ┌────────▼────────┐                     │
+│                   │   Message Bus    │                     │
+│                   │   (消息总线)     │                     │
+│                   └─────────────────┘                     │
+└─────────────────────────────────────────────────────────────┘
+</code></pre><hr><h2 id=第一层channel渠道>第一层：Channel（渠道）</h2><p>Channel 负责<strong>与外部聊天平台通信</strong>。</p><h3 id=支持的平台>支持的平台</h3><table><thead><tr><th>渠道</th><th>说明</th><th>配置项</th></tr></thead><tbody><tr><td><strong>Telegram</strong></td><td>Bot API</td><td>botToken</td></tr><tr><td><strong>Discord</strong></td><td>Bot Token</td><td>botToken</td></tr><tr><td><strong>Feishu（飞书）</strong></td><td>企业自建应用</td><td>appId + appSecret</td></tr><tr><td><strong>WhatsApp</strong></td><td>WhatsApp Web</td><td>pairing 模式</td></tr><tr><td><strong>iMessage</strong></td><td>macOS Messages.app</td><td>本地插件</td></tr></tbody></table><h3 id=channel-的核心职责>Channel 的核心职责</h3><ol><li><strong>接收消息</strong>：从外部平台拉取或接收消息</li><li><strong>解析消息</strong>：提取文本、提及（@）、附件、语音等</li><li><strong>发送响应</strong>：将 AI 的回复推送回对应平台</li><li><strong>多账号路由</strong>：一个渠道可以有多个账号（如多个飞书机器人）</li></ol><h3 id=关键设计消息归一化>关键设计：消息归一化</h3><p>不同平台的消息格式完全不同（Discord 有 embeds、飞书有 at_mention、Telegram 有 reply_to），Channel 层统一转换为内部标准格式：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;chat_id&#34;</span>: <span style=color:#e6db74>&#34;oc_xxxx&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;sender_id&#34;</span>: <span style=color:#e6db74>&#34;ou_xxxx&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;channel&#34;</span>: <span style=color:#e6db74>&#34;feishu&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;was_mentioned&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;body&#34;</span>: <span style=color:#e6db74>&#34;用户消息内容&#34;</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=第二层agent智能体>第二层：Agent（智能体）</h2><p>Agent 是 OpenClaw 的<strong>核心执行单元</strong>，每个 Agent 有自己独立的工作区（workspace）和会话。</p><h3 id=agent-的结构>Agent 的结构</h3><pre tabindex=0><code>Agent
+├── workspace/     # 独立文件系统工作区
+├── SOUL.md        # 角色定义（人格、语气）
+├── USER.md        # 用户偏好
+├── AGENTS.md      # 工作规范
+├── skills/        # 可用技能
+└── sessions/      # 对话历史
+</code></pre><h3 id=内置-agent-类型>内置 Agent 类型</h3><table><thead><tr><th>Agent</th><th>角色</th><th>职责</th></tr></thead><tbody><tr><td><strong>main</strong></td><td>协调员</td><td>总入口，路由任务</td></tr><tr><td><strong>researcher</strong></td><td>研究员</td><td>调研、分析、竞品分析</td></tr><tr><td><strong>architect</strong></td><td>架构师</td><td>系统设计、技术选型</td></tr><tr><td><strong>developer</strong></td><td>开发者</td><td>写代码、实现功能</td></tr><tr><td><strong>frontend</strong></td><td>前端</td><td>UI/UX 设计</td></tr><tr><td><strong>reviewer</strong></td><td>评审</td><td>代码/方案评审</td></tr><tr><td><strong>security</strong></td><td>安全</td><td>安全风险分析</td></tr><tr><td><strong>decider</strong></td><td>决策者</td><td>最终拍板</td></tr></tbody></table><h3 id=任务调度机制>任务调度机制</h3><p>当 main 收到一个任务时：</p><pre tabindex=0><code>用户消息
+    │
+    ▼
+main (协调员) ── 分析任务类型 ──▶ 派发给对应 Agent
+    │
+    ├── 调研类 ──▶ researcher
+    ├── 架构类 ──▶ architect
+    ├── 开发类 ──▶ developer
+    └── 安全类 ──▶ security
+</code></pre><p>每个 Agent 独立运行在自己的 workspace 中，互不干扰，通过 <code>sessions</code> 机制汇报结果。</p><hr><h2 id=第三层skills技能系统>第三层：Skills（技能系统）</h2><p>Skills 是 OpenClaw 的<strong>扩展工具层</strong>，让 AI 智能体能够执行具体操作。</p><h3 id=内置-skills>内置 Skills</h3><table><thead><tr><th>Skill</th><th>功能</th></tr></thead><tbody><tr><td><strong>image-generation</strong></td><td>AI 图片生成（DALL-E、MiniMaxi、FLUX）</td></tr><tr><td><strong>text-to-video</strong></td><td>AI 视频生成</td></tr><tr><td><strong>video-frames</strong></td><td>视频帧提取</td></tr><tr><td><strong>weather</strong></td><td>天气预报</td></tr><tr><td><strong>github</strong></td><td>GitHub API 操作</td></tr><tr><td><strong>feishu-doc</strong></td><td>飞书文档读写</td></tr><tr><td><strong>feishu-bitable</strong></td><td>飞书多维表格操作</td></tr><tr><td><strong>gog</strong></td><td>Google Workspace（Gmail、Calendar）</td></tr><tr><td><strong>1password</strong></td><td>密码管理</td></tr></tbody></table><h3 id=skills-调用机制>Skills 调用机制</h3><p>当 Agent 需要执行某个技能时（如生成图片），会通过统一的 Skill 接口调用：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>python3 ~/.openclaw/workspace/skills/image-generation/image_generate.py <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>  --prompt <span style=color:#e6db74>&#34;...&#34;</span> <span style=color:#ae81ff>\
+</span></span></span><span style=display:flex><span>  --output ~/Downloads/image.png
+</span></span></code></pre></div><p>Skills 返回结构化的结果给 Agent，Agent 再将结果整合到回复中。</p><hr><h2 id=消息总线message-bus>消息总线（Message Bus）</h2><p>Channel、Agent、Skills 之间的协作靠消息总线协调：</p><ol><li><strong>Channel</strong> 把用户消息发给 main Agent</li><li><strong>main Agent</strong> 分析后派生子任务给专业 Agent</li><li><strong>子 Agent</strong> 调用 Skills 执行具体操作</li><li><strong>结果</strong> 通过消息总线返回 main</li><li><strong>main</strong> 汇总结果通过 Channel 发回用户</li></ol><hr><h2 id=持久化层>持久化层</h2><table><thead><tr><th>数据</th><th>存储位置</th></tr></thead><tbody><tr><td>对话历史</td><td><code>~/.openclaw/agents/&lt;id>/sessions/</code></td></tr><tr><td>文件系统</td><td>各 Agent 的 <code>workspace/</code></td></tr><tr><td>凭证信息</td><td><code>~/.openclaw/credentials/</code>（加密）</td></tr><tr><td>定时任务</td><td><code>~/.openclaw/cron/</code></td></tr><tr><td>插件配置</td><td><code>~/.openclaw/openclaw.json</code></td></tr></tbody></table><hr><h2 id=架构带来的优势>架构带来的优势</h2><ol><li><strong>工作区隔离</strong>：每个 Agent 在独立目录工作，不会互相污染</li><li><strong>弹性扩展</strong>：新增渠道或 Agent 只需配置，不需要改代码</li><li><strong>本地优先</strong>：所有数据留在本地，只有 AI API 调用走网络</li><li><strong>技能可插拔</strong>：Skills 系统让任何工具都能接入 AI</li></ol><hr><p><em>系列下一篇：<a href=../openclaw-series/03-multi-agent.md>用 OpenClaw 构建多智能体团队</a></em></p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/openclaw-series/03_openclaw_multi_agent/>用 OpenClaw 构建多智能体团队：角色划分与任务协调实战</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/openclaw-series/05_openclaw_local_deployment/>OpenClaw 安全实践：自托管数据控制与权限管理</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

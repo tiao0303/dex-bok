@@ -1,0 +1,253 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="跨链前端集成：让 DApp 在多链生态中自由穿梭
+
+难度：🌿🌿🌿🌿 高级 | 字数：约 1150 字 | 预计阅读：8 分钟
+
+前言
+以太坊主网 Gas 费用高企，BSC、Polygon、Avalanche、Arbitrum 等 Layer2/Layer1 新链蓬勃发展，用户手里的资产分布在不同区块链上。跨链前端集成已成为现代 DApp 的必备能力。本篇文章将深入探讨多链架构设计、跨链通信机制以及主流跨链方案的前端集成实践。
+
+一、为什么需要跨链？
+1.1 用户现状
+
+用户在 Ethereum 有 ETH 和主流 ERC-20 代币
+在 BSC 有 BNB 和 BEP-20 代币
+在 Polygon 有 MATIC 和 PRC-20 代币
+跨链 Swap、跨链质押、跨链 NFT 交易需求激增
+
+1.2 跨链 DApp 的类型
+
+  
+      
+          类型
+          说明
+      
+  
+  
+      
+          跨链桥接
+          将资产从一条链转移到另一条链
+      
+      
+          跨链 Swap
+          兑换不同链上的同种资产（如 ETH on ETH ↔ ETH on Polygon）
+      
+      
+          跨链聚合
+          聚合多条链的流动性（如 LI.FI、Socket）
+      
+      
+          跨链消息传递
+          在一条链上触发另一条链上的合约逻辑（如 LayerZero）
+      
+  
+
+
+二、多链前端架构
+2.1 链配置抽象
+不要在代码中硬编码 chainId，统一管理所有链的配置："><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/frontend/10_cross_chain_frontend_integration/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/frontend/10_cross_chain_frontend_integration/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/frontend/10_cross_chain_frontend_integration/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/frontend/10_cross_chain_frontend_integration/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content="跨链前端集成：让 DApp 在多链生态中自由穿梭 难度：🌿🌿🌿🌿 高级 | 字数：约 1150 字 | 预计阅读：8 分钟
+前言 以太坊主网 Gas 费用高企，BSC、Polygon、Avalanche、Arbitrum 等 Layer2/Layer1 新链蓬勃发展，用户手里的资产分布在不同区块链上。跨链前端集成已成为现代 DApp 的必备能力。本篇文章将深入探讨多链架构设计、跨链通信机制以及主流跨链方案的前端集成实践。
+一、为什么需要跨链？ 1.1 用户现状 用户在 Ethereum 有 ETH 和主流 ERC-20 代币 在 BSC 有 BNB 和 BEP-20 代币 在 Polygon 有 MATIC 和 PRC-20 代币 跨链 Swap、跨链质押、跨链 NFT 交易需求激增 1.2 跨链 DApp 的类型 类型 说明 跨链桥接 将资产从一条链转移到另一条链 跨链 Swap 兑换不同链上的同种资产（如 ETH on ETH ↔ ETH on Polygon） 跨链聚合 聚合多条链的流动性（如 LI.FI、Socket） 跨链消息传递 在一条链上触发另一条链上的合约逻辑（如 LayerZero） 二、多链前端架构 2.1 链配置抽象 不要在代码中硬编码 chainId，统一管理所有链的配置："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content="跨链前端集成：让 DApp 在多链生态中自由穿梭 难度：🌿🌿🌿🌿 高级 | 字数：约 1150 字 | 预计阅读：8 分钟
+前言 以太坊主网 Gas 费用高企，BSC、Polygon、Avalanche、Arbitrum 等 Layer2/Layer1 新链蓬勃发展，用户手里的资产分布在不同区块链上。跨链前端集成已成为现代 DApp 的必备能力。本篇文章将深入探讨多链架构设计、跨链通信机制以及主流跨链方案的前端集成实践。
+一、为什么需要跨链？ 1.1 用户现状 用户在 Ethereum 有 ETH 和主流 ERC-20 代币 在 BSC 有 BNB 和 BEP-20 代币 在 Polygon 有 MATIC 和 PRC-20 代币 跨链 Swap、跨链质押、跨链 NFT 交易需求激增 1.2 跨链 DApp 的类型 类型 说明 跨链桥接 将资产从一条链转移到另一条链 跨链 Swap 兑换不同链上的同种资产（如 ETH on ETH ↔ ETH on Polygon） 跨链聚合 聚合多条链的流动性（如 LI.FI、Socket） 跨链消息传递 在一条链上触发另一条链上的合约逻辑（如 LayerZero） 二、多链前端架构 2.1 链配置抽象 不要在代码中硬编码 chainId，统一管理所有链的配置："><meta itemprop=wordCount content="698"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content="跨链前端集成：让 DApp 在多链生态中自由穿梭 难度：🌿🌿🌿🌿 高级 | 字数：约 1150 字 | 预计阅读：8 分钟
+前言 以太坊主网 Gas 费用高企，BSC、Polygon、Avalanche、Arbitrum 等 Layer2/Layer1 新链蓬勃发展，用户手里的资产分布在不同区块链上。跨链前端集成已成为现代 DApp 的必备能力。本篇文章将深入探讨多链架构设计、跨链通信机制以及主流跨链方案的前端集成实践。
+一、为什么需要跨链？ 1.1 用户现状 用户在 Ethereum 有 ETH 和主流 ERC-20 代币 在 BSC 有 BNB 和 BEP-20 代币 在 Polygon 有 MATIC 和 PRC-20 代币 跨链 Swap、跨链质押、跨链 NFT 交易需求激增 1.2 跨链 DApp 的类型 类型 说明 跨链桥接 将资产从一条链转移到另一条链 跨链 Swap 兑换不同链上的同种资产（如 ETH on ETH ↔ ETH on Polygon） 跨链聚合 聚合多条链的流动性（如 LI.FI、Socket） 跨链消息传递 在一条链上触发另一条链上的合约逻辑（如 LayerZero） 二、多链前端架构 2.1 链配置抽象 不要在代码中硬编码 chainId，统一管理所有链的配置："><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-10_cross_chain_frontend_integration"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#一为什么需要跨链>一、为什么需要跨链？</a><ul><li><a href=#11-用户现状>1.1 用户现状</a></li><li><a href=#12-跨链-dapp-的类型>1.2 跨链 DApp 的类型</a></li></ul></li><li><a href=#二多链前端架构>二、多链前端架构</a><ul><li><a href=#21-链配置抽象>2.1 链配置抽象</a></li><li><a href=#22-多链-provider-管理>2.2 多链 Provider 管理</a></li></ul></li><li><a href=#三链切换与网络添加>三、链切换与网络添加</a><ul><li><a href=#31-切换链>3.1 切换链</a></li><li><a href=#32-添加自定义链>3.2 添加自定义链</a></li></ul></li><li><a href=#四跨链桥接集成>四、跨链桥接集成</a><ul><li><a href=#41-桥接服务选型>4.1 桥接服务选型</a></li><li><a href=#42-lifi-集成示例>4.2 LI.FI 集成示例</a></li></ul></li><li><a href=#五跨链数据聚合>五、跨链数据聚合</a><ul><li><a href=#51-多链余额查询>5.1 多链余额查询</a></li><li><a href=#52-统一交易历史>5.2 统一交易历史</a></li></ul></li><li><a href=#六跨链开发注意事项>六、跨链开发注意事项</a></li><li><a href=#小结>小结</a></li><li><a href=#系列总结>系列总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>698 字</span></div></header><h1 id=跨链前端集成让-dapp-在多链生态中自由穿梭>跨链前端集成：让 DApp 在多链生态中自由穿梭</h1><blockquote><p>难度：🌿🌿🌿🌿 高级 | 字数：约 1150 字 | 预计阅读：8 分钟</p></blockquote><h2 id=前言>前言</h2><p>以太坊主网 Gas 费用高企，BSC、Polygon、Avalanche、Arbitrum 等 Layer2/Layer1 新链蓬勃发展，用户手里的资产分布在不同区块链上。跨链前端集成已成为现代 DApp 的必备能力。本篇文章将深入探讨多链架构设计、跨链通信机制以及主流跨链方案的前端集成实践。</p><hr><h2 id=一为什么需要跨链>一、为什么需要跨链？</h2><h3 id=11-用户现状>1.1 用户现状</h3><ul><li>用户在 Ethereum 有 ETH 和主流 ERC-20 代币</li><li>在 BSC 有 BNB 和 BEP-20 代币</li><li>在 Polygon 有 MATIC 和 PRC-20 代币</li><li>跨链 Swap、跨链质押、跨链 NFT 交易需求激增</li></ul><h3 id=12-跨链-dapp-的类型>1.2 跨链 DApp 的类型</h3><table><thead><tr><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>跨链桥接</td><td>将资产从一条链转移到另一条链</td></tr><tr><td>跨链 Swap</td><td>兑换不同链上的同种资产（如 ETH on ETH ↔ ETH on Polygon）</td></tr><tr><td>跨链聚合</td><td>聚合多条链的流动性（如 LI.FI、Socket）</td></tr><tr><td>跨链消息传递</td><td>在一条链上触发另一条链上的合约逻辑（如 LayerZero）</td></tr></tbody></table><hr><h2 id=二多链前端架构>二、多链前端架构</h2><h3 id=21-链配置抽象>2.1 链配置抽象</h3><p>不要在代码中硬编码 chainId，统一管理所有链的配置：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// config/chains.ts
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>interface</span> <span style=color:#a6e22e>ChainConfig</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>id</span>: <span style=color:#66d9ef>number</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>rpcUrl</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>explorer</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>nativeCurrency</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>name</span>: <span style=color:#66d9ef>string</span>; <span style=color:#66d9ef>symbol</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>string</span>; <span style=color:#a6e22e>decimals</span>: <span style=color:#66d9ef>number</span> };
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>icon</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>isTestnet?</span>: <span style=color:#66d9ef>boolean</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>CHAINS</span>: <span style=color:#66d9ef>Record</span>&lt;<span style=color:#f92672>number</span>, <span style=color:#a6e22e>ChainConfig</span>&gt; <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>1</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>id</span>: <span style=color:#66d9ef>1</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Ethereum&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rpcUrl</span>: <span style=color:#66d9ef>process.env.REACT_APP_ETH_RPC</span><span style=color:#f92672>!</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>explorer</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://etherscan.io&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>nativeCurrency</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Ether&#39;</span>, <span style=color:#66d9ef>symbol</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ETH&#39;</span>, <span style=color:#a6e22e>decimals</span>: <span style=color:#66d9ef>18</span> },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>icon</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/icons/ethereum.svg&#39;</span>,
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>137</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>id</span>: <span style=color:#66d9ef>137</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Polygon&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rpcUrl</span>: <span style=color:#66d9ef>process.env.REACT_APP_POLYGON_RPC</span><span style=color:#f92672>!</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>explorer</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://polygonscan.com&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>nativeCurrency</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;MATIC&#39;</span>, <span style=color:#66d9ef>symbol</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;MATIC&#39;</span>, <span style=color:#a6e22e>decimals</span>: <span style=color:#66d9ef>18</span> },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>icon</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/icons/polygon.svg&#39;</span>,
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>56</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>id</span>: <span style=color:#66d9ef>56</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;BSC&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rpcUrl</span>: <span style=color:#66d9ef>process.env.REACT_APP_BSC_RPC</span><span style=color:#f92672>!</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>explorer</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://bscscan.com&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>nativeCurrency</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;BNB&#39;</span>, <span style=color:#66d9ef>symbol</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;BNB&#39;</span>, <span style=color:#a6e22e>decimals</span>: <span style=color:#66d9ef>18</span> },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>icon</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/icons/bsc.svg&#39;</span>,
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#ae81ff>42161</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>id</span>: <span style=color:#66d9ef>42161</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Arbitrum One&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rpcUrl</span>: <span style=color:#66d9ef>process.env.REACT_APP_ARBITRUM_RPC</span><span style=color:#f92672>!</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>explorer</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;https://arbiscan.io&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>nativeCurrency</span><span style=color:#f92672>:</span> { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Ether&#39;</span>, <span style=color:#66d9ef>symbol</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ETH&#39;</span>, <span style=color:#a6e22e>decimals</span>: <span style=color:#66d9ef>18</span> },
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>icon</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/icons/arbitrum.svg&#39;</span>,
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>SUPPORTED_CHAIN_IDS</span> <span style=color:#f92672>=</span> Object.<span style=color:#a6e22e>keys</span>(<span style=color:#a6e22e>CHAINS</span>).<span style=color:#a6e22e>map</span>(Number);
+</span></span></code></pre></div><h3 id=22-多链-provider-管理>2.2 多链 Provider 管理</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>BrowserProvider</span>, <span style=color:#a6e22e>JsonRpcProvider</span> } <span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#39;ethers&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>MultiChainProvider</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>private</span> <span style=color:#a6e22e>providers</span>: <span style=color:#66d9ef>Map</span>&lt;<span style=color:#f92672>number</span>, <span style=color:#a6e22e>BrowserProvider</span> <span style=color:#960050;background-color:#1e0010>|</span> <span style=color:#a6e22e>JsonRpcProvider</span>&gt; <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Map</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>getProvider</span>(<span style=color:#a6e22e>chainId</span>: <span style=color:#66d9ef>number</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>BrowserProvider</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>providers</span>.<span style=color:#a6e22e>has</span>(<span style=color:#a6e22e>chainId</span>)) {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>config</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>CHAINS</span>[<span style=color:#a6e22e>chainId</span>];
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> (<span style=color:#f92672>!</span><span style=color:#a6e22e>config</span>) <span style=color:#66d9ef>throw</span> <span style=color:#66d9ef>new</span> Error(<span style=color:#e6db74>`Unsupported chain: </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>chainId</span><span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// MetaMask 已连接时优先使用 BrowserProvider
+</span></span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> (window.<span style=color:#a6e22e>ethereum</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>providers</span>.<span style=color:#66d9ef>set</span>(<span style=color:#a6e22e>chainId</span>, <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>BrowserProvider</span>(window.<span style=color:#a6e22e>ethereum</span>));
+</span></span><span style=display:flex><span>      } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>providers</span>.<span style=color:#66d9ef>set</span>(<span style=color:#a6e22e>chainId</span>, <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>JsonRpcProvider</span>(<span style=color:#a6e22e>config</span>.<span style=color:#a6e22e>rpcUrl</span>));
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>providers</span>.<span style=color:#66d9ef>get</span>(<span style=color:#a6e22e>chainId</span>)<span style=color:#f92672>!</span>;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>getContract</span>(<span style=color:#a6e22e>chainId</span>: <span style=color:#66d9ef>number</span>, <span style=color:#a6e22e>address</span>: <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>abi</span>: <span style=color:#66d9ef>any</span>, <span style=color:#a6e22e>signer?</span>: <span style=color:#66d9ef>any</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>provider</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>getProvider</span>(<span style=color:#a6e22e>chainId</span>);
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Contract</span>(<span style=color:#a6e22e>address</span>, <span style=color:#a6e22e>abi</span>, <span style=color:#a6e22e>signer</span> <span style=color:#f92672>||</span> <span style=color:#a6e22e>provider</span>);
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>multiChainProvider</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>MultiChainProvider</span>();
+</span></span></code></pre></div><hr><h2 id=三链切换与网络添加>三、链切换与网络添加</h2><h3 id=31-切换链>3.1 切换链</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>switchChain</span>(<span style=color:#a6e22e>targetChainId</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>number</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>hexChainId</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>`0x</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>targetChainId</span>.<span style=color:#a6e22e>toString</span>(<span style=color:#ae81ff>16</span>)<span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>try</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>await</span> window.<span style=color:#a6e22e>ethereum</span>.<span style=color:#a6e22e>request</span>({
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;wallet_switchEthereumChain&#39;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>params</span><span style=color:#f92672>:</span> [{ <span style=color:#a6e22e>chainId</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>hexChainId</span> }],
+</span></span><span style=display:flex><span>    });
+</span></span><span style=display:flex><span>  } <span style=color:#66d9ef>catch</span> (<span style=color:#a6e22e>switchError</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Chain not added yet, add it
+</span></span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>switchError</span>.<span style=color:#a6e22e>code</span> <span style=color:#f92672>===</span> <span style=color:#ae81ff>4902</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>addChain</span>(<span style=color:#a6e22e>targetChainId</span>);
+</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>throw</span> <span style=color:#a6e22e>switchError</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=32-添加自定义链>3.2 添加自定义链</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>addChain</span>(<span style=color:#a6e22e>chainId</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>number</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>config</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>CHAINS</span>[<span style=color:#a6e22e>chainId</span>];
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>await</span> window.<span style=color:#a6e22e>ethereum</span>.<span style=color:#a6e22e>request</span>({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>method</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;wallet_addEthereumChain&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>params</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>      {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>chainId</span><span style=color:#f92672>:</span> <span style=color:#e6db74>`0x</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>chainId</span>.<span style=color:#a6e22e>toString</span>(<span style=color:#ae81ff>16</span>)<span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>chainName</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>config</span>.<span style=color:#a6e22e>name</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>rpcUrls</span><span style=color:#f92672>:</span> [<span style=color:#a6e22e>config</span>.<span style=color:#a6e22e>rpcUrl</span>],
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>blockExplorerUrls</span><span style=color:#f92672>:</span> [<span style=color:#a6e22e>config</span>.<span style=color:#a6e22e>explorer</span>],
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>nativeCurrency</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>config</span>.<span style=color:#a6e22e>nativeCurrency</span>,
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>    ],
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=四跨链桥接集成>四、跨链桥接集成</h2><h3 id=41-桥接服务选型>4.1 桥接服务选型</h3><table><thead><tr><th>方案</th><th>特点</th><th>前端集成方式</th></tr></thead><tbody><tr><td>LayerZero</td><td>消息跨链，通用性强</td><td>SDK (<code>@layerzerolabs/sdk</code>)</td></tr><tr><td>Chainlink CCIP</td><td>跨链互操作协议</td><td>SDK (<code>@chainlink/ccip</code>)</td></tr><tr><td>LI.FI</td><td>聚合多条桥接路线</td><td>SDK (<code>@lifinance/sdk</code>)</td></tr><tr><td>Socket</td><td>流动性聚合</td><td>SDK (<code>@socket.tech/sdk</code>)</td></tr></tbody></table><h3 id=42-lifi-集成示例>4.2 LI.FI 集成示例</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>npm install @lifinance/sdk
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>LiFi</span>, <span style=color:#a6e22e>Route</span> } <span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#39;@lifinance/sdk&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>lifi</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>LiFi</span>({});
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getCrossChainRoute</span>(
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>fromChain</span>: <span style=color:#66d9ef>number</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>toChain</span>: <span style=color:#66d9ef>number</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>fromToken</span>: <span style=color:#66d9ef>string</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>toToken</span>: <span style=color:#66d9ef>string</span>,
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>amount</span>: <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>route</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>lifi</span>.<span style=color:#a6e22e>getRoutes</span>({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fromChain</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>toChain</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fromToken</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>toToken</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>amount</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>options</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>order</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;RECOMMENDED&#39;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>maxPriceImpact</span>: <span style=color:#66d9ef>0.03</span>, <span style=color:#75715e>// 价格影响不超过 3%
+</span></span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>route</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>executeCrossChainSwap</span>(<span style=color:#a6e22e>route</span>: <span style=color:#66d9ef>Route</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>signer</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>provider</span>.<span style=color:#a6e22e>getSigner</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>status</span> } <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>lifi</span>.<span style=color:#a6e22e>executeRoute</span>(<span style=color:#a6e22e>route</span>, {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>signer</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>updateHandler</span><span style=color:#f92672>:</span> (<span style=color:#a6e22e>update</span>) <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// 实时更新交易状态
+</span></span></span><span style=display:flex><span>      <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;跨链进度:&#39;</span>, <span style=color:#a6e22e>update</span>.<span style=color:#a6e22e>status</span>, <span style=color:#a6e22e>update</span>.<span style=color:#a6e22e>substatus</span>);
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>  });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;跨链交易最终状态:&#39;</span>, <span style=color:#a6e22e>status</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=五跨链数据聚合>五、跨链数据聚合</h2><h3 id=51-多链余额查询>5.1 多链余额查询</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getMultiChainBalances</span>(<span style=color:#a6e22e>address</span>: <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>tokens</span>: <span style=color:#66d9ef>TokenConfig</span>[]) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>results</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>Promise</span>.<span style=color:#a6e22e>allSettled</span>(
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>tokens</span>.<span style=color:#a6e22e>map</span>(<span style=color:#66d9ef>async</span> ({ <span style=color:#a6e22e>chainId</span>, <span style=color:#a6e22e>address</span>: <span style=color:#66d9ef>tokenAddress</span> }) <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>try</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>contract</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>multiChainProvider</span>.<span style=color:#a6e22e>getContract</span>(
+</span></span><span style=display:flex><span>          <span style=color:#a6e22e>chainId</span>,
+</span></span><span style=display:flex><span>          <span style=color:#a6e22e>tokenAddress</span>,
+</span></span><span style=display:flex><span>          <span style=color:#a6e22e>ERC20_ABI</span>
+</span></span><span style=display:flex><span>        );
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>balance</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>contract</span>.<span style=color:#a6e22e>balanceOf</span>(<span style=color:#a6e22e>address</span>);
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> { <span style=color:#a6e22e>chainId</span>, <span style=color:#a6e22e>tokenAddress</span>, <span style=color:#a6e22e>balance</span>: <span style=color:#66d9ef>balance.toString</span>() };
+</span></span><span style=display:flex><span>      } <span style=color:#66d9ef>catch</span> (<span style=color:#a6e22e>err</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> { <span style=color:#a6e22e>chainId</span>, <span style=color:#a6e22e>tokenAddress</span>, <span style=color:#a6e22e>balance</span>: <span style=color:#66d9ef>null</span>, <span style=color:#a6e22e>error</span>: <span style=color:#66d9ef>err.message</span> };
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>results</span>.<span style=color:#a6e22e>map</span>((<span style=color:#a6e22e>r</span>, <span style=color:#a6e22e>i</span>) <span style=color:#f92672>=&gt;</span> ({
+</span></span><span style=display:flex><span>    ...<span style=color:#a6e22e>tokens</span>[<span style=color:#a6e22e>i</span>],
+</span></span><span style=display:flex><span>    ...(<span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>status</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#39;fulfilled&#39;</span> <span style=color:#f92672>?</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>value</span> <span style=color:#f92672>:</span> { <span style=color:#a6e22e>balance</span>: <span style=color:#66d9ef>null</span>, <span style=color:#a6e22e>error</span>: <span style=color:#66d9ef>r.reason</span> }),
+</span></span><span style=display:flex><span>  }));
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=52-统一交易历史>5.2 统一交易历史</h3><p>不同链的交易记录来自不同的 Explorer API，需要分别查询后合并展示：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>getUnifiedTransactionHistory</span>(<span style=color:#a6e22e>address</span>: <span style=color:#66d9ef>string</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>chains</span> <span style=color:#f92672>=</span> [<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>137</span>, <span style=color:#ae81ff>56</span>, <span style=color:#ae81ff>42161</span>]; <span style=color:#75715e>// Ethereum, Polygon, BSC, Arbitrum
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>histories</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>Promise</span>.<span style=color:#a6e22e>all</span>(
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>chains</span>.<span style=color:#a6e22e>map</span>(<span style=color:#66d9ef>async</span> (<span style=color:#a6e22e>chainId</span>) <span style=color:#f92672>=&gt;</span> {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>explorerApi</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>`</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>CHAINS</span>[<span style=color:#a6e22e>chainId</span>].<span style=color:#a6e22e>explorer</span><span style=color:#e6db74>}</span><span style=color:#e6db74>/api`</span>;
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>params</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>URLSearchParams</span>({
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>module</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;account&#39;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>action</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;txlist&#39;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>address</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>sort</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;desc&#39;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>limit</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;20&#39;</span>,
+</span></span><span style=display:flex><span>      });
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>res</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>fetch</span>(<span style=color:#e6db74>`</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>explorerApi</span><span style=color:#e6db74>}</span><span style=color:#e6db74>?</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>params</span><span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>);
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>data</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>json</span>();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> (<span style=color:#a6e22e>data</span>.<span style=color:#a6e22e>result</span> <span style=color:#f92672>||</span> []).<span style=color:#a6e22e>map</span>((<span style=color:#a6e22e>tx</span>: <span style=color:#66d9ef>any</span>) <span style=color:#f92672>=&gt;</span> ({
+</span></span><span style=display:flex><span>        ...<span style=color:#a6e22e>tx</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>chainId</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>explorer</span>: <span style=color:#66d9ef>CHAINS</span>[<span style=color:#a6e22e>chainId</span>].<span style=color:#a6e22e>explorer</span>,
+</span></span><span style=display:flex><span>      }));
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// 按时间戳合并排序
+</span></span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>histories</span>.<span style=color:#a6e22e>flat</span>().<span style=color:#a6e22e>sort</span>((<span style=color:#a6e22e>a</span>, <span style=color:#a6e22e>b</span>) <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>timeStamp</span> <span style=color:#f92672>-</span> <span style=color:#a6e22e>a</span>.<span style=color:#a6e22e>timeStamp</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=六跨链开发注意事项>六、跨链开发注意事项</h2><ol><li><strong>Gas 费估算</strong>：不同链的 Gas 计算方式不同（ETH 用 Wei，BNB 用 Gwei，MATIC 费用极低），需要分别处理</li><li><strong>确认数差异</strong>：不同链的区块确认速度差异巨大（Arbitrum ~1分钟 vs Ethereum ~12分钟），UI 需要分别展示</li><li><strong>地址差异</strong>：部分链使用与以太坊相同的地址格式，但也有链（如 Solana）使用不同的地址方案</li><li><strong>跨链延迟</strong>：跨链交易比单链交易慢得多，乐观更新需要更长的时间窗口</li></ol><hr><h2 id=小结>小结</h2><p>跨链前端集成涉及链配置抽象、多链 Provider 管理、桥接服务集成、交易历史聚合等多个复杂环节。本篇文章提供了多链架构的核心设计思路和主要集成方案。现代 Web3 DApp 必然是多链的，掌握跨链集成能力是高级 Web3 前端开发者的核心竞争力。</p><hr><h2 id=系列总结>系列总结</h2><p>从第一篇的入门路径规划，到最后一篇的跨链集成，我们完成了 Web3 前端开发的完整知识图谱覆盖。这十篇文章涵盖了：</p><ul><li><strong>入门</strong>：前端基础、框架入门</li><li><strong>进阶</strong>：Web3 库使用、钱包连接、架构设计、签名验签</li><li><strong>高级</strong>：安全防护、性能优化、跨链集成</li></ul><p>Web3 前端是一个快速演进的领域，持续学习和关注生态变化是保持竞争力的关键。祝你在 Web3 的世界中写出优秀的去中心化应用！</p><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/frontend/09_frontend_performance_optimization/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

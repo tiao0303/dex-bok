@@ -1,0 +1,118 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="深入解析 AMM（自动做市商）的工作原理，从恒定乘积公式到流动性池机制，理解为什么 DEX 能无需订单簿完成交易。"><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/t2_intermediate/t2_06_amm_principles/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/t2_intermediate/t2_06_amm_principles/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/t2_intermediate/t2_06_amm_principles/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/t2_intermediate/t2_06_amm_principles/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎"><meta property="og:description" content="深入解析 AMM（自动做市商）的工作原理，从恒定乘积公式到流动性池机制，理解为什么 DEX 能无需订单簿完成交易。"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-03-19T10:00:00+08:00"><meta property="article:modified_time" content="2026-03-19T10:00:00+08:00"><meta property="article:tag" content="AMM"><meta property="article:tag" content="DEX"><meta property="article:tag" content="自动做市商"><meta property="article:tag" content="DeFi"><meta property="article:tag" content="Uniswap"><meta itemprop=name content="T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎"><meta itemprop=description content="深入解析 AMM（自动做市商）的工作原理，从恒定乘积公式到流动性池机制，理解为什么 DEX 能无需订单簿完成交易。"><meta itemprop=datePublished content="2026-03-19T10:00:00+08:00"><meta itemprop=dateModified content="2026-03-19T10:00:00+08:00"><meta itemprop=wordCount content="748"><meta itemprop=keywords content="AMM,DEX,自动做市商,DeFi,Uniswap"><meta name=twitter:card content="summary"><meta name=twitter:title content="T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎"><meta name=twitter:description content="深入解析 AMM（自动做市商）的工作原理，从恒定乘积公式到流动性池机制，理解为什么 DEX 能无需订单簿完成交易。"><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-t2_06_amm_principles"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#一amm-是什么>一、AMM 是什么？</a><ul><li><a href=#传统做市商-vs-amm>传统做市商 vs AMM</a></li></ul></li><li><a href=#二恒定乘积公式amm-的灵魂>二、恒定乘积公式：AMM 的灵魂</a><ul><li><a href=#公式本身>公式本身</a></li><li><a href=#直观理解>直观理解</a></li></ul></li><li><a href=#三amm-交易的实际计算>三、AMM 交易的实际计算</a><ul><li><a href=#场景ethusdc-池>场景：ETH/USDC 池</a></li><li><a href=#计算买入-1-eth-需要多少-usdc>计算买入 1 ETH 需要多少 USDC</a></li><li><a href=#分辨辨买入数量对价格的影响>分辨辨：买入数量对价格的影响</a></li></ul></li><li><a href=#四流动性质押lp的经济学>四、流动性质押（LP）的经济学</a><ul><li><a href=#成为-lp-的流程>成为 LP 的流程</a></li><li><a href=#lp-token-的价值逻辑>LP Token 的价值逻辑</a></li></ul></li><li><a href=#五amm-的三大关键概念>五、AMM 的三大关键概念</a><ul><li><a href=#1-滑点slippage>1. 滑点（Slippage）</a></li><li><a href=#2无常损失impermanent-lossil>2.无常损失（Impermanent Loss，IL）</a></li><li><a href=#3-手续费与-apy>3. 手续费与 APY</a></li></ul></li><li><a href=#六amm-的类型对比>六、AMM 的类型对比</a></li><li><a href=#七实战操作指南>七、实战操作指南</a><ul><li><a href=#如何计算最优交易金额>如何计算最优交易金额</a></li><li><a href=#选择池子的实用原则>选择池子的实用原则</a></li></ul></li><li><a href=#八amm-的局限性>八、AMM 的局限性</a></li><li><a href=#九总结>九、总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎</h1><div class=article-meta><time datetime=2026-03-19>2026-03-19</time>
+<span>•</span>
+<span>748 字</span>
+<span>•</span>
+<span>T2 进阶实战, AMM 基础</span></div><div class=article-tags><a href=/dex-bok/tags/amm/ class=article-tag>AMM</a>
+<a href=/dex-bok/tags/dex/ class=article-tag>DEX</a>
+<a href=/dex-bok/tags/%E8%87%AA%E5%8A%A8%E5%81%9A%E5%B8%82%E5%95%86/ class=article-tag>自动做市商</a>
+<a href=/dex-bok/tags/defi/ class=article-tag>DeFi</a>
+<a href=/dex-bok/tags/uniswap/ class=article-tag>Uniswap</a></div></header><h1 id=t2-进阶实战-06amm-原理详解--理解-dex-的核心引擎>T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎</h1><p>在上一节中，我们了解了 DEX 的基础概念。本节我们来深入理解 DEX 的核心引擎——<strong>AMM（Automated Market Maker，自动做市商）</strong>。理解 AMM 的原理，是所有进阶 DeFi 操作的根基。</p><hr><h2 id=一amm-是什么>一、AMM 是什么？</h2><h3 id=传统做市商-vs-amm>传统做市商 vs AMM</h3><p>在传统金融中，<strong>做市商</strong>是提供流动性的专业机构。他们在订单簿上同时挂出买单和卖单，赚取买卖价差（bid-ask spread）。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-plaintext data-lang=plaintext><span style=display:flex><span>传统订单簿模式：
+</span></span><span style=display:flex><span>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+</span></span><span style=display:flex><span>买单队列                    卖单队列
+</span></span><span style=display:flex><span>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+</span></span><span style=display:flex><span>用户B 买入 2 ETH @ 1990    用户D 卖出 1 ETH @ 2010
+</span></span><span style=display:flex><span>用户A 买入 1 ETH @ 1980    用户C 卖出 3 ETH @ 2020
+</span></span><span style=display:flex><span>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+</span></span><span style=display:flex><span>        ↑ 差价 = 2010 - 1990 = 20 USD
+</span></span></code></pre></div><p><strong>AMM 则完全取消了订单簿</strong>，用一个数学公式取而代之。无论你是买入还是卖出，智能合约根据公式自动报价，无需任何对手方等待。</p><hr><h2 id=二恒定乘积公式amm-的灵魂>二、恒定乘积公式：AMM 的灵魂</h2><h3 id=公式本身>公式本身</h3><p>AMM 最核心的公式是<strong>恒定乘积（Constant Product）</strong>：</p><pre tabindex=0><code>x × y = k
+</code></pre><p>其中：</p><ul><li><strong>x</strong> = 流动性池中 Token A 的数量</li><li><strong>y</strong> = 流动性池中 Token B 的数量</li><li><strong>k</strong> = 常数（交易前后乘积不变）</li></ul><h3 id=直观理解>直观理解</h3><p>想象一个装满水的两个连通容器：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-plaintext data-lang=plaintext><span style=display:flex><span>         容器 A (x)          容器 B (y)
+</span></span><span style=display:flex><span>           ┌───┐              ┌───┐
+</span></span><span style=display:flex><span>           │   │◄────────────►│   │
+</span></span><span style=display:flex><span>           │████│              │████│
+</span></span><span style=display:flex><span>           │████│              │████│
+</span></span><span style=display:flex><span>           └───┘              └───┘
+</span></span><span style=display:flex><span>            水                   水
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>数学关系：x × y = k（总水量不变）
+</span></span></code></pre></div><p>当你从容器 A 向外倒水（买 Token A），容器 B 的水位就会自动上升（Token B 增加）。倒得越多，水位差越大，价格就越高——这就是价格发现的自动机制。</p><hr><h2 id=三amm-交易的实际计算>三、AMM 交易的实际计算</h2><h3 id=场景ethusdc-池>场景：ETH/USDC 池</h3><p>假设一个流动性池初始状态：</p><pre tabindex=0><code>ETH 数量 (x) = 100
+USDC 数量 (y) = 200,000
+k = 100 × 200,000 = 20,000,000
+</code></pre><p><strong>当前价格</strong> = 200,000 ÷ 100 = <strong>2000 USDC/ETH</strong></p><h3 id=计算买入-1-eth-需要多少-usdc>计算买入 1 ETH 需要多少 USDC</h3><p>套入公式：</p><pre tabindex=0><code>x_new × y_new = k
+(100 + 1) × y_new = 20,000,000
+y_new = 20,000,000 ÷ 101 ≈ 198,019.80 USDC
+
+用户需要支付：200,000 - 198,019.80 = 1,980.20 USDC
+实际成交价格：1980.20 USDC/ETH
+</code></pre><blockquote><p>⚠️ 注意：实际成交价格 <strong>1980.20</strong> 与市价 <strong>2000</strong> 有轻微偏差，这就是<strong>滑点（Slippage）</strong>。</p></blockquote><h3 id=分辨辨买入数量对价格的影响>分辨辨：买入数量对价格的影响</h3><table><thead><tr><th style=text-align:center>买入 ETH 数量</th><th style=text-align:center>需支付 USDC</th><th style=text-align:center>实际均价/ETH</th><th style=text-align:center>vs 市价偏差</th></tr></thead><tbody><tr><td style=text-align:center>0.1 ETH</td><td style=text-align:center>198.02</td><td style=text-align:center>1,980.20</td><td style=text-align:center>-0.99%</td></tr><tr><td style=text-align:center>1 ETH</td><td style=text-align:center>1,980.20</td><td style=text-align:center>1,980.20</td><td style=text-align:center>-0.99%</td></tr><tr><td style=text-align:center>5 ETH</td><td style=text-align:center>10,256.41</td><td style=text-align:center>2,051.28</td><td style=text-align:center>+2.56%</td></tr><tr><td style=text-align:center>10 ETH</td><td style=text-align:center>22,222.22</td><td style=text-align:center>2,222.22</td><td style=text-align:center>+11.11%</td></tr><tr><td style=text-align:center>20 ETH</td><td style=text-align:center>50,000.00</td><td style=text-align:center>2,500.00</td><td style=text-align:center>+25.00%</td></tr></tbody></table><p>这张表说明了一个关键原则：<strong>大额交易滑点高，分批执行优于一次性大单</strong>。</p><hr><h2 id=四流动性质押lp的经济学>四、流动性质押（LP）的经济学</h2><h3 id=成为-lp-的流程>成为 LP 的流程</h3><p>任何人都可以向流动性池存入两种代币（等值），成为<strong>流动性提供者（LP）</strong>，并获得 <strong>LP Token</strong> 作为凭证。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-plaintext data-lang=plaintext><span style=display:flex><span>Alice 想成为 LP：
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Step 1: 存入 10 ETH（价值 $20,000）
+</span></span><span style=display:flex><span>Step 2: 存入 20,000 USDC（价值 $20,000）
+</span></span><span style=display:flex><span>Step 3: 获得 LP Token（代表她在池子中的份额）
+</span></span><span style=display:flex><span>Step 4: 等待交易手续费分红
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>池子总量（存入前）：100 ETH + 200,000 USDC
+</span></span><span style=display:flex><span>Alice 占比：20,000 / 240,000 ≈ 8.33%
+</span></span></code></pre></div><h3 id=lp-token-的价值逻辑>LP Token 的价值逻辑</h3><p>LP Token 不是凭空印发的，而是根据你在池子中的<strong>份额比例</strong>铸造：</p><pre tabindex=0><code>LP Token 铸造量 = 总供应量 × (个人存入价值 ÷ 池子总价值)
+</code></pre><p>当你赎回时，用 LP Token 换回对应份额的两种代币 + 该期间累积的手续费。</p><hr><h2 id=五amm-的三大关键概念>五、AMM 的三大关键概念</h2><h3 id=1-滑点slippage>1. 滑点（Slippage）</h3><p>滑点是<strong>成交价与预期价的偏差</strong>。</p><ul><li><strong>原因</strong>：池子深度不足，或交易量相对池子太大</li><li><strong>计算</strong>：滑点 % = (实际成交价 - 预期价) ÷ 预期价 × 100%</li><li><strong>应对</strong>：设置<strong>滑点容忍度（Slippage Tolerance）</strong>，通常 0.5%-1%</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#75715e>// 实际操作中的滑点设置（ethers.js）
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>overrides</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>slippageTolerance</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>0.005</span>, <span style=color:#75715e>// 0.5%
+</span></span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 或在 DEX UI 中直接设置
+</span></span></span></code></pre></div><h3 id=2无常损失impermanent-lossil>2.无常损失（Impermanent Loss，IL）</h3><p>这是 LP 最需要理解的风险。</p><p><strong>定义</strong>：将代币存入 AMM 池 vs. 简单持有相比，因价格变化导致的潜在损失。</p><pre tabindex=0><code>案例：初始 ETH = $2,000，存入 1 ETH + 2000 USDC
+
+存入池子后，ETH 涨到 $4,000：
+
+持有方式：1 ETH = $4,000 + 2000 USDC = $6,000
+LP 方式：池子自动 rebalance
+  → 池子变为 ~0.707 ETH + ~2,828 USDC
+  → 总价值 ≈ $5,657
+
+无常损失 = $5,657 - $6,000 = -$343（-5.7%）
+</code></pre><blockquote><p>💡 &ldquo;无常"意味着：若价格回到初始点，损失消失。但实践中大多数 LP 会长期承受这部分损失。</p></blockquote><p><strong>无常损失计算公式</strong>：</p><p>$$IL = 2 \times \frac{\sqrt{price_ratio}}{1 + price_ratio} - 1$$</p><p>当价格比 = 1（价格不变）时，IL = 0<br>当价格比 = 4（涨 4 倍）时，IL ≈ -13.4%</p><h3 id=3-手续费与-apy>3. 手续费与 APY</h3><p>LP 的收益来自两部分：</p><pre tabindex=0><code>LP 总收益 = 交易手续费收入 + 流动性挖矿奖励
+
+手续费收入 = 池子总交易量 × 手续费率 × LP 份额占比
+</code></pre><p>以 Uniswap V2 为例：</p><table><thead><tr><th style=text-align:center>手续费率</th><th style=text-align:center>每日池子交易量</th><th style=text-align:center>LP 份额</th><th style=text-align:center>日收益</th></tr></thead><tbody><tr><td style=text-align:center>0.30%</td><td style=text-align:center>$1,000,000</td><td style=text-align:center>5%</td><td style=text-align:center>$15</td></tr><tr><td style=text-align:center>0.30%</td><td style=text-align:center>$1,000,000</td><td style=text-align:center>1%</td><td style=text-align:center>$3</td></tr></tbody></table><p>年化计算：日收益 $15 × 365 ÷ $20,000（初始存款）≈ <strong>27.4% APY</strong></p><hr><h2 id=六amm-的类型对比>六、AMM 的类型对比</h2><p>除了恒定乘积，还有其他 AMM 公式：</p><table><thead><tr><th>类型</th><th>公式</th><th>适用场景</th><th>代表协议</th></tr></thead><tbody><tr><td><strong>恒定乘积 (CPMM)</strong></td><td>x × y = k</td><td>通用，任意代币对</td><td>Uniswap V2</td></tr><tr><td><strong>恒定和 (CSMM)</strong></td><td>x + y = k</td><td>零滑点，但可能耗尽</td><td>极少使用</td></tr><tr><td><strong>StableSwap</strong></td><td>混合 x+y 与 x×y</td><td>稳定币交易</td><td>Curve</td></tr><tr><td><strong>恒定几何平均数</strong></td><td>x × y × z = k</td><td>多资产池</td><td>Balancer</td></tr><tr><td><strong>动态联合曲线</strong></td><td>自定义参数</td><td>实验性</td><td>各类新协议</td></tr></tbody></table><blockquote><p>🔑 <strong>记住</strong>：没有完美的 AMM 公式，每种设计都是权衡。稳定币需要低滑点，波动资产需要深度流动性。</p></blockquote><hr><h2 id=七实战操作指南>七、实战操作指南</h2><h3 id=如何计算最优交易金额>如何计算最优交易金额</h3><p>使用 Python 可以快速计算滑点：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>calculate_swap_output</span>(x: float, y: float, dx: float, fee: float <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.003</span>) <span style=color:#f92672>-&gt;</span> dict:
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;&#34;&#34;
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    计算 AMM 交易输出
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    x, y: 池子中两种资产的数量
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    dx: 输入数量
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    fee: 手续费率（Uniswap V2 默认 0.3%）
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+</span></span><span style=display:flex><span>    k <span style=color:#f92672>=</span> x <span style=color:#f92672>*</span> y
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 扣除手续费后的输入</span>
+</span></span><span style=display:flex><span>    dx_after_fee <span style=color:#f92672>=</span> dx <span style=color:#f92672>*</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>-</span> fee)
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 交易后的 x</span>
+</span></span><span style=display:flex><span>    x_new <span style=color:#f92672>=</span> x <span style=color:#f92672>+</span> dx_after_fee
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 新的 y</span>
+</span></span><span style=display:flex><span>    y_new <span style=color:#f92672>=</span> k <span style=color:#f92672>/</span> x_new
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 输出量</span>
+</span></span><span style=display:flex><span>    dy <span style=color:#f92672>=</span> y <span style=color:#f92672>-</span> y_new
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 实际成交价</span>
+</span></span><span style=display:flex><span>    price <span style=color:#f92672>=</span> dx <span style=color:#f92672>/</span> dy
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 滑点（假设市价为 y/x）</span>
+</span></span><span style=display:flex><span>    spot_price <span style=color:#f92672>=</span> y <span style=color:#f92672>/</span> x
+</span></span><span style=display:flex><span>    slippage <span style=color:#f92672>=</span> (price <span style=color:#f92672>-</span> spot_price) <span style=color:#f92672>/</span> spot_price <span style=color:#f92672>*</span> <span style=color:#ae81ff>100</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;output&#34;</span>: dy,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;avg_price&#34;</span>: price,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;slippage_pct&#34;</span>: round(slippage, <span style=color:#ae81ff>4</span>),
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;fee_paid&#34;</span>: dx <span style=color:#f92672>*</span> fee
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 示例</span>
+</span></span><span style=display:flex><span>result <span style=color:#f92672>=</span> calculate_swap_output(<span style=color:#ae81ff>100</span>, <span style=color:#ae81ff>200_000</span>, <span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;输出: </span><span style=color:#e6db74>{</span>result[<span style=color:#e6db74>&#39;output&#39;</span>]<span style=color:#e6db74>:</span><span style=color:#e6db74>.4f</span><span style=color:#e6db74>}</span><span style=color:#e6db74> ETH&#34;</span>)
+</span></span><span style=display:flex><span>print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;均价: $</span><span style=color:#e6db74>{</span>result[<span style=color:#e6db74>&#39;avg_price&#39;</span>]<span style=color:#e6db74>:</span><span style=color:#e6db74>.2f</span><span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;滑点: </span><span style=color:#e6db74>{</span>result[<span style=color:#e6db74>&#39;slippage_pct&#39;</span>]<span style=color:#e6db74>:</span><span style=color:#e6db74>.2f</span><span style=color:#e6db74>}</span><span style=color:#e6db74>%&#34;</span>)
+</span></span></code></pre></div><h3 id=选择池子的实用原则>选择池子的实用原则</h3><pre tabindex=0><code>✓ 选池子优先看的指标：
+  1. TVL（总锁仓量）— 越高越安全
+  2. 24h 交易量 — 越高手续费收入越多
+  3. APY — 综合收益
+  4. 代币对 — 避免新上线或不知名代币
+
+✗ 避开：
+  - TVL &lt; $100,000 的池子（容易被操纵）
+  - 新建池子（价格发现不充分）
+  - 只有奖励没有真实交易量的池子
+</code></pre><hr><h2 id=八amm-的局限性>八、AMM 的局限性</h2><p>理解 AMM 的不足，才能更好地使用它：</p><table><thead><tr><th>局限</th><th>说明</th><th>应对方式</th></tr></thead><tbody><tr><td><strong>滑点问题</strong></td><td>大额交易价格冲击大</td><td>分批成交或用聚合器</td></tr><tr><td><strong>无常损失</strong></td><td>币价单边波动时 LP 受损</td><td>稳定币对或对冲策略</td></tr><tr><td><strong>多代币风险</strong></td><td>LP 必须持有两种代币</td><td>主动 Rebalance</td></tr><tr><td><strong>前端运行（MEV）</strong></td><td>机器人抢跑大单</td><td>使用私有交易</td></tr><tr><td><strong>价格预言机依赖</strong></td><td>初始价格来源有风险</td><td>参考多个数据源</td></tr></tbody></table><hr><h2 id=九总结>九、总结</h2><p>AMM 用一个简洁的 <code>x × y = k</code> 公式，彻底重构了资产交易的方式：</p><ol><li><strong>无需对手方</strong>：任何人都可以随时买卖</li><li><strong>无需订单簿</strong>：数学公式自动定价</li><li><strong>无需许可</strong>：智能合约代码即法律</li><li><strong>流动性可组合</strong>：LP 份额可在其他协议中再次利用</li></ol><p>理解 AMM 的核心机制——恒定乘积、滑点、无常损失——是所有 DeFi 进阶操作的基础。下一节我们将对比 Uniswap V2 和 V3 的具体差异，理解集中流动性的革命性创新。</p><hr><p><strong>本节要点</strong>：</p><ul><li>✅ 恒定乘积公式 x × y = k 是 AMM 的核心</li><li>✅ 滑点随交易量非线性增加，大额交易需分批</li><li>✅ 无常损失是 LP 必须理解的核心风险</li><li>✅ LP 收益 = 手续费分成 + 挖矿奖励</li><li>✅ 选择池子看 TVL > 看 APY</li></ul><p><strong>延伸阅读</strong>：</p><ul><li><a href=/posts/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/t2-07-uniswap-v2-v3/>T2-07：Uniswap V2 vs V3 深度对比</a></li><li><a href=/posts/t3-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84/t3-11-mev-protection/>T4-08：MEV 与前端运行防御</a></li></ul><hr><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/t2_intermediate/06_liquidity_pool_deep_dive/>T2 进阶实战 06：流动性池深度分析</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

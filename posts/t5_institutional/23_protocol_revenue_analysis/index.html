@@ -1,0 +1,154 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>协议收入分析框架 - Token Terminal 深度使用 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="学习如何分析 DeFi 协议收入，建立估值模型，找到被低估的投资机会"><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/posts/t5_institutional/23_protocol_revenue_analysis/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/posts/t5_institutional/23_protocol_revenue_analysis/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/posts/t5_institutional/23_protocol_revenue_analysis/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/posts/t5_institutional/23_protocol_revenue_analysis/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="协议收入分析框架 - Token Terminal 深度使用"><meta property="og:description" content="学习如何分析 DeFi 协议收入，建立估值模型，找到被低估的投资机会"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-03-19T01:10:00+08:00"><meta property="article:modified_time" content="2026-03-19T01:10:00+08:00"><meta property="article:tag" content="收入分析"><meta property="article:tag" content="估值"><meta property="article:tag" content="数据"><meta itemprop=name content="协议收入分析框架 - Token Terminal 深度使用"><meta itemprop=description content="学习如何分析 DeFi 协议收入，建立估值模型，找到被低估的投资机会"><meta itemprop=datePublished content="2026-03-19T01:10:00+08:00"><meta itemprop=dateModified content="2026-03-19T01:10:00+08:00"><meta itemprop=wordCount content="637"><meta itemprop=keywords content="收入分析,估值,数据"><meta name=twitter:card content="summary"><meta name=twitter:title content="协议收入分析框架 - Token Terminal 深度使用"><meta name=twitter:description content="学习如何分析 DeFi 协议收入，建立估值模型，找到被低估的投资机会"><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-23_protocol_revenue_analysis"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#为什么分析协议收入>为什么分析协议收入</a><ul><li><a href=#传统金融-vs-defi>传统金融 vs DeFi</a></li><li><a href=#收入分析价值>收入分析价值</a></li></ul></li><li><a href=#核心指标详解>核心指标详解</a><ul><li><a href=#1-收入revenue>1. 收入（Revenue）⭐⭐⭐⭐⭐</a></li><li><a href=#2-费用fees>2. 费用（Fees）⭐⭐⭐⭐</a></li><li><a href=#3-ps-比率->3. P/S 比率 ⭐⭐⭐⭐⭐</a></li><li><a href=#4-pe-比率->4. P/E 比率 ⭐⭐⭐⭐</a></li><li><a href=#5-fdvtvl->5. FDV/TVL ⭐⭐⭐⭐</a></li></ul></li><li><a href=#token-terminal-使用指南>Token Terminal 使用指南</a><ul><li><a href=#1-基础功能>1. 基础功能</a></li><li><a href=#2-高级筛选>2. 高级筛选</a></li><li><a href=#3-自定义仪表板>3. 自定义仪表板</a></li></ul></li><li><a href=#实战案例分析>实战案例分析</a><ul><li><a href=#案例一发现-makerdao-低估>案例一：发现 MakerDAO 低估</a></li><li><a href=#案例二识别-lido-高估>案例二：识别 Lido 高估</a></li></ul></li><li><a href=#建立估值模型>建立估值模型</a><ul><li><a href=#简化-dcf-模型>简化 DCF 模型</a></li><li><a href=#相对估值法>相对估值法</a></li></ul></li><li><a href=#我的投资框架>我的投资框架</a><ul><li><a href=#第一步筛选>第一步：筛选</a></li><li><a href=#第二步深入分析>第二步：深入分析</a></li><li><a href=#第三步建仓>第三步：建仓</a></li><li><a href=#第四步监控>第四步：监控</a></li></ul></li><li><a href=#工具汇总>工具汇总</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>协议收入分析框架 - Token Terminal 深度使用</h1><div class=article-meta><time datetime=2026-03-19>2026-03-19</time>
+<span>•</span>
+<span>637 字</span>
+<span>•</span>
+<span>机构视角</span></div><div class=article-tags><a href=/dex-bok/tags/%E6%94%B6%E5%85%A5%E5%88%86%E6%9E%90/ class=article-tag>收入分析</a>
+<a href=/dex-bok/tags/%E4%BC%B0%E5%80%BC/ class=article-tag>估值</a>
+<a href=/dex-bok/tags/%E6%95%B0%E6%8D%AE/ class=article-tag>数据</a></div></header><h2 id=为什么分析协议收入>为什么分析协议收入</h2><h3 id=传统金融-vs-defi>传统金融 vs DeFi</h3><table><thead><tr><th>维度</th><th>传统公司</th><th>DeFi 协议</th></tr></thead><tbody><tr><td>财报</td><td>季度披露</td><td>实时链上</td></tr><tr><td>透明度</td><td>有限</td><td>完全透明</td></tr><tr><td>数据获取</td><td>付费</td><td>免费</td></tr><tr><td>估值方法</td><td>P/E、P/S</td><td>P/S、P/E、FDV/TVL</td></tr></tbody></table><h3 id=收入分析价值>收入分析价值</h3><ul><li>✅ 识别真实价值（而非炒作）</li><li>✅ 发现低估机会</li><li>✅ 规避高风险项目</li><li>✅ 长期投资依据</li></ul><hr><h2 id=核心指标详解>核心指标详解</h2><h3 id=1-收入revenue>1. 收入（Revenue）⭐⭐⭐⭐⭐</h3><h4 id=定义>定义</h4><p><strong>协议收入</strong> = 用户支付费用 - 流动性提供者分成</p><h4 id=计算公式>计算公式</h4><pre tabindex=0><code>协议收入 = 总费用 × 协议分成比例
+
+示例（Uniswap V3）：
+总费用 = $100 万/天
+LP 分成 = 100%
+协议收入 = $0（V3 无协议分成）
+
+示例（Aave）：
+总利息 = $50 万/天
+LP 分成 = 70%
+协议收入 = $15 万/天
+</code></pre><h4 id=对比分析>对比分析</h4><table><thead><tr><th>协议</th><th>日收入</th><th>月收入</th><th>年收入（年化）</th></tr></thead><tbody><tr><td>Uniswap</td><td>$0</td><td>$0</td><td>$0</td></tr><tr><td>Aave</td><td>$15 万</td><td>$450 万</td><td>$5475 万</td></tr><tr><td>MakerDAO</td><td>$20 万</td><td>$600 万</td><td>$7300 万</td></tr><tr><td>Curve</td><td>$5 万</td><td>$150 万</td><td>$1825 万</td></tr></tbody></table><hr><h3 id=2-费用fees>2. 费用（Fees）⭐⭐⭐⭐</h3><h4 id=定义-1>定义</h4><p><strong>总费用</strong> = 用户为使用协议支付的全部费用</p><h4 id=与收入的区别>与收入的区别</h4><pre tabindex=0><code>费用 = 收入 + LP 分成
+
+示例（Curve）：
+用户支付费用 = $10 万/天
+LP 分成 = 50% = $5 万
+协议收入 = $5 万
+</code></pre><h4 id=意义>意义</h4><ul><li>费用反映<strong>需求强度</strong></li><li>收入反映<strong>盈利能力</strong></li><li>两者结合看<strong>商业模式</strong></li></ul><hr><h3 id=3-ps-比率->3. P/S 比率 ⭐⭐⭐⭐⭐</h3><h4 id=定义-2>定义</h4><p><strong>P/S</strong> = 市值 / 年收入</p><h4 id=计算示例>计算示例</h4><pre tabindex=0><code>Aave:
+市值 = $15 亿
+年收入 = $5475 万
+P/S = 15 / 0.5475 = 27.4
+</code></pre><h4 id=估值参考>估值参考</h4><table><thead><tr><th>P/S</th><th>估值水平</th><th>操作建议</th></tr></thead><tbody><tr><td>&lt;5</td><td>低估</td><td>买入 ✅</td></tr><tr><td>5-15</td><td>合理</td><td>持有</td></tr><tr><td>15-30</td><td>偏高</td><td>谨慎</td></tr><tr><td>>30</td><td>高估</td><td>卖出 ⚠️</td></tr></tbody></table><h4 id=行业对比>行业对比</h4><table><thead><tr><th>协议</th><th>P/S</th><th>评价</th></tr></thead><tbody><tr><td>MakerDAO</td><td>8.2</td><td>低估 ✅</td></tr><tr><td>Aave</td><td>27.4</td><td>合理</td></tr><tr><td>Uniswap</td><td>N/A</td><td>无收入</td></tr><tr><td>Lido</td><td>45.3</td><td>高估 ⚠️</td></tr></tbody></table><hr><h3 id=4-pe-比率->4. P/E 比率 ⭐⭐⭐⭐</h3><h4 id=定义-3>定义</h4><p><strong>P/E</strong> = 市值 / 年利润</p><h4 id=defi-特殊性>DeFi 特殊性</h4><pre tabindex=0><code>利润 = 收入 - 代币释放
+
+示例：
+协议收入 = $1000 万/年
+代币释放 = $1500 万/年
+利润 = -$500 万（亏损）
+</code></pre><h4 id=解读>解读</h4><ul><li>P/E &lt; 20：盈利能力强</li><li>P/E 负值：代币释放>收入</li><li>高通胀协议慎用 P/E</li></ul><hr><h3 id=5-fdvtvl->5. FDV/TVL ⭐⭐⭐⭐</h3><h4 id=定义-4>定义</h4><p><strong>FDV/TVL</strong> = 全流通市值 / 总锁仓价值</p><h4 id=意义-1>意义</h4><ul><li>&lt;1：可能被低估</li><li>1-3：合理区间</li><li><blockquote><p>3：可能高估</p></blockquote></li></ul><h4 id=对比>对比</h4><table><thead><tr><th>协议</th><th>FDV</th><th>TVL</th><th>FDV/TVL</th></tr></thead><tbody><tr><td>Aave</td><td>$15 亿</td><td>$80 亿</td><td>0.19 ✅</td></tr><tr><td>Uniswap</td><td>$45 亿</td><td>$40 亿</td><td>1.13</td></tr><tr><td>Compound</td><td>$8 亿</td><td>$30 亿</td><td>0.27 ✅</td></tr><tr><td>Lido</td><td>$30 亿</td><td>$200 亿</td><td>0.15 ✅</td></tr></tbody></table><hr><h2 id=token-terminal-使用指南>Token Terminal 使用指南</h2><h3 id=1-基础功能>1. 基础功能</h3><h4 id=查看协议概览>查看协议概览</h4><pre tabindex=0><code>访问：tokenterminal.com/terminal
+
+搜索协议名称 → 查看：
+- 收入图表
+- 费用图表
+- 活跃用户
+- TVL 趋势
+</code></pre><h4 id=导出数据>导出数据</h4><pre tabindex=0><code>步骤：
+1. 选择协议
+2. 选择指标（Revenue/Fees 等）
+3. 选择时间范围
+4. 点击 Export → CSV
+</code></pre><h3 id=2-高级筛选>2. 高级筛选</h3><h4 id=低估协议筛选>低估协议筛选</h4><pre tabindex=0><code>条件：
+- P/S &lt; 10
+- 收入增长 &gt;50% YoY
+- TVL 稳定增长
+- 代币释放&lt;收入
+
+结果：
+通常找到 3-5 个低估协议
+</code></pre><h4 id=高增长协议筛选>高增长协议筛选</h4><pre tabindex=0><code>条件：
+- 收入增长 &gt;100% YoY
+- 用户增长 &gt;50%
+- TVL 增长 &gt;30%
+- P/S &lt; 30
+
+结果：
+找到高增长潜力项目
+</code></pre><h3 id=3-自定义仪表板>3. 自定义仪表板</h3><h4 id=创建追踪列表>创建追踪列表</h4><pre tabindex=0><code>添加协议：
+- MakerDAO
+- Aave
+- Compound
+- Curve
+- Uniswap
+
+指标：
+- 日收入
+- P/S
+- TVL
+- 活跃地址
+</code></pre><hr><h2 id=实战案例分析>实战案例分析</h2><h3 id=案例一发现-makerdao-低估>案例一：发现 MakerDAO 低估</h3><h4 id=数据2023-q1>数据（2023 Q1）</h4><pre tabindex=0><code>市值：$12 亿
+年收入：$1.5 亿
+P/S：8.0
+TVL：$60 亿
+FDV/TVL：0.2
+</code></pre><h4 id=分析>分析</h4><pre tabindex=0><code>1. P/S = 8 → 远低于行业平均 20
+2. 收入稳定增长（DAI 需求增加）
+3. TVL 持续上升
+4. 代币释放少（通缩模型）
+
+结论：严重低估
+行动：买入 MKR
+结果：3 个月 +80%
+</code></pre><h3 id=案例二识别-lido-高估>案例二：识别 Lido 高估</h3><h4 id=数据2023-q2>数据（2023 Q2）</h4><pre tabindex=0><code>市值：$30 亿
+年收入：$5000 万
+P/S：60
+TVL：$200 亿
+FDV/TVL：0.15
+</code></pre><h4 id=分析-1>分析</h4><pre tabindex=0><code>1. P/S = 60 → 极高
+2. 收入依赖 ETH 质押
+3. 竞争加剧（Rocket Pool 等）
+4. 代币释放压力大
+
+结论：高估风险
+行动：观望/减仓
+结果：后续下跌 40%
+</code></pre><hr><h2 id=建立估值模型>建立估值模型</h2><h3 id=简化-dcf-模型>简化 DCF 模型</h3><h4 id=公式>公式</h4><pre tabindex=0><code>合理市值 = 年收入 × 合理 P/S
+
+示例（Aave）：
+年收入 = $5475 万
+合理 P/S = 15（行业平均）
+合理市值 = 5475 万 × 15 = $8.2 亿
+
+当前市值 = $15 亿
+→ 高估 83%
+</code></pre><h4 id=敏感性分析>敏感性分析</h4><pre tabindex=0><code>不同 P/S 假设：
+P/S = 10 → 市值 $5.5 亿
+P/S = 15 → 市值 $8.2 亿
+P/S = 20 → 市值 $11 亿
+P/S = 25 → 市值 $13.7 亿
+</code></pre><h3 id=相对估值法>相对估值法</h3><h4 id=同行对比>同行对比</h4><pre tabindex=0><code>选择可比协议：
+- Aave、Compound、MakerDAO
+
+计算平均 P/S：
+(27.4 + 15.2 + 8.2) / 3 = 16.9
+
+应用：
+目标协议收入 × 16.9 = 合理市值
+</code></pre><hr><h2 id=我的投资框架>我的投资框架</h2><h3 id=第一步筛选>第一步：筛选</h3><pre tabindex=0><code>条件：
+- P/S &lt; 15
+- 收入增长 &gt;30%
+- TVL 稳定
+- 代币释放&lt;收入
+
+结果：3-5 个候选
+</code></pre><h3 id=第二步深入分析>第二步：深入分析</h3><pre tabindex=0><code>每个候选：
+1. 阅读文档和治理提案
+2. 分析竞争格局
+3. 评估团队背景
+4. 检查智能合约审计
+</code></pre><h3 id=第三步建仓>第三步：建仓</h3><pre tabindex=0><code>资金分配：
+- 第一候选：40%
+- 第二候选：30%
+- 第三候选：20%
+- 现金：10%
+</code></pre><h3 id=第四步监控>第四步：监控</h3><pre tabindex=0><code>每周检查：
+- 收入变化
+- TVL 趋势
+- 竞争动态
+- 治理提案
+
+触发条件：
+- 收入连续 2 月下降 → 减仓
+- P/S &gt; 30 → 考虑卖出
+- 发现更好机会 → 调仓
+</code></pre><hr><h2 id=工具汇总>工具汇总</h2><table><thead><tr><th>工具</th><th>用途</th><th>价格</th></tr></thead><tbody><tr><td>Token Terminal</td><td>收入数据</td><td>免费 -$99/月</td></tr><tr><td>DefiLlama</td><td>TVL 数据</td><td>免费</td></tr><tr><td>Dune Analytics</td><td>自定义查询</td><td>免费</td></tr><tr><td>Nansen</td><td>链上分析</td><td>$199/月</td></tr><tr><td>Messari</td><td>研究报告</td><td>免费 -$500/月</td></tr></tbody></table><hr><h2 id=总结>总结</h2><p>协议收入分析核心：</p><ol><li><strong>关注真实收入</strong>：而非代币价格</li><li><strong>用 P/S 估值</strong>：DeFi 版 P/E</li><li><strong>对比同行</strong>：发现相对低估</li><li><strong>持续监控</strong>：动态调整</li></ol><hr><p><strong>作者</strong>：阿白
+<strong>邮箱</strong>：qingxin0919@gmail.com</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/t5_institutional/22_mev_searcher_guide/>MEV 搜索者实战手册 - Flashbots 与私有节点</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/posts/t5_institutional/24_governance_attack_cases/>治理攻击案例研究 - 投票操纵与贿赂市场</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

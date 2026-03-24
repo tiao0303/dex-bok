@@ -1,0 +1,178 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>OpenClaw 安全实践：自托管数据控制与权限管理 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="OpenClaw 安全实践：自托管数据控制与权限管理
+
+标签：OpenClaw / 安全 / 隐私 / 深度
+日期：2026-03-23
+专题：OpenClaw 深度探索
+
+
+自托管的核心价值：你的数据你做主
+很多人问我：为什么不用 ChatGPT？答案很简单：数据控制。
+用第三方 AI 服务，你的对话历史、文件、偏好都会被服务商存储和分析。OpenClaw 的自托管模式，让所有数据都留在你自己的机器上——这是它与 SaaS AI 工具最本质的区别。
+
+数据安全的多层防护
+第一层：本地存储
+~/.openclaw/
+├── agents/           # Agent 工作区
+│   ├── main/
+│   ├── researcher/
+│   └── developer/
+├── credentials/      # 加密存储的凭证
+├── workspace/        # 项目文件
+└── venv/            # Python 虚拟环境
+关键原则：所有文件都在本地，只有 AI API 调用走网络。
+第二层：凭证隔离
+API Keys 和 Bot Tokens 存在 ~/.openclaw/credentials/：
+~/.openclaw/credentials/
+├── feishu-main-allowFrom.json   # 飞书凭证（只允许特定用户）
+├── telegram-allowFrom.json       # Telegram 凭证
+└── .env                         # API Keys（不提交 git）
+这些文件权限设置为 600，防止其他用户读取："><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/openclaw-series/05_openclaw_local_deployment/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/openclaw-series/05_openclaw_local_deployment/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/openclaw-series/05_openclaw_local_deployment/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/openclaw-series/05_openclaw_local_deployment/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="OpenClaw 安全实践：自托管数据控制与权限管理"><meta property="og:description" content="OpenClaw 安全实践：自托管数据控制与权限管理 标签：OpenClaw / 安全 / 隐私 / 深度
+日期：2026-03-23
+专题：OpenClaw 深度探索
+自托管的核心价值：你的数据你做主 很多人问我：为什么不用 ChatGPT？答案很简单：数据控制。
+用第三方 AI 服务，你的对话历史、文件、偏好都会被服务商存储和分析。OpenClaw 的自托管模式，让所有数据都留在你自己的机器上——这是它与 SaaS AI 工具最本质的区别。
+数据安全的多层防护 第一层：本地存储 ~/.openclaw/ ├── agents/ # Agent 工作区 │ ├── main/ │ ├── researcher/ │ └── developer/ ├── credentials/ # 加密存储的凭证 ├── workspace/ # 项目文件 └── venv/ # Python 虚拟环境 关键原则：所有文件都在本地，只有 AI API 调用走网络。
+第二层：凭证隔离 API Keys 和 Bot Tokens 存在 ~/.openclaw/credentials/：
+~/.openclaw/credentials/ ├── feishu-main-allowFrom.json # 飞书凭证（只允许特定用户） ├── telegram-allowFrom.json # Telegram 凭证 └── .env # API Keys（不提交 git） 这些文件权限设置为 600，防止其他用户读取："><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="openclaw-series"><meta property="article:published_time" content="2026-03-23T00:00:00+00:00"><meta property="article:modified_time" content="2026-03-23T00:00:00+00:00"><meta property="article:tag" content="OpenClaw"><meta property="article:tag" content="AI"><meta property="article:tag" content="工具"><meta itemprop=name content="OpenClaw 安全实践：自托管数据控制与权限管理"><meta itemprop=description content="OpenClaw 安全实践：自托管数据控制与权限管理 标签：OpenClaw / 安全 / 隐私 / 深度
+日期：2026-03-23
+专题：OpenClaw 深度探索
+自托管的核心价值：你的数据你做主 很多人问我：为什么不用 ChatGPT？答案很简单：数据控制。
+用第三方 AI 服务，你的对话历史、文件、偏好都会被服务商存储和分析。OpenClaw 的自托管模式，让所有数据都留在你自己的机器上——这是它与 SaaS AI 工具最本质的区别。
+数据安全的多层防护 第一层：本地存储 ~/.openclaw/ ├── agents/ # Agent 工作区 │ ├── main/ │ ├── researcher/ │ └── developer/ ├── credentials/ # 加密存储的凭证 ├── workspace/ # 项目文件 └── venv/ # Python 虚拟环境 关键原则：所有文件都在本地，只有 AI API 调用走网络。
+第二层：凭证隔离 API Keys 和 Bot Tokens 存在 ~/.openclaw/credentials/：
+~/.openclaw/credentials/ ├── feishu-main-allowFrom.json # 飞书凭证（只允许特定用户） ├── telegram-allowFrom.json # Telegram 凭证 └── .env # API Keys（不提交 git） 这些文件权限设置为 600，防止其他用户读取："><meta itemprop=datePublished content="2026-03-23T00:00:00+00:00"><meta itemprop=dateModified content="2026-03-23T00:00:00+00:00"><meta itemprop=wordCount content="494"><meta itemprop=keywords content="OpenClaw,AI,工具"><meta name=twitter:card content="summary"><meta name=twitter:title content="OpenClaw 安全实践：自托管数据控制与权限管理"><meta name=twitter:description content="OpenClaw 安全实践：自托管数据控制与权限管理 标签：OpenClaw / 安全 / 隐私 / 深度
+日期：2026-03-23
+专题：OpenClaw 深度探索
+自托管的核心价值：你的数据你做主 很多人问我：为什么不用 ChatGPT？答案很简单：数据控制。
+用第三方 AI 服务，你的对话历史、文件、偏好都会被服务商存储和分析。OpenClaw 的自托管模式，让所有数据都留在你自己的机器上——这是它与 SaaS AI 工具最本质的区别。
+数据安全的多层防护 第一层：本地存储 ~/.openclaw/ ├── agents/ # Agent 工作区 │ ├── main/ │ ├── researcher/ │ └── developer/ ├── credentials/ # 加密存储的凭证 ├── workspace/ # 项目文件 └── venv/ # Python 虚拟环境 关键原则：所有文件都在本地，只有 AI API 调用走网络。
+第二层：凭证隔离 API Keys 和 Bot Tokens 存在 ~/.openclaw/credentials/：
+~/.openclaw/credentials/ ├── feishu-main-allowFrom.json # 飞书凭证（只允许特定用户） ├── telegram-allowFrom.json # Telegram 凭证 └── .env # API Keys（不提交 git） 这些文件权限设置为 600，防止其他用户读取："><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-05_openclaw_local_deployment"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#自托管的核心价值你的数据你做主>自托管的核心价值：你的数据你做主</a></li><li><a href=#数据安全的多层防护>数据安全的多层防护</a><ul><li><a href=#第一层本地存储>第一层：本地存储</a></li><li><a href=#第二层凭证隔离>第二层：凭证隔离</a></li><li><a href=#第三层channel-路由控制>第三层：channel 路由控制</a></li></ul></li><li><a href=#api-key-安全实践>API Key 安全实践</a><ul><li><a href=#-错误做法硬编码>❌ 错误做法：硬编码</a></li><li><a href=#-正确做法环境变量--分层配置>✅ 正确做法：环境变量 + 分层配置</a></li></ul></li><li><a href=#频道权限控制>频道权限控制</a><ul><li><a href=#飞书allowfrom-白名单>飞书：allowFrom 白名单</a></li><li><a href=#telegrambot-token-保护>Telegram：Bot Token 保护</a></li><li><a href=#对外消息审核机制>对外消息：审核机制</a></li></ul></li><li><a href=#多-agent-权限隔离>多 Agent 权限隔离</a></li><li><a href=#危险操作拦截>危险操作拦截</a><ul><li><a href=#exec-工具的安全策略>exec 工具的安全策略</a></li></ul></li><li><a href=#飞书消息安全要点>飞书消息安全要点</a><ul><li><a href=#1-不要在群里暴露-api-keys>1. 不要在群里暴露 API Keys</a></li><li><a href=#2-bot-权限最小化>2. Bot 权限最小化</a></li><li><a href=#3-bot-只响应-提及>3. Bot 只响应 @提及</a></li></ul></li><li><a href=#定时任务cron安全>定时任务（Cron）安全</a></li><li><a href=#安全检查清单>安全检查清单</a></li><li><a href=#openclaw-的安全边界>OpenClaw 的安全边界</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>OpenClaw 安全实践：自托管数据控制与权限管理</h1><div class=article-meta><time datetime=2026-03-23>2026-03-23</time>
+<span>•</span>
+<span>494 字</span>
+<span>•</span>
+<span>OpenClaw 深度探索</span></div><div class=article-tags><a href=/dex-bok/tags/openclaw/ class=article-tag>OpenClaw</a>
+<a href=/dex-bok/tags/ai/ class=article-tag>AI</a>
+<a href=/dex-bok/tags/%E5%B7%A5%E5%85%B7/ class=article-tag>工具</a></div></header><h1 id=openclaw-安全实践自托管数据控制与权限管理>OpenClaw 安全实践：自托管数据控制与权限管理</h1><blockquote><p><strong>标签</strong>：OpenClaw / 安全 / 隐私 / 深度<br><strong>日期</strong>：2026-03-23<br><strong>专题</strong>：OpenClaw 深度探索</p></blockquote><hr><h2 id=自托管的核心价值你的数据你做主>自托管的核心价值：你的数据你做主</h2><p>很多人问我：为什么不用 ChatGPT？答案很简单：<strong>数据控制</strong>。</p><p>用第三方 AI 服务，你的对话历史、文件、偏好都会被服务商存储和分析。OpenClaw 的自托管模式，让所有数据都留在你自己的机器上——这是它与 SaaS AI 工具最本质的区别。</p><hr><h2 id=数据安全的多层防护>数据安全的多层防护</h2><h3 id=第一层本地存储>第一层：本地存储</h3><pre tabindex=0><code>~/.openclaw/
+├── agents/           # Agent 工作区
+│   ├── main/
+│   ├── researcher/
+│   └── developer/
+├── credentials/      # 加密存储的凭证
+├── workspace/        # 项目文件
+└── venv/            # Python 虚拟环境
+</code></pre><p><strong>关键原则</strong>：所有文件都在本地，只有 AI API 调用走网络。</p><h3 id=第二层凭证隔离>第二层：凭证隔离</h3><p>API Keys 和 Bot Tokens 存在 <code>~/.openclaw/credentials/</code>：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>~/.openclaw/credentials/
+</span></span><span style=display:flex><span>├── feishu-main-allowFrom.json   <span style=color:#75715e># 飞书凭证（只允许特定用户）</span>
+</span></span><span style=display:flex><span>├── telegram-allowFrom.json       <span style=color:#75715e># Telegram 凭证</span>
+</span></span><span style=display:flex><span>└── .env                         <span style=color:#75715e># API Keys（不提交 git）</span>
+</span></span></code></pre></div><p>这些文件权限设置为 <code>600</code>，防止其他用户读取：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>chmod <span style=color:#ae81ff>600</span> ~/.openclaw/credentials/*.json
+</span></span></code></pre></div><h3 id=第三层channel-路由控制>第三层：channel 路由控制</h3><p>飞书群里的消息只路由到 main Agent，不直接暴露给其他 Agent：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;channels&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;feishu&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;enabled&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;requireMention&#34;</span>: <span style=color:#66d9ef>true</span>,    <span style=color:#75715e>// 只响应 @机器人 的消息
+</span></span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;dmPolicy&#34;</span>: <span style=color:#e6db74>&#34;pairing&#34;</span>,     <span style=color:#75715e>// 私聊需要配对
+</span></span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;groupPolicy&#34;</span>: <span style=color:#e6db74>&#34;allowlist&#34;</span>  <span style=color:#75715e>// 只允许白名单群
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=api-key-安全实践>API Key 安全实践</h2><h3 id=-错误做法硬编码>❌ 错误做法：硬编码</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># SKILL.md 中直接写 API Key</span>
+</span></span><span style=display:flex><span>OPENAI_API_KEY<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;sk-xxxxx&#34;</span>  <span style=color:#75715e># ❌ 危险！</span>
+</span></span></code></pre></div><h3 id=-正确做法环境变量--分层配置>✅ 正确做法：环境变量 + 分层配置</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># 通过环境变量读取</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> os
+</span></span><span style=display:flex><span>api_key <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>environ<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;OPENAI_API_KEY&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 或者通过 openclaw.json 配置</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># skills.entries.image-generation.env 中配置</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#75715e>// ~/.openclaw/openclaw.json
+</span></span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;skills&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;entries&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;image-generation&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;enabled&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;env&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;MINIMAX_API_KEY&#34;</span>: <span style=color:#e6db74>&#34;sk-xxx&#34;</span>  <span style=color:#75715e>// 仅本机可读
+</span></span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=频道权限控制>频道权限控制</h2><h3 id=飞书allowfrom-白名单>飞书：allowFrom 白名单</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;channels&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;feishu&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;accounts&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;main&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;appId&#34;</span>: <span style=color:#e6db74>&#34;cli_xxx&#34;</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;appSecret&#34;</span>: <span style=color:#e6db74>&#34;xxx&#34;</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>在 <code>credentials/</code> 中配置白名单：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#75715e>// credentials/feishu-main-allowFrom.json
+</span></span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;allowFrom&#34;</span>: [
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;ou_d556752e827a6d6cf526c640b7dcb044&#34;</span>  <span style=color:#75715e>// 只有 阿白 可以访问
+</span></span></span><span style=display:flex><span>  ]
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=telegrambot-token-保护>Telegram：Bot Token 保护</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># Bot Token 只在本地使用，不要写入任何共享文档</span>
+</span></span><span style=display:flex><span>openclaw channels add --channel telegram --token &lt;TOKEN&gt;
+</span></span></code></pre></div><h3 id=对外消息审核机制>对外消息：审核机制</h3><pre tabindex=0><code>用户消息 → main Agent → 分析 → 需要对外发布？
+                                        │
+                                        ├── 是 → 先确认用户（安全过滤）
+                                        │
+                                        └── 否 → 直接执行
+</code></pre><hr><h2 id=多-agent-权限隔离>多 Agent 权限隔离</h2><p>每个 Agent 只能访问自己的工作区：</p><pre tabindex=0><code>workspace-researcher/  # 研究员只能读写这里
+  ├── SOUL.md
+  ├── projects/
+  └── memory/
+
+workspace-developer/   # 开发者只能读写这里
+  ├── SOUL.md
+  ├── projects/
+  └── memory/
+</code></pre><p>这样做的好处：</p><ul><li>研究员无法读取开发者的代码（信息隔离）</li><li>一个 Agent 被攻破，不会影响其他 Agent 的数据</li><li>敏感项目（如密钥管理）可以单独隔离 Agent</li></ul><hr><h2 id=危险操作拦截>危险操作拦截</h2><p>OpenClaw 的执行策略：</p><table><thead><tr><th>操作类型</th><th>是否需要确认</th></tr></thead><tbody><tr><td>读文件、搜索、发消息</td><td>✅ 自动执行</td></tr><tr><td>删除文件、发送外部消息</td><td>⚠️ 先确认</td></tr><tr><td>暴露凭证、执行外部命令</td><td>❌ 拒绝</td></tr><tr><td>未知插件安装</td><td>❌ 拒绝</td></tr></tbody></table><h3 id=exec-工具的安全策略>exec 工具的安全策略</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#75715e>// openclaw.json 配置
+</span></span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;gateway&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;exec&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;policy&#34;</span>: <span style=color:#e6db74>&#34;allowlist&#34;</span>,    <span style=color:#75715e>// 白名单模式
+</span></span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;allowedCommands&#34;</span>: [
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;python3&#34;</span>, <span style=color:#e6db74>&#34;git&#34;</span>, <span style=color:#e6db74>&#34;node&#34;</span>, <span style=color:#e6db74>&#34;npm&#34;</span>
+</span></span><span style=display:flex><span>      ],
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;deniedPatterns&#34;</span>: [
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;rm -rf /&#34;</span>,              <span style=color:#75715e>// 防删库
+</span></span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;curl .* | sh&#34;</span>,           <span style=color:#75715e>// 防远程脚本注入
+</span></span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;.* --dangerous.*&#34;</span>       <span style=color:#75715e>// 防危险参数
+</span></span></span><span style=display:flex><span>      ]
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=飞书消息安全要点>飞书消息安全要点</h2><h3 id=1-不要在群里暴露-api-keys>1. 不要在群里暴露 API Keys</h3><p>飞书群聊是公开的，任何人都能看到历史消息。如果在群里分享了 API Key：</p><pre tabindex=0><code>❌ 错误
+&#34;API Key 是 sk-xxx，请帮我配置&#34;
+
+✅ 正确
+&#34;API Key 已私信给我&#34;（私聊发送）
+</code></pre><h3 id=2-bot-权限最小化>2. Bot 权限最小化</h3><p>飞书应用只需要这些权限：</p><ul><li><code>im:message</code> — 收发消息</li><li><code>docx:document</code> — 读写文档</li><li><code>bitable:app</code> — 操作多维表格</li></ul><p><strong>不要开通</strong>文件管理权限、通讯录权限等非必要权限。</p><h3 id=3-bot-只响应-提及>3. Bot 只响应 @提及</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;requireMention&#34;</span>: <span style=color:#66d9ef>true</span>  <span style=color:#75715e>// 不 @ 就不会响应，防止被滥用
+</span></span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=定时任务cron安全>定时任务（Cron）安全</h2><p>OpenClaw 的定时任务可以定期执行敏感操作，要格外小心：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#75715e>// ~/.openclaw/cron/tasks.json
+</span></span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;tasks&#34;</span>: [
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;schedule&#34;</span>: <span style=color:#e6db74>&#34;0 9 * * *&#34;</span>,  <span style=color:#75715e>// 每天 9 点
+</span></span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;action&#34;</span>: <span style=color:#e6db74>&#34;HEARTBEAT&#34;</span>,      <span style=color:#75715e>// 只执行心跳检查
+</span></span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;agents&#34;</span>: [<span style=color:#e6db74>&#34;main&#34;</span>]
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  ]
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>安全建议</strong>：</p><ul><li>Cron 任务只执行只读操作（检查邮件、天气等）</li><li>不要在 Cron 中执行删除操作</li><li>Cron 任务的日志要定期清理</li></ul><hr><h2 id=安全检查清单>安全检查清单</h2><p>部署 OpenClaw 后，逐项检查：</p><ul><li><input disabled type=checkbox> <code>~/.openclaw/credentials/</code> 目录权限为 <code>700</code>，文件权限为 <code>600</code></li><li><input disabled type=checkbox> 飞书/Telegram Bot Token 不在任何公开文档中</li><li><input disabled type=checkbox> <code>openclaw.json</code> 中的 API Keys 使用环境变量而非硬编码</li><li><input disabled type=checkbox> 飞书应用权限最小化（只开通必要的几个）</li><li><input disabled type=checkbox> <code>requireMention: true</code>（飞书 Bot 只响应 @）</li><li><input disabled type=checkbox> <code>dmPolicy: pairing</code>（私聊需要配对）</li><li><input disabled type=checkbox> <code>exec.policy: allowlist</code>（执行白名单模式）</li><li><input disabled type=checkbox> 不在群聊中暴露任何敏感信息</li></ul><hr><h2 id=openclaw-的安全边界>OpenClaw 的安全边界</h2><p>最后需要说明的是，OpenClaw 是<strong>本地网关</strong>，它的安全边界止于你的机器：</p><pre tabindex=0><code>OpenClaw 安全边界
+    │
+    ├── ✅ 保护：你的本地文件、Agent 工作区、凭证
+    ├── ✅ 保护：聊天内容不被第三方服务商存储
+    ├── ⚠️ 局限：AI API 调用（OpenAI/MiniMax 等）由第三方处理
+    └── ⚠️ 局限：飞书/Telegram 等平台的消息由平台方存储
+</code></pre><p>自托管解决了"AI 服务商数据留存"的问题，但"AI API 服务商"和"聊天平台"本身的数据安全问题，仍然需要依赖这些平台的隐私政策。</p><hr><h2 id=总结>总结</h2><p>OpenClaw 的安全核心：<strong>数据留在本地，操作经过授权，敏感信息多重隔离</strong>。作为自托管工具，它在易用性和安全性之间做到了很好的平衡——你不需要成为安全专家，也能安全地运行一个强大的 AI 助手团队。</p><hr><p><em>专题持续更新中 🎉</em></p><p><strong>系列目录：</strong></p><ol><li><a href=../openclaw-series/01-openclaw-%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97.md>OpenClaw 入门指南：自托管 AI 网关</a></li><li><a href=../openclaw-series/02-openclaw-%E6%9E%B6%E6%9E%84%E8%A7%A3%E6%9E%90.md>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构</a></li><li><a href=../openclaw-series/03-openclaw-%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%9B%A2%E9%98%9F.md>用 OpenClaw 构建多智能体团队</a></li><li><a href=../openclaw-series/04-openclaw-skills%E6%8F%92%E4%BB%B6%E7%B3%BB%E7%BB%9F.md>OpenClaw Skills 插件系统实战</a></li><li><a href=../openclaw-series/05-openclaw-%E5%AE%89%E5%85%A8%E5%AE%9E%E8%B7%B5.md>OpenClaw 安全实践：自托管数据控制与权限管理</a></li><li><a href=../openclaw-series/06-openclaw-%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F.md>OpenClaw 记忆系统：让 AI 拥有持续进化的记忆</a></li></ol><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/openclaw-series/02_openclaw_architecture/>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/openclaw-series/01_openclaw_getting_started/>OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

@@ -1,0 +1,215 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='OpenClaw 记忆系统：让 AI 拥有持续进化的记忆
+
+标签：OpenClaw / 记忆系统 / 深度 / AI
+日期：2026-03-24
+专题：OpenClaw 深度探索
+
+
+痛点：AI 为何总是"失忆"
+用过 ChatGPT 的人都遇到过这个场景：聊了 50 轮之后，AI 突然忘了你们最初达成的共识。上下文窗口满了，历史被无情截断，一切从头开始。
+这是所有 LLM 的本质局限：上下文窗口有上限，记忆不是"内置"的。
+OpenClaw 的解决方案是：让记忆变成文件。不是依赖模型的"记住"，而是把重要信息写到磁盘——就像人类的笔记本一样。
+
+核心设计哲学：文件即记忆
+OpenClaw 的记忆系统极度简洁：
+
+记忆 = Markdown 文件，文件即真相（Source of Truth）
+
+模型不是靠"脑子里想"来记住东西，而是靠读写文件。每次会话开始，读取相关文件；每次决策完成，写入相关文件。磁盘不丢，记忆就不丢。
+~/.openclaw/workspace/
+├── SOUL.md              # AI 的人格与行为准则
+├── USER.md              # 用户档案与偏好
+├── MEMORY.md            # 长期记忆（ curated )
+├── HEARTBEAT.md         # 定时任务清单
+└── memory/
+    └── YYYY-MM-DD.md    # 每日日志（ append-only )
+
+双层记忆架构
+第一层：每日日志（Daily Log）
+路径：memory/YYYY-MM-DD.md
+
+append-only，每次会话持续追加内容
+会话开始时自动读取今天 + 昨天的文件
+记录内容：做过的事、遇到的错误、待跟进的任务
+
+## 2026-03-24
+
+### 完成
+- 为用户配置了 Gemini API
+- 完成了 OpenClaw 网关的安装调试
+
+### 待跟进
+- [ ] 飞书群路由配置还未测试
+- [ ] 需要配置心跳任务
+
+### 错误记录
+- 首次运行 `openclaw gateway start` 报 Node 版本不兼容，升级到 Node 24 后解决
+第二层：长期记忆（Long-term Memory）
+路径：MEMORY.md（位于 workspace 根目录）'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/openclaw-series/06_openclaw_memory_system/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/openclaw-series/06_openclaw_memory_system/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/openclaw-series/06_openclaw_memory_system/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/openclaw-series/06_openclaw_memory_system/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='OpenClaw 记忆系统：让 AI 拥有持续进化的记忆 标签：OpenClaw / 记忆系统 / 深度 / AI
+日期：2026-03-24
+专题：OpenClaw 深度探索
+痛点：AI 为何总是"失忆" 用过 ChatGPT 的人都遇到过这个场景：聊了 50 轮之后，AI 突然忘了你们最初达成的共识。上下文窗口满了，历史被无情截断，一切从头开始。
+这是所有 LLM 的本质局限：上下文窗口有上限，记忆不是"内置"的。
+OpenClaw 的解决方案是：让记忆变成文件。不是依赖模型的"记住"，而是把重要信息写到磁盘——就像人类的笔记本一样。
+核心设计哲学：文件即记忆 OpenClaw 的记忆系统极度简洁：
+记忆 = Markdown 文件，文件即真相（Source of Truth）
+模型不是靠"脑子里想"来记住东西，而是靠读写文件。每次会话开始，读取相关文件；每次决策完成，写入相关文件。磁盘不丢，记忆就不丢。
+~/.openclaw/workspace/ ├── SOUL.md # AI 的人格与行为准则 ├── USER.md # 用户档案与偏好 ├── MEMORY.md # 长期记忆（ curated ) ├── HEARTBEAT.md # 定时任务清单 └── memory/ └── YYYY-MM-DD.md # 每日日志（ append-only ) 双层记忆架构 第一层：每日日志（Daily Log） 路径：memory/YYYY-MM-DD.md
+append-only，每次会话持续追加内容 会话开始时自动读取今天 + 昨天的文件 记录内容：做过的事、遇到的错误、待跟进的任务 ## 2026-03-24 ### 完成 - 为用户配置了 Gemini API - 完成了 OpenClaw 网关的安装调试 ### 待跟进 - [ ] 飞书群路由配置还未测试 - [ ] 需要配置心跳任务 ### 错误记录 - 首次运行 `openclaw gateway start` 报 Node 版本不兼容，升级到 Node 24 后解决 第二层：长期记忆（Long-term Memory） 路径：MEMORY.md（位于 workspace 根目录）'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="openclaw-series"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='OpenClaw 记忆系统：让 AI 拥有持续进化的记忆 标签：OpenClaw / 记忆系统 / 深度 / AI
+日期：2026-03-24
+专题：OpenClaw 深度探索
+痛点：AI 为何总是"失忆" 用过 ChatGPT 的人都遇到过这个场景：聊了 50 轮之后，AI 突然忘了你们最初达成的共识。上下文窗口满了，历史被无情截断，一切从头开始。
+这是所有 LLM 的本质局限：上下文窗口有上限，记忆不是"内置"的。
+OpenClaw 的解决方案是：让记忆变成文件。不是依赖模型的"记住"，而是把重要信息写到磁盘——就像人类的笔记本一样。
+核心设计哲学：文件即记忆 OpenClaw 的记忆系统极度简洁：
+记忆 = Markdown 文件，文件即真相（Source of Truth）
+模型不是靠"脑子里想"来记住东西，而是靠读写文件。每次会话开始，读取相关文件；每次决策完成，写入相关文件。磁盘不丢，记忆就不丢。
+~/.openclaw/workspace/ ├── SOUL.md # AI 的人格与行为准则 ├── USER.md # 用户档案与偏好 ├── MEMORY.md # 长期记忆（ curated ) ├── HEARTBEAT.md # 定时任务清单 └── memory/ └── YYYY-MM-DD.md # 每日日志（ append-only ) 双层记忆架构 第一层：每日日志（Daily Log） 路径：memory/YYYY-MM-DD.md
+append-only，每次会话持续追加内容 会话开始时自动读取今天 + 昨天的文件 记录内容：做过的事、遇到的错误、待跟进的任务 ## 2026-03-24 ### 完成 - 为用户配置了 Gemini API - 完成了 OpenClaw 网关的安装调试 ### 待跟进 - [ ] 飞书群路由配置还未测试 - [ ] 需要配置心跳任务 ### 错误记录 - 首次运行 `openclaw gateway start` 报 Node 版本不兼容，升级到 Node 24 后解决 第二层：长期记忆（Long-term Memory） 路径：MEMORY.md（位于 workspace 根目录）'><meta itemprop=wordCount content="606"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='OpenClaw 记忆系统：让 AI 拥有持续进化的记忆 标签：OpenClaw / 记忆系统 / 深度 / AI
+日期：2026-03-24
+专题：OpenClaw 深度探索
+痛点：AI 为何总是"失忆" 用过 ChatGPT 的人都遇到过这个场景：聊了 50 轮之后，AI 突然忘了你们最初达成的共识。上下文窗口满了，历史被无情截断，一切从头开始。
+这是所有 LLM 的本质局限：上下文窗口有上限，记忆不是"内置"的。
+OpenClaw 的解决方案是：让记忆变成文件。不是依赖模型的"记住"，而是把重要信息写到磁盘——就像人类的笔记本一样。
+核心设计哲学：文件即记忆 OpenClaw 的记忆系统极度简洁：
+记忆 = Markdown 文件，文件即真相（Source of Truth）
+模型不是靠"脑子里想"来记住东西，而是靠读写文件。每次会话开始，读取相关文件；每次决策完成，写入相关文件。磁盘不丢，记忆就不丢。
+~/.openclaw/workspace/ ├── SOUL.md # AI 的人格与行为准则 ├── USER.md # 用户档案与偏好 ├── MEMORY.md # 长期记忆（ curated ) ├── HEARTBEAT.md # 定时任务清单 └── memory/ └── YYYY-MM-DD.md # 每日日志（ append-only ) 双层记忆架构 第一层：每日日志（Daily Log） 路径：memory/YYYY-MM-DD.md
+append-only，每次会话持续追加内容 会话开始时自动读取今天 + 昨天的文件 记录内容：做过的事、遇到的错误、待跟进的任务 ## 2026-03-24 ### 完成 - 为用户配置了 Gemini API - 完成了 OpenClaw 网关的安装调试 ### 待跟进 - [ ] 飞书群路由配置还未测试 - [ ] 需要配置心跳任务 ### 错误记录 - 首次运行 `openclaw gateway start` 报 Node 版本不兼容，升级到 Node 24 后解决 第二层：长期记忆（Long-term Memory） 路径：MEMORY.md（位于 workspace 根目录）'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-06_openclaw_memory_system"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#痛点ai-为何总是失忆>痛点：AI 为何总是"失忆"</a></li><li><a href=#核心设计哲学文件即记忆>核心设计哲学：文件即记忆</a></li><li><a href=#双层记忆架构>双层记忆架构</a><ul><li><a href=#第一层每日日志daily-log>第一层：每日日志（Daily Log）</a></li><li><a href=#第二层长期记忆long-term-memory>第二层：长期记忆（Long-term Memory）</a></li></ul></li><li><a href=#记忆工具memory_search-与-memory_get>记忆工具：memory_search 与 memory_get</a><ul><li><a href=#memory_search语义检索>memory_search：语义检索</a></li><li><a href=#memory_get精准读取>memory_get：精准读取</a></li></ul></li><li><a href=#向量搜索让记忆语义化>向量搜索：让记忆"语义化"</a><ul><li><a href=#向量搜索配置>向量搜索配置</a></li><li><a href=#高级特性混合搜索--mmr>高级特性：混合搜索 + MMR</a></li></ul></li><li><a href=#compaction-前的记忆-flush>Compaction 前的记忆 Flush</a></li><li><a href=#记忆系统与-context-engine-的关系>记忆系统与 Context Engine 的关系</a></li><li><a href=#实际工作流示例>实际工作流示例</a><ul><li><a href=#场景用户说记得上次我们说要用-minimax>场景：用户说"记得上次我们说要用 MiniMax"</a></li><li><a href=#场景完成重要任务后>场景：完成重要任务后</a></li></ul></li><li><a href=#最佳实践>最佳实践</a><ul><li><a href=#-应该写入记忆的内容>✅ 应该写入记忆的内容</a></li><li><a href=#-不应该写入记忆的内容>❌ 不应该写入记忆的内容</a></li><li><a href=#写记忆的时机>写记忆的时机</a></li></ul></li><li><a href=#记忆系统配置参考>记忆系统配置参考</a></li><li><a href=#与其他-ai-系统的记忆对比>与其他 AI 系统的记忆对比</a></li><li><a href=#总结>总结</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
+<span>606 字</span></div></header><h1 id=openclaw-记忆系统让-ai-拥有持续进化的记忆>OpenClaw 记忆系统：让 AI 拥有持续进化的记忆</h1><blockquote><p><strong>标签</strong>：OpenClaw / 记忆系统 / 深度 / AI<br><strong>日期</strong>：2026-03-24<br><strong>专题</strong>：OpenClaw 深度探索</p></blockquote><hr><h2 id=痛点ai-为何总是失忆>痛点：AI 为何总是"失忆"</h2><p>用过 ChatGPT 的人都遇到过这个场景：聊了 50 轮之后，AI 突然忘了你们最初达成的共识。上下文窗口满了，历史被无情截断，一切从头开始。</p><p>这是所有 LLM 的本质局限：<strong>上下文窗口有上限，记忆不是"内置"的</strong>。</p><p>OpenClaw 的解决方案是：<strong>让记忆变成文件</strong>。不是依赖模型的"记住"，而是把重要信息写到磁盘——就像人类的笔记本一样。</p><hr><h2 id=核心设计哲学文件即记忆>核心设计哲学：文件即记忆</h2><p>OpenClaw 的记忆系统极度简洁：</p><blockquote><p><strong>记忆 = Markdown 文件，文件即真相（Source of Truth）</strong></p></blockquote><p>模型不是靠"脑子里想"来记住东西，而是靠读写文件。每次会话开始，读取相关文件；每次决策完成，写入相关文件。磁盘不丢，记忆就不丢。</p><pre tabindex=0><code>~/.openclaw/workspace/
+├── SOUL.md              # AI 的人格与行为准则
+├── USER.md              # 用户档案与偏好
+├── MEMORY.md            # 长期记忆（ curated )
+├── HEARTBEAT.md         # 定时任务清单
+└── memory/
+    └── YYYY-MM-DD.md    # 每日日志（ append-only )
+</code></pre><hr><h2 id=双层记忆架构>双层记忆架构</h2><h3 id=第一层每日日志daily-log>第一层：每日日志（Daily Log）</h3><p>路径：<code>memory/YYYY-MM-DD.md</code></p><ul><li><strong>append-only</strong>，每次会话持续追加内容</li><li>会话开始时自动读取<strong>今天 + 昨天</strong>的文件</li><li>记录内容：做过的事、遇到的错误、待跟进的任务</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-markdown data-lang=markdown><span style=display:flex><span><span style=color:#75715e>## 2026-03-24
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>### 完成
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 为用户配置了 Gemini API
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 完成了 OpenClaw 网关的安装调试
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>### 待跟进
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>- [ ]</span> 飞书群路由配置还未测试
+</span></span><span style=display:flex><span><span style=color:#66d9ef>- [ ]</span> 需要配置心跳任务
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>### 错误记录
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 首次运行 <span style=color:#e6db74>`openclaw gateway start`</span> 报 Node 版本不兼容，升级到 Node 24 后解决
+</span></span></code></pre></div><h3 id=第二层长期记忆long-term-memory>第二层：长期记忆（Long-term Memory）</h3><p>路径：<code>MEMORY.md</code>（位于 workspace 根目录）</p><ul><li>由每日日志提炼而来，是<strong>精选后的精华</strong></li><li>记录：决策、偏好、重要的长期上下文</li><li><strong>仅在主会话（私聊）中加载</strong>，不在群聊中暴露</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-markdown data-lang=markdown><span style=display:flex><span><span style=color:#75715e>## 用户偏好
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 喜欢简洁直接的沟通，不喜欢废话
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 技术问题偏好直接给方案，不解释原理可以但要有链接
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## 重要决策
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 2026-03-20：确定使用 Gemini 作为主要 AI 提供商
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 2026-03-19：采用飞书作为主要工作群
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>## 教训
+</span></span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> 不要在群聊中暴露 API Keys
+</span></span><span style=display:flex><span><span style=color:#66d9ef>-</span> exec 工具写文件后必须验证
+</span></span></code></pre></div><hr><h2 id=记忆工具memory_search-与-memory_get>记忆工具：memory_search 与 memory_get</h2><p>OpenClaw 暴露两个内置工具给 Agent：</p><h3 id=memory_search语义检索>memory_search：语义检索</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>memory_search<span style=color:#f92672>(</span>query<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;主人偏好什么沟通风格&#34;</span>, maxResults<span style=color:#f92672>=</span>5<span style=color:#f92672>)</span>
+</span></span></code></pre></div><p>基于向量相似度搜索 <code>MEMORY.md</code> 和 <code>memory/*.md</code> 中的相关片段。即使表述不同（&ldquo;怎么称呼&rdquo; vs &ldquo;偏好什么称呼&rdquo;），语义搜索也能找到相关内容。</p><p><strong>返回格式：</strong></p><pre tabindex=0><code>文件：MEMORY.md，第 15-18 行
+&#34;喜欢简洁直接的沟通，不喜欢废话&#34;
+匹配度：0.92
+
+文件：memory/2026-03-24.md，第 32 行
+&#34;用户说&#39;少说废话，直接给答案&#39;&#34;
+匹配度：0.87
+</code></pre><h3 id=memory_get精准读取>memory_get：精准读取</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>memory_get<span style=color:#f92672>(</span>path<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;memory/2026-03-24.md&#34;</span>, from<span style=color:#f92672>=</span>10, lines<span style=color:#f92672>=</span>20<span style=color:#f92672>)</span>
+</span></span></code></pre></div><p>按路径和行号精准读取特定片段。<strong>优雅降级</strong>：文件不存在时返回空文本而非报错，Agent 可以继续工作而不崩溃。</p><hr><h2 id=向量搜索让记忆语义化>向量搜索：让记忆"语义化"</h2><p>除了关键词搜索，OpenClaw 支持<strong>向量语义搜索</strong>：</p><pre tabindex=0><code>传统搜索：关键词匹配
+  搜索&#34;狗狗&#34; → 只找到包含&#34;狗&#34;字的文件
+
+向量搜索：语义理解
+  搜索&#34;宠物&#34; → 找到包含&#34;猫&#34;、&#34;仓鼠&#34;、&#34;金鱼&#34;的文件
+</code></pre><h3 id=向量搜索配置>向量搜索配置</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#75715e>// ~/.openclaw/openclaw.json
+</span></span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;plugins&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;slots&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;memory&#34;</span>: <span style=color:#e6db74>&#34;memory-core&#34;</span>  <span style=color:#75715e>// 默认插件，提供向量搜索能力
+</span></span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>支持多种 Embedding 提供商：</p><table><thead><tr><th>提供商</th><th>特点</th></tr></thead><tbody><tr><td><strong>OpenAI</strong></td><td>通用能力强，需 API Key</td></tr><tr><td><strong>Gemini</strong></td><td>Google 提供，免费额度大</td></tr><tr><td><strong>Voyage AI</strong></td><td>专注向量领域</td></tr><tr><td><strong>Mistral</strong></td><td>欧洲团队，隐私友好</td></tr><tr><td><strong>Ollama</strong></td><td>本地部署，完全离线</td></tr></tbody></table><h3 id=高级特性混合搜索--mmr>高级特性：混合搜索 + MMR</h3><p>OpenClaw 还支持：</p><ul><li><strong>混合搜索（Hybrid Search）</strong>：BM25（传统关键词）+ 向量语义，取长补短</li><li><strong>MMR 去重（MMaximum Marginal Relevance）</strong>：避免返回高度相似的重复结果</li><li><strong>时序衰减（Temporal Decay）</strong>：近期记忆权重更高，远期内容逐渐降低权重</li></ul><hr><h2 id=compaction-前的记忆-flush>Compaction 前的记忆 Flush</h2><p>当会话上下文快要满时，OpenClaw 会触发<strong>自动 compaction（压缩）</strong>——对历史消息做摘要，释放 token 空间。</p><p><strong>问题</strong>：压缩前的重要记忆会不会丢失？</p><p><strong>解决</strong>：Compaction 触发前，OpenClaw 会静默提醒 Agent：&ldquo;会话即将压缩，请先把重要记忆写入磁盘&rdquo;。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#75715e>// compaction.memoryFlush 配置
+</span></span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;compaction&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;reserveTokensFloor&#34;</span>: <span style=color:#ae81ff>20000</span>,     <span style=color:#75715e>// 保留 20000 token 缓冲
+</span></span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;memoryFlush&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;enabled&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;softThresholdTokens&#34;</span>: <span style=color:#ae81ff>4000</span>,   <span style=color:#75715e>// 剩余 4000 token 时触发
+</span></span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;systemPrompt&#34;</span>: <span style=color:#e6db74>&#34;Session nearing compaction. Store durable memories now.&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;prompt&#34;</span>: <span style=color:#e6db74>&#34;Write any lasting notes to memory/YYYY-MM-DD.md; reply with NO_REPLY if nothing to store.&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>特点</strong>：</p><ul><li><strong>静默执行</strong>：默认回复 <code>NO_REPLY</code>，用户完全感知不到</li><li><strong>只触发一次</strong>：每个 compaction 周期只 flush 一次</li><li><strong>自动跳过</strong>：工作区只读时（<code>workspaceAccess: "ro"</code>）自动跳过</li></ul><hr><h2 id=记忆系统与-context-engine-的关系>记忆系统与 Context Engine 的关系</h2><p>很多人会把"记忆"和"上下文管理"混为一谈。OpenClaw 中这是两个独立模块：</p><table><thead><tr><th>模块</th><th>职责</th><th>接口</th></tr></thead><tbody><tr><td><strong>Memory Plugin</strong></td><td>存储与检索</td><td><code>memory_search</code>、<code>memory_get</code></td></tr><tr><td><strong>Context Engine</strong></td><td>控制模型看到什么上下文</td><td><code>assemble()</code>、<code>compact()</code></td></tr></tbody></table><p><strong>关键区别</strong>：</p><ul><li>Memory Plugin 是<strong>持久化层</strong>——记忆写到哪里、如何检索</li><li>Context Engine 是<strong>组装层</strong>——本次请求应该给模型哪些消息</li></ul><p>两者可以协同工作：Context Engine 在 <code>assemble()</code> 时可以调用 Memory Plugin 拉取相关记忆，拼入系统提示词。</p><hr><h2 id=实际工作流示例>实际工作流示例</h2><h3 id=场景用户说记得上次我们说要用-minimax>场景：用户说"记得上次我们说要用 MiniMax"</h3><pre tabindex=0><code>用户：记得上次说要用 MiniMax？
+    │
+    ▼
+Agent 调用 memory_search
+    │
+    ▼
+搜索 &#34;MiniMax&#34; 相关记忆片段
+    │
+    ▼
+返回：
+  MEMORY.md: &#34;2026-03-20 决定采用 MiniMax 作为主要 AI 提供商&#34;
+  memory/2026-03-20.md: &#34;与用户讨论后确定切换到 MiniMax，原因：...&#34;
+    │
+    ▼
+Agent 基于记忆回答：
+&#34;对，上周三（3月20日）我们确定使用 MiniMax。原因是...&#34;
+</code></pre><h3 id=场景完成重要任务后>场景：完成重要任务后</h3><pre tabindex=0><code>Agent 完成：帮用户配置好了飞书机器人
+    │
+    ▼
+检查需要写入记忆的内容：
+  - 用户偏好：飞书是主要工作渠道
+  - 重要决策：飞书机器人 token 已配置
+  - 待跟进：测试飞书消息收发
+    │
+    ▼
+写入 memory/2026-03-24.md（每日日志）
+写入 MEMORY.md（长期记忆，只在私聊中）
+</code></pre><hr><h2 id=最佳实践>最佳实践</h2><h3 id=-应该写入记忆的内容>✅ 应该写入记忆的内容</h3><ul><li>用户的偏好和习惯（沟通风格、技术栈偏好）</li><li>重要决策及其原因（&ldquo;为什么选了 Gemini 而不是 OpenAI&rdquo;）</li><li>遇到的错误和解决方案（&ldquo;这个错误是因为 Node 版本太低&rdquo;）</li><li>长期项目目标和进度</li></ul><h3 id=-不应该写入记忆的内容>❌ 不应该写入记忆的内容</h3><ul><li>临时性的中间结果（&ldquo;这个查询返回了 42 条数据&rdquo;）</li><li>群聊中的公开信息（群聊上下文不写入 MEMORY.md）</li><li>敏感凭证（API Keys 绝不写入记忆文件）</li></ul><h3 id=写记忆的时机>写记忆的时机</h3><table><thead><tr><th>情况</th><th>是否写入</th></tr></thead><tbody><tr><td>用户说"记住这个"</td><td>✅ 立即写入</td></tr><tr><td>完成了重要任务</td><td>✅ 写入 MEMORY.md</td></tr><tr><td>遇到并解决了错误</td><td>✅ 写入每日日志</td></tr><tr><td>会话快压缩时</td><td>✅ 自动 flush</td></tr><tr><td>日常闲聊</td><td>❌ 不需要</td></tr></tbody></table><hr><h2 id=记忆系统配置参考>记忆系统配置参考</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#75715e>// ~/.openclaw/openclaw.json
+</span></span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;agents&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;defaults&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;workspace&#34;</span>: <span style=color:#e6db74>&#34;~/.openclaw/workspace&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;compaction&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;reserveTokensFloor&#34;</span>: <span style=color:#ae81ff>20000</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;memoryFlush&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;enabled&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;softThresholdTokens&#34;</span>: <span style=color:#ae81ff>4000</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;systemPrompt&#34;</span>: <span style=color:#e6db74>&#34;Session nearing compaction. Store durable memories now.&#34;</span>,
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;prompt&#34;</span>: <span style=color:#e6db74>&#34;Write any lasting notes to memory/YYYY-MM-DD.md; reply with NO_REPLY if nothing to store.&#34;</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;plugins&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;slots&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;memory&#34;</span>: <span style=color:#e6db74>&#34;memory-core&#34;</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;entries&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;memory-core&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;enabled&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;embedding&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;provider&#34;</span>: <span style=color:#e6db74>&#34;gemini&#34;</span>,     <span style=color:#75715e>// 使用 Gemini 做向量嵌入
+</span></span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;model&#34;</span>: <span style=color:#e6db74>&#34;text-embedding-004&#34;</span>
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;search&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;hybrid&#34;</span>: <span style=color:#66d9ef>true</span>,           <span style=color:#75715e>// 混合 BM25 + 向量
+</span></span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;mmr&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;enabled&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;diversity&#34;</span>: <span style=color:#ae81ff>0.3</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;temporalDecay&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;enabled&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;decayRate&#34;</span>: <span style=color:#ae81ff>0.95</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><hr><h2 id=与其他-ai-系统的记忆对比>与其他 AI 系统的记忆对比</h2><table><thead><tr><th>系统</th><th>记忆方式</th><th>持久化</th><th>可干预性</th></tr></thead><tbody><tr><td>ChatGPT</td><td>靠上下文窗口</td><td>❌ 不持久</td><td>❌ 用户无法管理</td></tr><tr><td>Claude</td><td>同上</td><td>❌ 不持久</td><td>❌ 有限</td></tr><tr><td><strong>OpenClaw</strong></td><td><strong>Markdown 文件</strong></td><td><strong>✅ 持久化</strong></td><td><strong>✅ 完全可控</strong></td></tr><tr><td>Mem.ai</td><td>外部笔记集成</td><td>✅ 持久</td><td>⚠️ 依赖第三方</td></tr></tbody></table><p>OpenClaw 的记忆系统最大优势：<strong>记忆是纯文本文件</strong>，不依赖任何专有格式，不依赖任何第三方服务。你可以用任何编辑器打开，任何工具处理，完全自主可控。</p><hr><h2 id=总结>总结</h2><p>OpenClaw 的记忆系统解决了一个根本问题：<strong>让 AI 的记忆从玄学变成工程</strong>。</p><p>核心设计：</p><ul><li><strong>文件即记忆</strong>：Markdown 文件，持久化、可追溯、可编辑</li><li><strong>双层结构</strong>：每日日志（原始积累）+ 长期记忆（精选精华）</li><li><strong>语义检索</strong>：向量搜索 + 混合搜索，找得快、找得准</li><li><strong>自动 flush</strong>：上下文压缩前自动把记忆落盘，不丢东西</li><li><strong>完全自主</strong>：纯文本，不依赖第三方，主人拥有完全控制权</li></ul><p>记忆不是 AI 的"超能力"，而是可以被设计、工程化、持续改进的系统。OpenClaw 做到了。</p><hr><p><strong>系列其他文章：</strong></p><ol><li><a href=../openclaw-series/01-openclaw-%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97.md>OpenClaw 入门指南：自托管 AI 网关</a></li><li><a href=../openclaw-series/02-openclaw-%E6%9E%B6%E6%9E%84%E8%A7%A3%E6%9E%90.md>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构</a></li><li><a href=../openclaw-series/03-openclaw-%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%9B%A2%E9%98%9F.md>用 OpenClaw 构建多智能体团队</a></li><li><a href=../openclaw-series/04-openclaw-skills%E6%8F%92%E4%BB%B6%E7%B3%BB%E7%BB%9F.md>OpenClaw Skills 插件系统实战</a></li><li><a href=../openclaw-series/05-openclaw-%E5%AE%89%E5%85%A8%E5%AE%9E%E8%B7%B5.md>OpenClaw 安全实践：自托管数据控制与权限管理</a></li><li><a href=../openclaw-series/06-openclaw-%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F.md>OpenClaw 记忆系统：让 AI 拥有持续进化的记忆</a></li></ol><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/openclaw-series/03_openclaw_multi_agent/>用 OpenClaw 构建多智能体团队：角色划分与任务协调实战</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>

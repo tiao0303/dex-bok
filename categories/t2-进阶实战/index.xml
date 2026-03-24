@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>T2 进阶实战 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/</link><description>Recent content in T2 进阶实战 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 10:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/t2-%E8%BF%9B%E9%98%B6%E5%AE%9E%E6%88%98/index.xml" rel="self" type="application/rss+xml"/><item><title>T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎</title><link>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/t2_06_amm_principles/</link><pubDate>Thu, 19 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/t2_06_amm_principles/</guid><description>&lt;h1 id="t2-进阶实战-06amm-原理详解--理解-dex-的核心引擎"&gt;T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎&lt;/h1&gt;
+&lt;p&gt;在上一节中，我们了解了 DEX 的基础概念。本节我们来深入理解 DEX 的核心引擎——&lt;strong&gt;AMM（Automated Market Maker，自动做市商）&lt;/strong&gt;。理解 AMM 的原理，是所有进阶 DeFi 操作的根基。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一amm-是什么"&gt;一、AMM 是什么？&lt;/h2&gt;
+&lt;h3 id="传统做市商-vs-amm"&gt;传统做市商 vs AMM&lt;/h3&gt;
+&lt;p&gt;在传统金融中，&lt;strong&gt;做市商&lt;/strong&gt;是提供流动性的专业机构。他们在订单簿上同时挂出买单和卖单，赚取买卖价差（bid-ask spread）。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;传统订单簿模式：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;买单队列 卖单队列
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;用户B 买入 2 ETH @ 1990 用户D 卖出 1 ETH @ 2010
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;用户A 买入 1 ETH @ 1980 用户C 卖出 3 ETH @ 2020
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ↑ 差价 = 2010 - 1990 = 20 USD
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;AMM 则完全取消了订单簿&lt;/strong&gt;，用一个数学公式取而代之。无论你是买入还是卖出，智能合约根据公式自动报价，无需任何对手方等待。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="二恒定乘积公式amm-的灵魂"&gt;二、恒定乘积公式：AMM 的灵魂&lt;/h2&gt;
+&lt;h3 id="公式本身"&gt;公式本身&lt;/h3&gt;
+&lt;p&gt;AMM 最核心的公式是&lt;strong&gt;恒定乘积（Constant Product）&lt;/strong&gt;：&lt;/p&gt;</description></item><item><title>T2 进阶实战</title><link>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/</link><pubDate>Thu, 19 Mar 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t2_intermediate/</guid><description/></item></channel></rss>

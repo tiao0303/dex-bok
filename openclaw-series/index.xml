@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Openclaw-Series on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/</link><description>Recent content in Openclaw-Series on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Mon, 23 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/openclaw-series/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/</guid><description>&lt;h1 id="openclaw-skills-插件系统实战从零构建你的第一个-skill"&gt;OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / Skills / 插件 / 实战&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="什么是-skills"&gt;什么是 Skills&lt;/h2&gt;
+&lt;p&gt;Skills 是 OpenClaw 的&lt;strong&gt;扩展工具层&lt;/strong&gt;，它让 AI Agent 能够执行具体的外部操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生成图片 → 调用 &lt;code&gt;image-generation&lt;/code&gt; Skill&lt;/li&gt;
+&lt;li&gt;发飞书消息 → 调用 &lt;code&gt;feishu-doc&lt;/code&gt; Skill&lt;/li&gt;
+&lt;li&gt;搜索 GitHub → 调用 &lt;code&gt;github&lt;/code&gt; Skill&lt;/li&gt;
+&lt;li&gt;发送邮件 → 调用 &lt;code&gt;gog&lt;/code&gt; Skill&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;本质上，Skill 就是一个&lt;strong&gt;封装好的命令行工具&lt;/strong&gt;，AI Agent 通过标准化接口调用它。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="skills-的标准结构"&gt;Skills 的标准结构&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;~/.openclaw/workspace/skills/
+└── my-skill/
+ ├── SKILL.md # 技能说明文档（AI 会读取）
+ ├── scripts/ # 可执行脚本
+ │ └── run.sh
+ └── references/ # 参考文档
+ └── examples.md
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="skillmd-的标准格式"&gt;SKILL.md 的标准格式&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;name: my-skill
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;description: 技能的简短描述，激活关键词
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;# My Skill
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 激活场景
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;当用户提到以下内容时使用本技能：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 生成图片
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 画一张图
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; AI 画图
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 工作流程
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;1.&lt;/span&gt; 理解需求
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;2.&lt;/span&gt; 调用脚本
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;3.&lt;/span&gt; 返回结果
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 使用方式
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 基本用法
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;```bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;python3 my_skill.py --param value
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="示例"&gt;示例&lt;/h2&gt;
+&lt;p&gt;python3 my_skill.py &amp;ndash;prompt &amp;ldquo;一只猫&amp;rdquo; &amp;ndash;output ~/Downloads/cat.png&lt;/p&gt;</description></item><item><title>OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/01_openclaw_getting_started/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/01_openclaw_getting_started/</guid><description>&lt;h1 id="openclaw-入门指南自托管-ai-网关让任何聊天应用都变成你的私人助手"&gt;OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 工具 / 入门&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="为什么需要-openclaw"&gt;为什么需要 OpenClaw&lt;/h2&gt;
+&lt;p&gt;在 AI 时代，我们每天在不同的聊天应用中切换：Telegram 处理工作、Discord 参与社区、WhatsApp 联系家人。但 AI 助手呢？ChatGPT 在网页里，Claude 在单独窗口，Copilot 在 VS Code 里。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;问题&lt;/strong&gt;：AI 助手和你的日常聊天工具是割裂的。&lt;/p&gt;
+&lt;p&gt;OpenClaw 解决的就是这个问题：它是一个&lt;strong&gt;自托管网关&lt;/strong&gt;，桥接你的聊天应用（Telegram、Discord、WhatsApp、飞书等）和 AI 智能体，让你在任何一个常用聊天软件里，都能召唤你的私人 AI 助手。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="什么是-openclaw"&gt;什么是 OpenClaw&lt;/h2&gt;
+&lt;h3 id="核心定义"&gt;核心定义&lt;/h3&gt;
+&lt;p&gt;OpenClaw 是一个运行在你本地机器（或服务器）上的&lt;strong&gt;网关进程&lt;/strong&gt;，它同时连接多个聊天平台和多个 AI 模型/智能体。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;你的手机/电脑
+ ├── Telegram ──┐
+ ├── Discord ──┼──▶ OpenClaw Gateway ──▶ AI Agent (Claude/GPT/MiniMax...)
+ ├── 飞书 ──┤ │
+ └── WhatsApp ──┘ ▼
+ 本地文件系统
+ (你的数据)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="关键特性"&gt;关键特性&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;特性&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;自托管&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;数据留在你自己的机器上，不经过第三方服务器&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;多渠道&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;同时支持 Telegram、Discord、WhatsApp、飞书、iMessage 等&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;多智能体&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;可以运行多个专业角色（研究员、架构师、开发者等）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;插件生态&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;支持 Skills 扩展，可自定义工作流&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;跨平台&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;macOS、Linux、树莓派都能跑&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="5-分钟快速上手"&gt;5 分钟快速上手&lt;/h2&gt;
+&lt;h3 id="第一步安装"&gt;第一步：安装&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;npm install -g openclaw
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二步启动网关"&gt;第二步：启动网关&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;openclaw gateway start
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第三步配置聊天渠道"&gt;第三步：配置聊天渠道&lt;/h3&gt;
+&lt;p&gt;以 Telegram 为例：&lt;/p&gt;</description></item><item><title>OpenClaw 安全实践：自托管数据控制与权限管理</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/05_openclaw_local_deployment/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/05_openclaw_local_deployment/</guid><description>&lt;h1 id="openclaw-安全实践自托管数据控制与权限管理"&gt;OpenClaw 安全实践：自托管数据控制与权限管理&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 安全 / 隐私 / 深度&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="自托管的核心价值你的数据你做主"&gt;自托管的核心价值：你的数据你做主&lt;/h2&gt;
+&lt;p&gt;很多人问我：为什么不用 ChatGPT？答案很简单：&lt;strong&gt;数据控制&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;用第三方 AI 服务，你的对话历史、文件、偏好都会被服务商存储和分析。OpenClaw 的自托管模式，让所有数据都留在你自己的机器上——这是它与 SaaS AI 工具最本质的区别。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="数据安全的多层防护"&gt;数据安全的多层防护&lt;/h2&gt;
+&lt;h3 id="第一层本地存储"&gt;第一层：本地存储&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;~/.openclaw/
+├── agents/ # Agent 工作区
+│ ├── main/
+│ ├── researcher/
+│ └── developer/
+├── credentials/ # 加密存储的凭证
+├── workspace/ # 项目文件
+└── venv/ # Python 虚拟环境
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;关键原则&lt;/strong&gt;：所有文件都在本地，只有 AI API 调用走网络。&lt;/p&gt;
+&lt;h3 id="第二层凭证隔离"&gt;第二层：凭证隔离&lt;/h3&gt;
+&lt;p&gt;API Keys 和 Bot Tokens 存在 &lt;code&gt;~/.openclaw/credentials/&lt;/code&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;~/.openclaw/credentials/
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;├── feishu-main-allowFrom.json &lt;span style="color:#75715e"&gt;# 飞书凭证（只允许特定用户）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;├── telegram-allowFrom.json &lt;span style="color:#75715e"&gt;# Telegram 凭证&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;└── .env &lt;span style="color:#75715e"&gt;# API Keys（不提交 git）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这些文件权限设置为 &lt;code&gt;600&lt;/code&gt;，防止其他用户读取：&lt;/p&gt;</description></item><item><title>OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/02_openclaw_architecture/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/02_openclaw_architecture/</guid><description>&lt;h1 id="openclaw-架构解析gatewayagentchannel-三层架构深度剖析"&gt;OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 架构 / 深度&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="为什么理解架构很重要"&gt;为什么理解架构很重要&lt;/h2&gt;
+&lt;p&gt;很多用户把 OpenClaw 当作&amp;quot;飞书/Telegram 接入 AI&amp;quot;的简单工具。但真正理解它的架构后，你会发现它本质上是一个&lt;strong&gt;本地 AI 智能体运行平台&lt;/strong&gt;——有调度器、有工作区隔离、有多渠道分发。&lt;/p&gt;
+&lt;p&gt;理解架构，才能用好 OpenClaw 的高级特性（多智能体、Skills、cron 定时任务等）。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="整体架构"&gt;整体架构&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;┌─────────────────────────────────────────────────────────────┐
+│ OpenClaw Gateway │
+│ │
+│ ┌──────────────┐ ┌─────────────┐ ┌────────────┐ │
+│ │ Channel │ │ Agent │ │ Skills │ │
+│ │ (消息收发) │ ──▶ │ (智能体) │ ──▶ │ (工具) │ │
+│ └──────────────┘ └─────────────┘ └────────────┘ │
+│ │ │ │ │
+│ └───────────────────┴────────────────────┘ │
+│ │ │
+│ ┌────────▼────────┐ │
+│ │ Message Bus │ │
+│ │ (消息总线) │ │
+│ └─────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="第一层channel渠道"&gt;第一层：Channel（渠道）&lt;/h2&gt;
+&lt;p&gt;Channel 负责&lt;strong&gt;与外部聊天平台通信&lt;/strong&gt;。&lt;/p&gt;</description></item><item><title>用 OpenClaw 构建多智能体团队：角色划分与任务协调实战</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/03_openclaw_multi_agent/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/03_openclaw_multi_agent/</guid><description>&lt;h1 id="用-openclaw-构建多智能体团队角色划分与任务协调实战"&gt;用 OpenClaw 构建多智能体团队：角色划分与任务协调实战&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 多智能体 / 实战&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="从单兵作战到团队协作"&gt;从单兵作战到团队协作&lt;/h2&gt;
+&lt;p&gt;用 AI 写代码不难，但用 AI 做复杂项目（调研 → 架构 → 开发 → 评审 → 决策）就复杂了。一个通用的 AI 无法同时精通所有领域。&lt;/p&gt;
+&lt;p&gt;OpenClaw 的解决方案是：&lt;strong&gt;多智能体团队&lt;/strong&gt;——每个 Agent 专注一个角色，协同完成复杂任务。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="团队角色设计"&gt;团队角色设计&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt; ┌─────────────────────────────┐
+ │ main (协调员) │
+ │ 接收任务 → 分析 → 分派 → 汇总 │
+ └──────────┬──────────────────┘
+ │
+ ┌──────────────┼──────────────────────┐
+ ▼ ▼ ▼
+ researcher architect developer
+ (调研员) (架构师) (开发者)
+ │ │ │
+ ▼ ▼ ▼
+ reviewer frontend security
+ (评审) (前端) (安全)
+ │
+ ▼ decider
+ (决策者)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="各角色职责"&gt;各角色职责&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;角色&lt;/th&gt;
+ &lt;th&gt;输入&lt;/th&gt;
+ &lt;th&gt;输出&lt;/th&gt;
+ &lt;th&gt;特点&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;researcher&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;问题/背景&lt;/td&gt;
+ &lt;td&gt;调研报告、市场分析&lt;/td&gt;
+ &lt;td&gt;广度优先，信息挖掘&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;architect&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;需求&lt;/td&gt;
+ &lt;td&gt;架构设计、技术选型&lt;/td&gt;
+ &lt;td&gt;系统性、前瞻性&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;developer&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;设计稿&lt;/td&gt;
+ &lt;td&gt;代码实现&lt;/td&gt;
+ &lt;td&gt;可执行、可测试&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;frontend&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;需求&lt;/td&gt;
+ &lt;td&gt;UI设计方案、组件规范&lt;/td&gt;
+ &lt;td&gt;用户视角&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;reviewer&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;方案/代码&lt;/td&gt;
+ &lt;td&gt;评审报告、改进建议&lt;/td&gt;
+ &lt;td&gt;批判性思维&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;security&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;方案/代码&lt;/td&gt;
+ &lt;td&gt;风险矩阵、安全建议&lt;/td&gt;
+ &lt;td&gt;底线思维&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;strong&gt;decider&lt;/strong&gt;&lt;/td&gt;
+ &lt;td&gt;各方意见&lt;/td&gt;
+ &lt;td&gt;最终决策&lt;/td&gt;
+ &lt;td&gt;权衡利弊、拍板&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="任务分配流程"&gt;任务分配流程&lt;/h2&gt;
+&lt;h3 id="案例dex-聚合器项目"&gt;案例：DEX 聚合器项目&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户（阿白）
+ │
+ ▼ 发起项目请求
+main (协调员)
+ │
+ ├── 解析任务 → 需要：调研 + 架构 + 开发 + 前端 + 安全 + 评审 + 决策
+ │
+ ▼ 并行派发（5路同时）
+ ┌─────────┬──────────┬─────────┬────────┬────────┐
+ ▼ ▼ ▼ ▼ ▼ │
+researcher architect developer frontend security │
+ │ │ │ │ │ │
+ │ │ │ │ │ │
+ │ │ │ │ │ │
+ └─────────┴──────────┴─────────┴────────┴────────┘
+ │
+ ▼ 各自输出报告
+ reviewer (综合评审)
+ │
+ ▼ 评审结论
+ decider (最终决策)
+ │
+ ▼
+ 汇总报告 → 发给用户
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="实际执行命令"&gt;实际执行命令&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# main 协调员收到 阿白 的请求后&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;main: @architect @researcher @developer @frontend @security 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 基于DEX聚合器项目，各自输出方案
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 各 Agent 并行工作&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;researcher → 输出 RESEARCH.md（竞品分析）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;architect → 输出 ARCHITECTURE.md（系统架构）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;developer → 输出 DEVELOP.md（合约设计）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;frontend → 输出 FRONTEND.md（UI设计）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;security → 输出 SECURITY.md（风险矩阵）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 评审汇总&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;reviewer → 输出 REVIEW.md（综合评审）
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 最终决策&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;decider → 输出 DECISION.md（Go/No-Go）
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="工作区隔离设计"&gt;工作区隔离设计&lt;/h2&gt;
+&lt;p&gt;每个 Agent 的工作区完全独立：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/openclaw-series/06_openclaw_memory_system/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/06_openclaw_memory_system/</guid><description>&lt;h1 id="openclaw-记忆系统让-ai-拥有持续进化的记忆"&gt;OpenClaw 记忆系统：让 AI 拥有持续进化的记忆&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 记忆系统 / 深度 / AI&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-24&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="痛点ai-为何总是失忆"&gt;痛点：AI 为何总是&amp;quot;失忆&amp;quot;&lt;/h2&gt;
+&lt;p&gt;用过 ChatGPT 的人都遇到过这个场景：聊了 50 轮之后，AI 突然忘了你们最初达成的共识。上下文窗口满了，历史被无情截断，一切从头开始。&lt;/p&gt;
+&lt;p&gt;这是所有 LLM 的本质局限：&lt;strong&gt;上下文窗口有上限，记忆不是&amp;quot;内置&amp;quot;的&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;OpenClaw 的解决方案是：&lt;strong&gt;让记忆变成文件&lt;/strong&gt;。不是依赖模型的&amp;quot;记住&amp;quot;，而是把重要信息写到磁盘——就像人类的笔记本一样。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="核心设计哲学文件即记忆"&gt;核心设计哲学：文件即记忆&lt;/h2&gt;
+&lt;p&gt;OpenClaw 的记忆系统极度简洁：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;记忆 = Markdown 文件，文件即真相（Source of Truth）&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;模型不是靠&amp;quot;脑子里想&amp;quot;来记住东西，而是靠读写文件。每次会话开始，读取相关文件；每次决策完成，写入相关文件。磁盘不丢，记忆就不丢。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;~/.openclaw/workspace/
+├── SOUL.md # AI 的人格与行为准则
+├── USER.md # 用户档案与偏好
+├── MEMORY.md # 长期记忆（ curated )
+├── HEARTBEAT.md # 定时任务清单
+└── memory/
+ └── YYYY-MM-DD.md # 每日日志（ append-only )
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="双层记忆架构"&gt;双层记忆架构&lt;/h2&gt;
+&lt;h3 id="第一层每日日志daily-log"&gt;第一层：每日日志（Daily Log）&lt;/h3&gt;
+&lt;p&gt;路径：&lt;code&gt;memory/YYYY-MM-DD.md&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;append-only&lt;/strong&gt;，每次会话持续追加内容&lt;/li&gt;
+&lt;li&gt;会话开始时自动读取&lt;strong&gt;今天 + 昨天&lt;/strong&gt;的文件&lt;/li&gt;
+&lt;li&gt;记录内容：做过的事、遇到的错误、待跟进的任务&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 2026-03-24
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 完成
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 为用户配置了 Gemini API
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 完成了 OpenClaw 网关的安装调试
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 待跟进
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;- [ ]&lt;/span&gt; 飞书群路由配置还未测试
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;- [ ]&lt;/span&gt; 需要配置心跳任务
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 错误记录
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 首次运行 &lt;span style="color:#e6db74"&gt;`openclaw gateway start`&lt;/span&gt; 报 Node 版本不兼容，升级到 Node 24 后解决
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二层长期记忆long-term-memory"&gt;第二层：长期记忆（Long-term Memory）&lt;/h3&gt;
+&lt;p&gt;路径：&lt;code&gt;MEMORY.md&lt;/code&gt;（位于 workspace 根目录）&lt;/p&gt;</description></item></channel></rss>

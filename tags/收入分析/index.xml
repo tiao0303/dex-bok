@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>收入分析 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E6%94%B6%E5%85%A5%E5%88%86%E6%9E%90/</link><description>Recent content in 收入分析 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 19 Mar 2026 01:10:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E6%94%B6%E5%85%A5%E5%88%86%E6%9E%90/index.xml" rel="self" type="application/rss+xml"/><item><title>协议收入分析框架 - Token Terminal 深度使用</title><link>https://tiao0303.github.io/dex-bok/posts/t5_institutional/23_protocol_revenue_analysis/</link><pubDate>Thu, 19 Mar 2026 01:10:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/t5_institutional/23_protocol_revenue_analysis/</guid><description>&lt;h2 id="为什么分析协议收入"&gt;为什么分析协议收入&lt;/h2&gt;
+&lt;h3 id="传统金融-vs-defi"&gt;传统金融 vs DeFi&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;维度&lt;/th&gt;
+ &lt;th&gt;传统公司&lt;/th&gt;
+ &lt;th&gt;DeFi 协议&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;财报&lt;/td&gt;
+ &lt;td&gt;季度披露&lt;/td&gt;
+ &lt;td&gt;实时链上&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;透明度&lt;/td&gt;
+ &lt;td&gt;有限&lt;/td&gt;
+ &lt;td&gt;完全透明&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;数据获取&lt;/td&gt;
+ &lt;td&gt;付费&lt;/td&gt;
+ &lt;td&gt;免费&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;估值方法&lt;/td&gt;
+ &lt;td&gt;P/E、P/S&lt;/td&gt;
+ &lt;td&gt;P/S、P/E、FDV/TVL&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="收入分析价值"&gt;收入分析价值&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;✅ 识别真实价值（而非炒作）&lt;/li&gt;
+&lt;li&gt;✅ 发现低估机会&lt;/li&gt;
+&lt;li&gt;✅ 规避高风险项目&lt;/li&gt;
+&lt;li&gt;✅ 长期投资依据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="核心指标详解"&gt;核心指标详解&lt;/h2&gt;
+&lt;h3 id="1-收入revenue"&gt;1. 收入（Revenue）⭐⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="定义"&gt;定义&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;协议收入&lt;/strong&gt; = 用户支付费用 - 流动性提供者分成&lt;/p&gt;
+&lt;h4 id="计算公式"&gt;计算公式&lt;/h4&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;协议收入 = 总费用 × 协议分成比例
+
+示例（Uniswap V3）：
+总费用 = $100 万/天
+LP 分成 = 100%
+协议收入 = $0（V3 无协议分成）
+
+示例（Aave）：
+总利息 = $50 万/天
+LP 分成 = 70%
+协议收入 = $15 万/天
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id="对比分析"&gt;对比分析&lt;/h4&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;协议&lt;/th&gt;
+ &lt;th&gt;日收入&lt;/th&gt;
+ &lt;th&gt;月收入&lt;/th&gt;
+ &lt;th&gt;年收入（年化）&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Uniswap&lt;/td&gt;
+ &lt;td&gt;$0&lt;/td&gt;
+ &lt;td&gt;$0&lt;/td&gt;
+ &lt;td&gt;$0&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Aave&lt;/td&gt;
+ &lt;td&gt;$15 万&lt;/td&gt;
+ &lt;td&gt;$450 万&lt;/td&gt;
+ &lt;td&gt;$5475 万&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;MakerDAO&lt;/td&gt;
+ &lt;td&gt;$20 万&lt;/td&gt;
+ &lt;td&gt;$600 万&lt;/td&gt;
+ &lt;td&gt;$7300 万&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;Curve&lt;/td&gt;
+ &lt;td&gt;$5 万&lt;/td&gt;
+ &lt;td&gt;$150 万&lt;/td&gt;
+ &lt;td&gt;$1825 万&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id="2-费用fees"&gt;2. 费用（Fees）⭐⭐⭐⭐&lt;/h3&gt;
+&lt;h4 id="定义-1"&gt;定义&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;总费用&lt;/strong&gt; = 用户为使用协议支付的全部费用&lt;/p&gt;</description></item></channel></rss>

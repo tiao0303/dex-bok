@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>工作流 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/</link><description>Recent content in 工作流 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Tue, 24 Mar 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/index.xml" rel="self" type="application/rss+xml"/><item><title>Claude Code 交互模式：多轮对话完成复杂任务</title><link>https://tiao0303.github.io/dex-bok/claude-code-series/02_claude_code_interactive_mode/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/claude-code-series/02_claude_code_interactive_mode/</guid><description>&lt;h1 id="claude-code-交互模式多轮对话完成复杂任务"&gt;Claude Code 交互模式：多轮对话完成复杂任务&lt;/h1&gt;
+&lt;h2 id="单次模式-vs-交互模式"&gt;单次模式 vs 交互模式&lt;/h2&gt;
+&lt;p&gt;Claude Code 支持两种主要工作模式：&lt;/p&gt;
+&lt;h3 id="单次任务模式"&gt;单次任务模式&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude &lt;span style="color:#e6db74"&gt;&amp;#34;帮我写一个排序算法&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;适合简单、独立的编程任务。&lt;/p&gt;
+&lt;h3 id="交互模式"&gt;交互模式&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 进入交互式对话&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;适合复杂、多步骤的项目开发。&lt;/p&gt;
+&lt;h2 id="多轮对话的艺术"&gt;多轮对话的艺术&lt;/h2&gt;
+&lt;h3 id="1-上下文累积"&gt;1. 上下文累积&lt;/h3&gt;
+&lt;p&gt;Claude Code 会自动维护对话上下文：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;gt; claude
+# 第一轮：创建项目结构
+帮我初始化一个 React + TypeScript 项目
+
+# 第二轮：继续开发
+现在添加一个用户登录页面
+
+# 第三轮：添加功能
+登录成功后跳转到 dashboard
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Claude 知道项目已经初始化、已有哪些文件，所以每次新请求都在正确上下文中执行。&lt;/p&gt;
+&lt;h3 id="2-精确引用文件"&gt;2. 精确引用文件&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;@&lt;/code&gt; 符号精确引用文件：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;帮我改进 @src/utils/auth.ts 里的 token 刷新逻辑
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Claude 会直接读取该文件内容并提出改进建议。&lt;/p&gt;
+&lt;h3 id="3-分步骤执行"&gt;3. 分步骤执行&lt;/h3&gt;
+&lt;p&gt;不要一次让 Claude 做太多事：&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 建议：分步骤
+第一步：设计数据库 Schema
+第二步：写 API 路由
+第三步：写前端组件
+第四步：测试集成
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="4-tdd-开发流程"&gt;4. TDD 开发流程&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 1. 先写测试
+帮我为 calculateSwap() 函数写 Foundry 测试，覆盖：
+- 正常路径
+- 余额不足
+- 无授权
+
+# 2. 运行测试确认失败
+forge test
+
+# 3. 实现功能
+帮我实现 calculateSwap() 函数，让测试通过
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="常用交互命令"&gt;常用交互命令&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;命令&lt;/th&gt;
+ &lt;th&gt;作用&lt;/th&gt;
+ &lt;th&gt;示例&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;@file&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;引用文件&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;@src/app.ts&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/web&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;搜索网络&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/web latest Next.js release&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/grep&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;搜索代码&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/grep &amp;quot;TODO&amp;quot; **/*.ts&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/ask&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;简单问题&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/ask React useEffect vs useLayoutEffect&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;/review&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;代码审查&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;/review @src/auth.ts&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="实战重构一个大文件"&gt;实战：重构一个大文件&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# 第一轮：让 Claude 分析
+帮我分析 @src的大型文件.ts 的结构，列出主要函数和依赖关系
+
+# 第二轮：制定拆分计划
+根据分析结果，我要把这个文件拆成 3 个模块：
+- validators/ - 数据验证
+- processors/ - 业务逻辑
+- handlers/ - 外部接口
+
+# 第三轮：执行拆分
+按上述计划拆分，每完成一个模块我来确认
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="最佳实践"&gt;最佳实践&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;每次任务明确&lt;/strong&gt;：不要模糊请求，给出具体输入输出&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;及时纠正&lt;/strong&gt;：Claude 理解错了马上说&amp;quot;不对，应该是&amp;hellip;&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;检查中间结果&lt;/strong&gt;：大任务中途让它暂停，确认后再继续&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;保留上下文&lt;/strong&gt;：重要决策记录在 CLAUDE.md 里&lt;/li&gt;
+&lt;/ol&gt;</description></item></channel></rss>
