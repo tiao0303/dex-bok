@@ -1,0 +1,194 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>OpenClaw 免费模型配置指南：通义千问、MiniMax 等国产模型一网打尽 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='前言
+OpenClaw 作为一款开源的个人 AI 助手，支持多模型接入，国内开发者最关心的问题之一就是：有没有免费模型可以用？如何配置？
+好消息是，OpenClaw 确实内置了对多款国产大模型的支持，其中部分模型提供免费额度或免费接入方式。本文将详细介绍 OpenClaw 可免费使用的模型、配置方法、各模型特点及适用场景，并提供完整的配置示例。
+
+一、OpenClaw 模型提供商概述
+在深入免费模型之前，先了解 OpenClaw 的模型接入机制。OpenClaw 使用 provider/model 格式引用模型，例如 qwen-portal/coder-model 表示通义千问的代码模型。
+OpenClaw 支持两类提供商：
+
+内置提供商：如 anthropic、openai、zai、qwen-portal、minimax-portal 等，已在 OpenClaw 的插件目录中预定义，只需设置认证凭据，无需手动配置 models.providers。
+自定义提供商：如 moonshot、deepseek 等，需要在 openclaw.json 的 models.providers 字段中手动配置 baseUrl、API Key、API 协议和模型列表。
+
+配置时建议始终设置 models.mode: "merge"，确保自定义提供商会与内置提供商并存，而不是覆盖掉内置列表。
+二、真正的免费模型
+2.1 通义千问（Qwen）— 完全免费
+推荐指数：⭐⭐⭐⭐⭐
+通义千问是 OpenClaw 中最容易上手的免费模型。通过 qwen-portal 提供商接入，使用 OAuth 设备码认证，无需购买 API Key，每日免费额度 2,000 次请求，对于个人用户来说非常充裕。
+特点
+
+完全免费，每日 2,000 次请求
+国内网络直连，无需 VPN
+OAuth 自动刷新 Token，无需手动管理
+若已安装 Qwen Code CLI 并登录，OpenClaw 可复用已有凭据
+提供代码模型和视觉多模态模型
+
+适用场景
+日常问答、文本写作、代码辅助、轻量级编程任务。如果你的使用量不大，这是最佳入门选择。'><meta name=generator content="Hugo 0.159.0"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/openclaw-series/07_openclaw_free_models/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/openclaw-series/07_openclaw_free_models/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/openclaw-series/07_openclaw_free_models/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/openclaw-series/07_openclaw_free_models/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="OpenClaw 免费模型配置指南：通义千问、MiniMax 等国产模型一网打尽"><meta property="og:description" content='前言 OpenClaw 作为一款开源的个人 AI 助手，支持多模型接入，国内开发者最关心的问题之一就是：有没有免费模型可以用？如何配置？
+好消息是，OpenClaw 确实内置了对多款国产大模型的支持，其中部分模型提供免费额度或免费接入方式。本文将详细介绍 OpenClaw 可免费使用的模型、配置方法、各模型特点及适用场景，并提供完整的配置示例。
+一、OpenClaw 模型提供商概述 在深入免费模型之前，先了解 OpenClaw 的模型接入机制。OpenClaw 使用 provider/model 格式引用模型，例如 qwen-portal/coder-model 表示通义千问的代码模型。
+OpenClaw 支持两类提供商：
+内置提供商：如 anthropic、openai、zai、qwen-portal、minimax-portal 等，已在 OpenClaw 的插件目录中预定义，只需设置认证凭据，无需手动配置 models.providers。 自定义提供商：如 moonshot、deepseek 等，需要在 openclaw.json 的 models.providers 字段中手动配置 baseUrl、API Key、API 协议和模型列表。 配置时建议始终设置 models.mode: "merge"，确保自定义提供商会与内置提供商并存，而不是覆盖掉内置列表。
+二、真正的免费模型 2.1 通义千问（Qwen）— 完全免费 推荐指数：⭐⭐⭐⭐⭐
+通义千问是 OpenClaw 中最容易上手的免费模型。通过 qwen-portal 提供商接入，使用 OAuth 设备码认证，无需购买 API Key，每日免费额度 2,000 次请求，对于个人用户来说非常充裕。
+特点 完全免费，每日 2,000 次请求 国内网络直连，无需 VPN OAuth 自动刷新 Token，无需手动管理 若已安装 Qwen Code CLI 并登录，OpenClaw 可复用已有凭据 提供代码模型和视觉多模态模型 适用场景 日常问答、文本写作、代码辅助、轻量级编程任务。如果你的使用量不大，这是最佳入门选择。'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="openclaw-series"><meta property="article:published_time" content="2026-03-24T00:00:00+00:00"><meta property="article:modified_time" content="2026-03-24T00:00:00+00:00"><meta property="article:tag" content="OpenClaw"><meta property="article:tag" content="AI模型"><meta property="article:tag" content="通义千问"><meta property="article:tag" content="MiniMax"><meta property="article:tag" content="Moonshot"><meta property="article:tag" content="智谱GLM"><meta itemprop=name content="OpenClaw 免费模型配置指南：通义千问、MiniMax 等国产模型一网打尽"><meta itemprop=description content='前言 OpenClaw 作为一款开源的个人 AI 助手，支持多模型接入，国内开发者最关心的问题之一就是：有没有免费模型可以用？如何配置？
+好消息是，OpenClaw 确实内置了对多款国产大模型的支持，其中部分模型提供免费额度或免费接入方式。本文将详细介绍 OpenClaw 可免费使用的模型、配置方法、各模型特点及适用场景，并提供完整的配置示例。
+一、OpenClaw 模型提供商概述 在深入免费模型之前，先了解 OpenClaw 的模型接入机制。OpenClaw 使用 provider/model 格式引用模型，例如 qwen-portal/coder-model 表示通义千问的代码模型。
+OpenClaw 支持两类提供商：
+内置提供商：如 anthropic、openai、zai、qwen-portal、minimax-portal 等，已在 OpenClaw 的插件目录中预定义，只需设置认证凭据，无需手动配置 models.providers。 自定义提供商：如 moonshot、deepseek 等，需要在 openclaw.json 的 models.providers 字段中手动配置 baseUrl、API Key、API 协议和模型列表。 配置时建议始终设置 models.mode: "merge"，确保自定义提供商会与内置提供商并存，而不是覆盖掉内置列表。
+二、真正的免费模型 2.1 通义千问（Qwen）— 完全免费 推荐指数：⭐⭐⭐⭐⭐
+通义千问是 OpenClaw 中最容易上手的免费模型。通过 qwen-portal 提供商接入，使用 OAuth 设备码认证，无需购买 API Key，每日免费额度 2,000 次请求，对于个人用户来说非常充裕。
+特点 完全免费，每日 2,000 次请求 国内网络直连，无需 VPN OAuth 自动刷新 Token，无需手动管理 若已安装 Qwen Code CLI 并登录，OpenClaw 可复用已有凭据 提供代码模型和视觉多模态模型 适用场景 日常问答、文本写作、代码辅助、轻量级编程任务。如果你的使用量不大，这是最佳入门选择。'><meta itemprop=datePublished content="2026-03-24T00:00:00+00:00"><meta itemprop=dateModified content="2026-03-24T00:00:00+00:00"><meta itemprop=wordCount content="676"><meta itemprop=keywords content="OpenClaw,AI模型,通义千问,MiniMax,Moonshot,智谱GLM,国产大模型,免费"><meta name=twitter:card content="summary"><meta name=twitter:title content="OpenClaw 免费模型配置指南：通义千问、MiniMax 等国产模型一网打尽"><meta name=twitter:description content='前言 OpenClaw 作为一款开源的个人 AI 助手，支持多模型接入，国内开发者最关心的问题之一就是：有没有免费模型可以用？如何配置？
+好消息是，OpenClaw 确实内置了对多款国产大模型的支持，其中部分模型提供免费额度或免费接入方式。本文将详细介绍 OpenClaw 可免费使用的模型、配置方法、各模型特点及适用场景，并提供完整的配置示例。
+一、OpenClaw 模型提供商概述 在深入免费模型之前，先了解 OpenClaw 的模型接入机制。OpenClaw 使用 provider/model 格式引用模型，例如 qwen-portal/coder-model 表示通义千问的代码模型。
+OpenClaw 支持两类提供商：
+内置提供商：如 anthropic、openai、zai、qwen-portal、minimax-portal 等，已在 OpenClaw 的插件目录中预定义，只需设置认证凭据，无需手动配置 models.providers。 自定义提供商：如 moonshot、deepseek 等，需要在 openclaw.json 的 models.providers 字段中手动配置 baseUrl、API Key、API 协议和模型列表。 配置时建议始终设置 models.mode: "merge"，确保自定义提供商会与内置提供商并存，而不是覆盖掉内置列表。
+二、真正的免费模型 2.1 通义千问（Qwen）— 完全免费 推荐指数：⭐⭐⭐⭐⭐
+通义千问是 OpenClaw 中最容易上手的免费模型。通过 qwen-portal 提供商接入，使用 OAuth 设备码认证，无需购买 API Key，每日免费额度 2,000 次请求，对于个人用户来说非常充裕。
+特点 完全免费，每日 2,000 次请求 国内网络直连，无需 VPN OAuth 自动刷新 Token，无需手动管理 若已安装 Qwen Code CLI 并登录，OpenClaw 可复用已有凭据 提供代码模型和视觉多模态模型 适用场景 日常问答、文本写作、代码辅助、轻量级编程任务。如果你的使用量不大，这是最佳入门选择。'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-07_openclaw_free_models"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#一openclaw-模型提供商概述>一、OpenClaw 模型提供商概述</a></li><li><a href=#二真正的免费模型>二、真正的免费模型</a><ul><li><a href=#21-通义千问qwen-完全免费>2.1 通义千问（Qwen）— 完全免费</a></li><li><a href=#22-minimax-coding-plan--免费接入>2.2 MiniMax Coding Plan — 免费接入</a></li></ul></li><li><a href=#三需要-api-key-的国产模型部分有免费额度>三、需要 API Key 的国产模型（部分有免费额度）</a><ul><li><a href=#31-moonshot-aikimi>3.1 Moonshot AI（Kimi）</a></li><li><a href=#32-智谱-glmzai>3.2 智谱 GLM（Z.AI）</a></li><li><a href=#33-deepseek>3.3 DeepSeek</a></li><li><a href=#34-小米-mimo>3.4 小米 MiMo</a></li></ul></li><li><a href=#四配置管理常用命令>四、配置管理常用命令</a></li><li><a href=#五总结对比>五、总结对比</a></li><li><a href=#结语>结语</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>OpenClaw 免费模型配置指南：通义千问、MiniMax 等国产模型一网打尽</h1><div class=article-meta><time datetime=2026-03-24>2026-03-24</time>
+<span>•</span>
+<span>676 字</span>
+<span>•</span>
+<span>AI工具, OpenClaw系列</span></div><div class=article-tags><a href=/dex-bok/tags/openclaw/ class=article-tag>OpenClaw</a>
+<a href=/dex-bok/tags/ai%E6%A8%A1%E5%9E%8B/ class=article-tag>AI模型</a>
+<a href=/dex-bok/tags/%E9%80%9A%E4%B9%89%E5%8D%83%E9%97%AE/ class=article-tag>通义千问</a>
+<a href=/dex-bok/tags/minimax/ class=article-tag>MiniMax</a>
+<a href=/dex-bok/tags/moonshot/ class=article-tag>Moonshot</a>
+<a href=/dex-bok/tags/%E6%99%BA%E8%B0%B1glm/ class=article-tag>智谱GLM</a>
+<a href=/dex-bok/tags/%E5%9B%BD%E4%BA%A7%E5%A4%A7%E6%A8%A1%E5%9E%8B/ class=article-tag>国产大模型</a>
+<a href=/dex-bok/tags/%E5%85%8D%E8%B4%B9/ class=article-tag>免费</a></div></header><h2 id=前言>前言</h2><p>OpenClaw 作为一款开源的个人 AI 助手，支持多模型接入，国内开发者最关心的问题之一就是：<strong>有没有免费模型可以用？如何配置？</strong></p><p>好消息是，OpenClaw 确实内置了对多款国产大模型的支持，其中部分模型提供免费额度或免费接入方式。本文将详细介绍 OpenClaw 可免费使用的模型、配置方法、各模型特点及适用场景，并提供完整的配置示例。</p><h2 id=一openclaw-模型提供商概述>一、OpenClaw 模型提供商概述</h2><p>在深入免费模型之前，先了解 OpenClaw 的模型接入机制。OpenClaw 使用 <code>provider/model</code> 格式引用模型，例如 <code>qwen-portal/coder-model</code> 表示通义千问的代码模型。</p><p>OpenClaw 支持两类提供商：</p><ul><li><strong>内置提供商</strong>：如 <code>anthropic</code>、<code>openai</code>、<code>zai</code>、<code>qwen-portal</code>、<code>minimax-portal</code> 等，已在 OpenClaw 的插件目录中预定义，只需设置认证凭据，无需手动配置 <code>models.providers</code>。</li><li><strong>自定义提供商</strong>：如 <code>moonshot</code>、<code>deepseek</code> 等，需要在 <code>openclaw.json</code> 的 <code>models.providers</code> 字段中手动配置 baseUrl、API Key、API 协议和模型列表。</li></ul><p>配置时建议始终设置 <code>models.mode: "merge"</code>，确保自定义提供商会与内置提供商并存，而不是覆盖掉内置列表。</p><h2 id=二真正的免费模型>二、真正的免费模型</h2><h3 id=21-通义千问qwen-完全免费>2.1 通义千问（Qwen）— 完全免费</h3><p><strong>推荐指数：⭐⭐⭐⭐⭐</strong></p><p>通义千问是 OpenClaw 中最容易上手的免费模型。通过 <code>qwen-portal</code> 提供商接入，使用 OAuth 设备码认证，<strong>无需购买 API Key，每日免费额度 2,000 次请求</strong>，对于个人用户来说非常充裕。</p><h4 id=特点>特点</h4><ul><li>完全免费，每日 2,000 次请求</li><li>国内网络直连，无需 VPN</li><li>OAuth 自动刷新 Token，无需手动管理</li><li>若已安装 Qwen Code CLI 并登录，OpenClaw 可复用已有凭据</li><li>提供代码模型和视觉多模态模型</li></ul><h4 id=适用场景>适用场景</h4><p>日常问答、文本写作、代码辅助、轻量级编程任务。如果你的使用量不大，这是最佳入门选择。</p><h4 id=配置步骤>配置步骤</h4><p><strong>第一步：启用插件</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>openclaw plugins enable qwen-portal-auth
+</span></span><span style=display:flex><span>openclaw gateway restart  <span style=color:#75715e># 如果网关已在运行，需要重启</span>
+</span></span></code></pre></div><p><strong>第二步：登录认证</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>openclaw models auth login --provider qwen-portal --set-default
+</span></span></code></pre></div><p>执行后会显示一个设备码和链接，在浏览器中打开链接并输入设备码完成认证。</p><p><strong>第三步：设置默认模型</strong></p><p>在 <code>openclaw.json</code> 中配置：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;agents&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;defaults&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;model&#34;</span>: { <span style=color:#f92672>&#34;primary&#34;</span>: <span style=color:#e6db74>&#34;qwen-portal/coder-model&#34;</span> },
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;models&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;qwen-portal/coder-model&#34;</span>: { <span style=color:#f92672>&#34;alias&#34;</span>: <span style=color:#e6db74>&#34;Qwen Coder&#34;</span> },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;qwen-portal/vision-model&#34;</span>: { <span style=color:#f92672>&#34;alias&#34;</span>: <span style=color:#e6db74>&#34;Qwen Vision&#34;</span> }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>可用模型列表：</strong></p><table><thead><tr><th>模型引用</th><th>说明</th></tr></thead><tbody><tr><td><code>qwen-portal/coder-model</code></td><td>Qwen Coder，代码生成和辅助</td></tr><tr><td><code>qwen-portal/vision-model</code></td><td>Qwen Vision，多模态（文本+图片）</td></tr></tbody></table><h3 id=22-minimax-coding-plan--免费接入>2.2 MiniMax Coding Plan — 免费接入</h3><p><strong>推荐指数：⭐⭐⭐⭐</strong></p><p>MiniMax 提供了 Coding Plan（编程计划），可通过 OAuth 方式免费接入 OpenClaw，无需 API Key。这是除了通义千问之外，OpenClaw 中另一个真正零成本的接入方式。</p><h4 id=特点-1>特点</h4><ul><li>通过 OAuth 免费接入，无需购买 API Key</li><li>支持国内端点（api.minimaxi.com），访问速度快</li><li>提供 M2.1、M2.5 等主力模型</li><li>同一 API Key 额度全平台共享，所有工具共同消耗 prompt 用量</li><li>极速版（highspeed）无需额外 Key，修改模型 ID 即可启用</li></ul><h4 id=适用场景-1>适用场景</h4><p>编程辅助、代码生成、Agent 工作流开发。如果你的主要需求是 coding，MiniMax Coding Plan 是不错的选择。</p><h4 id=配置步骤-1>配置步骤</h4><p><strong>第一步：启用 OAuth 插件</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>openclaw plugins enable minimax-portal-auth
+</span></span><span style=display:flex><span>openclaw gateway restart
+</span></span></code></pre></div><p><strong>第二步：OAuth 登录</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>openclaw onboard --auth-choice minimax-portal
+</span></span></code></pre></div><p>登录时会提示选择端点：</p><ul><li><strong>Global</strong> — 国际用户（api.minimax.io）</li><li><strong>CN</strong> — 国内用户（api.minimaxi.com）</li></ul><p><strong>第三步：配置默认模型</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;agents&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;defaults&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;model&#34;</span>: { <span style=color:#f92672>&#34;primary&#34;</span>: <span style=color:#e6db74>&#34;minimax-portal/MiniMax-M2.5&#34;</span> }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>MiniMax 主要模型参考：</strong></p><table><thead><tr><th>模型引用</th><th>说明</th></tr></thead><tbody><tr><td><code>minimax-portal/MiniMax-M2.5</code></td><td>最新模型，极致性价比</td></tr><tr><td><code>minimax-portal/MiniMax-M2.5-highspeed</code></td><td>极速版，速度更快</td></tr><tr><td><code>minimax-portal/MiniMax-M2.1</code></td><td>强大多语言编程能力</td></tr><tr><td><code>minimax-portal/MiniMax-M2.1-highspeed</code></td><td>极速版</td></tr></tbody></table><h2 id=三需要-api-key-的国产模型部分有免费额度>三、需要 API Key 的国产模型（部分有免费额度）</h2><p>以下模型需要获取 API Key，但部分平台提供免费试用额度，适合有更高需求的用户。</p><h3 id=31-moonshot-aikimi>3.1 Moonshot AI（Kimi）</h3><p><strong>推荐指数：⭐⭐⭐⭐</strong></p><p>Moonshot AI 提供的 Kimi 系列模型在长上下文和代码生成方面表现突出。OpenClaw 中有两个独立的提供商：<code>moonshot</code>（通用 API）和 <code>kimi-coding</code>（编程专项）。</p><h4 id=特点-2>特点</h4><ul><li>256K 超长上下文窗口</li><li>Kimi K2.5 是最新通用模型，K2 Thinking 版具备推理增强能力</li><li>支持 OpenAI 兼容 API</li><li><strong>注意</strong>：Moonshot API 和 Kimi Coding 是独立提供商，API Key 不可互换</li></ul><h4 id=适用场景-2>适用场景</h4><p>需要处理长文档、超长代码文件的场景；复杂的多步骤编程任务。</p><h4 id=配置步骤-2>配置步骤</h4><p><strong>获取 API Key：</strong> 访问 <a href=https://platform.moonshot.cn/>Moonshot 开放平台</a> 注册并创建 API Key。</p><p><strong>配置示例（openclaw.json）：</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;env&#34;</span>: { <span style=color:#f92672>&#34;MOONSHOT_API_KEY&#34;</span>: <span style=color:#e6db74>&#34;sk-...&#34;</span> },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;agents&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;defaults&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;model&#34;</span>: { <span style=color:#f92672>&#34;primary&#34;</span>: <span style=color:#e6db74>&#34;moonshot/kimi-k2.5&#34;</span> },
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;models&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;moonshot/kimi-k2.5&#34;</span>: { <span style=color:#f92672>&#34;alias&#34;</span>: <span style=color:#e6db74>&#34;Kimi K2.5&#34;</span> },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;moonshot/kimi-k2-thinking&#34;</span>: { <span style=color:#f92672>&#34;alias&#34;</span>: <span style=color:#e6db74>&#34;Kimi K2 Thinking&#34;</span> }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;models&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;mode&#34;</span>: <span style=color:#e6db74>&#34;merge&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;providers&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;moonshot&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;baseUrl&#34;</span>: <span style=color:#e6db74>&#34;https://api.moonshot.cn/v1&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;apiKey&#34;</span>: <span style=color:#e6db74>&#34;${MOONSHOT_API_KEY}&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;api&#34;</span>: <span style=color:#e6db74>&#34;openai-completions&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;models&#34;</span>: [
+</span></span><span style=display:flex><span>          {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;kimi-k2.5&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;Kimi K2.5&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;reasoning&#34;</span>: <span style=color:#66d9ef>false</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;input&#34;</span>: [<span style=color:#e6db74>&#34;text&#34;</span>],
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;contextWindow&#34;</span>: <span style=color:#ae81ff>256000</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;maxTokens&#34;</span>: <span style=color:#ae81ff>8192</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;kimi-k2-thinking&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;Kimi K2 Thinking&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;reasoning&#34;</span>: <span style=color:#66d9ef>true</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;input&#34;</span>: [<span style=color:#e6db74>&#34;text&#34;</span>],
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;contextWindow&#34;</span>: <span style=color:#ae81ff>256000</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;maxTokens&#34;</span>: <span style=color:#ae81ff>8192</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        ]
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>可用模型：</strong></p><table><thead><tr><th>模型引用</th><th>推理能力</th><th>说明</th></tr></thead><tbody><tr><td><code>moonshot/kimi-k2.5</code></td><td>❌</td><td>最新通用模型</td></tr><tr><td><code>moonshot/kimi-k2-thinking</code></td><td>✅</td><td>推理增强版</td></tr><tr><td><code>moonshot/kimi-k2-thinking-turbo</code></td><td>✅</td><td>快速推理版</td></tr></tbody></table><h3 id=32-智谱-glmzai>3.2 智谱 GLM（Z.AI）</h3><p><strong>推荐指数：⭐⭐⭐</strong></p><p>智谱的 GLM 系列是国内最早成熟的大模型之一，通过 Z.AI 平台接入，zai 是 OpenClaw 的内置提供商，配置极为简便。</p><h4 id=特点-3>特点</h4><ul><li>内置提供商，只需设置 API Key，无需手动配置 models.providers</li><li>GLM-4.7 是最新旗舰模型，擅长复杂系统工程与长程 Agent 任务</li><li>支持 Bearer Token 认证</li><li>提供多种规格（标准版、轻量高速版）适配不同场景</li></ul><h4 id=适用场景-3>适用场景</h4><p>需要强推理、长程规划、复杂工具调用的 Agent 任务。</p><h4 id=配置步骤-3>配置步骤</h4><p><strong>获取 API Key：</strong> 访问 <a href=https://open.bigmodel.cn/>Z.AI 控制台</a> 注册并获取 API Key。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>openclaw onboard --auth-choice zai-api-key
+</span></span><span style=display:flex><span><span style=color:#75715e># 或非交互式：</span>
+</span></span><span style=display:flex><span>openclaw onboard --zai-api-key <span style=color:#e6db74>&#34;</span>$ZAI_API_KEY<span style=color:#e6db74>&#34;</span>
+</span></span></code></pre></div><p><strong>配置示例（openclaw.json）：</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;env&#34;</span>: { <span style=color:#f92672>&#34;ZAI_API_KEY&#34;</span>: <span style=color:#e6db74>&#34;sk-...&#34;</span> },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;agents&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;defaults&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;model&#34;</span>: { <span style=color:#f92672>&#34;primary&#34;</span>: <span style=color:#e6db74>&#34;zai/glm-4.7&#34;</span> },
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;models&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;zai/glm-4.7&#34;</span>: { <span style=color:#f92672>&#34;alias&#34;</span>: <span style=color:#e6db74>&#34;GLM-4.7&#34;</span> },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;zai/glm-4.6&#34;</span>: { <span style=color:#f92672>&#34;alias&#34;</span>: <span style=color:#e6db74>&#34;GLM-4.6&#34;</span> }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>可用模型：</strong></p><table><thead><tr><th>模型引用</th><th>说明</th></tr></thead><tbody><tr><td><code>zai/glm-4.7</code></td><td>最新旗舰，复杂系统工程与长程 Agent 任务</td></tr><tr><td><code>zai/glm-4.6</code></td><td>上一代模型，高性价比</td></tr></tbody></table><h3 id=33-deepseek>3.3 DeepSeek</h3><p><strong>推荐指数：⭐⭐⭐</strong></p><p>DeepSeek 以开源和高性价比著称，其 DeepSeek Chat 模型可以通过 OpenAI 兼容接口接入 OpenClaw。</p><h4 id=特点-4>特点</h4><ul><li>开源模型，成本极低</li><li>API 协议为 openai-completions，配置简单</li><li>适合对成本敏感的场景</li></ul><h4 id=配置示例>配置示例：</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;env&#34;</span>: { <span style=color:#f92672>&#34;DEEPSEEK_API_KEY&#34;</span>: <span style=color:#e6db74>&#34;sk-...&#34;</span> },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;models&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;mode&#34;</span>: <span style=color:#e6db74>&#34;merge&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;providers&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;deepseek&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;baseUrl&#34;</span>: <span style=color:#e6db74>&#34;https://api.deepseek.com&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;apiKey&#34;</span>: <span style=color:#e6db74>&#34;${DEEPSEEK_API_KEY}&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;api&#34;</span>: <span style=color:#e6db74>&#34;openai-completions&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;models&#34;</span>: [
+</span></span><span style=display:flex><span>          {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;deepseek-chat&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;DeepSeek Chat&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;contextWindow&#34;</span>: <span style=color:#ae81ff>64000</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;maxTokens&#34;</span>: <span style=color:#ae81ff>8192</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        ]
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=34-小米-mimo>3.4 小米 MiMo</h3><p><strong>推荐指数：⭐⭐</strong></p><p>小米 MiMo 是小米的大模型产品，通过 anthropic-messages 协议接入。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;env&#34;</span>: { <span style=color:#f92672>&#34;XIAOMI_API_KEY&#34;</span>: <span style=color:#e6db74>&#34;sk-...&#34;</span> },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;models&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;mode&#34;</span>: <span style=color:#e6db74>&#34;merge&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;providers&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;xiaomi&#34;</span>: {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;baseUrl&#34;</span>: <span style=color:#e6db74>&#34;https://api.xiaomimimo.com/v1&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;apiKey&#34;</span>: <span style=color:#e6db74>&#34;${XIAOMI_API_KEY}&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;api&#34;</span>: <span style=color:#e6db74>&#34;anthropic-messages&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;models&#34;</span>: [
+</span></span><span style=display:flex><span>          {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;mimo-v2-flash&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;MiMo V2 Flash&#34;</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        ]
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=四配置管理常用命令>四、配置管理常用命令</h2><p>配置完成后，使用以下命令管理模型：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 查看所有已配置模型状态</span>
+</span></span><span style=display:flex><span>openclaw models status
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 列出所有可用模型</span>
+</span></span><span style=display:flex><span>openclaw models list
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 设置默认模型（命令行方式）</span>
+</span></span><span style=display:flex><span>openclaw models set minimax-portal/MiniMax-M2.5
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 检查配置是否正常（发送真实请求）</span>
+</span></span><span style=display:flex><span>openclaw models status --probe
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 查看网关运行状态</span>
+</span></span><span style=display:flex><span>openclaw gateway status
+</span></span></code></pre></div><h2 id=五总结对比>五、总结对比</h2><table><thead><tr><th>模型</th><th>免费情况</th><th>认证方式</th><th>配置难度</th><th>特点</th></tr></thead><tbody><tr><td><strong>通义千问</strong></td><td>✅ 每日 2,000 次免费</td><td>OAuth</td><td>⭐ 极简</td><td>零成本入门首选</td></tr><tr><td><strong>MiniMax</strong></td><td>✅ Coding Plan 免费</td><td>OAuth</td><td>⭐ 简单</td><td>编程场景友好</td></tr><tr><td><strong>Moonshot/Kimi</strong></td><td>❌ 需付费</td><td>API Key</td><td>⭐⭐ 中等</td><td>超长上下文</td></tr><tr><td><strong>智谱 GLM</strong></td><td>❌ 需付费</td><td>API Key</td><td>⭐ 内置</td><td>长程 Agent 任务</td></tr><tr><td><strong>DeepSeek</strong></td><td>❌ 需付费</td><td>API Key</td><td>⭐⭐ 中等</td><td>成本极低</td></tr><tr><td><strong>小米 MiMo</strong></td><td>❌ 需付费</td><td>API Key</td><td>⭐⭐ 中等</td><td>轻量级场景</td></tr></tbody></table><h2 id=结语>结语</h2><p>对于刚接触 OpenClaw 的国内用户，<strong>通义千问（qwen-portal）和 MiniMax Coding Plan</strong> 是两个真正零成本的起点，前者每日 2,000 次免费请求，后者通过 OAuth 免费接入。如果免费额度不能满足需求，再根据具体场景选择 Kimi（长上下文）、GLM（复杂 Agent 任务）或 DeepSeek（低成本）作为进阶方案。</p><p>希望这篇指南能帮助你快速配置心仪的模型。如果还有其他问题，欢迎在评论区留言！</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/openclaw-series/06_openclaw_memory_system/>OpenClaw 记忆系统：让 AI 拥有持续进化的记忆</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>
