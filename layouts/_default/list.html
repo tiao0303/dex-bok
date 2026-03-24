@@ -135,6 +135,7 @@
     renderPager();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+  window.showPage = showPage;
 
   function renderPager() {
     if (totalPages <= 1) { pager.innerHTML = ''; return; }
