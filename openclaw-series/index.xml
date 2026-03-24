@@ -1,51 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Openclaw-Series on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/</link><description>Recent content in Openclaw-Series on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Tue, 24 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/openclaw-series/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenClaw 记忆系统：让 AI 拥有持续进化的记忆</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/06_openclaw_memory_system/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/06_openclaw_memory_system/</guid><description>&lt;h1 id="openclaw-记忆系统让-ai-拥有持续进化的记忆"&gt;OpenClaw 记忆系统：让 AI 拥有持续进化的记忆&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 记忆系统 / 深度 / AI&lt;br&gt;
-&lt;strong&gt;日期&lt;/strong&gt;：2026-03-24&lt;br&gt;
-&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;h2 id="痛点ai-为何总是失忆"&gt;痛点：AI 为何总是&amp;quot;失忆&amp;quot;&lt;/h2&gt;
-&lt;p&gt;用过 ChatGPT 的人都遇到过这个场景：聊了 50 轮之后，AI 突然忘了你们最初达成的共识。上下文窗口满了，历史被无情截断，一切从头开始。&lt;/p&gt;
-&lt;p&gt;这是所有 LLM 的本质局限：&lt;strong&gt;上下文窗口有上限，记忆不是&amp;quot;内置&amp;quot;的&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;OpenClaw 的解决方案是：&lt;strong&gt;让记忆变成文件&lt;/strong&gt;。不是依赖模型的&amp;quot;记住&amp;quot;，而是把重要信息写到磁盘——就像人类的笔记本一样。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id="核心设计哲学文件即记忆"&gt;核心设计哲学：文件即记忆&lt;/h2&gt;
-&lt;p&gt;OpenClaw 的记忆系统极度简洁：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;记忆 = Markdown 文件，文件即真相（Source of Truth）&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;模型不是靠&amp;quot;脑子里想&amp;quot;来记住东西，而是靠读写文件。每次会话开始，读取相关文件；每次决策完成，写入相关文件。磁盘不丢，记忆就不丢。&lt;/p&gt;
-&lt;pre tabindex="0"&gt;&lt;code&gt;~/.openclaw/workspace/
-├── SOUL.md # AI 的人格与行为准则
-├── USER.md # 用户档案与偏好
-├── MEMORY.md # 长期记忆（ curated )
-├── HEARTBEAT.md # 定时任务清单
-└── memory/
- └── YYYY-MM-DD.md # 每日日志（ append-only )
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id="双层记忆架构"&gt;双层记忆架构&lt;/h2&gt;
-&lt;h3 id="第一层每日日志daily-log"&gt;第一层：每日日志（Daily Log）&lt;/h3&gt;
-&lt;p&gt;路径：&lt;code&gt;memory/YYYY-MM-DD.md&lt;/code&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;append-only&lt;/strong&gt;，每次会话持续追加内容&lt;/li&gt;
-&lt;li&gt;会话开始时自动读取&lt;strong&gt;今天 + 昨天&lt;/strong&gt;的文件&lt;/li&gt;
-&lt;li&gt;记录内容：做过的事、遇到的错误、待跟进的任务&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 2026-03-24
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 完成
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 为用户配置了 Gemini API
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 完成了 OpenClaw 网关的安装调试
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 待跟进
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;- [ ]&lt;/span&gt; 飞书群路由配置还未测试
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;- [ ]&lt;/span&gt; 需要配置心跳任务
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 错误记录
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 首次运行 &lt;span style="color:#e6db74"&gt;`openclaw gateway start`&lt;/span&gt; 报 Node 版本不兼容，升级到 Node 24 后解决
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二层长期记忆long-term-memory"&gt;第二层：长期记忆（Long-term Memory）&lt;/h3&gt;
-&lt;p&gt;路径：&lt;code&gt;MEMORY.md&lt;/code&gt;（位于 workspace 根目录）&lt;/p&gt;</description></item><item><title>OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/</guid><description>&lt;h1 id="openclaw-skills-插件系统实战从零构建你的第一个-skill"&gt;OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Openclaw-Series on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/</link><description>Recent content in Openclaw-Series on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Mon, 23 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/openclaw-series/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill</title><link>https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/</link><pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/04_openclaw_skills/</guid><description>&lt;h1 id="openclaw-skills-插件系统实战从零构建你的第一个-skill"&gt;OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / Skills / 插件 / 实战&lt;br&gt;
 &lt;strong&gt;日期&lt;/strong&gt;：2026-03-23&lt;br&gt;
@@ -341,4 +294,51 @@ researcher architect developer frontend security │
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;decider → 输出 DECISION.md（Go/No-Go）
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="工作区隔离设计"&gt;工作区隔离设计&lt;/h2&gt;
-&lt;p&gt;每个 Agent 的工作区完全独立：&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;每个 Agent 的工作区完全独立：&lt;/p&gt;</description></item><item><title/><link>https://tiao0303.github.io/dex-bok/openclaw-series/06_openclaw_memory_system/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/openclaw-series/06_openclaw_memory_system/</guid><description>&lt;h1 id="openclaw-记忆系统让-ai-拥有持续进化的记忆"&gt;OpenClaw 记忆系统：让 AI 拥有持续进化的记忆&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标签&lt;/strong&gt;：OpenClaw / 记忆系统 / 深度 / AI&lt;br&gt;
+&lt;strong&gt;日期&lt;/strong&gt;：2026-03-24&lt;br&gt;
+&lt;strong&gt;专题&lt;/strong&gt;：OpenClaw 深度探索&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="痛点ai-为何总是失忆"&gt;痛点：AI 为何总是&amp;quot;失忆&amp;quot;&lt;/h2&gt;
+&lt;p&gt;用过 ChatGPT 的人都遇到过这个场景：聊了 50 轮之后，AI 突然忘了你们最初达成的共识。上下文窗口满了，历史被无情截断，一切从头开始。&lt;/p&gt;
+&lt;p&gt;这是所有 LLM 的本质局限：&lt;strong&gt;上下文窗口有上限，记忆不是&amp;quot;内置&amp;quot;的&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;OpenClaw 的解决方案是：&lt;strong&gt;让记忆变成文件&lt;/strong&gt;。不是依赖模型的&amp;quot;记住&amp;quot;，而是把重要信息写到磁盘——就像人类的笔记本一样。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="核心设计哲学文件即记忆"&gt;核心设计哲学：文件即记忆&lt;/h2&gt;
+&lt;p&gt;OpenClaw 的记忆系统极度简洁：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;记忆 = Markdown 文件，文件即真相（Source of Truth）&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;模型不是靠&amp;quot;脑子里想&amp;quot;来记住东西，而是靠读写文件。每次会话开始，读取相关文件；每次决策完成，写入相关文件。磁盘不丢，记忆就不丢。&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;~/.openclaw/workspace/
+├── SOUL.md # AI 的人格与行为准则
+├── USER.md # 用户档案与偏好
+├── MEMORY.md # 长期记忆（ curated )
+├── HEARTBEAT.md # 定时任务清单
+└── memory/
+ └── YYYY-MM-DD.md # 每日日志（ append-only )
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id="双层记忆架构"&gt;双层记忆架构&lt;/h2&gt;
+&lt;h3 id="第一层每日日志daily-log"&gt;第一层：每日日志（Daily Log）&lt;/h3&gt;
+&lt;p&gt;路径：&lt;code&gt;memory/YYYY-MM-DD.md&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;append-only&lt;/strong&gt;，每次会话持续追加内容&lt;/li&gt;
+&lt;li&gt;会话开始时自动读取&lt;strong&gt;今天 + 昨天&lt;/strong&gt;的文件&lt;/li&gt;
+&lt;li&gt;记录内容：做过的事、遇到的错误、待跟进的任务&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;## 2026-03-24
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 完成
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 为用户配置了 Gemini API
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 完成了 OpenClaw 网关的安装调试
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 待跟进
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;- [ ]&lt;/span&gt; 飞书群路由配置还未测试
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;- [ ]&lt;/span&gt; 需要配置心跳任务
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;### 错误记录
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 首次运行 &lt;span style="color:#e6db74"&gt;`openclaw gateway start`&lt;/span&gt; 报 Node 版本不兼容，升级到 Node 24 后解决
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二层长期记忆long-term-memory"&gt;第二层：长期记忆（Long-term Memory）&lt;/h3&gt;
+&lt;p&gt;路径：&lt;code&gt;MEMORY.md&lt;/code&gt;（位于 workspace 根目录）&lt;/p&gt;</description></item></channel></rss>
