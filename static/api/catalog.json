@@ -1,0 +1,1335 @@
+{
+  "generated_at": "2026-03-24T11:35:38+08:00",
+  "total_posts": 153,
+  "sections": [
+    {
+      "section": "Claude Code 专题",
+      "section_key": "claude-code-series",
+      "items": [
+        {
+          "title": "Claude Code 入门指南：AI 编程第一课，让 AI 替你写代码",
+          "path": "/claude-code-series/01_claude_code_getting_started/",
+          "date": "2026-03-24T00:00:00+08:00",
+          "tags": [
+            "Claude Code",
+            "AI",
+            "编程工具"
+          ]
+        },
+        {
+          "title": "Claude Code 交互模式：多轮对话完成复杂任务",
+          "path": "/claude-code-series/02_claude_code_interactive_mode/",
+          "date": "2026-03-24T00:00:00+08:00",
+          "tags": [
+            "Claude Code",
+            "AI",
+            "工作流"
+          ]
+        },
+        {
+          "title": "Claude Code 大仓库导航：让 AI 深度理解你的代码库",
+          "path": "/claude-code-series/03_claude_code_repo_navigation/",
+          "date": "2026-03-24T00:00:00+08:00",
+          "tags": [
+            "Claude Code",
+            "AI",
+            "代码库分析"
+          ]
+        },
+        {
+          "title": "Claude Code 自动化与自定义：把 AI 变成你的专属开发助手",
+          "path": "/claude-code-series/04_claude_code_automation/",
+          "date": "2026-03-24T00:00:00+08:00",
+          "tags": [
+            "Claude Code",
+            "AI",
+            "自动化",
+            "DevOps"
+          ]
+        },
+        {
+          "title": "Skill 写作深度调研：如何构建真正好用的 AI 插件",
+          "path": "/claude-code-series/05_skill_writing_research/",
+          "date": "2026-03-24T00:00:00+08:00",
+          "tags": [
+            "Claude Code",
+            "OpenClaw",
+            "Skill",
+            "AI工具"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "OpenClaw 专题",
+      "section_key": "openclaw-series",
+      "items": [
+        {
+          "title": "OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手",
+          "path": "/openclaw-series/01_openclaw_getting_started/",
+          "date": "2026-03-23",
+          "tags": [
+            "OpenClaw",
+            "AI",
+            "工具"
+          ]
+        },
+        {
+          "title": "OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析",
+          "path": "/openclaw-series/02_openclaw_architecture/",
+          "date": "2026-03-23",
+          "tags": [
+            "OpenClaw",
+            "AI",
+            "工具"
+          ]
+        },
+        {
+          "title": "用 OpenClaw 构建多智能体团队：角色划分与任务协调实战",
+          "path": "/openclaw-series/03_openclaw_multi_agent/",
+          "date": "2026-03-23",
+          "tags": [
+            "OpenClaw",
+            "AI",
+            "工具"
+          ]
+        },
+        {
+          "title": "OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill",
+          "path": "/openclaw-series/04_openclaw_skills/",
+          "date": "2026-03-23",
+          "tags": [
+            "OpenClaw",
+            "AI",
+            "工具"
+          ]
+        },
+        {
+          "title": "OpenClaw 安全实践：自托管数据控制与权限管理",
+          "path": "/openclaw-series/05_openclaw_local_deployment/",
+          "date": "2026-03-23",
+          "tags": [
+            "OpenClaw",
+            "AI",
+            "工具"
+          ]
+        },
+        {
+          "title": "OpenClaw 记忆系统：让 AI 拥有持续进化的记忆",
+          "path": "/openclaw-series/06_openclaw_memory_system/",
+          "date": "",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "section": "入门教程",
+      "section_key": "guides",
+      "items": [
+        {
+          "title": "第一次提供流动性 - 完整 LP 指南",
+          "path": "/guides/first_lp/",
+          "date": "2026-03-18T21:23:00+08:00",
+          "tags": [
+            "教程",
+            "LP",
+            "流动性"
+          ]
+        },
+        {
+          "title": "第一次在 Uniswap 上交易 - 完整指南",
+          "path": "/guides/first_swap/",
+          "date": "2026-03-18T21:10:00+08:00",
+          "tags": [
+            "教程",
+            "Uniswap",
+            "新手"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "架构设计",
+      "section_key": "architect",
+      "items": [
+        {
+          "title": "什么是系统架构？",
+          "path": "/posts/01_what_is_system_architecture/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Web2 vs Web3：两种互联网架构的深度对比",
+          "path": "/posts/02_web2_vs_web3/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "智能合约架构设计基础",
+          "path": "/posts/03_smart_contract_design_basics/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "AMM 自动做市商核心逻辑",
+          "path": "/posts/04_amm_core_logic/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "DeFi 协议安全架构",
+          "path": "/posts/05_defi_security_architecture/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "多链架构设计模式",
+          "path": "/posts/06_multi_chain_architecture/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "预言机机制深度解析",
+          "path": "/posts/07_oracle_mechanism/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "扩容方案技术对比",
+          "path": "/posts/08_scaling_comparison/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "区块链性能优化实战",
+          "path": "/posts/09_blockchain_performance_optimization/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "企业级 DeFi 架构设计",
+          "path": "/posts/10_enterprise_defi_architecture/",
+          "date": "",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "section": "开发者",
+      "section_key": "developer",
+      "items": [
+        {
+          "title": "编程入门到精通：区块链开发者的学习路径",
+          "path": "/posts/01_programming_path/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Solidity 基础语法：从变量到函数",
+          "path": "/posts/02_solidity_basics/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "智能合约开发环境搭建：工具链全景指南",
+          "path": "/posts/03_smart_contract_env/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "ERC-20 代币标准详解：理解 DeFi 的基石",
+          "path": "/posts/04_erc20_standard/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "DeFi 核心合约解析：AMM、借贷与收益聚合",
+          "path": "/posts/05_defi_core_contracts/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "ERC20 代币标准 - DeFi 世界的基石",
+          "path": "/posts/06-erc20-token-standard/",
+          "date": "2026-03-21T10:00:00+08:00",
+          "tags": [
+            "ERC20",
+            "代币标准",
+            "Ethereum",
+            "DeFi"
+          ]
+        },
+        {
+          "title": "智能合约测试与部署：从测试网到主网",
+          "path": "/posts/06_contract_testing_deploy/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "ERC4626 金库标准 - 收益代币化的革命",
+          "path": "/posts/07-erc4626-vault-standard/",
+          "date": "2026-03-21T10:30:00+08:00",
+          "tags": [
+            "ERC4626",
+            "金库标准",
+            "收益聚合",
+            "DeFi"
+          ]
+        },
+        {
+          "title": "智能合约常见安全漏洞与防范",
+          "path": "/posts/07_common_vulnerabilities/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "ERC721 NFT 标准 - 数字所有权革命",
+          "path": "/posts/08-erc721-nft-standard/",
+          "date": "2026-03-21T11:00:00+08:00",
+          "tags": [
+            "ERC721",
+            "NFT",
+            "非同质化代币",
+            "数字收藏"
+          ]
+        },
+        {
+          "title": "Gas 优化技巧：写出省油的智能合约",
+          "path": "/posts/08_gas_optimization/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "升级型合约设计模式：代理模式深度解析",
+          "path": "/posts/09_upgradeable_patterns/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "智能合约审计实战：从自检到专业审计",
+          "path": "/posts/10_contract_audit/",
+          "date": "",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "section": "前端工程",
+      "section_key": "frontend",
+      "items": [
+        {
+          "title": "Web3 前端开发入门路径：从零到初识去中心化世界",
+          "path": "/posts/01_frontend_learning_path/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "HTML / CSS / JavaScript：Web3 前端的基石",
+          "path": "/posts/02_html_css_js_basics/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "React / Vue 框架入门：现代 DApp 的界面骨架",
+          "path": "/posts/03_react_vue_getting_started/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Web3.js / Ethers.js 入门：连接前端与区块链",
+          "path": "/posts/04_web3_ethers_getting_started/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "连接钱包功能实现：从 MetaMask 到多链钱包",
+          "path": "/posts/05_wallet_connection_implementation/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "DApp 前端架构设计：从 Demo 到生产级应用",
+          "path": "/posts/06_dapp_frontend_architecture/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "签名与验签实战：保障用户数据完整性",
+          "path": "/posts/07_signature_verification/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "去中心化前端安全：守护用户的数字资产",
+          "path": "/posts/08_decentralized_frontend_security/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "前端性能优化：让 DApp 跑得更快更轻",
+          "path": "/posts/09_frontend_performance_optimization/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "跨链前端集成：让 DApp 在多链生态中自由穿梭",
+          "path": "/posts/10_cross_chain_frontend_integration/",
+          "date": "",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "section": "研究员视角",
+      "section_key": "researcher",
+      "items": [
+        {
+          "title": "什么是加密货币？（入门）",
+          "path": "/posts/01_what_is_crypto/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "区块链技术原理（进阶）",
+          "path": "/posts/02_blockchain_principles/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "DeFi 是什么？（入门）",
+          "path": "/posts/03_what_is_defi/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "主流 DEX 深度分析（进阶）",
+          "path": "/posts/04_major_dex_analysis/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "借贷协议原理解析（进阶）",
+          "path": "/posts/05_lending_protocols/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "稳定币深度解析（进阶）",
+          "path": "/posts/06_stablecoins/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "跨链桥技术详解（高级）",
+          "path": "/posts/07_crosschain_bridges/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Layer2 扩容方案对比（高级）",
+          "path": "/posts/08_layer2_scaling/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "PancakeSwap 深度分析",
+          "path": "/posts/09-pancakeswap/",
+          "date": "2026-03-20T19:00:00+08:00",
+          "tags": [
+            "DEX",
+            "DeFi",
+            "BSC",
+            "AMM",
+            "集中流动性"
+          ]
+        },
+        {
+          "title": "代币经济学深度（高级）",
+          "path": "/posts/09_token_economics/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Balancer 深度分析",
+          "path": "/posts/10-balancer/",
+          "date": "2026-03-20T19:00:00+08:00",
+          "tags": [
+            "DEX",
+            "DeFi",
+            "以太坊",
+            "AMM",
+            "可变权重池"
+          ]
+        },
+        {
+          "title": "加密行业监管趋势（高级）",
+          "path": "/posts/10_regulation_trends/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "DODO 深度分析",
+          "path": "/posts/11-dodo/",
+          "date": "2026-03-20T19:00:00+08:00",
+          "tags": [
+            "DEX",
+            "DeFi",
+            "PMM",
+            "主动做市商",
+            "多链"
+          ]
+        },
+        {
+          "title": "跨链桥安全指南 - 如何安全转移资产",
+          "path": "/posts/12-cross-chain-bridge/",
+          "date": "2026-03-19T00:05:00+08:00",
+          "tags": [
+            "跨链",
+            "桥",
+            "安全"
+          ]
+        },
+        {
+          "title": "代币经济学分析 - 识别优质项目",
+          "path": "/posts/13-token-economics/",
+          "date": "2026-03-19T00:10:00+08:00",
+          "tags": [
+            "代币",
+            "经济",
+            "投资"
+          ]
+        },
+        {
+          "title": "Uniswap V2/V3/V4 机制对比与深度分析",
+          "path": "/posts/uniswap-v2-v3-v4-comparison/",
+          "date": "2026-03-19T12:00:00+08:00",
+          "tags": [
+            "Uniswap",
+            "AMM",
+            "DeFi",
+            "V3",
+            "V4"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "代码评审",
+      "section_key": "reviewer",
+      "items": [
+        {
+          "title": "什么是代码评审？",
+          "path": "/posts/01_what_is_code_review/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "代码评审的最佳实践",
+          "path": "/posts/02_best_practices/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Solidity 代码风格指南",
+          "path": "/posts/03_solidity_style_guide/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "常见代码问题与修复",
+          "path": "/posts/04_common_issues/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "智能合约审计清单",
+          "path": "/posts/05_audit_checklist/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "单元测试与集成测试",
+          "path": "/posts/06_testing/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "代码复杂度分析",
+          "path": "/posts/07_complexity_analysis/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "安全漏洞案例分析",
+          "path": "/posts/08_vulnerability_cases/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "形式化验证入门",
+          "path": "/posts/09_formal_verification/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "代码评审工具与流程",
+          "path": "/posts/10_review_tools/",
+          "date": "",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "section": "安全审计",
+      "section_key": "security",
+      "items": [
+        {
+          "title": "区块链安全概述：为什么去中心化不等于无风险",
+          "path": "/posts/01_blockchain_security_overview/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "智能合约常见漏洞：从入门到理解真实风险",
+          "path": "/posts/02_common_vulnerabilities/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "重入攻击原理与防范：The DAO 事件的教训",
+          "path": "/posts/03_reentrancy_attack/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "权限控制问题：被忽视的合约安全命门",
+          "path": "/posts/04_access_control_issues/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "闪电贷攻击解析：DeFi 的无本生意如何成为黑客提款机",
+          "path": "/posts/05_flash_loan_attacks/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "代币标准安全考量：ERC-20 与 ERC-721 的隐藏陷阱",
+          "path": "/posts/06_token_standard_security/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "预言机 Manipulation：DeFi 定价的隐形杀手",
+          "path": "/posts/07_oracle_manipulation/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "合约升级风险：升级即风险的艺术",
+          "path": "/posts/08_contract_upgrade_risks/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "审计流程详解：一份合约要经历怎样的安全审视",
+          "path": "/posts/09_security_audit_process/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "安全开发最佳实践：如何从一开始就写出安全的合约",
+          "path": "/posts/10_secure_development_best_practices/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "DEX 智能合约审计入门 - 避开 90% 的坑",
+          "path": "/posts/11_dex_security_audit/",
+          "date": "2026-03-19T00:00:00+08:00",
+          "tags": [
+            "安全",
+            "审计",
+            "智能合约"
+          ]
+        },
+        {
+          "title": "DeFi 安全实战 - 智能合约攻击与防护完全指南",
+          "path": "/posts/defi_security_attack_defense/",
+          "date": "2026-03-19T13:00:00+08:00",
+          "tags": [
+            "DeFi",
+            "安全",
+            "智能合约",
+            "审计",
+            "攻击"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "新手入门",
+      "section_key": "t1_beginner",
+      "items": [
+        {
+          "title": "AMM 原理详解 - 自动做市商核心机制",
+          "path": "/posts/01_amm_principles/",
+          "date": "2026-03-18T21:00:00+08:00",
+          "tags": [
+            "AMM",
+            "Uniswap",
+            "基础"
+          ]
+        },
+        {
+          "title": "流动性管理策略 - 从被动 LP 到主动管理",
+          "path": "/posts/02_liquidity_strategies/",
+          "date": "2026-03-18T21:05:00+08:00",
+          "tags": [
+            "流动性",
+            "LP",
+            "策略"
+          ]
+        },
+        {
+          "title": "Uniswap V2 vs V3 深度对比 - 选哪个版本？",
+          "path": "/posts/03_uniswap_v2_v3/",
+          "date": "2026-03-18T21:20:00+08:00",
+          "tags": [
+            "Uniswap",
+            "V2",
+            "V3",
+            "对比"
+          ]
+        },
+        {
+          "title": "Curve StableSwap 解析 - 稳定币交换的王者",
+          "path": "/posts/04_curve_stableswap/",
+          "date": "2026-03-18T21:21:00+08:00",
+          "tags": [
+            "Curve",
+            "稳定币",
+            "StableSwap"
+          ]
+        },
+        {
+          "title": "MEV 防护指南 - 避免被机器人收割",
+          "path": "/posts/05_mev_protection/",
+          "date": "2026-03-18T21:22:00+08:00",
+          "tags": [
+            "MEV",
+            "安全",
+            "防护"
+          ]
+        },
+        {
+          "title": "T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念",
+          "path": "/posts/t1_01_dex_basics/",
+          "date": "2026-03-18T10:00:00+08:00",
+          "tags": [
+            "DEX",
+            "去中心化交易所",
+            "新手入门",
+            "加密货币"
+          ]
+        },
+        {
+          "title": "T1 新手入门 02 - 创建钱包：安全保管你的加密资产",
+          "path": "/posts/t1_02_wallet_setup/",
+          "date": "2026-03-18T11:00:00+08:00",
+          "tags": [
+            "钱包",
+            "私钥",
+            "助记词",
+            "安全",
+            "新手入门"
+          ]
+        },
+        {
+          "title": "T1 新手入门 03 - 第一笔交易：从充值到完成兑换",
+          "path": "/posts/t1_03_first_trade/",
+          "date": "2026-03-18T12:00:00+08:00",
+          "tags": [
+            "交易",
+            "充值",
+            "Gas 费",
+            "滑点",
+            "新手入门"
+          ]
+        },
+        {
+          "title": "T1 新手入门 04 - 代币安全：如何识别假币和土狗项目",
+          "path": "/posts/t1_04_token_safety/",
+          "date": "2026-03-18T13:00:00+08:00",
+          "tags": [
+            "代币安全",
+            "假币识别",
+            "合约验证",
+            "土狗币",
+            "新手入门"
+          ]
+        },
+        {
+          "title": "T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平",
+          "path": "/posts/t1_05_advanced_tips/",
+          "date": "2026-03-18T14:00:00+08:00",
+          "tags": [
+            "限价单",
+            "DCA",
+            "投资组合",
+            "交易工具",
+            "新手入门"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "进阶实战",
+      "section_key": "t2_intermediate",
+      "items": [
+        {
+          "title": "Layer2 DEX 完全指南 - Gas 费节省 90%",
+          "path": "/posts/06_layer2_dex/",
+          "date": "2026-03-18T21:24:00+08:00",
+          "tags": [
+            "Layer2",
+            "Arbitrum",
+            "Optimism",
+            "Gas"
+          ]
+        },
+        {
+          "title": "T2 进阶实战 06：流动性池深度分析",
+          "path": "/posts/06_liquidity_pool_deep_dive/",
+          "date": "2026-03-19T00:00:00+08:00",
+          "tags": [
+            "DEX",
+            "流动性",
+            "AMM",
+            "进阶"
+          ]
+        },
+        {
+          "title": "DEX 聚合器对比 - 如何获得最优价格",
+          "path": "/posts/07_dex_aggregators/",
+          "date": "2026-03-18T21:25:00+08:00",
+          "tags": [
+            "聚合器",
+            "1inch",
+            "Matcha",
+            "比价"
+          ]
+        },
+        {
+          "title": "T2 进阶实战 07：滑点与价格影响",
+          "path": "/posts/07_slippage_price_impact/",
+          "date": "2026-03-19T00:00:00+08:00",
+          "tags": [
+            "DEX",
+            "滑点",
+            "价格影响",
+            "交易优化"
+          ]
+        },
+        {
+          "title": "无常损失详解 - LP 最大的隐形成本",
+          "path": "/posts/08_impermanent_loss/",
+          "date": "2026-03-18T21:26:00+08:00",
+          "tags": [
+            "无常损失",
+            "LP",
+            "风险"
+          ]
+        },
+        {
+          "title": "DeFi 收益 farming 完全指南",
+          "path": "/posts/09_defi_yield/",
+          "date": "2026-03-18T21:27:00+08:00",
+          "tags": [
+            "Yield Farming",
+            "DeFi",
+            "收益"
+          ]
+        },
+        {
+          "title": "DeFi 风险管理 - 保住本金的 10 条铁律",
+          "path": "/posts/10_risk_management/",
+          "date": "2026-03-18T21:28:00+08:00",
+          "tags": [
+            "风险",
+            "安全",
+            "本金"
+          ]
+        },
+        {
+          "title": "T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎",
+          "path": "/posts/t2_06_amm_principles/",
+          "date": "2026-03-19T10:00:00+08:00",
+          "tags": [
+            "AMM",
+            "DEX",
+            "自动做市商",
+            "DeFi",
+            "Uniswap"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "安全合规",
+      "section_key": "t3_security",
+      "items": [
+        {
+          "title": "DeFi 税务指南 - 合规报税要点",
+          "path": "/posts/15_defi_tax_guide/",
+          "date": "2026-03-19T00:20:00+08:00",
+          "tags": [
+            "税务",
+            "合规",
+            "报税"
+          ]
+        },
+        {
+          "title": "T3 安全合规系列 (11/15)：链上交易监控与异常检测",
+          "path": "/posts/t3_security_compliance_11/",
+          "date": "2026-03-19T00:27:00+08:00",
+          "tags": [
+            "T3",
+            "安全合规",
+            "链上监控",
+            "异常检测",
+            "DEX"
+          ]
+        },
+        {
+          "title": "T3 安全合规系列 (12/15)：KYC/AML 合规流程实现",
+          "path": "/posts/t3_security_compliance_12/",
+          "date": "2026-03-19T00:27:00+08:00",
+          "tags": [
+            "T3",
+            "安全合规",
+            "KYC",
+            "AML",
+            "身份验证"
+          ]
+        },
+        {
+          "title": "T3 安全合规系列 (13/15)：智能合约安全审计流程",
+          "path": "/posts/t3_security_compliance_13/",
+          "date": "2026-03-19T00:27:00+08:00",
+          "tags": [
+            "T3",
+            "安全合规",
+            "智能合约",
+            "安全审计",
+            "代码审查"
+          ]
+        },
+        {
+          "title": "T3 安全合规系列 (14/15)：数据隐私与保护机制",
+          "path": "/posts/t3_security_compliance_14/",
+          "date": "2026-03-19T00:27:00+08:00",
+          "tags": [
+            "T3",
+            "安全合规",
+            "数据隐私",
+            "加密",
+            "GDPR"
+          ]
+        },
+        {
+          "title": "T3 安全合规系列 (15/15)：应急响应与事件管理",
+          "path": "/posts/t3_security_compliance_15/",
+          "date": "2026-03-19T00:27:00+08:00",
+          "tags": [
+            "T3",
+            "安全合规",
+            "应急响应",
+            "事件管理",
+            "灾难恢复"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "高级策略",
+      "section_key": "t4_advanced",
+      "items": [
+        {
+          "title": "T2 进阶实战 08：MEV 与前端运行防御",
+          "path": "/posts/08_mev_front_running/",
+          "date": "2026-03-19T00:00:00+08:00",
+          "tags": [
+            "DEX",
+            "MEV",
+            "前端运行",
+            "安全"
+          ]
+        },
+        {
+          "title": "DEX 套利策略详解 - 从零开始赚无风险收益",
+          "path": "/posts/16_dex_arbitrage_strategies/",
+          "date": "2026-03-19T00:30:00+08:00",
+          "tags": [
+            "套利",
+            "策略",
+            "收益"
+          ]
+        },
+        {
+          "title": "流动性挖矿收益优化 - 让 APY 翻倍技巧",
+          "path": "/posts/17_liquidity_mining_optimization/",
+          "date": "2026-03-19T00:35:00+08:00",
+          "tags": [
+            "挖矿",
+            "收益",
+            "优化"
+          ]
+        },
+        {
+          "title": "稳定币脱锚历史复盘 - 血泪教训总结",
+          "path": "/posts/18_stablecoin_depeg_history/",
+          "date": "2026-03-19T00:40:00+08:00",
+          "tags": [
+            "稳定币",
+            "脱锚",
+            "风险"
+          ]
+        },
+        {
+          "title": "期权+DEX 组合策略 - 对冲风险增强收益",
+          "path": "/posts/19_options_dex_combo/",
+          "date": "2026-03-19T00:45:00+08:00",
+          "tags": [
+            "期权",
+            "对冲",
+            "策略"
+          ]
+        },
+        {
+          "title": "链上数据分析实战 - 像侦探一样追踪资金",
+          "path": "/posts/20_onchain_analysis_tutorial/",
+          "date": "2026-03-19T00:50:00+08:00",
+          "tags": [
+            "链上分析",
+            "数据",
+            "工具"
+          ]
+        },
+        {
+          "title": "Rebasing 池子是什么？弹性供应代币的 AMM 挑战",
+          "path": "/posts/29_rebasing_pools/",
+          "date": "2026-03-21T11:30:00+08:00",
+          "tags": [
+            "Rebasing",
+            "弹性供应",
+            "AMM",
+            "DeFi"
+          ]
+        },
+        {
+          "title": "DeFi 量化策略 - 套利与做市实战完全指南",
+          "path": "/posts/defi_quant_strategy_arbitrage_market_making/",
+          "date": "2026-03-19T14:00:00+08:00",
+          "tags": [
+            "DeFi",
+            "量化",
+            "套利",
+            "做市",
+            "策略"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "机构视角",
+      "section_key": "t5_institutional",
+      "items": [
+        {
+          "title": "DAO 治理完全指南 - 参与协议决策",
+          "path": "/posts/14_governance_guide/",
+          "date": "2026-03-19T00:15:00+08:00",
+          "tags": [
+            "DAO",
+            "治理",
+            "投票"
+          ]
+        },
+        {
+          "title": "做市商内部运作揭秘 - Wintermute、Jump 模式解析",
+          "path": "/posts/21_market_maker_insider/",
+          "date": "2026-03-19T01:00:00+08:00",
+          "tags": [
+            "做市商",
+            "机构",
+            "策略"
+          ]
+        },
+        {
+          "title": "MEV 搜索者实战手册 - Flashbots 与私有节点",
+          "path": "/posts/22_mev_searcher_guide/",
+          "date": "2026-03-19T01:05:00+08:00",
+          "tags": [
+            "MEV",
+            "搜索者",
+            "技术"
+          ]
+        },
+        {
+          "title": "协议收入分析框架 - Token Terminal 深度使用",
+          "path": "/posts/23_protocol_revenue_analysis/",
+          "date": "2026-03-19T01:10:00+08:00",
+          "tags": [
+            "收入分析",
+            "估值",
+            "数据"
+          ]
+        },
+        {
+          "title": "治理攻击案例研究 - 投票操纵与贿赂市场",
+          "path": "/posts/24_governance_attack_cases/",
+          "date": "2026-03-19T01:15:00+08:00",
+          "tags": [
+            "治理",
+            "DAO",
+            "安全"
+          ]
+        },
+        {
+          "title": "跨链流动性网络 - LayerZero 与 CCIP 架构",
+          "path": "/posts/25_cross_chain_liquidity/",
+          "date": "2026-03-19T01:20:00+08:00",
+          "tags": [
+            "跨链",
+            "LayerZero",
+            "架构"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "大师级",
+      "section_key": "t6_master",
+      "items": [
+        {
+          "title": "AMM 数学原理深究 - 曲线设计与资本效率",
+          "path": "/posts/26_amm_math_deep_dive/",
+          "date": "2026-03-19T01:30:00+08:00",
+          "tags": [
+            "AMM",
+            "数学",
+            "原理"
+          ]
+        },
+        {
+          "title": "智能合约形式化验证 - Certora 与 Spec 语言",
+          "path": "/posts/27_formal_verification/",
+          "date": "2026-03-19T01:35:00+08:00",
+          "tags": [
+            "验证",
+            "安全",
+            "形式化"
+          ]
+        },
+        {
+          "title": "DEX 经济模型设计 - 代币排放与激励机制",
+          "path": "/posts/28_dex_tokenomics_design/",
+          "date": "2026-03-19T01:40:00+08:00",
+          "tags": [
+            "经济模型",
+            "代币",
+            "设计"
+          ]
+        },
+        {
+          "title": "黑客攻击技术复盘 - 重入、预言机操纵详解",
+          "path": "/posts/29_hack_attack_technical_analysis/",
+          "date": "2026-03-19T01:45:00+08:00",
+          "tags": [
+            "黑客",
+            "安全",
+            "攻击"
+          ]
+        },
+        {
+          "title": "DeFi 未来趋势预测 - RWA、真实收益与全链生态",
+          "path": "/posts/30_defi_future_trends/",
+          "date": "2026-03-19T01:50:00+08:00",
+          "tags": [
+            "未来",
+            "趋势",
+            "预测"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "研究报告",
+      "section_key": "researcher",
+      "items": [
+        {
+          "title": "DeFi 借贷协议深度解析：Aave、Compound 与 MakerDAO",
+          "path": "/researcher/01_defi_lending/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Uniswap V3：聚集流动性如何重塑 DEX 竞争格局",
+          "path": "/researcher/01_uniswap_v3/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Curve Finance：稳定币之王的护城河与系统性风险",
+          "path": "/researcher/02_curve_finance/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "稳定币深度解析：USDC、USDT、DAI 与 FRAX",
+          "path": "/researcher/02_stablecoins/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "跨链桥技术深度解析：LayerZero、Axelar 与 Chainlink CCIP",
+          "path": "/researcher/03_crosschain_bridges/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "SushiSwap：社区驱动的 DEX 能否在红海中找到新出路？",
+          "path": "/researcher/03_sushiswap/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Layer2 扩容方案深度解析：Arbitrum、Optimism、zkSync 与 Starknet",
+          "path": "/researcher/04_layer2_scaling/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "NFT 市场协议深度解析：OpenSea、Blur 与 Magic Eden",
+          "path": "/researcher/05_nft_marketplaces/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "GameFi 经济模型深度解析：Axie Infinity、StepN 与 The Sandbox",
+          "path": "/researcher/06_gamefi_economics/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "DAO 治理机制深度解析：MakerDAO、Compound 与 Uniswap",
+          "path": "/researcher/07_dao_governance/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "区块链安全：常见攻击类型与审计流程",
+          "path": "/researcher/08_blockchain_security/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "代币经济学深度解析：分配模型、解锁日程与估值方法",
+          "path": "/researcher/09_token_economics/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "加密货币监管政策：全球主要司法管辖区深度解析",
+          "path": "/researcher/10_crypto_regulation/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Balancer 深度分析",
+          "path": "/researcher/balancer/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "DODO 深度分析",
+          "path": "/researcher/dodo/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "PancakeSwap 深度分析",
+          "path": "/researcher/pancakeswap/",
+          "date": "",
+          "tags": []
+        }
+      ]
+    },
+    {
+      "section": "开发者专题",
+      "section_key": "developer",
+      "items": [
+        {
+          "title": "编程入门到精通：区块链开发者的学习路径",
+          "path": "/developer/01_programming_path/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Solidity 基础语法：从变量到函数",
+          "path": "/developer/02_solidity_basics/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "智能合约开发环境搭建：工具链全景指南",
+          "path": "/developer/03_smart_contract_env/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "ERC-20 代币标准详解：理解 DeFi 的基石",
+          "path": "/developer/04_erc20_standard/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "DeFi 核心合约解析：AMM、借贷与收益聚合",
+          "path": "/developer/05_defi_core_contracts/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "智能合约测试与部署：从测试网到主网",
+          "path": "/developer/06_contract_testing_deploy/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "智能合约常见安全漏洞与防范",
+          "path": "/developer/07_common_vulnerabilities/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "Gas 优化技巧：写出省油的智能合约",
+          "path": "/developer/08_gas_optimization/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "升级型合约设计模式：代理模式深度解析",
+          "path": "/developer/09_upgradeable_patterns/",
+          "date": "",
+          "tags": []
+        },
+        {
+          "title": "智能合约审计实战：从自检到专业审计",
+          "path": "/developer/10_contract_audit/",
+          "date": "",
+          "tags": []
+        }
+      ]
+    }
+  ]
+}
