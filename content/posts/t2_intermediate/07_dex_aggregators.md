@@ -1,5 +1,6 @@
 ---
 title: "DEX 聚合器对比 - 如何获得最优价格"
+slug: "07_dex_aggregators"
 date: 2026-03-18T21:25:00+08:00
 description: "1inch、Matcha、CowSwap 等聚合器对比，教你每次 swap 都拿到最优价格"
 tags: ["聚合器", "1inch", "Matcha", "比价"]

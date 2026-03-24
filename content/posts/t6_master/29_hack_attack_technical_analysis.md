@@ -1,5 +1,6 @@
 ---
 title: "黑客攻击技术复盘 - 重入、预言机操纵详解"
+slug: "29_hack_attack_technical_analysis"
 date: 2026-03-19T01:45:00+08:00
 description: "深度分析 DeFi 黑客攻击技术细节，学习如何识别和防范各类攻击"
 tags: ["黑客", "安全", "攻击"]

@@ -1,5 +1,6 @@
 ---
 title: "Curve StableSwap 解析 - 稳定币交换的王者"
+slug: "04_curve_stableswap"
 date: 2026-03-18T21:21:00+08:00
 description: "深入理解 Curve 的 StableSwap 机制，为什么它是稳定币交换的最优选择"
 tags: ["Curve", "稳定币", "StableSwap"]

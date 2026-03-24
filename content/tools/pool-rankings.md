@@ -1,5 +1,6 @@
 ---
 title: "Top 50 DEX 池子排行"
+slug: "pool-rankings"
 date: 2026-03-18T21:15:00+08:00
 description: "实时 Uniswap V3 流动性池排行，包含 TVL、交易量、APY 数据"
 tags: ["工具", "数据", "Uniswap"]

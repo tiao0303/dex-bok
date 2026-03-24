@@ -1,5 +1,6 @@
 ---
 title: "T1 新手入门 01 - 什么是 DEX？去中心化交易所基础概念"
+slug: "t1_01_dex_basics"
 date: 2026-03-18T10:00:00+08:00
 draft: false
 categories: ["T1 新手入门", "DEX 基础"]

@@ -1,5 +1,6 @@
 ---
 title: "DeFi 税务指南 - 合规报税要点"
+slug: "15_defi_tax_guide"
 date: 2026-03-19T00:20:00+08:00
 description: "了解 DeFi 交易的税务处理，避免税务风险"
 tags: ["税务", "合规", "报税"]

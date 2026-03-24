@@ -1,5 +1,6 @@
 ---
 title: "DODO 深度分析"
+slug: "11-dodo"
 date: 2026-03-20T19:00:00+08:00
 tags: ["DEX", "DeFi", "PMM", "主动做市商", "多链"]
 series: "DEX 深度分析"

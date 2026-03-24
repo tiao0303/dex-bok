@@ -1,5 +1,6 @@
 ---
 title: "AMM 原理详解 - 自动做市商核心机制"
+slug: "01_amm_principles"
 date: 2026-03-18T21:00:00+08:00
 description: "深入理解 AMM 的恒定乘积公式、流动性池工作原理，以及 LP 收益与风险"
 tags: ["AMM", "Uniswap", "基础"]

@@ -1,5 +1,6 @@
 ---
 title: "OpenClaw 架构解析：Gateway、Agent、Channel 三层架构深度剖析"
+slug: "02_openclaw_architecture"
 date: 2026-03-23
 draft: false
 tags: ["OpenClaw", "AI", "工具"]

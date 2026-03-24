@@ -1,5 +1,6 @@
 ---
 title: "流动性挖矿收益优化 - 让 APY 翻倍技巧"
+slug: "17_liquidity_mining_optimization"
 date: 2026-03-19T00:35:00+08:00
 description: "学习复投策略、Gas 优化、奖励代币处理，最大化流动性挖矿收益"
 tags: ["挖矿", "收益", "优化"]

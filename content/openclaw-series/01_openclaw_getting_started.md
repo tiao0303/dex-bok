@@ -1,5 +1,6 @@
 ---
 title: "OpenClaw 入门指南：自托管 AI 网关，让任何聊天应用都变成你的私人助手"
+slug: "01_openclaw_getting_started"
 date: 2026-03-23
 draft: false
 tags: ["OpenClaw", "AI", "工具"]

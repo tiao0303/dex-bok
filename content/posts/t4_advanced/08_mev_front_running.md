@@ -1,5 +1,6 @@
 ---
 title: "T2 进阶实战 08：MEV 与前端运行防御"
+slug: "08_mev_front_running"
 date: 2026-03-19T00:00:00+08:00
 draft: false
 tags: ["DEX", "MEV", "前端运行", "安全"]

@@ -1,5 +1,6 @@
 ---
 title: "Uniswap V2 vs V3 深度对比 - 选哪个版本？"
+slug: "03_uniswap_v2_v3"
 date: 2026-03-18T21:20:00+08:00
 description: "Uniswap V2 和 V3 的核心差异、适用场景、LP 收益对比，帮你做出正确选择"
 tags: ["Uniswap", "V2", "V3", "对比"]

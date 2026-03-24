@@ -1,5 +1,6 @@
 ---
 title: "T3 安全合规系列 (12/15)：KYC/AML 合规流程实现"
+slug: "t3_security_compliance_12"
 date: 2026-03-19T00:27:00+08:00
 draft: false
 tags: ["T3", "安全合规", "KYC", "AML", "身份验证"]

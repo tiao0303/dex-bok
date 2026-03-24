@@ -1,5 +1,6 @@
 ---
 title: "跨链流动性网络 - LayerZero 与 CCIP 架构"
+slug: "25_cross_chain_liquidity"
 date: 2026-03-19T01:20:00+08:00
 description: "深入理解跨链技术架构，分析 LayerZero、CCIP 等协议的安全性与投资机会"
 tags: ["跨链", "LayerZero", "架构"]

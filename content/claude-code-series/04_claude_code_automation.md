@@ -1,5 +1,6 @@
 ---
 title: "Claude Code 自动化与自定义：把 AI 变成你的专属开发助手"
+slug: "04_claude_code_automation"
 date: 2026-03-24T00:00:00+08:00
 draft: false
 tags: ["Claude Code", "AI", "自动化", "DevOps"]

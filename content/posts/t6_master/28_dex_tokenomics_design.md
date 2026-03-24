@@ -1,5 +1,6 @@
 ---
 title: "DEX 经济模型设计 - 代币排放与激励机制"
+slug: "28_dex_tokenomics_design"
 date: 2026-03-19T01:40:00+08:00
 description: "学习如何设计 DEX 代币经济模型，平衡通胀、激励与长期价值"
 tags: ["经济模型", "代币", "设计"]

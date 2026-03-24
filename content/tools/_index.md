@@ -1,5 +1,6 @@
 ---
 title: "工具"
+slug: "_index"
 description: "DEX 实战工具集合"
 ---
 

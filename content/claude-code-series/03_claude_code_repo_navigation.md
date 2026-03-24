@@ -1,5 +1,6 @@
 ---
 title: "Claude Code 大仓库导航：让 AI 深度理解你的代码库"
+slug: "03_claude_code_repo_navigation"
 date: 2026-03-24T00:00:00+08:00
 draft: false
 tags: ["Claude Code", "AI", "代码库分析"]

@@ -1,5 +1,6 @@
 ---
 title: "MEV 搜索者实战手册 - Flashbots 与私有节点"
+slug: "22_mev_searcher_guide"
 date: 2026-03-19T01:05:00+08:00
 description: "学习成为 MEV 搜索者，掌握抢跑、三明治、清算等策略的技术实现"
 tags: ["MEV", "搜索者", "技术"]

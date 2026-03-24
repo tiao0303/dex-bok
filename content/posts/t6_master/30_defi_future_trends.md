@@ -1,5 +1,6 @@
 ---
 title: "DeFi 未来趋势预测 - RWA、真实收益与全链生态"
+slug: "30_defi_future_trends"
 date: 2026-03-19T01:50:00+08:00
 description: "展望 DeFi 未来发展方向，分析 RWA、真实收益、全链应用等趋势"
 tags: ["未来", "趋势", "预测"]

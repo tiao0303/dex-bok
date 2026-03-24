@@ -1,5 +1,6 @@
 ---
 title: "关于"
+slug: "about"
 date: 2026-03-18T21:00:00+08:00
 description: "关于 DEX 学习笔记"
 draft: false

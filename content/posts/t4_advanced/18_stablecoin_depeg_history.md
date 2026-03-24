@@ -1,5 +1,6 @@
 ---
 title: "稳定币脱锚历史复盘 - 血泪教训总结"
+slug: "18_stablecoin_depeg_history"
 date: 2026-03-19T00:40:00+08:00
 description: "深度分析 UST、USDC 等稳定币脱锚事件，学习如何识别和规避风险"
 tags: ["稳定币", "脱锚", "风险"]

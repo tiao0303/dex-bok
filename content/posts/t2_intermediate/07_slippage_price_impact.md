@@ -1,5 +1,6 @@
 ---
 title: "T2 进阶实战 07：滑点与价格影响"
+slug: "07_slippage_price_impact"
 date: 2026-03-19T00:00:00+08:00
 draft: false
 tags: ["DEX", "滑点", "价格影响", "交易优化"]

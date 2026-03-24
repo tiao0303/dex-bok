@@ -1,5 +1,6 @@
 ---
 title: "第一次在 Uniswap 上交易 - 完整指南"
+slug: "first_swap"
 date: 2026-03-18T21:10:00+08:00
 description: "从零开始，教你完成第一次 DEX 交易，包含 MetaMask 设置、Gas 费优化、滑点控制"
 tags: ["教程", "Uniswap", "新手"]

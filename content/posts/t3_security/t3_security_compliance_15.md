@@ -1,5 +1,6 @@
 ---
 title: "T3 安全合规系列 (15/15)：应急响应与事件管理"
+slug: "t3_security_compliance_15"
 date: 2026-03-19T00:27:00+08:00
 draft: false
 tags: ["T3", "安全合规", "应急响应", "事件管理", "灾难恢复"]

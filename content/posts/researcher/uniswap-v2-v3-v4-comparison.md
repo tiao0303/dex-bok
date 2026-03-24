@@ -1,5 +1,6 @@
 ---
 title: "Uniswap V2/V3/V4 机制对比与深度分析"
+slug: "uniswap-v2-v3-v4-comparison"
 date: 2026-03-19T12:00:00+08:00
 description: "深入对比 Uniswap V2、V3、V4 的核心机制差异，解析流动性集中策略与资本效率优化"
 tags: ["Uniswap", "AMM", "DeFi", "V3", "V4"]

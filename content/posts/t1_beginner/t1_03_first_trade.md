@@ -1,5 +1,6 @@
 ---
 title: "T1 新手入门 03 - 第一笔交易：从充值到完成兑换"
+slug: "t1_03_first_trade"
 date: 2026-03-18T12:00:00+08:00
 draft: false
 categories: ["T1 新手入门", "交易实操"]

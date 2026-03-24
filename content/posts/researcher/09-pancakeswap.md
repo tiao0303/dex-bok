@@ -1,5 +1,6 @@
 ---
 title: "PancakeSwap 深度分析"
+slug: "09-pancakeswap"
 date: 2026-03-20T19:00:00+08:00
 tags: ["DEX", "DeFi", "BSC", "AMM", "集中流动性"]
 series: "DEX 深度分析"

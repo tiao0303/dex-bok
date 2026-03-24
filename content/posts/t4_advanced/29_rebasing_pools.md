@@ -1,5 +1,6 @@
 ---
 title: "Rebasing 池子是什么？弹性供应代币的 AMM 挑战"
+slug: "29_rebasing_pools"
 date: 2026-03-21T11:30:00+08:00
 description: "深入理解 Rebasing 代币的工作原理、AMM 池子的特殊挑战，以及如何正确处理弹性供应代币的流动性"
 tags: ["Rebasing", "弹性供应", "AMM", "DeFi"]

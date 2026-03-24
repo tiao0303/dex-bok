@@ -1,5 +1,6 @@
 ---
 title: "OpenClaw Skills 插件系统实战：从零构建你的第一个 Skill"
+slug: "04_openclaw_skills"
 date: 2026-03-23
 draft: false
 tags: ["OpenClaw", "AI", "工具"]

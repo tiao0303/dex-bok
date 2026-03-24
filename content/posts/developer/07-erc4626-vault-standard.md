@@ -1,5 +1,6 @@
 ---
 title: "ERC4626 金库标准 - 收益代币化的革命"
+slug: "07-erc4626-vault-standard"
 date: 2026-03-21T10:30:00+08:00
 description: "深入理解 ERC4626 代币化金库标准，如何统一收益聚合协议，实现更好的 DeFi 互操作性"
 tags: ["ERC4626", "金库标准", "收益聚合", "DeFi"]

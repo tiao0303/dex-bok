@@ -1,5 +1,6 @@
 ---
 title: "教程"
+slug: "_index"
 description: "DEX 实战教程，从入门到精通"
 ---
 

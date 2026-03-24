@@ -1,5 +1,6 @@
 ---
 title: "OpenClaw 安全实践：自托管数据控制与权限管理"
+slug: "05_openclaw_local_deployment"
 date: 2026-03-23
 draft: false
 tags: ["OpenClaw", "AI", "工具"]

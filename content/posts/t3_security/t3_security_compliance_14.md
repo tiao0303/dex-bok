@@ -1,5 +1,6 @@
 ---
 title: "T3 安全合规系列 (14/15)：数据隐私与保护机制"
+slug: "t3_security_compliance_14"
 date: 2026-03-19T00:27:00+08:00
 draft: false
 tags: ["T3", "安全合规", "数据隐私", "加密", "GDPR"]

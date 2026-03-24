@@ -1,5 +1,6 @@
 ---
 title: "文章"
+slug: "_index"
 description: "DEX 理论与实战文章合集"
 ---
 

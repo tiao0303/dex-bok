@@ -1,5 +1,6 @@
 ---
 title: "AMM 数学原理深究 - 曲线设计与资本效率"
+slug: "26_amm_math_deep_dive"
 date: 2026-03-19T01:30:00+08:00
 description: "深入理解 AMM 的数学原理，从恒定乘积到集中流动性，掌握资本效率优化方法"
 tags: ["AMM", "数学", "原理"]

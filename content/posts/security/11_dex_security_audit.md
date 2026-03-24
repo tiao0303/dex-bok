@@ -1,5 +1,6 @@
 ---
 title: "DEX 智能合约审计入门 - 避开 90% 的坑"
+slug: "11_dex_security_audit"
 date: 2026-03-19T00:00:00+08:00
 description: "学习如何审计 DEX 合约，识别常见漏洞，保护你的资金安全"
 tags: ["安全", "审计", "智能合约"]

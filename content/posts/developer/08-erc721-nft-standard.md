@@ -1,5 +1,6 @@
 ---
 title: "ERC721 NFT 标准 - 数字所有权革命"
+slug: "08-erc721-nft-standard"
 date: 2026-03-21T11:00:00+08:00
 description: "深入理解 ERC721 非同质化代币标准，掌握 NFT 的核心接口、元数据扩展和实际应用场景"
 tags: ["ERC721", "NFT", "非同质化代币", "数字收藏"]

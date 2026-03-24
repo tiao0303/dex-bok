@@ -1,5 +1,6 @@
 ---
 title: "MEV 防护指南 - 避免被机器人收割"
+slug: "05_mev_protection"
 date: 2026-03-18T21:22:00+08:00
 description: "了解 MEV 攻击方式，学会使用防护工具，保护你的交易不被机器人收割"
 tags: ["MEV", "安全", "防护"]

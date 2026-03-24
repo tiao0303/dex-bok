@@ -1,5 +1,6 @@
 ---
 title: "治理攻击案例研究 - 投票操纵与贿赂市场"
+slug: "24_governance_attack_cases"
 date: 2026-03-19T01:15:00+08:00
 description: "分析 DAO 治理攻击案例，学习识别和防范投票操纵、贿赂等风险"
 tags: ["治理", "DAO", "安全"]

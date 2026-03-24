@@ -1,5 +1,6 @@
 ---
 title: "DEX 套利策略详解 - 从零开始赚无风险收益"
+slug: "16_dex_arbitrage_strategies"
 date: 2026-03-19T00:30:00+08:00
 description: "学习三角套利、跨所套利、闪电贷套利等 DEX 套利策略，赚取无风险收益"
 tags: ["套利", "策略", "收益"]

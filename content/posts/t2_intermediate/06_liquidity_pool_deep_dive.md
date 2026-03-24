@@ -1,5 +1,6 @@
 ---
 title: "T2 进阶实战 06：流动性池深度分析"
+slug: "06_liquidity_pool_deep_dive"
 date: 2026-03-19T00:00:00+08:00
 draft: false
 tags: ["DEX", "流动性", "AMM", "进阶"]

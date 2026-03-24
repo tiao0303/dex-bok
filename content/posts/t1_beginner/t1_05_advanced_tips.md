@@ -1,5 +1,6 @@
 ---
 title: "T1 新手入门 05 - 进阶技巧：提升你的 DEX 交易水平"
+slug: "t1_05_advanced_tips"
 date: 2026-03-18T14:00:00+08:00
 draft: false
 categories: ["T1 新手入门", "进阶技巧"]

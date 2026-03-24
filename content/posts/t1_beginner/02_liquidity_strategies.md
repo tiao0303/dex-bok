@@ -1,5 +1,6 @@
 ---
 title: "流动性管理策略 - 从被动 LP 到主动管理"
+slug: "02_liquidity_strategies"
 date: 2026-03-18T21:05:00+08:00
 description: "对比被动 LP、主动调仓、集中流动性三种策略，找到适合你的流动性管理方式"
 tags: ["流动性", "LP", "策略"]

@@ -1,5 +1,6 @@
 ---
 title: "用 OpenClaw 构建多智能体团队：角色划分与任务协调实战"
+slug: "03_openclaw_multi_agent"
 date: 2026-03-23
 draft: false
 tags: ["OpenClaw", "AI", "工具"]

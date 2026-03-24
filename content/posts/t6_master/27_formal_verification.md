@@ -1,5 +1,6 @@
 ---
 title: "智能合约形式化验证 - Certora 与 Spec 语言"
+slug: "27_formal_verification"
 date: 2026-03-19T01:35:00+08:00
 description: "学习智能合约形式化验证方法，使用 Certora 等工具证明合约正确性"
 tags: ["验证", "安全", "形式化"]

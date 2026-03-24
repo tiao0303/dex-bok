@@ -1,5 +1,6 @@
 ---
 title: "T1 新手入门 04 - 代币安全：如何识别假币和土狗项目"
+slug: "t1_04_token_safety"
 date: 2026-03-18T13:00:00+08:00
 draft: false
 categories: ["T1 新手入门", "安全风控"]

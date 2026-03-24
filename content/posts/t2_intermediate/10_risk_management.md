@@ -1,5 +1,6 @@
 ---
 title: "DeFi 风险管理 - 保住本金的 10 条铁律"
+slug: "10_risk_management"
 date: 2026-03-18T21:28:00+08:00
 description: "3 年 DeFi 实战总结的风险管理原则，帮你避开 99% 的坑"
 tags: ["风险", "安全", "本金"]

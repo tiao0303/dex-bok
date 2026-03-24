@@ -1,5 +1,6 @@
 ---
 title: "Balancer 深度分析"
+slug: "10-balancer"
 date: 2026-03-20T19:00:00+08:00
 tags: ["DEX", "DeFi", "以太坊", "AMM", "可变权重池"]
 series: "DEX 深度分析"

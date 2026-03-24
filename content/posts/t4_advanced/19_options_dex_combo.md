@@ -1,5 +1,6 @@
 ---
 title: "期权+DEX 组合策略 - 对冲风险增强收益"
+slug: "19_options_dex_combo"
 date: 2026-03-19T00:45:00+08:00
 description: "学习如何用期权对冲 LP 无常损失，构建低风险高收益组合"
 tags: ["期权", "对冲", "策略"]

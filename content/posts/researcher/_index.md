@@ -1,5 +1,6 @@
 ---
 title: "研究者"
+slug: "_index"
 date: 2026-03-18T21:00:00+08:00
 description: "DeFi 研究者学习路径 - 区块链原理、DeFi 深层逻辑、协议分析"
 ---

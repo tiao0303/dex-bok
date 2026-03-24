@@ -1,5 +1,6 @@
 ---
 title: "T3 安全合规系列 (11/15)：链上交易监控与异常检测"
+slug: "t3_security_compliance_11"
 date: 2026-03-19T00:27:00+08:00
 draft: false
 tags: ["T3", "安全合规", "链上监控", "异常检测", "DEX"]

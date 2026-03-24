@@ -1,5 +1,6 @@
 ---
 title: "Layer2 DEX 完全指南 - Gas 费节省 90%"
+slug: "06_layer2_dex"
 date: 2026-03-18T21:24:00+08:00
 description: "Arbitrum、Optimism、Base 等 Layer2 DEX 对比，Gas 费、流动性、安全性全面分析"
 tags: ["Layer2", "Arbitrum", "Optimism", "Gas"]

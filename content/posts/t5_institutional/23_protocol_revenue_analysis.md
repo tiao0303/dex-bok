@@ -1,5 +1,6 @@
 ---
 title: "协议收入分析框架 - Token Terminal 深度使用"
+slug: "23_protocol_revenue_analysis"
 date: 2026-03-19T01:10:00+08:00
 description: "学习如何分析 DeFi 协议收入，建立估值模型，找到被低估的投资机会"
 tags: ["收入分析", "估值", "数据"]

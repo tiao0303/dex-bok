@@ -1,5 +1,6 @@
 ---
 title: "T3 安全合规系列 (13/15)：智能合约安全审计流程"
+slug: "t3_security_compliance_13"
 date: 2026-03-19T00:27:00+08:00
 draft: false
 tags: ["T3", "安全合规", "智能合约", "安全审计", "代码审查"]

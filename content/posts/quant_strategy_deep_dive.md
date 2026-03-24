@@ -1,5 +1,6 @@
 ---
 title: "量化交易策略深度解析：从传统金融到 DeFi"
+slug: "quant_strategy_deep_dive"
 date: 2026-03-21T21:00:00+08:00
 description: "全面解析主流量化交易策略，包括趋势跟踪、均值回归、套利、做市商等策略，以及 DeFi 领域的量化机会"
 tags: ["量化交易", "DeFi", "套利", "策略", "量化策略"]

@@ -1,5 +1,6 @@
 ---
 title: "DeFi 安全实战 - 智能合约攻击与防护完全指南"
+slug: "defi_security_attack_defense"
 date: 2026-03-19T13:00:00+08:00
 description: "深入解析 DeFi 常见攻击手段，包括 Flash Loan 攻击、重入攻击、预言机操纵，提供实际防护方案与审计要点"
 tags: ["DeFi", "安全", "智能合约", "审计", "攻击"]

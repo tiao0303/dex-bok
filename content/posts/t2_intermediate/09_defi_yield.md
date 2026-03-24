@@ -1,5 +1,6 @@
 ---
 title: "DeFi 收益 farming 完全指南"
+slug: "09_defi_yield"
 date: 2026-03-18T21:27:00+08:00
 description: "从 LP 到 yield farming，全面解析 DeFi 收益来源、风险、最优策略"
 tags: ["Yield Farming", "DeFi", "收益"]

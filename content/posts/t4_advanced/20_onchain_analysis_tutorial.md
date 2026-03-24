@@ -1,5 +1,6 @@
 ---
 title: "链上数据分析实战 - 像侦探一样追踪资金"
+slug: "20_onchain_analysis_tutorial"
 date: 2026-03-19T00:50:00+08:00
 description: "学习使用 Dune、Nansen、Etherscan 等工具，追踪大户动向，发现投资机会"
 tags: ["链上分析", "数据", "工具"]

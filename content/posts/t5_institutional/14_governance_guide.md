@@ -1,5 +1,6 @@
 ---
 title: "DAO 治理完全指南 - 参与协议决策"
+slug: "14_governance_guide"
 date: 2026-03-19T00:15:00+08:00
 description: "学习如何参与 DAO 治理，让你的代币投票产生价值"
 tags: ["DAO", "治理", "投票"]

@@ -1,5 +1,6 @@
 ---
 title: "DeFi 量化策略 - 套利与做市实战完全指南"
+slug: "defi_quant_strategy_arbitrage_market_making"
 date: 2026-03-19T14:00:00+08:00
 description: "深入分析 DeFi 量化交易策略，包括三角套利、流动性做市、资金费率套利，提供完整代码实现与风险控制方案"
 tags: ["DeFi", "量化", "套利", "做市", "策略"]

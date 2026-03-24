@@ -1,5 +1,6 @@
 ---
 title: "ERC20 代币标准 - DeFi 世界的基石"
+slug: "06-erc20-token-standard"
 date: 2026-03-21T10:00:00+08:00
 description: "深入理解 ERC20 代币标准的技术规范、核心函数、以及在 DeFi 中的广泛应用"
 tags: ["ERC20", "代币标准", "Ethereum", "DeFi"]

@@ -1,5 +1,6 @@
 ---
 title: "T1 新手入门 02 - 创建钱包：安全保管你的加密资产"
+slug: "t1_02_wallet_setup"
 date: 2026-03-18T11:00:00+08:00
 draft: false
 categories: ["T1 新手入门", "钱包安全"]

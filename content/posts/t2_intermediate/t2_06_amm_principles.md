@@ -1,5 +1,6 @@
 ---
 title: "T2 进阶实战 06：AMM 原理详解 — 理解 DEX 的核心引擎"
+slug: "t2_06_amm_principles"
 date: 2026-03-19T10:00:00+08:00
 draft: false
 categories: ["T2 进阶实战", "AMM 基础"]

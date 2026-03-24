@@ -1,5 +1,6 @@
 ---
 title: "Claude Code 交互模式：多轮对话完成复杂任务"
+slug: "02_claude_code_interactive_mode"
 date: 2026-03-24T00:00:00+08:00
 draft: false
 tags: ["Claude Code", "AI", "工作流"]
