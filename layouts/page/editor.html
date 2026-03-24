@@ -1,0 +1,40 @@
+{{ define "main" }}
+<link rel="stylesheet" href="{{ "css/editor.css" | relURL }}">
+
+<div class="editor-container">
+  <div class="editor-toolbar">
+    <h2>✏️ Markdown 编辑器</h2>
+    <div class="toolbar-actions">
+      <button id="btn-save-draft" class="btn btn-sm">💾 保存草稿</button>
+      <button id="btn-clear" class="btn btn-sm btn-outline">🗑️ 清空</button>
+      <button id="btn-copy" class="btn btn-primary">📋 复制到 Content</button>
+    </div>
+    <span id="save-status" class="save-status"></span>
+  </div>
+
+  <div class="editor-main">
+    <div id="monaco-editor" class="editor-pane"></div>
+    <div id="preview-pane" class="preview-pane">
+      <div class="preview-content"></div>
+    </div>
+  </div>
+
+  <div class="frontmatter-form">
+    <input type="text" id="fm-title" placeholder="文章标题" required>
+    <input type="text" id="fm-date" placeholder="日期 (YYYY-MM-DD)">
+    <input type="text" id="fm-tags" placeholder="标签 (逗号分隔)">
+    <select id="fm-category">
+      <option value="posts">文章</option>
+      <option value="guides">教程</option>
+      <option value="tools">工具</option>
+    </select>
+  </div>
+</div>
+
+{{/* 依赖加载顺序很重要：DOMPurify → Marked → Monaco loader → dex-editor */}}
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+<script src="{{ "js/dex-editor.js" | relURL }}"></script>
+{{ end }}
+

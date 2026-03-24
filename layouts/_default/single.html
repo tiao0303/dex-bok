@@ -1,0 +1,52 @@
+{{ define "main" }}
+<div class="geek-article-layout">
+  <!-- 左侧文章目录 (仅在大屏幕显示) -->
+  <aside class="geek-article-toc">
+    <h4>目录</h4>
+    {{ if .TableOfContents }}
+    {{ .TableOfContents }}
+    {{ end }}
+  </aside>
+
+  <!-- 主内容区 -->
+  <article class="geek-article-content geek-article-main">
+    <header class="geek-article-header">
+      <h1>{{ .Title }}</h1>
+      <div class="article-meta">
+        {{ with .Date }}
+        <time datetime="{{ .Format "2006-01-02" }}">{{ .Format "2006-01-02" }}</time>
+        {{ end }}
+        <span>•</span>
+        <span>{{ .WordCount }} 字</span>
+        {{ with .Params.categories }}
+        <span>•</span>
+        <span>{{ delimit . ", " }}</span>
+        {{ end }}
+      </div>
+      {{ if .Params.tags }}
+      <div class="article-tags">
+        {{ range .Params.tags }}
+        <a href="{{ printf "tags/%s/" (. | urlize) | relLangURL }}" class="article-tag">{{ . }}</a>
+        {{ end }}
+      </div>
+      {{ end }}
+    </header>
+
+    {{ .Content }}
+
+    <!-- 上下篇导航 -->
+    {{ with .PrevInSection }}
+    <div class="article-nav article-nav-prev">
+      <span class="nav-label">← 上一篇</span>
+      <a href="{{ .Permalink }}">{{ .Title }}</a>
+    </div>
+    {{ end }}
+    {{ with .NextInSection }}
+    <div class="article-nav article-nav-next">
+      <span class="nav-label">下一篇 →</span>
+      <a href="{{ .Permalink }}">{{ .Title }}</a>
+    </div>
+    {{ end }}
+  </article>
+</div>
+{{ end }}

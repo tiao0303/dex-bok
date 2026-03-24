@@ -1,0 +1,192 @@
+{{ define "main" }}
+<div class="geek-list-layout">
+  <header class="geek-list-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Description }}<p>{{ . }}</p>{{ end }}
+    <p class="article-count" id="total-count"></p>
+  </header>
+
+  {{/* 判断页面类型 */}}
+  {{ $isRootList := and (eq .Kind "section") (eq .Section "posts") (eq .Parent.Kind "home") }}
+  {{ $isSubSection := and (eq .Kind "section") (eq .Section "posts") (not (eq .Parent.Kind "home")) }}
+  {{ $isTaxonomy := and .Data.Terms (not .Pages) }}
+
+  {{/* 标签过滤（仅根 /posts/ 列表页） */}}
+  {{ if $isRootList }}
+  {{ $tags := slice }}
+  {{ range .Site.RegularPages }}
+    {{ range .Params.tags }}{{ $tags = $tags | append . }}{{ end }}
+  {{ end }}
+  {{ $uniqueTags := $tags | uniq | sort }}
+  {{ if $uniqueTags }}
+  <div class="geek-tag-filter">
+    <button class="tag-btn active" data-tag="all">全部</button>
+    {{ range $uniqueTags }}<button class="tag-btn" data-tag="{{ . }}">{{ . }}</button>{{ end }}
+  </div>
+  {{ end }}
+  {{ end }}
+
+  <div class="geek-posts-grid" id="posts-grid">
+    {{/* /posts/ 根列表页：加载所有 posts 文章，JS 分页 */}}
+    {{ if $isRootList }}
+      {{ $allPages := where .Site.RegularPages "Section" "posts" }}
+      {{ $sorted := sort $allPages "Date" "desc" }}
+      {{ range $sorted }}
+      <article class="geek-post-card" data-date="{{ .Date.Format "2006-01-02" }}" data-tags="{{ range .Params.tags }}{{ . }} {{ end }}">
+        <div class="post-card-inner">
+          <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+          <p class="post-meta">
+            <span>{{ .Date.Format "2006-01-02" }}</span>
+            <span class="meta-sep">•</span>
+            <span>{{ .WordCount }}字</span>
+            {{ with .Params.tags }}<span class="meta-sep">•</span>{{ range first 2 . }}<span class="post-tag">{{ . }}</span>{{ end }}{{ end }}
+          </p>
+          <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
+          <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+      {{ end }}
+
+    {{/* 子 Section 页面 */}}
+    {{ else if $isSubSection }}
+      {{ $sorted := sort .Pages "Date" "desc" }}
+      {{ range $sorted }}
+      <article class="geek-post-card" data-date="{{ .Date.Format "2006-01-02" }}">
+        <div class="post-card-inner">
+          <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+          <p class="post-meta">
+            <span>{{ .Date.Format "2006-01-02" }}</span>
+            <span class="meta-sep">•</span>
+            <span>{{ .WordCount }}字</span>
+            {{ with .Params.tags }}<span class="meta-sep">•</span>{{ range first 2 . }}<span class="post-tag">{{ . }}</span>{{ end }}{{ end }}
+          </p>
+          <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
+          <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+      {{ end }}
+
+    {{/* Taxonomy 页面 */}}
+    {{ else if $isTaxonomy }}
+      {{ range .Data.Terms.ByCount }}
+        {{ range .Pages }}
+        <article class="geek-post-card" data-date="{{ .Date.Format "2006-01-02" }}">
+          <div class="post-card-inner">
+            <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+            <p class="post-meta">
+              <span>{{ .Date.Format "2006-01-02" }}</span>
+              <span class="meta-sep">•</span>
+              <span>{{ .WordCount }}字</span>
+            </p>
+            <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
+            <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
+          </div>
+        </article>
+        {{ end }}
+      {{ end }}
+
+    {{/* 其他普通页面 */}}
+    {{ else }}
+      {{ range .Paginator.Pages }}
+      <article class="geek-post-card" data-date="{{ .Date.Format "2006-01-02" }}">
+        <div class="post-card-inner">
+          <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+          <p class="post-meta">
+            <span>{{ .Date.Format "2006-01-02" }}</span>
+            <span class="meta-sep">•</span>
+            <span>{{ .WordCount }}字</span>
+          </p>
+          <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
+          <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+      {{ end }}
+    {{ end }}
+  </div>
+
+  {{ if $isRootList }}
+  <nav class="geek-pagination" id="pagination"></nav>
+  {{ end }}
+</div>
+
+{{ if $isRootList }}
+<script>
+(function() {
+  var PER_PAGE = 10;
+  var grid = document.getElementById('posts-grid');
+  var pager = document.getElementById('pagination');
+  var totalEl = document.getElementById('total-count');
+  if (!grid || !pager) return;
+
+  var cards = Array.from(grid.querySelectorAll('.geek-post-card'));
+  var total = cards.length;
+  var totalPages = Math.ceil(total / PER_PAGE);
+  var currentPage = 1;
+
+  totalEl.textContent = '共 ' + total + ' 篇文章';
+
+  function showPage(page) {
+    currentPage = page;
+    var start = (page - 1) * PER_PAGE;
+    var end = start + PER_PAGE;
+    cards.forEach(function(card, i) {
+      card.style.display = (i >= start && i < end) ? '' : 'none';
+    });
+    renderPager();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderPager() {
+    if (totalPages <= 1) { pager.innerHTML = ''; return; }
+    var html = '';
+    if (currentPage > 1) html += '<a href="javascript:showPage(' + (currentPage - 1) + ')" class="page-link prev">← 上一页</a>';
+
+    var r = getRange(currentPage, totalPages);
+    if (r[0] > 1) {
+      html += '<a href="javascript:showPage(1)" class="page-link">1</a>';
+      if (r[0] > 2) html += '<span class="page-ellipsis">...</span>';
+    }
+    for (var i = r[0]; i <= r[1]; i++) {
+      html += (i === currentPage)
+        ? '<span class="page-link active">' + i + '</span>'
+        : '<a href="javascript:showPage(' + i + ')" class="page-link">' + i + '</a>';
+    }
+    if (r[1] < totalPages) {
+      if (r[1] < totalPages - 1) html += '<span class="page-ellipsis">...</span>';
+      html += '<a href="javascript:showPage(' + totalPages + ')" class="page-link">' + totalPages + '</a>';
+    }
+    if (currentPage < totalPages) html += '<a href="javascript:showPage(' + (currentPage + 1) + ')" class="page-link next">下一页 →</a>';
+    html += '<span class="page-info">第 ' + currentPage + ' / ' + totalPages + ' 页</span>';
+    pager.innerHTML = html;
+  }
+
+  function getRange(cur, total) {
+    var s = Math.max(1, cur - 2);
+    var e = Math.min(total, cur + 2);
+    if (e - s < 4) {
+      if (s === 1) e = Math.min(total, s + 4);
+      else s = Math.max(1, e - 4);
+    }
+    return [s, e];
+  }
+
+  var tagBtns = document.querySelectorAll('.tag-btn');
+  tagBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var tag = this.dataset.tag;
+      tagBtns.forEach(function(b){ b.classList.remove('active'); });
+      this.classList.add('active');
+      var visible = cards.filter(function(c) {
+        return tag === 'all' || (c.dataset.tags && c.dataset.tags.indexOf(tag) !== -1);
+      });
+      visible.forEach(function(c){ c.style.display = ''; });
+      cards.forEach(function(c) { if (visible.indexOf(c) === -1) c.style.display = 'none'; });
+      totalEl.textContent = '共 ' + visible.length + ' 篇（筛选）';
+    });
+  });
+
+  showPage(1);
+})();
+</script>
+{{ end }}
+{{ end }}

@@ -1,0 +1,402 @@
+{{ define "main" }}
+<!-- Hero Section -->
+<section class="geek-hero">
+  <div class="geek-hero-bg" aria-hidden="true">
+    <div class="geek-hero-glow geek-hero-glow-1"></div>
+    <div class="geek-hero-glow geek-hero-glow-2"></div>
+    <div class="geek-hero-glow geek-hero-glow-3"></div>
+  </div>
+  <div class="container geek-hero-inner">
+    <div class="geek-hero-badge">DeFi · DEX · 实战指南</div>
+    <h1 class="geek-hero-title">DEX 学习笔记</h1>
+    <p class="geek-hero-subtitle">从入门到大师的完整知识体系，60+ 篇深度文章</p>
+    <div class="geek-hero-stats">
+      <span class="geek-stat"><strong>60+</strong> 文章</span>
+      <span class="geek-stat"><strong>6</strong> 阶段</span>
+      <span class="geek-stat"><strong>6</strong> 角色</span>
+    </div>
+    <div class="geek-hero-cta">
+      <a href="#learning-path" class="btn btn-primary">开始学习</a>
+      <a href="{{ "posts/" | relLangURL }}" class="btn btn-outline">浏览全部</a>
+    </div>
+  </div>
+</section>
+
+<!-- OpenClaw 专题 -->
+<section id="openclaw-series" class="geek-section geek-section-dark">
+  <div class="container">
+    <header class="geek-section-header">
+      <h2 class="geek-section-title">🦞 OpenClaw 专题</h2>
+      <p class="geek-section-desc">用 AI 智能体团队做 DeFi 研究 — 完整实战记录</p>
+    </header>
+
+    <div class="geek-roles-grid">
+      <a href="{{ "openclaw-series/01-openclaw-入门指南/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🚀</div>
+        <div class="role-info">
+          <h3>01 · 入门指南</h3>
+          <p>OpenClaw 是什么、本地 AI 网关架构、5 分钟快速上手</p>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <a href="{{ "openclaw-series/02-openclaw-架构解析/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🏗️</div>
+        <div class="role-info">
+          <h3>02 · 架构解析</h3>
+          <p>Channel × Agent × Skills 三层架构、消息路由机制</p>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <a href="{{ "openclaw-series/03-openclaw-多智能体团队/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🤖</div>
+        <div class="role-info">
+          <h3>03 · 多智能体团队</h3>
+          <p>7 个专业角色同时工作：调研、架构、开发、前端、安全、评审、决策</p>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <a href="{{ "openclaw-series/04-openclaw-skills插件系统/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🔌</div>
+        <div class="role-info">
+          <h3>04 · Skills 插件系统</h3>
+          <p>可插拔工具：发飞书、生成图片视频、读写 GitHub、定时任务</p>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <a href="{{ "openclaw-series/05-openclaw-安全实践/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🔒</div>
+        <div class="role-info">
+          <h3>05 · 安全实践</h3>
+          <p>私有 Skills 配置、敏感信息管理、本地数据安全</p>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Claude Code 专题 -->
+<section id="claude-code-series" class="geek-section">
+  <div class="container">
+    <header class="geek-section-header">
+      <h2 class="geek-section-title">🤖 Claude Code 专题</h2>
+      <p class="geek-section-desc">AI 编程从入门到精通 — 5 篇文章掌握 Claude Code</p>
+    </header>
+
+    <div class="geek-roles-grid">
+      <a href="{{ "claude-code-series/01-claude-code入门/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🚀</div>
+        <div class="role-info">
+          <h3>01 · 入门指南</h3>
+          <p>Claude Code 是什么、安装、5 分钟上手、核心命令</p>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <a href="{{ "claude-code-series/02-claude-code交互模式/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">💬</div>
+        <div class="role-info">
+          <h3>02 · 交互模式</h3>
+          <p>多轮对话、跨文件重构、TDD 结合、搜索理解</p>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <a href="{{ "claude-code-series/03-claude-code大仓库导航/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🔭</div>
+        <div class="role-info">
+          <h3>03 · 大仓库导航</h3>
+          <p>万行代码分析、跨文件追踪、安全审查、性能优化</p>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <a href="{{ "claude-code-series/04-claude-code自动化自定义/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">⚙️</div>
+        <div class="role-info">
+          <h3>04 · 自动化与自定义</h3>
+          <p>CLAUDE.md、Git Hooks、CI/CD 集成、生产力技巧</p>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <a href="{{ "claude-code-series/05-Skill写作深度调研/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🛠️</div>
+        <div class="role-info">
+          <h3>05 · Skill 写作深度调研</h3>
+          <p>如何构建真正好用的 AI 插件：原则、模式、反模式、案例</p>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 学习路径 T1-T6 -->
+<section id="learning-path" class="geek-section">
+  <div class="container">
+    <header class="geek-section-header">
+      <h2 class="geek-section-title">学习路径</h2>
+      <p class="geek-section-desc">6 个阶段，从新手到专家</p>
+    </header>
+
+    <div class="geek-stages-scroll">
+      <div class="geek-stages-grid">
+        <!-- T1 -->
+        <div class="geek-stage-card">
+          <div class="stage-header">
+            <span class="stage-badge">T1</span>
+            <h3>新手入门</h3>
+          </div>
+          <p class="stage-desc">建立 DEX 基础认知</p>
+          <ul class="stage-list">
+            <li>AMM 原理</li>
+            <li>流动性策略</li>
+            <li>Uniswap V2/V3</li>
+            <li>Curve 解析</li>
+            <li>MEV 防护</li>
+          </ul>
+          <a href="{{ "posts/t1-新手入门/" | relLangURL }}" class="stage-link">{{ with .Site.GetPage "section" "posts/t1-新手入门" }}{{ len .Pages }}{{ else }}0{{ end }} 篇文章 →</a>
+        </div>
+
+        <!-- T2 -->
+        <div class="geek-stage-card">
+          <div class="stage-header">
+            <span class="stage-badge">T2</span>
+            <h3>进阶实战</h3>
+          </div>
+          <p class="stage-desc">掌握实战交易技巧</p>
+          <ul class="stage-list">
+            <li>Layer2 DEX</li>
+            <li>聚合器对比</li>
+            <li>无常损失</li>
+            <li>Yield Farming</li>
+            <li>风险管理</li>
+          </ul>
+          <a href="{{ "posts/t2-进阶实战/" | relLangURL }}" class="stage-link">{{ with .Site.GetPage "section" "posts/t2-进阶实战" }}{{ len .Pages }}{{ else }}0{{ end }} 篇文章 →</a>
+        </div>
+
+        <!-- T3 -->
+        <div class="geek-stage-card">
+          <div class="stage-header">
+            <span class="stage-badge">T3</span>
+            <h3>安全合规</h3>
+          </div>
+          <p class="stage-desc">识别风险，合规交易</p>
+          <ul class="stage-list">
+            <li>合约审计</li>
+            <li>跨链桥安全</li>
+            <li>代币经济学</li>
+            <li>DAO 治理</li>
+            <li>税务指南</li>
+          </ul>
+          <a href="{{ "posts/t3-安全合规/" | relLangURL }}" class="stage-link">{{ with .Site.GetPage "section" "posts/t3-安全合规" }}{{ len .Pages }}{{ else }}0{{ end }} 篇文章 →</a>
+        </div>
+
+        <!-- T4 -->
+        <div class="geek-stage-card">
+          <div class="stage-header">
+            <span class="stage-badge">T4</span>
+            <h3>高级策略</h3>
+          </div>
+          <p class="stage-desc">专业交易策略</p>
+          <ul class="stage-list">
+            <li>DEX 套利</li>
+            <li>挖矿优化</li>
+            <li>稳定币脱锚</li>
+            <li>期权组合</li>
+            <li>链上分析</li>
+          </ul>
+          <a href="{{ "posts/t4-高级策略/" | relLangURL }}" class="stage-link">{{ with .Site.GetPage "section" "posts/t4-高级策略" }}{{ len .Pages }}{{ else }}0{{ end }} 篇文章 →</a>
+        </div>
+
+        <!-- T5 -->
+        <div class="geek-stage-card">
+          <div class="stage-header">
+            <span class="stage-badge">T5</span>
+            <h3>机构视角</h3>
+          </div>
+          <p class="stage-desc">理解机构运作</p>
+          <ul class="stage-list">
+            <li>做市商内幕</li>
+            <li>MEV 搜索者</li>
+            <li>收入分析</li>
+            <li>治理攻击</li>
+            <li>跨链网络</li>
+          </ul>
+          <a href="{{ "posts/t5-机构视角/" | relLangURL }}" class="stage-link">{{ with .Site.GetPage "section" "posts/t5-机构视角" }}{{ len .Pages }}{{ else }}0{{ end }} 篇文章 →</a>
+        </div>
+
+        <!-- T6 -->
+        <div class="geek-stage-card">
+          <div class="stage-header">
+            <span class="stage-badge">T6</span>
+            <h3>大师级</h3>
+          </div>
+          <p class="stage-desc">深度技术与未来</p>
+          <ul class="stage-list">
+            <li>AMM 数学</li>
+            <li>形式化验证</li>
+            <li>经济模型</li>
+            <li>黑客技术</li>
+            <li>未来趋势</li>
+          </ul>
+          <a href="{{ "posts/t6-大师级/" | relLangURL }}" class="stage-link">{{ with .Site.GetPage "section" "posts/t6-大师级" }}{{ len .Pages }}{{ else }}0{{ end }} 篇文章 →</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 角色学习路径 -->
+<section id="roles-section" class="geek-section geek-section-dark">
+  <div class="container">
+    <header class="geek-section-header">
+      <h2 class="geek-section-title">角色学习路径</h2>
+      <p class="geek-section-desc">6 个角色方向，从不同视角深入 DeFi 世界</p>
+    </header>
+
+    <div class="geek-roles-grid">
+      <!-- 研究者 -->
+      <a href="{{ "posts/researcher/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🔬</div>
+        <div class="role-info">
+          <h3>研究者</h3>
+          <p>区块链原理、DeFi 深层逻辑、协议分析</p>
+          <span class="role-count">10 篇文章</span>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <!-- 开发者 -->
+      <a href="{{ "posts/developer/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">💻</div>
+        <div class="role-info">
+          <h3>开发者</h3>
+          <p>Solidity 编程、智能合约、DeFi 核心逻辑</p>
+          <span class="role-count">10 篇文章</span>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <!-- 前端工程师 -->
+      <a href="{{ "posts/frontend/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🎨</div>
+        <div class="role-info">
+          <h3>前端工程师</h3>
+          <p>Web3.js、Ethers、钱包连接、DApp 前端</p>
+          <span class="role-count">10 篇文章</span>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <!-- 安全专家 -->
+      <a href="{{ "posts/security/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🛡️</div>
+        <div class="role-info">
+          <h3>安全专家</h3>
+          <p>合约漏洞、重入攻击、Flash Loan、安全审计</p>
+          <span class="role-count">10 篇文章</span>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <!-- 架构师 -->
+      <a href="{{ "posts/architect/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🏗️</div>
+        <div class="role-info">
+          <h3>架构师</h3>
+          <p>系统设计、Web2 vs Web3、AMM 核心逻辑</p>
+          <span class="role-count">10 篇文章</span>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+
+      <!-- 代码评审 -->
+      <a href="{{ "posts/reviewer/" | relLangURL }}" class="geek-role-card">
+        <div class="role-icon">🔍</div>
+        <div class="role-info">
+          <h3>代码评审</h3>
+          <p>代码风格，最佳实践，审计清单</p>
+          <span class="role-count">10 篇文章</span>
+        </div>
+        <div class="role-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 最新文章 -->
+<section class="geek-section">
+  <div class="container">
+    <header class="geek-section-header">
+      <h2 class="geek-section-title">最新文章</h2>
+      <p class="geek-section-desc">近期更新与精选</p>
+    </header>
+    
+    {{/* 最新3篇特别展示 */}}
+    {{ $latest3 := first 3 (sort .Site.RegularPages "Date" "desc") }}
+    <div class="geek-posts-grid geek-posts-featured">
+      {{ range $latest3 }}
+      <article class="geek-post-card geek-post-featured">
+        <div class="post-card-inner">
+          <div class="featured-badge">最新</div>
+          <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+          <p class="post-meta">
+            <span>{{ .Date.Format "2006-01-02" }}</span>
+            <span class="meta-sep">•</span>
+            <span>{{ .WordCount }}字</span>
+          </p>
+          <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
+          <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+      {{ end }}
+    </div>
+    
+    {{/* 其他文章 */}}
+    {{ $remaining := after 3 (sort .Site.RegularPages "Date" "desc") }}
+    {{ if $remaining }}
+    <div class="geek-posts-grid">
+      {{ range first 3 $remaining }}
+      <article class="geek-post-card">
+        <div class="post-card-inner">
+          <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+          <p class="post-meta">
+            <span>{{ .Date.Format "2006-01-02" }}</span>
+            <span class="meta-sep">•</span>
+            <span>{{ .WordCount }}字</span>
+          </p>
+          <p class="post-excerpt">{{ .Summary | truncate 120 }}</p>
+          <a href="{{ .Permalink }}" class="read-more">阅读全文 →</a>
+        </div>
+      </article>
+      {{ end }}
+    </div>
+    {{ end }}
+    
+    <div class="geek-view-all">
+      <a href="{{ "posts/" | relLangURL }}" class="btn btn-outline">查看全部文章 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 订阅 -->
+<section class="geek-newsletter">
+  <div class="container">
+    <div class="geek-newsletter-inner">
+      <h2 class="newsletter-title">获取更新</h2>
+      <p class="newsletter-desc">精选内容，直达邮箱</p>
+      <form class="geek-newsletter-form">
+        <input type="email" placeholder="你的邮箱地址" required>
+        <button type="submit" class="btn btn-primary">订阅</button>
+      </form>
+    </div>
+  </div>
+</section>
+{{ end }}
