@@ -1,5 +1,5 @@
 {
-  "articles": 56,
+  "articles": 57,
   "data": [
     {
       "title": "ERC20 代币标准 - DeFi 世界的基石",
@@ -123,6 +123,21 @@
         "Uniswap",
         "PancakeSwap",
         "2025"
+      ]
+    },
+    {
+      "title": "2025年永续合约DEX崛起：Hyperliquid统治与新格局",
+      "slug": "15_perp_dex_2025",
+      "path": "content/posts/researcher/15_perp_dex_2025.md",
+      "date": "2026-03-26",
+      "tags": [
+        "Perp DEX",
+        "永续合约",
+        "Hyperliquid",
+        "GMX",
+        "dYdX",
+        "2025",
+        "DeFi"
       ]
     },
     {
