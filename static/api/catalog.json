@@ -1,5 +1,5 @@
 {
-  "articles": 57,
+  "articles": 58,
   "data": [
     {
       "title": "ERC20 代币标准 - DeFi 世界的基石",
@@ -138,6 +138,20 @@
         "dYdX",
         "2025",
         "DeFi"
+      ]
+    },
+    {
+      "title": "AI Crypto Agent 赛道深度分析：2025年高ROI可落地项目指南",
+      "slug": "16_ai_crypto_agent_project_analysis",
+      "path": "content/posts/researcher/16_ai_crypto_agent_project_analysis.md",
+      "date": "2026-03-26",
+      "tags": [
+        "AI Agent",
+        "Crypto",
+        "Virtuals",
+        "DeFi",
+        "量化交易",
+        "被动收入"
       ]
     },
     {
