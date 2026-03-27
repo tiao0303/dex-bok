@@ -1,8 +1,27 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>以太坊 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/</link><description>Recent content in 以太坊 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Fri, 20 Mar 2026 19:00:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/index.xml" rel="self" type="application/rss+xml"/><item><title>Balancer 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/10-balancer/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/10-balancer/</guid><description>&lt;h1 id="balancer-深度分析"&gt;Balancer 深度分析&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>以太坊 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/</link><description>Recent content in 以太坊 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Fri, 27 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/index.xml" rel="self" type="application/rss+xml"/><item><title>Balancer 深度分析</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/10-balancer/</link><pubDate>Fri, 20 Mar 2026 19:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/10-balancer/</guid><description>&lt;h1 id="balancer-深度分析"&gt;Balancer 深度分析&lt;/h1&gt;
 &lt;h2 id="项目简介"&gt;项目简介&lt;/h2&gt;
 &lt;p&gt;Balancer 是一个基于以太坊的去中心化交易所和资产管理协议，由 Fernando Martinelli 和 Blake Rodriguez 于 2018 年底创立，2020 年 3 月正式上线主网。Balancer 最初以「可变比例 AMM」为核心创新点，允许任何人创建包含多达 8 种代币的自定义权重流动性池，彻底改变了传统 AMM 只能采用 50/50 固定比例的限制。2023 年，Balancer 推出 v3 版本，整合了 Boosted Pools（收益增强池）和 veBAL 治理模型，进一步强化了其作为专业做市和资产管理平台的市场定位。&lt;/p&gt;
 &lt;h2 id="核心机制"&gt;核心机制&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;可变权重 AMM（Weighted Pool）：&lt;/strong&gt; Balancer 的核心创新在于将 AMM 的代币权重从固定的 50/50 扩展为任意比例（0-100%）。例如，用户可以创建一个 80% ETH + 20% USDC 的流动性池，交易价格会根据池子权重动态调整。这为专业做市商和量化策略提供了极大的灵活性，使得被动指数投资和主动做市可以在同一个协议内实现。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;加权数学公式：&lt;/strong&gt; Balancer 采用恒定加权乘积公式：∏(x_i)^{w_i} = k，其中 w_i 为第 i 个资产的权重。这与 Uniswap 的恒定乘积公式有本质区别，支持更多样化的资产配置。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Boosted Pools（收益增强池）：&lt;/strong&gt; Balancer 将闲置流动性自动存入 Aave 等借贷协议以获取额外收益，LP 在提供流动性的同时还能获得借出收益，显著提升了资金利用效率。这一机制在 2022-2023 年稳定币和主流资产池中被广泛采用。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;veBAL 治理模型：&lt;/strong&gt; 2022 年 Balancer 引入 veBAL（投票托管 BAL），用户将 BAL 锁定最多一年获得 veBAL，veBAL 持有者可以：1）决定哪些流动性池获得 BAL 挖矿奖励及其权重；2）获得协议手续费分成；3）参与治理投票。这一模型有效对齐了流动性提供者、协议收入和治理权力。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;&lt;strong&gt;veBAL 治理模型：&lt;/strong&gt; 2022 年 Balancer 引入 veBAL（投票托管 BAL），用户将 BAL 锁定最多一年获得 veBAL，veBAL 持有者可以：1）决定哪些流动性池获得 BAL 挖矿奖励及其权重；2）获得协议手续费分成；3）参与治理投票。这一模型有效对齐了流动性提供者、协议收入和治理权力。&lt;/p&gt;</description></item><item><title>ERC1155 深度解析：多代币标准如何重塑区块链资产范式</title><link>https://tiao0303.github.io/dex-bok/posts/researcher/19_erc1155_deep_dive/</link><pubDate>Fri, 27 Mar 2026 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/posts/researcher/19_erc1155_deep_dive/</guid><description>&lt;h1 id="erc1155-深度解析多代币标准如何重塑区块链资产范式"&gt;ERC1155 深度解析：多代币标准如何重塑区块链资产范式&lt;/h1&gt;
+&lt;h2 id="前言"&gt;前言&lt;/h2&gt;
+&lt;p&gt;以太坊的代币标准经历了从单一功能到高度复合的演进历程。ERC20 作为同质化代币的鼻祖，让开发者能够创建可互换的加密货币；ERC721 开创了非同质化代币（NFT）的时代，使每个Token拥有独特的身份标识。然而，随着区块链游戏、元宇宙和复杂 DeFi 应用的崛起，开发者面临一个现实困境：管理数十种甚至数千种不同类型的资产，是否需要部署数千个独立合约？ERC1155 的出现彻底改变了这一局面。&lt;/p&gt;
+&lt;p&gt;ERC1155 由 Enjin 团队主导开发，于 2018 年 6 月正式提出（EIP-1155），2019 年成为以太坊正式标准（Ethereum Standards）。这一标准被业界称为&amp;quot;多代币标准&amp;quot;（Multi-Token Standard），它在一份智能合约内同时支持同质化代币、非同质化代币以及半同质化代币，被认为是目前以太坊上最灵活的代币标准之一。&lt;/p&gt;
+&lt;p&gt;本文将从技术原理、接口规范、与其他标准的对比、典型应用场景以及安全实践等多个维度，对 ERC1155 进行系统性深度解析。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="一为什么需要-erc1155背景与动机"&gt;一、为什么需要 ERC1155：背景与动机&lt;/h2&gt;
+&lt;h3 id="11-传统标准的局限性"&gt;1.1 传统标准的局限性&lt;/h3&gt;
+&lt;p&gt;在 ERC1155 出现之前，开发者若要创建多种类型的代币资产，必须为每种类型部署独立的智能合约。以一个区块链游戏为例，若游戏内包含以下资产类型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;游戏内货币&lt;/strong&gt;（可互换的同质化代币）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;装备道具&lt;/strong&gt;（每个装备唯一的非同质化代币）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;消耗品&lt;/strong&gt;（同一道具有多个副本的半同质化代币）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;皮肤/外观&lt;/strong&gt;（限量但非唯一的代币）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在传统方案下，开发者可能需要部署 4 个甚至更多独立合约。每个合约都需要完整的字节码部署成本，且合约之间无法共享授权逻辑。这种模式带来了一系列具体问题。&lt;/p&gt;
+&lt;p&gt;首先是&lt;strong&gt;高昂的部署成本&lt;/strong&gt;。每个 ERC20 或 ERC721 合约都包含完整的接口定义和安全管理逻辑，部署一个合约的 Gas 成本约为 100-200 万 Gas。当需要管理 1000 种游戏道具时，部署成本就成为一个不可忽视的瓶颈。&lt;/p&gt;
+&lt;p&gt;其次是&lt;strong&gt;授权管理的碎片化&lt;/strong&gt;。ERC20 的 &lt;code&gt;approve&lt;/code&gt; 机制是针对单个 token 类型设计的。若一个游戏包含 500 种道具，玩家若想授权第三方（比如一个交易市场）代为操作所有道具，就必须对每个合约分别授权，操作成本极高。&lt;/p&gt;
+&lt;p&gt;第三是&lt;strong&gt;批量操作的低效&lt;/strong&gt;。假设玩家希望将 10 种不同道具打包卖给另一个用户。在 ERC20/ERC721 体系下，这需要 10 笔独立交易，每笔都需要支付 Gas 费用。而 ERC1155 允许将这些操作合并为一笔交易。&lt;/p&gt;
+&lt;p&gt;ERC1155 的核心设计哲学正是针对上述痛点：&lt;strong&gt;一份合约，多种资产；一次授权，全部通行；一笔交易，批量转移&lt;/strong&gt;。&lt;/p&gt;</description></item></channel></rss>

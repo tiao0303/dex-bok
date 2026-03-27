@@ -1,5 +1,5 @@
 {
-  "articles": 118,
+  "articles": 119,
   "data": [
     {
       "title": "什么是系统架构？",
@@ -1112,6 +1112,20 @@
         "未来",
         "趋势",
         "预测"
+      ]
+    },
+    {
+      "title": "ERC1155 深度解析：多代币标准如何重塑区块链资产范式",
+      "slug": "19_erc1155_deep_dive",
+      "path": "content/posts/researcher/19_erc1155_deep_dive.md",
+      "date": "2026-03-27",
+      "tags": [
+        "ERC1155",
+        "多代币标准",
+        "NFT",
+        "以太坊",
+        "DeFi",
+        "智能合约"
       ]
     }
   ]
