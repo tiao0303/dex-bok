@@ -1,0 +1,107 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>第5章：结构体与方法 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="Go 语言结构体定义、字段标签、方法、组合与可见性详解"><meta name=generator content="Hugo 0.161.1"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/go-language-series/go_05_structs_and_methods/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/go-language-series/go_05_structs_and_methods/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/go-language-series/go_05_structs_and_methods/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/go-language-series/go_05_structs_and_methods/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="第5章：结构体与方法"><meta property="og:description" content="Go 语言结构体定义、字段标签、方法、组合与可见性详解"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="go-language-series"><meta property="article:published_time" content="2026-05-10T09:40:00+08:00"><meta property="article:modified_time" content="2026-05-10T09:40:00+08:00"><meta property="article:tag" content="Go"><meta property="article:tag" content="编程语言"><meta itemprop=name content="第5章：结构体与方法"><meta itemprop=description content="Go 语言结构体定义、字段标签、方法、组合与可见性详解"><meta itemprop=datePublished content="2026-05-10T09:40:00+08:00"><meta itemprop=dateModified content="2026-05-10T09:40:00+08:00"><meta itemprop=wordCount content="313"><meta itemprop=keywords content="Go,编程语言"><meta name=twitter:card content="summary"><meta name=twitter:title content="第5章：结构体与方法"><meta name=twitter:description content="Go 语言结构体定义、字段标签、方法、组合与可见性详解"><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-go_05_structs_and_methods"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/go-language-series/ title="Go 语言">Go 语言</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#结构体定义>结构体定义</a></li><li><a href=#字段标签struct-tag>字段标签（Struct Tag）</a></li><li><a href=#方法定义>方法定义</a></li><li><a href=#值接收者-vs-指针接收者>值接收者 vs 指针接收者</a></li><li><a href=#组合composition>组合（Composition）</a></li><li><a href=#可见性>可见性</a></li><li><a href=#练习题>练习题</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>第5章：结构体与方法</h1><div class=article-meta><time datetime=2026-05-10>2026-05-10</time>
+<span>•</span>
+<span>313 字</span>
+<span>•</span>
+<span>Go语言学习</span></div><div class=article-tags><a href=/dex-bok/tags/go/ class=article-tag>Go</a>
+<a href=/dex-bok/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/ class=article-tag>编程语言</a></div></header><h1 id=第5章结构体与方法>第5章：结构体与方法</h1><h2 id=结构体定义>结构体定义</h2><p>结构体是由多个字段组成的复合类型：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Person</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Name</span>    <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Age</span>     <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Email</span>   <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 初始化</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Person</span>{
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Name</span>:  <span style=color:#e6db74>&#34;张三&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Age</span>:   <span style=color:#ae81ff>30</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Email</span>: <span style=color:#e6db74>&#34;zhang@example.com&#34;</span>,
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 省略字段名（必须全部字段按顺序赋值）</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>p2</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Person</span>{<span style=color:#e6db74>&#34;李四&#34;</span>, <span style=color:#ae81ff>25</span>, <span style=color:#e6db74>&#34;li@example.com&#34;</span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 部分字段（省略的字段为零值）</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>p3</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Person</span>{<span style=color:#a6e22e>Name</span>: <span style=color:#e6db74>&#34;王五&#34;</span>}
+</span></span></code></pre></div><h2 id=字段标签struct-tag>字段标签（Struct Tag）</h2><p>用反引号包裹的元数据，用于标注字段的序列化、验证等元信息：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Person</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Name</span>  <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`json:&#34;name&#34;`</span>            <span style=color:#75715e>// JSON 序列化为 &#34;name&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Age</span>   <span style=color:#66d9ef>int</span>    <span style=color:#e6db74>`json:&#34;age,omitempty&#34;`</span>   <span style=color:#75715e>// 为空时忽略</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Phone</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`json:&#34;-&#34;`</span>               <span style=color:#75715e>// 序列化时忽略</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>常见标签：</p><ul><li><code>json:"fieldName"</code> — JSON 序列化字段名</li><li><code>json:"-"</code> — 跳过该字段</li><li><code>json:",omitempty"</code> — 零值时忽略</li><li><code>xml:"fieldName"</code> — XML 序列化</li><li><code>db:"column_name"</code> — 数据库列名</li></ul><h2 id=方法定义>方法定义</h2><p>Go 没有类，但可以在结构体上定义方法。方法的接收者（receiver）可以是值或指针：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// 值接收者</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>p</span> <span style=color:#a6e22e>Person</span>) <span style=color:#a6e22e>Greet</span>() <span style=color:#66d9ef>string</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;你好，我是&#34;</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>Name</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 指针接收者（可以修改原对象）</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>p</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Person</span>) <span style=color:#a6e22e>SetAge</span>(<span style=color:#a6e22e>age</span> <span style=color:#66d9ef>int</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>Age</span> = <span style=color:#a6e22e>age</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 调用</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Person</span>{<span style=color:#a6e22e>Name</span>: <span style=color:#e6db74>&#34;张三&#34;</span>, <span style=color:#a6e22e>Age</span>: <span style=color:#ae81ff>30</span>}
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>Greet</span>())   <span style=color:#75715e>// 你好，我是张三</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>SetAge</span>(<span style=color:#ae81ff>31</span>)
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>Age</span>)      <span style=color:#75715e>// 31</span>
+</span></span></code></pre></div><h2 id=值接收者-vs-指针接收者>值接收者 vs 指针接收者</h2><table><thead><tr><th>场景</th><th>推荐</th></tr></thead><tbody><tr><td>方法不需要修改对象</td><td>值接收者 <code>func (p Person)</code></td></tr><tr><td>需要修改对象</td><td>指针接收者 <code>func (p *Person)</code></td></tr><tr><td>对象较大（避免复制）</td><td>指针接收者</td></tr><tr><td>结构体有指针字段可能为 nil</td><td>指针接收者</td></tr></tbody></table><p><strong>惯用法：</strong> 通常给所有方法都使用指针接收者，保持一致性。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Person</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Age</span>  <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 推荐：全部用指针</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>p</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Person</span>) <span style=color:#a6e22e>Speak</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;%s 说：我 %d 岁了\n&#34;</span>, <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>Name</span>, <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>Age</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=组合composition>组合（Composition）</h2><p>Go 没有继承，而是用<strong>组合</strong>（Embedding）实现代码复用：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Address</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>City</span>    <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>ZipCode</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Person</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Name</span>    <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Address</span>        <span style=color:#75715e>// 匿名嵌套，组合 Address 的所有字段</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 使用</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Person</span>{
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Name</span>: <span style=color:#e6db74>&#34;张三&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Address</span>: <span style=color:#a6e22e>Address</span>{
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>City</span>:    <span style=color:#e6db74>&#34;北京&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>ZipCode</span>: <span style=color:#e6db74>&#34;100000&#34;</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span><span style=color:#75715e>// 直接访问组合的字段</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>City</span>)    <span style=color:#75715e>// 北京</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>ZipCode</span>) <span style=color:#75715e>// 100000</span>
+</span></span></code></pre></div><p><strong>注意：</strong> 匿名嵌套字段的方法会被"提升"，可以直接调用，但方法中 <code>self</code> 指针不变。</p><h2 id=可见性>可见性</h2><p>Go 用<strong>首字母大写</strong>控制导出性：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>person</span> <span style=color:#66d9ef>struct</span> { <span style=color:#75715e>// 小写，私有，只能本包内访问</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span> <span style=color:#75715e>// 私有字段</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 大写，公开，可导出</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Person</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Name</span> <span style=color:#66d9ef>string</span> <span style=color:#75715e>// 公开字段</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>p</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Person</span>) <span style=color:#a6e22e>Greet</span>() { <span style=color:#75715e>// 大写，公开</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;Hello&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=练习题>练习题</h2><p><strong>练习 5-1：</strong> 定义一个 <code>Person</code> 结构体，包含 <code>Name</code>（string）和 <code>Age</code>（int）字段，实现一个 <code>Speak()</code> 方法，输出 &ldquo;我叫xxx，我xx岁了&rdquo;。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Person</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Age</span>  <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>p</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Person</span>) <span style=color:#a6e22e>Speak</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;我叫%s，我%d岁了\n&#34;</span>, <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>Name</span>, <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>Age</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>Person</span>{<span style=color:#a6e22e>Name</span>: <span style=color:#e6db74>&#34;张三&#34;</span>, <span style=color:#a6e22e>Age</span>: <span style=color:#ae81ff>25</span>}
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>Speak</span>()
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>练习 5-2：</strong> 定义一个 <code>Rectangle</code> 结构体（宽 <code>Width</code>、高 <code>Height</code>），用组合的方式嵌套一个 <code>Position</code> 结构体（x, y 坐标），实现计算面积的方法。</p><hr><p>下一章我们将学习 Go 的接口——实现多态的核心机制。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/go-language-series/go_06_interfaces/>第6章：接口——Go 的多态哲学</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/go-language-series/go_04_data_structures/>第4章：数据结构——数组、切片、映射</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+<span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>
