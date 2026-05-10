@@ -1,7 +1,7 @@
 ---
 title: "第3章：函数——多返回值、闭包、延迟调用"
 slug: go_03_functions
-date: 2026-05-10T09:50:00+08:00
+date: 2026-05-10T10:15:00+08:00
 description: "Go 函数的多返回值、闭包与 defer 延迟调用机制"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]

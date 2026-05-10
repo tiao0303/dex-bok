@@ -1,7 +1,7 @@
 ---
 title: "第10章：工程化、测试与高级主题"
 slug: go_10_advanced
-date: 2026-05-10T10:25:00+08:00
+date: 2026-05-10T09:40:00+08:00
 description: "测试、Go Mod、泛型、反射与交叉编译"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]

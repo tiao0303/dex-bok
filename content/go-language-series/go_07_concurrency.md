@@ -1,7 +1,7 @@
 ---
 title: "第7章：并发——Goroutine 与 Channel"
 slug: go_07_concurrency
-date: 2026-05-10T10:10:00+08:00
+date: 2026-05-10T09:55:00+08:00
 description: "Goroutine、Channel、Select 与 sync 并发原语"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]

@@ -1,7 +1,7 @@
 ---
 title: "第9章：Go 标准库精讲"
 slug: go_09_standard_library
-date: 2026-05-10T10:20:00+08:00
+date: 2026-05-10T09:45:00+08:00
 description: "fmt、os、bufio、encoding/json、net/http 标准库实战"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]

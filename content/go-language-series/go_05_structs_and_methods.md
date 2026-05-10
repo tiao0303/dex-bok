@@ -1,7 +1,7 @@
 ---
 title: "第5章：结构体与方法"
 slug: go_05_structs_and_methods
-date: 2026-05-10T10:00:00+08:00
+date: 2026-05-10T10:05:00+08:00
 description: "结构体定义、接收者模式与组合代替继承"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]

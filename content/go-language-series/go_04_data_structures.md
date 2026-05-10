@@ -1,7 +1,7 @@
 ---
 title: "第4章：数据结构——数组、切片、映射"
 slug: go_04_data_structures
-date: 2026-05-10T09:55:00+08:00
+date: 2026-05-10T10:10:00+08:00
 description: "数组、切片与 Map 的原理、使用场景与内存模型"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]

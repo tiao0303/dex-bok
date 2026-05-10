@@ -1,7 +1,7 @@
 ---
 title: "第1章：Go 入门——环境搭建与 Hello World"
 slug: go_01_hello_world
-date: 2026-05-10T09:40:00+08:00
+date: 2026-05-10T10:25:00+08:00
 description: "Go 语言入门第一步：环境搭建、第一个程序、常用命令详解"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]
