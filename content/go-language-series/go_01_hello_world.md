@@ -1,7 +1,7 @@
-date: 2026-05-10T09:40:00+08:00
 ---
 title: "第1章：Go 入门——环境搭建与 Hello World"
-slug: "go_01_hello_world"
+slug: go_01_hello_world
+date: 2026-05-10T09:40:00+08:00
 description: "Go 语言入门第一步：环境搭建、第一个程序、常用命令详解"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]
@@ -10,48 +10,48 @@ draft: false
 
 # 第1章：Go 入门——环境搭建与 Hello World
 
-## Go 的诞生与定位
+## 什么是 Go？
 
-Go（又称 Golang）是 Google 于 2009 年推出的编程语言，由 Robert Griesemer、Rob Pike 和 Ken Thompson 等人设计。Go 的设计目标是**简单、高效、可靠**，特别适合服务端开发、云计算和并发编程。
+Go（又称 Golang）是 Google 于 2009 年推出的编程语言，主打**简洁、高效、并发**。它的设计哲学是：Less is more，少即是多。Go 的编译速度极快，标准库丰富，天然支持并发编程，非常适合构建后端服务、网络工具和云原生应用。
 
-Go 语言的主要特点：
-- 静态类型，编译型语言，性能接近 C
-- 语法简洁，学习曲线平缓
-- 天生支持并发（goroutine + channel）
-- 内置垃圾回收（GC）
-- 丰富的标准库
+## 环境搭建
 
-## 安装 Go
+### macOS / Linux 安装
 
-从 [go.dev/dl](https://go.dev/dl) 下载对应平台的安装包。macOS 用户推荐用 Homebrew 安装：
+下载对应系统的安装包或使用包管理器：
 
 ```bash
+# macOS (Homebrew)
 brew install go
-```
 
-安装完成后，验证版本：
+# Linux (Ubuntu/Debian)
+sudo apt update
+sudo apt install golang-go
 
-```bash
+# 验证安装
 go version
-# go version go1.22.3 darwin/arm64
+# 输出类似：go version go1.22.2 darwin/arm64
 ```
 
-## GOPATH vs Go Modules
+### Windows 安装
 
-早期 Go 使用 `GOPATH` 管理依赖，Go 1.11 引入 **Go Modules** 后成为主流。本教程全部使用 Modules 方式。
+前往 https://go.dev/dl/ 下载 Windows 安装包（.msi），一路 Next 安装完成，然后在 PowerShell 中验证：
 
-初始化一个新项目：
-
-```bash
-mkdir myproject && cd myproject
-go mod init github.com/yourname/myproject
+```powershell
+go version
 ```
 
-这会生成 `go.mod` 文件，后续依赖会自动管理。
+### 环境变量说明
+
+Go 安装后会自动设置 `GOPATH`（工作区路径）和 `PATH`。默认情况下：
+- **Linux/macOS**：`GOPATH=$HOME/go`，二进制安装到 `$GOPATH/bin`
+- **Windows**：`GOPATH=%USERPROFILE%\go`
+
+从 Go 1.11 开始支持 **Go Modules**（项目级依赖管理），不再强制依赖 `GOPATH`，推荐使用 `go mod init` 初始化项目。
 
 ## 第一个程序：Hello World
 
-创建文件 `main.go`：
+创建文件 `hello.go`：
 
 ```go
 package main
@@ -59,66 +59,122 @@ package main
 import "fmt"
 
 func main() {
-    fmt.Println("Hello, Go!")
+    fmt.Println("Hello, World!")
 }
 ```
 
-运行它：
+运行方式：
 
 ```bash
+# 方式一：直接运行（适合单文件脚本）
+go run hello.go
+
+# 方式二：编译为可执行文件
+go build -o hello hello.go
+./hello        # Linux/macOS
+hello.exe      # Windows
+```
+
+**输出：**
+
+```
+Hello, World!
+```
+
+## 代码结构解读
+
+```go
+package main          // 1. 包声明：所有 .go 文件第一行必须是 package
+import "fmt"          // 2. 导入标准库 fmt（格式化 I/O）
+func main() {         // 3. main 函数：程序入口，无参数无返回值
+    fmt.Println("Hello, World!")  // 4. 打印输出
+}
+```
+
+- Go 没有分号结尾，编译器自动推断（一行一条语句时换行即代表语句结束）
+- `package main` 表明这是一个**可执行程序**；库代码通常用 `package something`
+- 每个可执行程序必须有且仅有一个 `main()` 函数
+
+## go run / go build / go install
+
+| 命令 | 作用 | 场景 |
+|------|------|------|
+| `go run 文件.go` | 编译并运行，不留可执行文件 | 开发调试单文件 |
+| `go build -o name file.go` | 编译为指定名称的可执行文件 | 构建发布 |
+| `go build file.go` | 编译为与文件名同名的可执行文件 | 快速构建 |
+| `go install` | 编译并安装到 `$GOPATH/bin` | 安装全局工具 |
+
+## Go Modules 初始化
+
+```bash
+# 创建项目目录
+mkdir myproject && cd myproject
+
+# 初始化 Go 模块（生成 go.mod 文件）
+go mod init github.com/username/myproject
+
+# 创建 main.go
+cat > main.go << 'EOF'
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Go Modules 项目初始化成功！")
+}
+EOF
+
+# 运行
 go run main.go
-# Hello, Go!
 ```
 
-或者编译成可执行文件：
+`go.mod` 文件示例：
+
+```go
+module github.com/username/myproject
+
+go 1.22
+```
+
+## 常用命令速查
 
 ```bash
-go build -o hello main.go
-./hello
-# Hello, Go!
+go fmt        # 格式化代码（自动对齐，符合 Go 规范）
+go vet        # 检查代码潜在错误
+go test       # 运行测试
+go get        # 下载依赖包
+go mod tidy   # 整理依赖，移除未使用的包
+go env        # 查看 Go 环境变量
 ```
-
-**代码解析：**
-
-| 元素 | 说明 |
-|------|------|
-| `package main` | 声明包名，可执行程序必须为 `main` |
-| `import "fmt"` | 导入格式化 I/O 包 |
-| `func main()` | 程序入口，无参数无返回值 |
-
-## 常用命令一览
-
-| 命令 | 作用 |
-|------|------|
-| `go run <file>` | 编译并运行（临时，不生成二进制） |
-| `go build [-o name] <file>` | 编译为可执行文件 |
-| `go get <package>` | 下载并安装依赖包 |
-| `go test` | 运行测试 |
-| `go mod tidy` | 整理 `go.mod`，移除未使用的依赖 |
-| `go fmt` | 格式化代码 |
-| `go vet` | 检查代码潜在问题 |
 
 ## 练习题
 
-**练习 1-1：** 写一个程序，接收两个整数参数，输出它们的和。
+**1. 编写程序**：输出你的名字和当前年份。
+
+**2. 修改代码**：将 `fmt.Println` 改为 `fmt.Printf`，使用格式化输出：
 
 ```go
-package main
-
-import "fmt"
-
-func main() {
-    var a, b int
-    fmt.Print("请输入两个整数（用空格分隔）：")
-    fmt.Scan(&a, &b)
-    fmt.Printf("%d + %d = %d\n", a, b, a+b)
-}
+name := "小明"
+age := 18
+fmt.Printf("我叫 %s，今年 %d 岁\n", name, age)
 ```
 
-**练习 1-2：** 写一个程序，计算圆的面积（输入半径，输出面积）。
-
-**提示：** 使用 `fmt.Scan` 读取输入，`math.Pi` 获取 π 值。
+**3. 思考题**：Go 为什么不需要分号作为语句结束符？
 
 ---
 
-下一章我们将学习 Go 的变量、数据类型与控制流语句。
+**答案：**
+
+1. 参考代码：
+```go
+package main
+import "fmt"
+func main() {
+    fmt.Println("我是张三")
+    fmt.Println("2026")
+}
+```
+
+2. 提示：字符串中的 `\n` 表示换行符，`%s` 格式化字符串，`%d` 格式化整数。
+
+3. Go 编译器会自动在每行末尾（非括号内）插入分号，因此程序员不必手动添加。这是 Go 语言的设计选择，让代码更简洁。

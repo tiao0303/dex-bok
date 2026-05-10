@@ -1,8 +1,8 @@
-date: 2026-05-10T09:55:00+08:00
 ---
 title: "第4章：数据结构——数组、切片、映射"
-slug: "go_04_data_structures"
-description: "Go 语言数组、切片、映射的创建、操作与内存模型详解"
+slug: go_04_data_structures
+date: 2026-05-10T09:55:00+08:00
+description: "数组、切片与 Map 的原理、使用场景与内存模型"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]
 draft: false
@@ -10,204 +10,260 @@ draft: false
 
 # 第4章：数据结构——数组、切片、映射
 
-## 数组
+## 数组（Array）
 
-数组是固定长度的序列，创建时长度固定，类型 `[n]T`：
+数组是**固定长度**的同类型元素序列，在 Go 中数组是值类型（复制而非引用）：
 
 ```go
-// 声明并初始化
-var arr [5]int = [5]int{1, 2, 3, 4, 5}
+// 声明方式
+var arr1 [5]int              // 默认零值初始化：[0, 0, 0, 0, 0]
+arr2 := [5]int{1, 2, 3, 4, 5}  // 字面量初始化
+arr3 := [...]int{1, 2, 3}    // 自动推断长度：[1, 2, 3]
 
-// 简短写法
-arr := [5]int{1, 2, 3, 4, 5}
+// 多维数组
+var matrix [3][4]int         // 3行4列的二维数组
+matrix[0][1] = 10
 
-// 自动推导长度
-arr := [...]int{1, 2, 3} // len=3
+// 遍历数组
+for i := 0; i < len(arr2); i++ {
+    fmt.Print(arr2[i], " ")
+}
+fmt.Println()
+
+for i, v := range arr2 {
+    fmt.Printf("arr2[%d] = %d\n", i, v)
+}
 ```
 
-**数组是值类型** — 赋值和传参会复制整个数组：
+**数组特点：**
+- 长度固定，不可动态增长
+- 作为函数参数时会**完整复制**一份（值类型）
+- 长度是类型的一部分：`[5]int` 和 `[6]int` 是不同的类型
 
 ```go
 a := [3]int{1, 2, 3}
-b := a // 复制整个数组
+b := a              // 复制整个数组，a 和 b 独立
 b[0] = 100
-fmt.Println(a) // [1 2 3]，a 不受影响
+fmt.Println(a[0])   // 仍为 1，a 不受影响
 ```
 
 ## 切片（Slice）
 
-切片是 Go 中最常用的动态数组，长度可变，本质是**三个字段的结构体**（指针、长度、容量）：
+切片是 Go 中最常用的动态数组，它是**引用类型**——对切片的修改会影响底层数组：
+
+### 创建切片
 
 ```go
-// 方式1：基于数组创建
+// 方式一：make 创建（推荐方式）
+s1 := make([]int, 5)         // 长度5，容量5，元素为零值
+s2 := make([]int, 3, 10)     // 长度3，容量10
+
+// 方式二：字面量
+s3 := []int{1, 2, 3, 4, 5}
+
+// 方式三：从数组或切片切片（slice）
 arr := [5]int{1, 2, 3, 4, 5}
-s1 := arr[1:4] // 从索引1到3（左闭右开）: [2 3 4]
+s4 := arr[1:4]              // s4 = [2, 3, 4]，左闭右开区间
 
-// 方式2：make 创建
-s2 := make([]int, 3)       // len=3, cap=3, 零值: [0 0 0]
-s3 := make([]int, 3, 10)   // len=3, cap=10
+// 方式四：空切片
+var s5 []int                // nil 切片
+s6 := []int{}              // 空切片（非 nil）
+```
 
-// 方式3：字面量
-s4 := []int{1, 2, 3}
+### 切片结构
+
+切片包含三个部分：**指针（指向底层数组）**、**长度（当前元素数）**、**容量（底层数组最大长度）**：
+
+```
+Slice: {ptr: 指向 arr[1], len: 3, cap: 4}
+Underlying Array: [?, 2, 3, 4, ?]
+                    ↑ptr      len=3 cap=4
+```
+
+### 追加元素（append）
+
+```go
+s := make([]int, 0)
+s = append(s, 1)       // 追加一个元素
+s = append(s, 2, 3, 4)  // 追加多个元素
+
+// 动态增长：底层数组容量翻倍扩展
+fmt.Println(len(s), cap(s))  // 4 4
 ```
 
 ### 切片操作
 
 ```go
-s := []int{1, 2, 3, 4, 5}
+s := []int{10, 20, 30, 40, 50}
 
-// append：追加元素（可能触发扩容）
-s = append(s, 6, 7)
+// 切片截取
+s1 := s[1:3]      // [20, 30]
+s2 := s[:2]       // [10, 20]
+s3 := s[2:]       // [30, 40, 50]
 
-// copy
-s2 := make([]int, len(s))
-copy(s2, s)
-
-// slice expressions 切片表达式
-fmt.Println(s[1:3])  // [2 3]
-fmt.Println(s[:3])   // [1 2 3]
-fmt.Println(s[2:])   // [3 4 5 6 7]
-
-// len 和 cap
-fmt.Println(len(s)) // 7
-fmt.Println(cap(s)) // 扩容后可能是 10 或更大
+// 删除元素（删除索引 i 的元素）
+i := 2
+s = append(s[:i], s[i+1:]...)  // 删除 s[2]
+fmt.Println(s)  // [10, 20, 40, 50]
 ```
 
-### 扩容机制
-
-当 `len` 超过 `cap` 时，`append` 会触发扩容，新容量通常是旧容量的 **2 倍**（超过 1024 时增长放缓）。
+### 内存模型示例
 
 ```go
-s := make([]int, 0)
-for i := 0; i < 10; i++ {
-    s = append(s, i)
-    fmt.Printf("len=%d cap=%d\n", len(s), cap(s))
-}
+arr := [5]int{1, 2, 3, 4, 5}
+s := arr[0:3]   // s = [1, 2, 3]，指向 arr[0]
+
+s[1] = 20       // 修改切片，底层数组也被修改
+fmt.Println(arr[1])  // 20，arr 被影响
 ```
 
-输出类似：
-```
-len=1 cap=1
-len=2 cap=2
-len=3 cap=4
-len=4 cap=4
-len=5 cap=8
-...
+### 切片作为函数参数
+
+切片是引用类型，传入函数后修改会影响原切片（但**长度不可变**，除非重新分配）：
+
+```go
+func modifySlice(s []int) {
+    s[0] = 100  // 会影响原切片
+    s = append(s, 4)  // 这里是新切片，不影响原切片
+}
+
+orig := []int{1, 2, 3}
+modifySlice(orig)
+fmt.Println(orig)  // [100, 2, 3]
 ```
 
 ## 映射（Map）
 
-Go 的 map 是键值对的无序集合，底层是 hash 表：
+Map 是 Go 的键值对数据结构，内部使用**哈希表**实现：
+
+### 创建 Map
 
 ```go
-// 创建
-m := make(map[string]int)
+// 方式一：make
+m1 := make(map[string]int)
 
-// 字面量
+// 方式二：字面量
 m2 := map[string]int{
-    "Alice": 25,
-    "Bob":   30,
+    "Alice":   90,
+    "Bob":     85,
+    "Charlie": 78,
 }
+```
 
+### 基本操作
+
+```go
 // 添加/修改
-m["Charlie"] = 28
+m["David"] = 92
 
 // 读取
-age := m["Alice"] // 不存在则返回零值 0
-
-// 安全读取：ok idiom
-age, ok := m["David"]
-if !ok {
-    fmt.Println("David 不存在")
+score, ok := m["Alice"]  // ok 为 false 表示键不存在
+if ok {
+    fmt.Println("Alice 的分数：", score)
 }
 
 // 删除
-delete(m, "Charlie")
+delete(m, "Bob")
 
 // 遍历
-for key, value := range m {
-    fmt.Printf("%s: %d\n", key, value)
+for name, score := range m {
+    fmt.Printf("%s: %d\n", name, score)
 }
 ```
 
-**map 是引用类型** — 赋值和传参不会复制 map：
+### Map 的重要特性
 
 ```go
-m1 := map[string]int{"a": 1}
-m2 := m1
-m2["a"] = 100
-fmt.Println(m1["a"]) // 100，m1 也被修改
+m := map[string]int{"a": 1}
+
+// 读取不存在的键，返回零值（不会报错）
+fmt.Println(m["none"])  // 0
+
+// 使用 ok 检查键是否存在
+if v, ok := m["a"]; ok {
+    fmt.Println("存在：", v)
+}
 ```
 
-## range 遍历
+### Map 是引用类型
 
 ```go
-// 遍历切片
-fruits := []string{"apple", "banana", "cherry"}
-for index, fruit := range fruits {
-    fmt.Printf("%d: %s\n", index, fruit)
-}
-
-// 遍历 map（顺序随机）
-ages := map[string]int{"Alice": 25, "Bob": 30}
-for name, age := range ages {
-    fmt.Printf("%s is %d years old\n", name, age)
-}
-
-// 不需要 index/key 时用 _ 忽略
-for _, fruit := range fruits {
-    fmt.Println(fruit)
-}
+m1 := map[string]int{"x": 1}
+m2 := m1              // m2 和 m1 共享同一个底层哈希表
+m2["x"] = 100
+fmt.Println(m1["x"])  // 100
 ```
+
+## 常见数据结构对比
+
+| 特性 | 数组 | 切片 | Map |
+|------|------|------|-----|
+| 长度 | 固定 | 可动态增长 | 可动态增长 |
+| 类型 | 值类型 | 引用类型 | 引用类型 |
+| 访问 | 索引访问 O(1) | 索引访问 O(1) | 键访问 O(1) |
+| 有序 | 有序（索引） | 有序（索引） | 无序（迭代） |
 
 ## 练习题
 
-**练习 4-1：实现一个栈（Stack）**
+**1. 数组练习：**
+创建一个 `[5]int` 类型数组，元素为 `{1, 2, 3, 4, 5}`，计算所有元素的和。
 
-用切片模拟栈，支持 `Push`、`Pop`、`Peek` 操作：
+**2. 切片练习：**
+使用切片存储 5 个整数 `{10, 20, 30, 40, 50}`，将第 3 个元素（索引2）修改为 99，然后打印切片内容。
 
-```go
-package main
+**3. Map 练习：**
+创建一个 `map[string]int`，存储3个学生的成绩，遍历并打印所有学生信息。
 
-import "fmt"
-
-type Stack struct {
-    items []int
-}
-
-func (s *Stack) Push(item int) {
-    s.items = append(s.items, item)
-}
-
-func (s *Stack) Pop() (int, bool) {
-    if len(s.items) == 0 {
-        return 0, false
-    }
-    top := s.items[len(s.items)-1]
-    s.items = s.items[:len(s.items)-1]
-    return top, true
-}
-
-func (s *Stack) Peek() (int, bool) {
-    if len(s.items) == 0 {
-        return 0, false
-    }
-    return s.items[len(s.items)-1], true
-}
-
-func main() {
-    stack := &Stack{}
-    stack.Push(1)
-    stack.Push(2)
-    stack.Push(3)
-    fmt.Println("Peek:", stack.Peek())   // 3
-    fmt.Println("Pop:", stack.Pop())     // 3
-    fmt.Println("Pop:", stack.Pop())     // 2
-}
-```
-
-**练习 4-2：** 统计一段文字中每个单词出现的次数（用 map 实现）。
+**4. 综合练习：**
+写一个函数 `filterPositive(numbers []int) []int`，返回一个只包含正数的新切片（原切片不变）。
 
 ---
 
-下一章我们将学习结构体与方法。
+**答案：**
+
+1.
+```go
+arr := [5]int{1, 2, 3, 4, 5}
+sum := 0
+for _, v := range arr {
+    sum += v
+}
+fmt.Println("数组元素和：", sum)  // 15
+```
+
+2.
+```go
+s := []int{10, 20, 30, 40, 50}
+s[2] = 99
+fmt.Println(s)  // [10 20 99 40 50]
+```
+
+3.
+```go
+grades := map[string]int{
+    "小明": 92,
+    "小红": 88,
+    "小刚": 95,
+}
+for name, grade := range grades {
+    fmt.Printf("%s：%d分\n", name, grade)
+}
+```
+
+4.
+```go
+func filterPositive(numbers []int) []int {
+    result := make([]int, 0)
+    for _, n := range numbers {
+        if n > 0 {
+            result = append(result, n)
+        }
+    }
+    return result
+}
+
+original := []int{-3, -1, 0, 2, 5, -6, 8}
+filtered := filterPositive(original)
+fmt.Println("原切片：", original)  // [-3 -1 0 2 5 -6 8]
+fmt.Println("正数切片：", filtered) // [2 5 8]
+```

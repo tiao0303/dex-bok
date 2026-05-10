@@ -1,8 +1,8 @@
-date: 2026-05-10T10:10:00+08:00
 ---
 title: "第7章：并发——Goroutine 与 Channel"
-slug: "go_07_concurrency"
-description: "Go 语言轻量级并发 Goroutine、双向 Channel、Select 与 sync 包详解"
+slug: go_07_concurrency
+date: 2026-05-10T10:10:00+08:00
+description: "Goroutine、Channel、Select 与 sync 并发原语"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]
 draft: false
@@ -10,70 +10,129 @@ draft: false
 
 # 第7章：并发——Goroutine 与 Channel
 
-## Goroutine
+## 并发 vs 并行
 
-Goroutine 是 Go 轻量级线程，创建成本极低（初始栈仅 2KB），由 Go 运行时（runtime）管理：
+- **并发（Concurrency）**：同时管理多个任务，任务之间可以交替执行（一个 CPU 切换多个任务）
+- **并行（Parallelism）**：真正同时执行多个任务，需要多个 CPU 核心
+
+Go 的 goroutine 是**并发**的天然支持，可以让程序在少量线程上高效切换大量任务。
+
+## Goroutine（协程）
+
+goroutine 是 Go 最轻量的并发单元，创建一个 goroutine 的开销极小（比线程小几个数量级）：
+
+### 启动 goroutine
 
 ```go
-// 启动一个 goroutine
+func sayHello(name string) {
+    fmt.Println("你好，", name)
+}
+
+func main() {
+    // 普通函数调用
+    sayHello("同步")
+
+    // 启动 goroutine（非阻塞）
+    go sayHello("异步 goroutine 1")
+    go sayHello("异步 goroutine 2")
+
+    // 等待 goroutine 执行完成
+    time.Sleep(time.Second)
+    fmt.Println("主函数结束")
+}
+```
+
+**注意**：如果主函数在 goroutine 执行前退出，这些 goroutine 会被直接终止。
+
+### goroutine 与匿名函数
+
+```go
 go func() {
-    fmt.Println("后台任务执行中...")
+    fmt.Println("这是匿名函数的 goroutine")
 }()
 
-fmt.Println("主函数继续执行")
-time.Sleep(time.Second) // 等待 goroutine 完成
+// 带参数
+msg := "Hello"
+go func(s string) {
+    fmt.Println(s)
+}(msg)
 ```
 
-**goroutine vs 线程：**
-- 线程：操作系统调度，栈空间 1-8MB
-- Goroutine：Go runtime 调度，栈空间 2KB（按需扩展）
+## Channel（通道）
 
-## Channel
+channel 是 goroutine 之间通信的管道，用于传递数据和控制同步：
 
-Channel 是 goroutine 间的通信机制，保证同步：
+### 创建 channel
 
 ```go
-// 创建无缓冲 channel
-ch := make(chan int)
+// 创建无缓冲 channel（容量 0）
+ch1 := make(chan int)
 
-// 发送数据
-ch <- 42
+// 创建有缓冲 channel
+ch2 := make(chan int, 3)  // 容量为 3
 
-// 接收数据
-value := <-ch
+// 关闭 channel
+close(ch1)
 ```
 
-### 有缓冲 vs 无缓冲
+### 发送与接收
 
 ```go
-// 无缓冲：发送和接收必须同时准备好（同步）
-ch := make(chan int)
+ch := make(chan string)
 
-// 有缓冲：缓冲区满才阻塞
-ch := make(chan int, 3)
-ch <- 1 // 不阻塞，直到缓冲区满
+// 发送数据（阻塞，直到有人接收）
+ch <- "Hello"
+
+// 接收数据（阻塞，直到有数据）
+msg := <-ch
+
+// 接收并判断 channel 是否关闭
+val, ok := <-ch  // ok 为 false 表示 channel 已关闭
 ```
 
-### 单向 Channel
-
-限制 channel 的方向，提高安全性：
+### 有缓冲 vs 无缓冲 channel
 
 ```go
-// 仅发送
+// 无缓冲：发送和接收必须同时配对，否则死锁
+ch1 := make(chan int)
+go func() {
+    ch1 <- 42  // 这里会阻塞，等待主 goroutine 接收
+}()
+result := <-ch1
+
+// 有缓冲：在缓冲区满之前不会阻塞
+ch2 := make(chan int, 2)
+ch2 <- 1   // 不阻塞
+ch2 <- 2   // 不阻塞
+// ch2 <- 3 // 阻塞，缓冲区已满
+```
+
+### 单向 channel
+
+```go
+// 只发送 channel
 func producer(ch chan<- int) {
-    ch <- 42
+    for i := 0; i < 5; i++ {
+        ch <- i
+    }
+    close(ch)
 }
 
-// 仅接收
+// 只接收 channel
 func consumer(ch <-chan int) {
-    val := <-ch
-    fmt.Println(val)
+    for v := range ch {
+        fmt.Println("收到：", v)
+    }
 }
+
+ch := make(chan int)
+go producer(ch)
+consumer(ch)
 ```
 
-## Select 语句
+## Select 多路复用
 
-`select` 类似于 `switch`，但用于 channel 操作，可以同时等待多个 channel：
+`select` 监听多个 channel 的状态，哪个先就绪就先处理哪个：
 
 ```go
 ch1 := make(chan string)
@@ -82,153 +141,237 @@ ch2 := make(chan string)
 go func() { ch1 <- "A" }()
 go func() { ch2 <- "B" }()
 
-select {
-case msg1 := <-ch1:
-    fmt.Println("收到:", msg1)
-case msg2 := <-ch2:
-    fmt.Println("收到:", msg2)
-case <-time.After(time.Second):
-    fmt.Println("超时")
+for i := 0; i < 2; i++ {
+    select {
+    case msg1 := <-ch1:
+        fmt.Println("收到 ch1：", msg1)
+    case msg2 := <-ch2:
+        fmt.Println("收到 ch2：", msg2)
+    }
 }
 ```
 
-## sync 包
-
-| 类型 | 用途 |
-|------|------|
-| `sync.WaitGroup` | 等待一组 goroutine 完成 |
-| `sync.Mutex` | 互斥锁，保护共享资源 |
-| `sync.RWMutex` | 读写锁，读多写少场景 |
-| `sync.Once` | 保证只执行一次 |
-| `sync.Cond` | 条件变量，通知机制 |
-| `sync.Map` | 并发安全的 map |
-
-### WaitGroup
-
-等待所有任务完成：
+### 超时处理
 
 ```go
+select {
+case msg := <-ch:
+    fmt.Println("收到：", msg)
+case <-time.After(time.Second):
+    fmt.Println("超时！")
+}
+```
+
+## sync 并发原语
+
+Go 标准库 `sync` 包提供了常用的并发工具：
+
+### WaitGroup：等待一组任务完成
+
+```go
+import "sync"
+
 var wg sync.WaitGroup
 
-for i := 0; i < 3; i++ {
-    wg.Add(1)
-    go func(id int) {
-        defer wg.Done()
-        fmt.Printf("任务 %d 完成\n", id)
-    }(i)
-}
-
-wg.Wait() // 阻塞，直到所有 goroutine 调用 Done()
-fmt.Println("所有任务完成")
-```
-
-### Mutex
-
-保护共享变量：
-
-```go
-var (
-    counter int
-    mutex   sync.Mutex
-)
-
-func increment() {
-    mutex.Lock()
-    defer mutex.Unlock()
-    counter++
-}
-```
-
-## context 包
-
-用于传递请求作用域的上下文、取消信号和超时控制：
-
-```go
-ctx, cancel := context.WithCancel(context.Background())
-defer cancel()
-
-// 或者带超时
-ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-defer cancel()
-
-// 在 goroutine 中检查 ctx.Done()
-go func() {
-    for {
-        select {
-        case <-ctx.Done():
-            fmt.Println("上下文取消，退出")
-            return
-        default:
-            // 做点事
-        }
-    }
-}()
-```
-
-## 常见并发问题
-
-| 问题 | 说明 |
-|------|------|
-| **Deadlock** | 所有 goroutine 互相等待，无人能推进 |
-| **Channel 泄漏** | channel 只发送不接收，或只接收不发送 |
-| **Race condition** | 多个 goroutine 同时读写共享变量，无同步保护 |
-
-使用 `go run -race main.go` 可以检测数据竞争。
-
-## 练习题
-
-**练习 7-1：并发爬取多个 URL**
-
-```go
-package main
-
-import (
-    "context"
-    "fmt"
-    "net/http"
-    "time"
-)
-
-func fetchURL(ctx context.Context, url string) (string, error) {
-    req, _ := http.NewRequestWithContext(ctx, "GET", url, nil)
-    resp, err := http.DefaultClient.Do(req)
-    if err != nil {
-        return "", err
-    }
-    defer resp.Body.Close()
-    return fmt.Sprintf("%s: %d", url, resp.StatusCode), nil
+func worker(id int) {
+    defer wg.Done()  // 任务完成后调用
+    fmt.Printf("Worker %d 开始工作\n", id)
+    time.Sleep(time.Millisecond * 100)
+    fmt.Printf("Worker %d 完成\n", id)
 }
 
 func main() {
-    urls := []string{
-        "https://go.dev",
-        "https://golang.org",
-        "https://pkg.go.dev",
+    for i := 1; i <= 3; i++ {
+        wg.Add(1)   // 每启动一个任务，计数 +1
+        go worker(i)
     }
+    wg.Wait()       // 等待计数归零
+    fmt.Println("所有任务完成")
+}
+```
 
-    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-    defer cancel()
+### Mutex：互斥锁
 
-    results := make(chan string, len(urls))
-    for _, url := range urls {
-        go func(u string) {
-            result, err := fetchURL(ctx, u)
-            if err != nil {
-                results <- fmt.Sprintf("%s: 错误 - %v", u, err)
-            } else {
-                results <- result
-            }
-        }(url)
+```go
+import "sync"
+
+var (
+    counter int
+    mu      sync.Mutex
+)
+
+func increment() {
+    mu.Lock()          // 加锁
+    counter++
+    mu.Unlock()        // 解锁
+}
+
+func main() {
+    var wg sync.WaitGroup
+    for i := 0; i < 1000; i++ {
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            increment()
+        }()
     }
+    wg.Wait()
+    fmt.Println(counter)  // 1000
+}
+```
 
-    for i := 0; i < len(urls); i++ {
-        fmt.Println(<-results)
+### RWMutex：读写锁
+
+读多写少场景下，读锁不阻塞读操作：
+
+```go
+var (
+    data     map[string]string
+    rwMu     sync.RWMutex
+)
+
+func read(key string) string {
+    rwMu.RLock()         // 读锁
+    defer rwMu.RUnlock()
+    return data[key]
+}
+
+func write(key, value string) {
+    rwMu.Lock()          // 写锁
+    defer rwMu.Unlock()
+    data[key] = value
+}
+```
+
+### Once：只执行一次
+
+```go
+var (
+    once sync.Once
+    instance *Config
+)
+
+func getInstance() *Config {
+    once.Do(func() {
+        instance = &Config{}
+        fmt.Println("初始化一次")
+    })
+    return instance
+}
+
+func main() {
+    getInstance()  // 只会打印一次"初始化一次"
+    getInstance()
+    getInstance()
+}
+```
+
+## 练习题
+
+**1. Goroutine 练习：**
+启动 5 个 goroutine，每个打印 "Worker N 开始工作"，主函数等待所有 goroutine 完成后打印 "全部完成"。
+
+**2. Channel 练习：**
+创建一个 goroutine 生成 0-9 的数字，通过 channel 发送到主函数，主函数打印接收到的数字。
+
+**3. Select 练习：**
+创建两个 channel，一个每秒发送一个数字，另一个每 500ms 发送一个字母。使用 select 交替接收并打印。
+
+**4. WaitGroup 练习：**
+使用 WaitGroup 并发计算 1-5 的阶乘（1!=1, 2!=2, 3!=6, 4!=24, 5!=120），将结果存入切片，最后打印所有结果。
+
+---
+
+**答案：**
+
+1.
+```go
+import "sync"
+
+func main() {
+    var wg sync.WaitGroup
+    for i := 1; i <= 5; i++ {
+        wg.Add(1)
+        go func(n int) {
+            defer wg.Done()
+            fmt.Printf("Worker %d 开始工作\n", n)
+        }(i)
+    }
+    wg.Wait()
+    fmt.Println("全部完成")
+}
+```
+
+2.
+```go
+ch := make(chan int)
+
+go func() {
+    for i := 0; i < 10; i++ {
+        ch <- i
+    }
+    close(ch)
+}()
+
+for v := range ch {
+    fmt.Println("收到：", v)
+}
+```
+
+3.
+```go
+ch1 := make(chan int)
+ch2 := make(chan string)
+
+go func() {
+    for i := 1; i <= 3; i++ {
+        time.Sleep(time.Second)
+        ch1 <- i
+    }
+}()
+
+go func() {
+    letters := []string{"A", "B", "C"}
+    for _, l := range letters {
+        time.Sleep(500 * time.Millisecond)
+        ch2 <- l
+    }
+}()
+
+for i := 0; i < 6; i++ {
+    select {
+    case v := <-ch1:
+        fmt.Println("数字：", v)
+    case v := <-ch2:
+        fmt.Println("字母：", v)
     }
 }
 ```
 
-**练习 7-2：** 用 WaitGroup 和 Mutex 实现一个线程安全的计数器，并发运行 100 个 goroutine 同时加 1，最终结果应为 100。
+4.
+```go
+func factorial(n int) int {
+    result := 1
+    for i := 2; i <= n; i++ {
+        result *= i
+    }
+    return result
+}
 
----
+func main() {
+    var wg sync.WaitGroup
+    results := make([]int, 5)
 
-下一章我们将学习 Go 的内存模型与性能优化。
+    for i := 1; i <= 5; i++ {
+        wg.Add(1)
+        idx := i  // 避免闭包捕获问题
+        go func() {
+            defer wg.Done()
+            results[idx-1] = factorial(idx)
+        }()
+    }
+
+    wg.Wait()
+    fmt.Println("阶乘结果：", results)  // [1, 2, 6, 24, 120]
+}
+```

@@ -1,8 +1,8 @@
-date: 2026-05-10T10:05:00+08:00
 ---
 title: "第6章：接口——Go 的多态哲学"
-slug: "go_06_interfaces"
-description: "Go 语言接口定义、隐式实现、空接口、类型断言与常用标准接口详解"
+slug: go_06_interfaces
+date: 2026-05-10T10:05:00+08:00
+description: "接口隐式实现、多态与类型断言"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]
 draft: false
@@ -10,145 +10,99 @@ draft: false
 
 # 第6章：接口——Go 的多态哲学
 
-## 接口定义
+## 接口是什么？
 
-接口定义了一组方法的集合，实现者不需要显式声明（隐式实现）：
+接口（Interface）定义了**行为的契约**。在 Go 中，接口是一组方法签名的集合，实现接口不需要显式声明（隐式实现）。这是一种"duck typing"——"如果它走起来像鸭子，叫起来像鸭子，那它就是鸭子"。
+
+### 定义接口
 
 ```go
-// 定义接口
-type Writer interface {
-    Write([]byte) (int, error)
-}
-
-// 隐式实现：任何实现了 Write 方法的类型都满足 Writer 接口
-type File struct {
-    name string
-}
-
-func (f *File) Write(data []byte) (int, error) {
-    // 实现细节...
-    return len(data), nil
+// 定义一个动物接口
+type Animal interface {
+    Speak()        // 会叫
+    Move() string   // 移动方式
 }
 ```
 
-> **注意：** Go 没有 `implements` 关键字，只要方法签名匹配，类型自动实现接口。
+### 实现接口
 
-## 空接口
-
-空接口 `interface{}` 等价于"所有类型"，可用于接收任意类型的值（相当于其他语言的 `any`）：
+任何类型只要实现了接口的所有方法，就自动实现了该接口，无需 `implements` 关键字：
 
 ```go
-var anything interface{}
-anything = 42
+type Dog struct {
+    Name string
+}
+
+// Dog 实现了 Animal 接口
+func (d Dog) Speak() {
+    fmt.Println(d.Name + "说：汪汪汪！")
+}
+
+func (d Dog) Move() string {
+    return "用四条腿跑"
+}
+
+// Cat 也实现了 Animal 接口
+type Cat struct {
+    Name string
+}
+
+func (c Cat) Speak() {
+    fmt.Println(c.Name + "说：喵喵喵！")
+}
+
+func (c Cat) Move() string {
+    return "用四条腿走"
+}
+```
+
+## 接口的使用
+
+### 多态：同一接口，不同实现
+
+```go
+func describeAnimal(a Animal) {
+    fmt.Printf("名字：%s，移动方式：%s\n", a.Speak(), a.Move())
+    // 注意：上面一行有问题，Speak() 无返回值，应该分开调用
+}
+
+func main() {
+    dog := Dog{Name: "旺财"}
+    cat := Cat{Name: "小白"}
+
+    animals := []Animal{dog, cat}
+    for _, a := range animals {
+        a.Speak()          // 每个动物叫的方式不同
+        fmt.Println(a.Move())
+    }
+}
+```
+
+### 空接口
+
+`interface{}` 表示空接口，所有类型都实现了空接口（类似于其他语言的 `Object`）：
+
+```go
+// 可以存放任意类型的值
+var anything interface{} = 42
 anything = "hello"
 anything = []int{1, 2, 3}
 
-// 函数参数接受任意类型
-func printAll(items ...interface{}) {
-    for _, item := range items {
-        fmt.Println(item)
-    }
-}
+fmt.Println(anything)  // [1 2 3]
 ```
 
-Go 1.18 引入 `any` 作为 `interface{}` 的别名，推荐使用 `any`：
+### 接口作为函数参数
 
 ```go
-func printAll(items ...any) {
-    for _, item := range items {
-        fmt.Println(item)
-    }
-}
+// fmt.Println 的签名就是接受 interface{} 参数
+// Println 可以打印任意类型的值
+
+fmt.Println(42)          // int
+fmt.Println("hello")     // string
+fmt.Println([]int{1,2})  // slice
 ```
 
-## 接口组合
-
-接口可以组合其他接口：
-
-```go
-type ReadWriter interface {
-    Reader
-    Writer
-}
-
-type Reader interface {
-    Read([]byte) (int, error)
-}
-
-type Writer interface {
-    Write([]byte) (int, error)
-}
-```
-
-## 类型断言
-
-从接口值中提取具体类型：
-
-```go
-var i any = "hello"
-
-// 方式1：ok idiom（安全）
-s, ok := i.(string)
-if ok {
-    fmt.Println("是字符串:", s)
-}
-
-// 方式2：不安全，类型不对会 panic
-s2 := i.(string)
-
-// 方式3：类型 switch
-switch v := i.(type) {
-case string:
-    fmt.Println("字符串:", v)
-case int:
-    fmt.Println("整数:", v)
-default:
-    fmt.Println("未知类型")
-}
-```
-
-## 常用标准接口
-
-Go 标准库中有很多预定义接口，以下是最常见的几个：
-
-### error 接口
-
-```go
-type error interface {
-    Error() string
-}
-
-// 自定义错误
-type MyError struct {
-    msg string
-}
-
-func (e *MyError) Error() string {
-    return e.msg
-}
-```
-
-### Stringer 接口
-
-```go
-type Stringer interface {
-    String() string
-}
-
-// 实现后 fmt.Print 会调用 String()
-type Person struct {
-    Name string
-    Age  int
-}
-
-func (p Person) String() string {
-    return fmt.Sprintf("%s(%d岁)", p.Name, p.Age)
-}
-fmt.Println(Person{Name: "张三", Age: 25})
-// 输出: 张三(25岁)
-```
-
-### Reader / Writer 接口
+### 接口组合
 
 ```go
 type Reader interface {
@@ -158,46 +112,212 @@ type Reader interface {
 type Writer interface {
     Write(p []byte) (n int, err error)
 }
+
+// 组合接口：同时实现 Read 和 Write
+type ReadWriter interface {
+    Reader
+    Writer
+}
+```
+
+## 类型断言
+
+接口可以存储任意具体类型的值，但需要**类型断言**来提取具体值：
+
+### 基本语法
+
+```go
+var i interface{} = "hello"
+
+// 语法一：ok 模式（安全）
+s, ok := i.(string)
+if ok {
+    fmt.Println("字符串值：", s)
+}
+
+// 语法二：switch 类型分支
+switch v := i.(type) {
+case string:
+    fmt.Println("字符串：", v)
+case int:
+    fmt.Println("整数：", v)
+default:
+    fmt.Println("未知类型")
+}
+```
+
+### 断言失败示例
+
+```go
+var i interface{} = 42
+
+s, ok := i.(string)
+if !ok {
+    fmt.Println("断言失败，i 不是 string 类型")
+}
+fmt.Println(s)  // 空字符串（断言失败时 s 为零值）
+```
+
+## 错误接口
+
+Go 内置的 `error` 接口是错误处理的核心：
+
+```go
+type error interface {
+    Error() string
+}
+```
+
+自定义错误：
+
+```go
+import "errors"
+
+type ValidationError struct {
+    Field   string
+    Message string
+}
+
+func (e ValidationError) Error() string {
+    return e.Field + ": " + e.Message
+}
+
+func validate(name string) error {
+    if name == "" {
+        return ValidationError{Field: "name", Message: "不能为空"}
+    }
+    return nil
+}
+
+err := validate("")
+if err != nil {
+    fmt.Println(err)  // name: 不能为空
+}
+```
+
+## 接口的 nil
+
+```go
+var a Animal  // nil 接口，没有实现者
+fmt.Println(a == nil)  // true
+
+// 注意：nil 接口不能调用方法，否则会 panic
+// a.Speak()  // 运行时错误：panic: invalid memory address or nil pointer dereference
+```
+
+### 接口非 nil 的情况
+
+```go
+var a Animal = (*Dog)(nil)  // 值为 nil，但类型为 *Dog，非 nil 接口
+fmt.Println(a == nil)  // false
 ```
 
 ## 练习题
 
-**练习 6-1：** 实现一个 `Writer` 接口，把字符串写入文件。
+**1. 实现接口：**
+定义一个 `Shape` 接口，包含 `Area() float64` 方法。实现 `Circle`（圆形）和 `Rectangle`（矩形）两个结构体，并让它们实现 `Shape` 接口。
 
-```go
-package main
+**2. 多态练习：**
+写一个函数 `printArea(shapes []Shape)`，遍历并打印每个图形的面积。
 
-import (
-    "fmt"
-    "os"
-)
+**3. 类型断言练习：**
+写一个函数 `printType(i interface{})`，使用 switch 判断并打印传入值的类型和值。
 
-type FileWriter struct {
-    filename string
-}
-
-func (fw *FileWriter) Write(data []byte) (int, error) {
-    return os.WriteFile(fw.filename, data, 0644)
-}
-
-func writeContent(w fmt.Stringer) {
-    content := w.String()
-    fmt.Printf("写入内容: %s\n", content)
-}
-
-func main() {
-    fw := &FileWriter{filename: "output.txt"}
-    n, err := fw.Write([]byte("Hello, Go!"))
-    if err != nil {
-        fmt.Println("写入失败:", err)
-        return
-    }
-    fmt.Printf("成功写入 %d 字节\n", n)
-}
-```
-
-**练习 6-2：** 定义一个 `Speaker` 接口，包含 `Speak()` 方法，创建 `Dog` 和 `Cat` 结构体实现该接口，用 `type switch` 判断具体类型。
+**4. 错误处理练习：**
+实现一个 `divide(a, b float64) (float64, error)` 函数，当 `b == 0` 时返回一个自定义错误。
 
 ---
 
-下一章我们将学习 Go 的并发特性——Goroutine 与 Channel。
+**答案：**
+
+1.
+```go
+type Shape interface {
+    Area() float64
+}
+
+type Circle struct {
+    Radius float64
+}
+
+func (c Circle) Area() float64 {
+    return 3.14159 * c.Radius * c.Radius
+}
+
+type Rectangle struct {
+    Width, Height float64
+}
+
+func (r Rectangle) Area() float64 {
+    return r.Width * r.Height
+}
+```
+
+2.
+```go
+func printArea(shapes []Shape) {
+    for _, s := range shapes {
+        fmt.Printf("面积：%.2f\n", s.Area())
+    }
+}
+
+func main() {
+    shapes := []Shape{
+        Circle{Radius: 5},
+        Rectangle{Width: 4, Height: 6},
+    }
+    printArea(shapes)
+    // 面积：78.54
+    // 面积：24.00
+}
+```
+
+3.
+```go
+func printType(i interface{}) {
+    switch v := i.(type) {
+    case string:
+        fmt.Printf("string: %s\n", v)
+    case int:
+        fmt.Printf("int: %d\n", v)
+    case float64:
+        fmt.Printf("float64: %f\n", v)
+    case bool:
+        fmt.Printf("bool: %t\n", v)
+    default:
+        fmt.Printf("unknown type: %T\n", v)
+    }
+}
+
+printType("hello")   // string: hello
+printType(42)        // int: 42
+printType(3.14)     // float64: 3.140000
+```
+
+4.
+```go
+import "errors"
+
+type DivideError struct {
+    Dividend float64
+    Divisor  float64
+}
+
+func (e DivideError) Error() string {
+    return fmt.Sprintf("不能除以零：%.2f / %.2f", e.Dividend, e.Divisor)
+}
+
+func divide(a, b float64) (float64, error) {
+    if b == 0 {
+        return 0, DivideError{Dividend: a, Divisor: b}
+    }
+    return a / b, nil
+}
+
+result, err := divide(10, 0)
+if err != nil {
+    fmt.Println("错误：", err)  // 不能除以零：10.00 / 0.00
+} else {
+    fmt.Println("结果：", result)
+}
+```
