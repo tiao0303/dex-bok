@@ -1,1 +1,808 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Go语言学习 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/</link><description>Recent content in Go语言学习 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><atom:link href="https://tiao0303.github.io/dex-bok/categories/go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml"/><item><title>Go 语言学习系列</title><link>https://tiao0303.github.io/dex-bok/go-language-series/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Go语言学习 on DEX 学习笔记 | 去中心化交易所实战指南</title><link>https://tiao0303.github.io/dex-bok/categories/go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/</link><description>Recent content in Go语言学习 on DEX 学习笔记 | 去中心化交易所实战指南</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sun, 10 May 2026 10:25:00 +0800</lastBuildDate><atom:link href="https://tiao0303.github.io/dex-bok/categories/go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml"/><item><title>Go 语言学习系列</title><link>https://tiao0303.github.io/dex-bok/go-language-series/</link><pubDate>Sun, 10 May 2026 10:25:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/</guid><description/></item><item><title>第10章：工程化、测试与高级主题</title><link>https://tiao0303.github.io/dex-bok/go-language-series/go_10_advanced/</link><pubDate>Sun, 10 May 2026 10:25:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/go_10_advanced/</guid><description>&lt;h1 id="第10章工程化测试与高级主题"&gt;第10章：工程化、测试与高级主题&lt;/h1&gt;
+&lt;h2 id="go-modules"&gt;Go Modules&lt;/h2&gt;
+&lt;p&gt;Go Modules 是 Go 1.11 引入的依赖管理方案，现代化 Go 项目的标配。&lt;/p&gt;
+&lt;h3 id="gomod-文件结构"&gt;go.mod 文件结构&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;module&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;github&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;com&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;myproject&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;myservice&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 模块名&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;go&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1.22&lt;/span&gt; &lt;span style="color:#75715e"&gt;// Go 版本&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;require&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;github&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;com&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;gin&lt;/span&gt;&lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;gonic&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;gin&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;v1&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;.9.1&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 依赖&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;github&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;com&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;go&lt;/span&gt;&lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;redis&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;redis&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;v8&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;.11.5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;replace&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;github&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;com&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;old&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&lt;/span&gt;&lt;span style="color:#f92672"&gt;package&lt;/span&gt; =&amp;gt; &lt;span style="color:#a6e22e"&gt;github&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;com&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;new&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&lt;/span&gt;&lt;span style="color:#f92672"&gt;package&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;v2&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;.0.0&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 替换依赖&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="常用命令"&gt;常用命令&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go mod init github.com/myproject/myservice &lt;span style="color:#75715e"&gt;# 初始化项目&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go mod tidy &lt;span style="color:#75715e"&gt;# 整理依赖（移除未使用，补充缺失）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go mod download &lt;span style="color:#75715e"&gt;# 下载依赖到本地缓存&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go mod graph &lt;span style="color:#75715e"&gt;# 查看依赖图&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go list -m all &lt;span style="color:#75715e"&gt;# 列出所有依赖及版本&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go get package@version &lt;span style="color:#75715e"&gt;# 升级/降级/添加依赖&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go mod why 包名 &lt;span style="color:#75715e"&gt;# 解释为什么要某个依赖&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="测试testing"&gt;测试（Testing）&lt;/h2&gt;
+&lt;p&gt;Go 内置测试框架，测试文件以 &lt;code&gt;_test.go&lt;/code&gt; 结尾。&lt;/p&gt;
+&lt;h3 id="基本单元测试"&gt;基本单元测试&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// math_test.go&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;package&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;testing&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 测试函数以 Test 开头，参数为 *testing.T&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;TestAdd&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;t&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;testing&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;T&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;result&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;add&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;expected&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;8&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;result&lt;/span&gt; &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;expected&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;t&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Errorf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;add(3,5) = %d, expected %d&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;result&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;expected&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;BenchmarkAdd&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;testing&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;B&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt; &amp;lt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;N&lt;/span&gt;; &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt;&lt;span style="color:#f92672"&gt;++&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;add&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;运行测试：&lt;/p&gt;</description></item><item><title>第9章：Go 标准库精讲</title><link>https://tiao0303.github.io/dex-bok/go-language-series/go_09_standard_library/</link><pubDate>Sun, 10 May 2026 10:20:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/go_09_standard_library/</guid><description>&lt;h1 id="第9章go-标准库精讲"&gt;第9章：Go 标准库精讲&lt;/h1&gt;
+&lt;p&gt;Go 的标准库非常完善，几乎不需要第三方库就能完成大部分开发任务。本章重点讲解最常用的几个标准库。&lt;/p&gt;
+&lt;h2 id="fmt格式化-io"&gt;fmt：格式化 I/O&lt;/h2&gt;
+&lt;h3 id="print-系列"&gt;Print 系列&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Print&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello&amp;#34;&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 直接打印，不换行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello&amp;#34;&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 打印 + 换行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Printf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello %s\n&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;World&amp;#34;&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 格式化打印&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="格式化动词"&gt;格式化动词&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;动词&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;th&gt;示例&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;%v&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;默认格式&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;fmt.Printf(&amp;quot;%v&amp;quot;, student)&lt;/code&gt; → &lt;code&gt;{张三 18}&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;%+v&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;结构体带字段名&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;fmt.Printf(&amp;quot;%+v&amp;quot;, student)&lt;/code&gt; → &lt;code&gt;{Name:张三 Age:18}&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;%#v&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;完整 Go 语法&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;fmt.Printf(&amp;quot;%#v&amp;quot;, student)&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;%T&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;类型&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;fmt.Printf(&amp;quot;%T&amp;quot;, &amp;quot;hello&amp;quot;)&lt;/code&gt; → &lt;code&gt;string&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;%d&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;整数&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;fmt.Printf(&amp;quot;%d&amp;quot;, 42)&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;%s&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;字符串&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;fmt.Printf(&amp;quot;%s&amp;quot;, &amp;quot;hi&amp;quot;)&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;%f&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;浮点数&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;fmt.Printf(&amp;quot;%f&amp;quot;, 3.14)&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;%.2f&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;保留2位小数&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;fmt.Printf(&amp;quot;%.2f&amp;quot;, 3.14159)&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;%p&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;指针地址&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;fmt.Printf(&amp;quot;%p&amp;quot;, &amp;amp;x)&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;%x&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;十六进制&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;fmt.Printf(&amp;quot;%x&amp;quot;, 255)&lt;/code&gt; → &lt;code&gt;ff&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="字符串构建"&gt;字符串构建&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;s&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Sprintf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;我叫%s，年龄%d岁&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;张三&amp;#34;&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;18&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;s&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 我叫张三，年龄18岁&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="错误格式化"&gt;错误格式化&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;errors&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;New&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;文件不存在&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Printf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;错误：%v\n&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 错误：文件不存在&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="os文件与系统"&gt;os：文件与系统&lt;/h2&gt;
+&lt;h3 id="文件操作"&gt;文件操作&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;os&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;fileDemo&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 创建文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;f&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Create&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;test.txt&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;创建失败：&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;defer&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;f&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Close&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 写入&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;n&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;f&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;WriteString&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello, Go!\n&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;写入&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;n&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;字节&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 读取&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;ReadFile&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;test.txt&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(string(&lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 删除&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Remove&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;test.txt&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="目录操作"&gt;目录操作&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;os&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;path/filepath&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 创建目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;MkdirAll&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;tmp/subdir&amp;#34;&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;0755&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 列出目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;entries&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;ReadDir&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;.&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;e&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;range&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;entries&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;e&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt;(), &lt;span style="color:#a6e22e"&gt;e&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;IsDir&lt;/span&gt;())
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 获取当前工作目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;cwd&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Getwd&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;cwd&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 拼接路径&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;path&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;filepath&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Join&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;dir&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;subdir&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;file.txt&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;path&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// dir/subdir/file.txt&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="命令行参数"&gt;命令行参数&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;os&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;args&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Args&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 程序自身路径 + 参数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;程序：&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;args&lt;/span&gt;[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;参数：&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;args&lt;/span&gt;[&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;:])
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 环境变量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;home&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Getenv&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;HOME&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;HOME:&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;home&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 设置环境变量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Setenv&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;MY_VAR&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="执行命令"&gt;执行命令&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;os/exec&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;execDemo&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 执行 ls 命令&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;cmd&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;exec&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Command&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;ls&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;-la&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;output&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;cmd&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Output&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(string(&lt;span style="color:#a6e22e"&gt;output&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="bufio高效-io"&gt;bufio：高效 I/O&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;bufio&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;os&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;bufioDemo&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 高效写入文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;f&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Create&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;buffered.txt&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;defer&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;f&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Close&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;writer&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;bufio&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;NewWriter&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;f&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;; &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;; &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt;&lt;span style="color:#f92672"&gt;++&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Fprintf&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;writer&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;行号：%d\n&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;writer&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Flush&lt;/span&gt;() &lt;span style="color:#75715e"&gt;// 必须 flush，否则数据在缓冲区&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 高效读取文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;file&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Open&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;buffered.txt&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;defer&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;file&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Close&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;scanner&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;bufio&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;NewScanner&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;file&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;lineNum&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;scanner&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Scan&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;lineNum&lt;/span&gt;&lt;span style="color:#f92672"&gt;++&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;lineNum&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;scanner&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Text&lt;/span&gt;())
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;lineNum&lt;/span&gt; &amp;gt; &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;break&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="reader-和-writer"&gt;Reader 和 Writer&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 带缓冲的 Reader&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;reader&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;bufio&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;NewReader&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;os&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Stdin&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Print&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;请输入：&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;input&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;reader&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;ReadString&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;\n&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Print&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;你输入了：&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;input&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 读取到指定字节数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;buf&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; make([]&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;n&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;reader&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Read&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;buf&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;读取了&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;n&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;字节：&amp;#34;&lt;/span&gt;, string(&lt;span style="color:#a6e22e"&gt;buf&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="encodingjsonjson-编解码"&gt;encoding/json：JSON 编解码&lt;/h2&gt;
+&lt;h3 id="序列化go--json"&gt;序列化（Go → JSON）&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;encoding/json&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Student&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`json:&amp;#34;name&amp;#34;`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Age&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`json:&amp;#34;age&amp;#34;`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Score&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;float64&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`json:&amp;#34;score,omitempty&amp;#34;`&lt;/span&gt; &lt;span style="color:#75715e"&gt;// omitempty：零值时省略&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;jsonDemo&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;s&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Student&lt;/span&gt;{&lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;张三&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;Age&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;18&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 序列化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;json&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Marshal&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;s&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;序列化失败：&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(string(&lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;)) &lt;span style="color:#75715e"&gt;// {&amp;#34;name&amp;#34;:&amp;#34;张三&amp;#34;,&amp;#34;age&amp;#34;:18}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 格式化输出&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;data2&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;json&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;MarshalIndent&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;s&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34; &amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(string(&lt;span style="color:#a6e22e"&gt;data2&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;/*
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; &amp;#34;name&amp;#34;: &amp;#34;张三&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; &amp;#34;age&amp;#34;: 18
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="反序列化json--go"&gt;反序列化（JSON → Go）&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;unmarshalDemo&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;jsonStr&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`{&amp;#34;name&amp;#34;:&amp;#34;李四&amp;#34;,&amp;#34;age&amp;#34;:20,&amp;#34;score&amp;#34;:95.5}`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;s&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Student&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;json&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Unmarshal&lt;/span&gt;([]byte(&lt;span style="color:#a6e22e"&gt;jsonStr&lt;/span&gt;), &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;s&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;反序列化失败：&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Printf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;%+v\n&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;s&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// {Name:李四 Age:20 Score:95.5}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="map-与-json"&gt;Map 与 JSON&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// JSON → map&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;jsonMap&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;`{&amp;#34;a&amp;#34;:1,&amp;#34;b&amp;#34;:2}`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;m&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;map&lt;/span&gt;[&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;]&lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt;{}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;json&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Unmarshal&lt;/span&gt;([]byte(&lt;span style="color:#a6e22e"&gt;jsonMap&lt;/span&gt;), &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;m&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;m&lt;/span&gt;[&lt;span style="color:#e6db74"&gt;&amp;#34;a&amp;#34;&lt;/span&gt;]) &lt;span style="color:#75715e"&gt;// 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// map → JSON&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;m2&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;map&lt;/span&gt;[&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;]&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;{&lt;span style="color:#e6db74"&gt;&amp;#34;x&amp;#34;&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;y&amp;#34;&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;20&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;json&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Marshal&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;m2&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(string(&lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;)) &lt;span style="color:#75715e"&gt;// {&amp;#34;x&amp;#34;:10,&amp;#34;y&amp;#34;:20}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="nethttphttp-服务与客户端"&gt;net/http：HTTP 服务与客户端&lt;/h2&gt;
+&lt;h3 id="创建-http-服务器"&gt;创建 HTTP 服务器&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;log&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;httpServerDemo&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 简单路由&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;HandleFunc&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;w&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;ResponseWriter&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;r&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Request&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Fprintf&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;w&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;Hello, 访问路径：%s&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;r&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;URL&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Path&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; })
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// JSON API&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;HandleFunc&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/api/student&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;w&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;ResponseWriter&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;r&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Request&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;w&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Header&lt;/span&gt;().&lt;span style="color:#a6e22e"&gt;Set&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Content-Type&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;application/json&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;student&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Student&lt;/span&gt;{&lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;张三&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;Age&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;18&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;json&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;NewEncoder&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;w&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;Encode&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;student&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; })
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 启动服务器&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;服务器启动在 :8080&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;log&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Fatal&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;ListenAndServe&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;:8080&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="http-客户端"&gt;HTTP 客户端&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;httpClientDemo&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// GET 请求&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;resp&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Get&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;https://httpbin.org/get&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;请求失败：&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;defer&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;resp&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Body&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Close&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 读取响应&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;body&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;io&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;ReadAll&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;resp&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Body&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;状态码：&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;resp&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;StatusCode&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;响应内容：&amp;#34;&lt;/span&gt;, string(&lt;span style="color:#a6e22e"&gt;body&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// POST 请求&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;resp2&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Post&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;https://httpbin.org/post&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;application/json&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;strings&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;NewReader&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;`{&amp;#34;name&amp;#34;:&amp;#34;测试&amp;#34;}`&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; )
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;defer&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;resp2&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Body&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Close&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;body2&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;io&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;ReadAll&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;resp2&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Body&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(string(&lt;span style="color:#a6e22e"&gt;body2&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="自定义-http-客户端"&gt;自定义 HTTP 客户端&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;client&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Client&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Timeout&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;time&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Second&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 设置请求头&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;req&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;NewRequest&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;GET&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;https://httpbin.org/headers&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;req&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Header&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Set&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;User-Agent&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#34;My Go Client/1.0&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;resp&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;client&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Do&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;req&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;defer&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;resp&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Body&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Close&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;resp&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Status&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="其他常用标准库"&gt;其他常用标准库&lt;/h2&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;包&lt;/th&gt;
+ &lt;th&gt;用途&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;time&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;时间、日期、定时器&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;strings&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;字符串操作（查找、替换、分割）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;bytes&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;字节切片操作&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;math&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;数学函数（三角、对数、随机数）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;sort&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;切片排序&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;log&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;日志记录&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;context&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;上下文传递、取消信号、超时控制&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;io&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;I/O 基础接口&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;crypto&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;加密（MD5、SHA、aes）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="练习题"&gt;练习题&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;1. 文件操作练习：&lt;/strong&gt;
+创建文件 &lt;code&gt;log.txt&lt;/code&gt;，写入当前时间戳，然后读取并打印文件内容。&lt;/p&gt;</description></item><item><title>第8章：内存模型与性能优化</title><link>https://tiao0303.github.io/dex-bok/go-language-series/go_08_memory_and_performance/</link><pubDate>Sun, 10 May 2026 10:15:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/go_08_memory_and_performance/</guid><description>&lt;h1 id="第8章内存模型与性能优化"&gt;第8章：内存模型与性能优化&lt;/h1&gt;
+&lt;h2 id="go-的内存分配"&gt;Go 的内存分配&lt;/h2&gt;
+&lt;p&gt;Go 的内存分配基于 TCMalloc（Thread-Caching Malloc）算法，分为三个层次：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;微对象&lt;/strong&gt;（0~32B）：微分配器管理&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;小对象&lt;/strong&gt;（32B~32KB）：使用 mcache 中的小对象缓存&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;大对象&lt;/strong&gt;（&amp;gt;32KB）：直接从堆分配&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="new-vs-make"&gt;new vs make&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// new：分配任意类型的零值内存，返回指针&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;p&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; new(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// *int，值为 0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;s&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; new([]&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// *[]int，值为 nil&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// make：专门用于切片、Map、Channel 的初始化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;s&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; make([]&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// slice，长度5，容量5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;m&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; make(&lt;span style="color:#66d9ef"&gt;map&lt;/span&gt;[&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;]&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 空 map&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;ch&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; make(&lt;span style="color:#66d9ef"&gt;chan&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 有缓冲 channel&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="逃逸分析escape-analysis"&gt;逃逸分析（Escape Analysis）&lt;/h2&gt;
+&lt;p&gt;Go 编译器会分析变量的作用域，决定变量应该分配在**栈（Stack）&lt;strong&gt;还是&lt;/strong&gt;堆（Heap）**上。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;栈分配&lt;/strong&gt;：函数返回即释放，无需垃圾回收，速度快&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;堆分配&lt;/strong&gt;：生命周期超出函数作用域，需要 GC 回收&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="逃逸示例"&gt;逃逸示例&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 这个变量不会逃逸（栈上分配）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;notEscape&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;x&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;x&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// x 不会逃逸&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 这个变量会逃逸（堆上分配）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;escapeToHeap&lt;/span&gt;() &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;x&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;x&lt;/span&gt; &lt;span style="color:#75715e"&gt;// &amp;amp;x 被返回，x 逃逸到堆&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="逃逸分析工具"&gt;逃逸分析工具&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 编译时加上 -gcflags=&amp;#34;-m&amp;#34; 可以看到逃逸分析结果&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go build -gcflags&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;-m&amp;#34;&lt;/span&gt; main.go
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;示例输出：&lt;/p&gt;</description></item><item><title>第7章：并发——Goroutine 与 Channel</title><link>https://tiao0303.github.io/dex-bok/go-language-series/go_07_concurrency/</link><pubDate>Sun, 10 May 2026 10:10:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/go_07_concurrency/</guid><description>&lt;h1 id="第7章并发goroutine-与-channel"&gt;第7章：并发——Goroutine 与 Channel&lt;/h1&gt;
+&lt;h2 id="并发-vs-并行"&gt;并发 vs 并行&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;并发（Concurrency）&lt;/strong&gt;：同时管理多个任务，任务之间可以交替执行（一个 CPU 切换多个任务）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;并行（Parallelism）&lt;/strong&gt;：真正同时执行多个任务，需要多个 CPU 核心&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Go 的 goroutine 是&lt;strong&gt;并发&lt;/strong&gt;的天然支持，可以让程序在少量线程上高效切换大量任务。&lt;/p&gt;
+&lt;h2 id="goroutine协程"&gt;Goroutine（协程）&lt;/h2&gt;
+&lt;p&gt;goroutine 是 Go 最轻量的并发单元，创建一个 goroutine 的开销极小（比线程小几个数量级）：&lt;/p&gt;
+&lt;h3 id="启动-goroutine"&gt;启动 goroutine&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;sayHello&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;name&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;你好，&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 普通函数调用&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;sayHello&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;同步&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 启动 goroutine（非阻塞）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;go&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;sayHello&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;异步 goroutine 1&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;go&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;sayHello&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;异步 goroutine 2&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 等待 goroutine 执行完成&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;time&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Sleep&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;time&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Second&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;主函数结束&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：如果主函数在 goroutine 执行前退出，这些 goroutine 会被直接终止。&lt;/p&gt;
+&lt;h3 id="goroutine-与匿名函数"&gt;goroutine 与匿名函数&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;go&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;这是匿名函数的 goroutine&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 带参数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;msg&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;Hello&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;go&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;s&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;s&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}(&lt;span style="color:#a6e22e"&gt;msg&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="channel通道"&gt;Channel（通道）&lt;/h2&gt;
+&lt;p&gt;channel 是 goroutine 之间通信的管道，用于传递数据和控制同步：&lt;/p&gt;</description></item><item><title>第6章：接口——Go 的多态哲学</title><link>https://tiao0303.github.io/dex-bok/go-language-series/go_06_interfaces/</link><pubDate>Sun, 10 May 2026 10:05:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/go_06_interfaces/</guid><description>&lt;h1 id="第6章接口go-的多态哲学"&gt;第6章：接口——Go 的多态哲学&lt;/h1&gt;
+&lt;h2 id="接口是什么"&gt;接口是什么？&lt;/h2&gt;
+&lt;p&gt;接口（Interface）定义了&lt;strong&gt;行为的契约&lt;/strong&gt;。在 Go 中，接口是一组方法签名的集合，实现接口不需要显式声明（隐式实现）。这是一种&amp;quot;duck typing&amp;quot;——&amp;ldquo;如果它走起来像鸭子，叫起来像鸭子，那它就是鸭子&amp;rdquo;。&lt;/p&gt;
+&lt;h3 id="定义接口"&gt;定义接口&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 定义一个动物接口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Animal&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Speak&lt;/span&gt;() &lt;span style="color:#75715e"&gt;// 会叫&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Move&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 移动方式&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="实现接口"&gt;实现接口&lt;/h3&gt;
+&lt;p&gt;任何类型只要实现了接口的所有方法，就自动实现了该接口，无需 &lt;code&gt;implements&lt;/code&gt; 关键字：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Dog&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Dog 实现了 Animal 接口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;d&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Dog&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;Speak&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;d&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;说：汪汪汪！&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;d&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Dog&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;Move&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;用四条腿跑&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Cat 也实现了 Animal 接口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Cat&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Cat&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;Speak&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;说：喵喵喵！&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Cat&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;Move&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;用四条腿走&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="接口的使用"&gt;接口的使用&lt;/h2&gt;
+&lt;h3 id="多态同一接口不同实现"&gt;多态：同一接口，不同实现&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;describeAnimal&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Animal&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Printf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;名字：%s，移动方式：%s\n&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Speak&lt;/span&gt;(), &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Move&lt;/span&gt;())
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 注意：上面一行有问题，Speak() 无返回值，应该分开调用&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;dog&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Dog&lt;/span&gt;{&lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;旺财&amp;#34;&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;cat&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Cat&lt;/span&gt;{&lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;小白&amp;#34;&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;animals&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; []&lt;span style="color:#a6e22e"&gt;Animal&lt;/span&gt;{&lt;span style="color:#a6e22e"&gt;dog&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;cat&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;range&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;animals&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Speak&lt;/span&gt;() &lt;span style="color:#75715e"&gt;// 每个动物叫的方式不同&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Move&lt;/span&gt;())
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="空接口"&gt;空接口&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;interface{}&lt;/code&gt; 表示空接口，所有类型都实现了空接口（类似于其他语言的 &lt;code&gt;Object&lt;/code&gt;）：&lt;/p&gt;</description></item><item><title>第5章：结构体与方法</title><link>https://tiao0303.github.io/dex-bok/go-language-series/go_05_structs_and_methods/</link><pubDate>Sun, 10 May 2026 10:00:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/go_05_structs_and_methods/</guid><description>&lt;h1 id="第5章结构体与方法"&gt;第5章：结构体与方法&lt;/h1&gt;
+&lt;h2 id="结构体struct"&gt;结构体（Struct）&lt;/h2&gt;
+&lt;p&gt;Go 没有类（Class），但可以用 &lt;code&gt;struct&lt;/code&gt; 定义自定义类型，将不同类型的数据组合在一起。&lt;/p&gt;
+&lt;h3 id="定义结构体"&gt;定义结构体&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 定义一个学生结构体&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Student&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Age&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Score&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;float64&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 创建结构体实例&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;s1&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Student&lt;/span&gt;{&lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;张三&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;Age&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;18&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;Score&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;92.5&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;s2&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Student&lt;/span&gt;{&lt;span style="color:#e6db74"&gt;&amp;#34;李四&amp;#34;&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;19&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;88.0&lt;/span&gt;} &lt;span style="color:#75715e"&gt;// 按字段顺序初始化（不推荐）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;s3&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Student&lt;/span&gt;{} &lt;span style="color:#75715e"&gt;// 零值：{&amp;#34;&amp;#34;, 0, 0.0}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 部分字段初始化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;s4&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Student&lt;/span&gt;{&lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;王五&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;Age&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;20&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 访问字段&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;s1&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;s1&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Score&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 张三 92.5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 修改字段&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;s1&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Score&lt;/span&gt; = &lt;span style="color:#ae81ff"&gt;95.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="结构体嵌套"&gt;结构体嵌套&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Address&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;City&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;District&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Person&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Address&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Address&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 嵌套结构体&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;p&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Person&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Name&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;小明&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Address&lt;/span&gt;: &lt;span style="color:#a6e22e"&gt;Address&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;City&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;北京&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;District&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;朝阳区&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;p&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Address&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;City&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 北京&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="方法method"&gt;方法（Method）&lt;/h2&gt;
+&lt;p&gt;Go 的方法是一种&lt;strong&gt;语法糖&lt;/strong&gt;，是绑定到特定类型的函数。语法是在 &lt;code&gt;func&lt;/code&gt; 和函数名之间加一个&lt;strong&gt;接收者（receiver）&lt;/strong&gt;：&lt;/p&gt;
+&lt;h3 id="值接收者-vs-指针接收者"&gt;值接收者 vs 指针接收者&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 定义一个圆形结构体&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Circle&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Radius&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;float64&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 值接收者：不会修改原结构体&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Circle&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;areaVal&lt;/span&gt;() &lt;span style="color:#66d9ef"&gt;float64&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;3.14159&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Radius&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Radius&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 指针接收者：可以修改原结构体&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Circle&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;setRadius&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;r&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;float64&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Radius&lt;/span&gt; = &lt;span style="color:#a6e22e"&gt;r&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 修改了接收者本身&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Circle&lt;/span&gt;{&lt;span style="color:#a6e22e"&gt;Radius&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 调用值接收者方法&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;areaVal&lt;/span&gt;()) &lt;span style="color:#75715e"&gt;// 78.53975&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 调用指针接收者方法&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;setRadius&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Radius&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;什么时候用指针接收者？&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>第4章：数据结构——数组、切片、映射</title><link>https://tiao0303.github.io/dex-bok/go-language-series/go_04_data_structures/</link><pubDate>Sun, 10 May 2026 09:55:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/go_04_data_structures/</guid><description>&lt;h1 id="第4章数据结构数组切片映射"&gt;第4章：数据结构——数组、切片、映射&lt;/h1&gt;
+&lt;h2 id="数组array"&gt;数组（Array）&lt;/h2&gt;
+&lt;p&gt;数组是&lt;strong&gt;固定长度&lt;/strong&gt;的同类型元素序列，在 Go 中数组是值类型（复制而非引用）：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 声明方式&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;arr1&lt;/span&gt; [&lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;]&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 默认零值初始化：[0, 0, 0, 0, 0]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;arr2&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; [&lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;]&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;{&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;4&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;} &lt;span style="color:#75715e"&gt;// 字面量初始化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;arr3&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; [&lt;span style="color:#f92672"&gt;...&lt;/span&gt;]&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;{&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;} &lt;span style="color:#75715e"&gt;// 自动推断长度：[1, 2, 3]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 多维数组&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;matrix&lt;/span&gt; [&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;][&lt;span style="color:#ae81ff"&gt;4&lt;/span&gt;]&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 3行4列的二维数组&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;matrix&lt;/span&gt;[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;][&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;] = &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 遍历数组&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;; &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt; &amp;lt; len(&lt;span style="color:#a6e22e"&gt;arr2&lt;/span&gt;); &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt;&lt;span style="color:#f92672"&gt;++&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Print&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;arr2&lt;/span&gt;[&lt;span style="color:#a6e22e"&gt;i&lt;/span&gt;], &lt;span style="color:#e6db74"&gt;&amp;#34; &amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;v&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;range&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;arr2&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Printf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;arr2[%d] = %d\n&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;i&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;v&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;数组特点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;长度固定，不可动态增长&lt;/li&gt;
+&lt;li&gt;作为函数参数时会&lt;strong&gt;完整复制&lt;/strong&gt;一份（值类型）&lt;/li&gt;
+&lt;li&gt;长度是类型的一部分：&lt;code&gt;[5]int&lt;/code&gt; 和 &lt;code&gt;[6]int&lt;/code&gt; 是不同的类型&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; [&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;]&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;{&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 复制整个数组，a 和 b 独立&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;] = &lt;span style="color:#ae81ff"&gt;100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]) &lt;span style="color:#75715e"&gt;// 仍为 1，a 不受影响&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="切片slice"&gt;切片（Slice）&lt;/h2&gt;
+&lt;p&gt;切片是 Go 中最常用的动态数组，它是&lt;strong&gt;引用类型&lt;/strong&gt;——对切片的修改会影响底层数组：&lt;/p&gt;</description></item><item><title>第3章：函数——多返回值、闭包、延迟调用</title><link>https://tiao0303.github.io/dex-bok/go-language-series/go_03_functions/</link><pubDate>Sun, 10 May 2026 09:50:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/go_03_functions/</guid><description>&lt;h1 id="第3章函数多返回值闭包延迟调用"&gt;第3章：函数——多返回值、闭包、延迟调用&lt;/h1&gt;
+&lt;h2 id="函数基础"&gt;函数基础&lt;/h2&gt;
+&lt;p&gt;Go 的函数是一等公民（first-class citizen），可以赋值给变量、作为参数传递、作为返回值。&lt;/p&gt;
+&lt;h3 id="基本语法"&gt;基本语法&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;函数名&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;参数列表&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;返回值类型&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 函数体&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;结果&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 示例&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;add&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;result&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;add&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// result = 8&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="多个返回值"&gt;多个返回值&lt;/h3&gt;
+&lt;p&gt;Go 最具特色的特性之一：&lt;strong&gt;函数可以返回多个值&lt;/strong&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 返回两个值：商和余数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;divide&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;quotient&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#f92672"&gt;/&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;remainder&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#f92672"&gt;%&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;quotient&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;remainder&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;q&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;r&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;divide&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;17&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Printf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;商=%d, 余数=%d\n&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;q&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;r&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 商=3, 余数=2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="命名返回值"&gt;命名返回值&lt;/h3&gt;
+&lt;p&gt;Go 允许为返回值命名，返回时直接 &lt;code&gt;return&lt;/code&gt; 即可：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;rectangleInfo&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;width&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;height&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) (&lt;span style="color:#a6e22e"&gt;area&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;perimeter&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;area&lt;/span&gt; = &lt;span style="color:#a6e22e"&gt;width&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;height&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;perimeter&lt;/span&gt; = (&lt;span style="color:#a6e22e"&gt;width&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;height&lt;/span&gt;) &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 隐式返回命名变量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;p&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;rectangleInfo&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;p&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 50 30&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="错误处理多返回值的经典用法"&gt;错误处理：多返回值的经典用法&lt;/h3&gt;
+&lt;p&gt;Go 没有异常机制，错误通过返回值传递。这是 Go 的设计哲学——&lt;strong&gt;错误是值&lt;/strong&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;errors&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;divideSafe&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;errors&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;New&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;除数不能为零&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#f92672"&gt;/&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;result&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;divideSafe&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;错误：&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 错误： 除数不能为零&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;} &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;结果：&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;result&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="可变参数"&gt;可变参数&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;sum&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;nums&lt;/span&gt; &lt;span style="color:#f92672"&gt;...&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;total&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;n&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;range&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;nums&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;total&lt;/span&gt; &lt;span style="color:#f92672"&gt;+=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;n&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;total&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;sum&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;)) &lt;span style="color:#75715e"&gt;// 6&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;sum&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;4&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;)) &lt;span style="color:#75715e"&gt;// 15&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="函数类型与匿名函数"&gt;函数类型与匿名函数&lt;/h2&gt;
+&lt;p&gt;函数本身有类型，可以赋值给变量：&lt;/p&gt;</description></item><item><title>第2章：变量、数据类型与控制流</title><link>https://tiao0303.github.io/dex-bok/go-language-series/go_02_variables_and_control_flow/</link><pubDate>Sun, 10 May 2026 09:45:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/go_02_variables_and_control_flow/</guid><description>&lt;h1 id="第2章变量数据类型与控制流"&gt;第2章：变量、数据类型与控制流&lt;/h1&gt;
+&lt;h2 id="变量声明"&gt;变量声明&lt;/h2&gt;
+&lt;p&gt;Go 有多种变量声明方式：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 方式一：var 声明 + 初始化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;name&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; = &lt;span style="color:#e6db74"&gt;&amp;#34;张三&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 方式二：类型推断（编译器自动判断类型）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;age&lt;/span&gt; = &lt;span style="color:#ae81ff"&gt;25&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 等价于 var age int = 25&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 方式三：短变量声明（函数内部使用）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;score&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;98.5&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 等价于 var score float64 = 98.5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 方式四：并行声明&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;c&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; = &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：&lt;code&gt;:=&lt;/code&gt; 是短变量声明，只能在函数内部使用，不能用于函数外部。&lt;/p&gt;
+&lt;h3 id="变量零值"&gt;变量零值&lt;/h3&gt;
+&lt;p&gt;声明但未赋值的变量有默认零值（零并不意味着空，而是该类型的&amp;quot;空状态&amp;quot;）：&lt;/p&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;类型&lt;/th&gt;
+ &lt;th&gt;零值&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;数值类型（int, float）&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;0&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;布尔类型 bool&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;字符串 string&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;（空字符串）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;指针、接口、切片等&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;nil&lt;/code&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="基本数据类型"&gt;基本数据类型&lt;/h2&gt;
+&lt;h3 id="整数"&gt;整数&lt;/h3&gt;
+&lt;table&gt;
+ &lt;thead&gt;
+ &lt;tr&gt;
+ &lt;th&gt;类型&lt;/th&gt;
+ &lt;th&gt;说明&lt;/th&gt;
+ &lt;/tr&gt;
+ &lt;/thead&gt;
+ &lt;tbody&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;int&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;有符号整数，平台相关（64位系统为64位）&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;int8/int16/int32/int64&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;有符号定点整数&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;uint&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;无符号整数&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;uint8/uint16/uint32/uint64&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;无符号定点整数&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;byte&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;uint8&lt;/code&gt; 的别名&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;rune&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;int32&lt;/code&gt; 的别名，表示 Unicode 码点&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;code&gt;uintptr&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;足以存储指针值的无符号整数&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="浮点数与复数"&gt;浮点数与复数&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;f1&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;float32&lt;/span&gt; = &lt;span style="color:#ae81ff"&gt;3.14&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;f2&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;float64&lt;/span&gt; = &lt;span style="color:#ae81ff"&gt;2.718281828&lt;/span&gt; &lt;span style="color:#75715e"&gt;// float64 为默认类型&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;c1&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;complex128&lt;/span&gt; = complex(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;) &lt;span style="color:#75715e"&gt;// 1 + 2i&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="布尔与字符串"&gt;布尔与字符串&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;isActive&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;greeting&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; = &lt;span style="color:#e6db74"&gt;&amp;#34;你好，Go！&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="类型转换"&gt;类型转换&lt;/h3&gt;
+&lt;p&gt;Go &lt;strong&gt;不会自动转换类型&lt;/strong&gt;，必须显式转换：&lt;/p&gt;</description></item><item><title>第1章：Go 入门——环境搭建与 Hello World</title><link>https://tiao0303.github.io/dex-bok/go-language-series/go_01_hello_world/</link><pubDate>Sun, 10 May 2026 09:40:00 +0800</pubDate><guid>https://tiao0303.github.io/dex-bok/go-language-series/go_01_hello_world/</guid><description>&lt;h1 id="第1章go-入门环境搭建与-hello-world"&gt;第1章：Go 入门——环境搭建与 Hello World&lt;/h1&gt;
+&lt;h2 id="什么是-go"&gt;什么是 Go？&lt;/h2&gt;
+&lt;p&gt;Go（又称 Golang）是 Google 于 2009 年推出的编程语言，主打&lt;strong&gt;简洁、高效、并发&lt;/strong&gt;。它的设计哲学是：Less is more，少即是多。Go 的编译速度极快，标准库丰富，天然支持并发编程，非常适合构建后端服务、网络工具和云原生应用。&lt;/p&gt;
+&lt;h2 id="环境搭建"&gt;环境搭建&lt;/h2&gt;
+&lt;h3 id="macos--linux-安装"&gt;macOS / Linux 安装&lt;/h3&gt;
+&lt;p&gt;下载对应系统的安装包或使用包管理器：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# macOS (Homebrew)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brew install go
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Linux (Ubuntu/Debian)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt update
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo apt install golang-go
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 验证安装&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go version
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 输出类似：go version go1.22.2 darwin/arm64&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="windows-安装"&gt;Windows 安装&lt;/h3&gt;
+&lt;p&gt;前往 &lt;a href="https://go.dev/dl/"&gt;https://go.dev/dl/&lt;/a&gt; 下载 Windows 安装包（.msi），一路 Next 安装完成，然后在 PowerShell 中验证：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-powershell" data-lang="powershell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go version
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="环境变量说明"&gt;环境变量说明&lt;/h3&gt;
+&lt;p&gt;Go 安装后会自动设置 &lt;code&gt;GOPATH&lt;/code&gt;（工作区路径）和 &lt;code&gt;PATH&lt;/code&gt;。默认情况下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Linux/macOS&lt;/strong&gt;：&lt;code&gt;GOPATH=$HOME/go&lt;/code&gt;，二进制安装到 &lt;code&gt;$GOPATH/bin&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Windows&lt;/strong&gt;：&lt;code&gt;GOPATH=%USERPROFILE%\go&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;从 Go 1.11 开始支持 &lt;strong&gt;Go Modules&lt;/strong&gt;（项目级依赖管理），不再强制依赖 &lt;code&gt;GOPATH&lt;/code&gt;，推荐使用 &lt;code&gt;go mod init&lt;/code&gt; 初始化项目。&lt;/p&gt;</description></item></channel></rss>

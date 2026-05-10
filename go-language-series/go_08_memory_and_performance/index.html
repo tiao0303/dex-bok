@@ -1,218 +1,208 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content='date: 2026-05-10T10:15:00+08:00
-title: &ldquo;第8章：内存模型与性能优化&rdquo;
-slug: &ldquo;go_08_memory_and_performance&rdquo;
-description: &ldquo;Go 语言逃逸分析、垃圾回收机制、性能优化与 pprof 使用详解&rdquo;
-tags: [&ldquo;Go&rdquo;, &ldquo;编程语言&rdquo;]
-categories: [&ldquo;Go语言学习&rdquo;]
-draft: false
-第8章：内存模型与性能优化
-逃逸分析
-Go 编译器通过逃逸分析决定变量分配在栈还是堆上。栈分配快速（分配/释放O(1)），堆分配需要 GC 介入。
-查看逃逸分析结果：
-go build -gcflags="-m" main.go
-常见逃逸场景：
-// 返回指针 → 逃逸到堆
-func foo() *int {
-    tmp := 10
-    return &amp;tmp // tmp 逃逸
-}
-
-// 全局变量引用 → 逃逸
-var global *int
-
-func bar() {
-    x := 10
-    global = &amp;x // x 逃逸
-}
-
-// interface 类型 → 逃逸
-var i any = 10  // 装箱，分配在堆
-栈 vs 堆：
-
-  
-      
-          特性
-          栈
-          堆
-      
-  
-  
-      
-          分配速度
-          O(1)，只需移动栈指针
-          O(log n)，需要分配算法
-      
-      
-          释放速度
-          O(1)，只需恢复栈指针
-          依赖 GC
-      
-      
-          生命周期
-          函数退出即释放
-          依赖 GC 回收
-      
-  
-
-垃圾回收（GC）
-Go 使用三色标记并发 GC：'><meta name=generator content="Hugo 0.161.1"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/go-language-series/go_08_memory_and_performance/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/go-language-series/go_08_memory_and_performance/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/go-language-series/go_08_memory_and_performance/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/go-language-series/go_08_memory_and_performance/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:description" content='date: 2026-05-10T10:15:00+08:00 title: “第8章：内存模型与性能优化” slug: “go_08_memory_and_performance” description: “Go 语言逃逸分析、垃圾回收机制、性能优化与 pprof 使用详解” tags: [“Go”, “编程语言”] categories: [“Go语言学习”] draft: false 第8章：内存模型与性能优化 逃逸分析 Go 编译器通过逃逸分析决定变量分配在栈还是堆上。栈分配快速（分配/释放O(1)），堆分配需要 GC 介入。
-查看逃逸分析结果：
-go build -gcflags="-m" main.go 常见逃逸场景：
-// 返回指针 → 逃逸到堆 func foo() *int { tmp := 10 return &amp;tmp // tmp 逃逸 } // 全局变量引用 → 逃逸 var global *int func bar() { x := 10 global = &amp;x // x 逃逸 } // interface 类型 → 逃逸 var i any = 10 // 装箱，分配在堆 栈 vs 堆：
-特性 栈 堆 分配速度 O(1)，只需移动栈指针 O(log n)，需要分配算法 释放速度 O(1)，只需恢复栈指针 依赖 GC 生命周期 函数退出即释放 依赖 GC 回收 垃圾回收（GC） Go 使用三色标记并发 GC：'><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="go-language-series"><meta itemprop=name content="DEX 学习笔记 | 去中心化交易所实战指南"><meta itemprop=description content='date: 2026-05-10T10:15:00+08:00 title: “第8章：内存模型与性能优化” slug: “go_08_memory_and_performance” description: “Go 语言逃逸分析、垃圾回收机制、性能优化与 pprof 使用详解” tags: [“Go”, “编程语言”] categories: [“Go语言学习”] draft: false 第8章：内存模型与性能优化 逃逸分析 Go 编译器通过逃逸分析决定变量分配在栈还是堆上。栈分配快速（分配/释放O(1)），堆分配需要 GC 介入。
-查看逃逸分析结果：
-go build -gcflags="-m" main.go 常见逃逸场景：
-// 返回指针 → 逃逸到堆 func foo() *int { tmp := 10 return &amp;tmp // tmp 逃逸 } // 全局变量引用 → 逃逸 var global *int func bar() { x := 10 global = &amp;x // x 逃逸 } // interface 类型 → 逃逸 var i any = 10 // 装箱，分配在堆 栈 vs 堆：
-特性 栈 堆 分配速度 O(1)，只需移动栈指针 O(log n)，需要分配算法 释放速度 O(1)，只需恢复栈指针 依赖 GC 生命周期 函数退出即释放 依赖 GC 回收 垃圾回收（GC） Go 使用三色标记并发 GC：'><meta itemprop=wordCount content="510"><meta name=twitter:card content="summary"><meta name=twitter:title content="DEX 学习笔记 | 去中心化交易所实战指南"><meta name=twitter:description content='date: 2026-05-10T10:15:00+08:00 title: “第8章：内存模型与性能优化” slug: “go_08_memory_and_performance” description: “Go 语言逃逸分析、垃圾回收机制、性能优化与 pprof 使用详解” tags: [“Go”, “编程语言”] categories: [“Go语言学习”] draft: false 第8章：内存模型与性能优化 逃逸分析 Go 编译器通过逃逸分析决定变量分配在栈还是堆上。栈分配快速（分配/释放O(1)），堆分配需要 GC 介入。
-查看逃逸分析结果：
-go build -gcflags="-m" main.go 常见逃逸场景：
-// 返回指针 → 逃逸到堆 func foo() *int { tmp := 10 return &amp;tmp // tmp 逃逸 } // 全局变量引用 → 逃逸 var global *int func bar() { x := 10 global = &amp;x // x 逃逸 } // interface 类型 → 逃逸 var i any = 10 // 装箱，分配在堆 栈 vs 堆：
-特性 栈 堆 分配速度 O(1)，只需移动栈指针 O(log n)，需要分配算法 释放速度 O(1)，只需恢复栈指针 依赖 GC 生命周期 函数退出即释放 依赖 GC 回收 垃圾回收（GC） Go 使用三色标记并发 GC：'><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-go_08_memory_and_performance"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
-<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/go-language-series/ title="Go 语言">Go 语言</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#date-2026-05-10t1015000800>date: 2026-05-10T10:15:00+08:00</a></li><li><a href=#draft-false>title: &ldquo;第8章：内存模型与性能优化&rdquo;
-slug: &ldquo;go_08_memory_and_performance&rdquo;
-description: &ldquo;Go 语言逃逸分析、垃圾回收机制、性能优化与 pprof 使用详解&rdquo;
-tags: [&ldquo;Go&rdquo;, &ldquo;编程语言&rdquo;]
-categories: [&ldquo;Go语言学习&rdquo;]
-draft: false</a></li></ul><ul><li><a href=#逃逸分析>逃逸分析</a></li><li><a href=#垃圾回收gc>垃圾回收（GC）</a></li><li><a href=#性能优化建议>性能优化建议</a><ul><li><a href=#1-减少内存分配>1. 减少内存分配</a></li><li><a href=#2-预分配切片容量>2. 预分配切片容量</a></li><li><a href=#3-对象池syncpool>3. 对象池（sync.Pool）</a></li><li><a href=#4-减少指针使用>4. 减少指针使用</a></li></ul></li><li><a href=#基准测试>基准测试</a></li><li><a href=#pprof-使用>pprof 使用</a></li><li><a href=#内存泄漏常见场景>内存泄漏常见场景</a></li><li><a href=#练习题>练习题</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1></h1><div class=article-meta><span>•</span>
-<span>510 字</span></div></header><h2 id=date-2026-05-10t1015000800>date: 2026-05-10T10:15:00+08:00</h2><h2 id=draft-false>title: &ldquo;第8章：内存模型与性能优化&rdquo;
-slug: &ldquo;go_08_memory_and_performance&rdquo;
-description: &ldquo;Go 语言逃逸分析、垃圾回收机制、性能优化与 pprof 使用详解&rdquo;
-tags: [&ldquo;Go&rdquo;, &ldquo;编程语言&rdquo;]
-categories: [&ldquo;Go语言学习&rdquo;]
-draft: false</h2><h1 id=第8章内存模型与性能优化>第8章：内存模型与性能优化</h1><h2 id=逃逸分析>逃逸分析</h2><p>Go 编译器通过逃逸分析决定变量分配在栈还是堆上。栈分配快速（分配/释放O(1)），堆分配需要 GC 介入。</p><p>查看逃逸分析结果：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>go build -gcflags<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-m&#34;</span> main.go
-</span></span></code></pre></div><p><strong>常见逃逸场景：</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// 返回指针 → 逃逸到堆</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>foo</span>() <span style=color:#f92672>*</span><span style=color:#66d9ef>int</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>tmp</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>10</span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>tmp</span> <span style=color:#75715e>// tmp 逃逸</span>
-</span></span><span style=display:flex><span>}
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><title>第8章：内存模型与性能优化 | DEX 学习笔记 | 去中心化交易所实战指南</title><meta name=viewport content="width=device-width,minimum-scale=1"><meta name=description content="逃逸分析、垃圾回收、pprof 性能调优"><meta name=generator content="Hugo 0.161.1"><meta name=robots content="index, follow"><meta name=author content="阿白"><link rel=stylesheet href=/dex-bok/ananke/css/main.min.efe4d852f731d5d1fbb87718387202a97aafd768cdcdaed0662bbe6982e91824.css><link rel=stylesheet href=/dex-bok/css/custom.css><link rel="shortcut icon" href=/dex-bok/favicon.ico type=image/x-icon><link href=/dex-bok/go-language-series/go_08_memory_and_performance/index.xml rel=alternate type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link href=/dex-bok/go-language-series/go_08_memory_and_performance/index.xml rel=feed type=application/rss+xml title="DEX 学习笔记 | 去中心化交易所实战指南"><link rel=canonical href=https://tiao0303.github.io/dex-bok/go-language-series/go_08_memory_and_performance/><meta property="og:url" content="https://tiao0303.github.io/dex-bok/go-language-series/go_08_memory_and_performance/"><meta property="og:site_name" content="DEX 学习笔记 | 去中心化交易所实战指南"><meta property="og:title" content="第8章：内存模型与性能优化"><meta property="og:description" content="逃逸分析、垃圾回收、pprof 性能调优"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="go-language-series"><meta property="article:published_time" content="2026-05-10T10:15:00+08:00"><meta property="article:modified_time" content="2026-05-10T10:15:00+08:00"><meta property="article:tag" content="Go"><meta property="article:tag" content="编程语言"><meta itemprop=name content="第8章：内存模型与性能优化"><meta itemprop=description content="逃逸分析、垃圾回收、pprof 性能调优"><meta itemprop=datePublished content="2026-05-10T10:15:00+08:00"><meta itemprop=dateModified content="2026-05-10T10:15:00+08:00"><meta itemprop=wordCount content="635"><meta itemprop=keywords content="Go,编程语言"><meta name=twitter:card content="summary"><meta name=twitter:title content="第8章：内存模型与性能优化"><meta name=twitter:description content="逃逸分析、垃圾回收、pprof 性能调优"><link rel=stylesheet href=/dex-bok/css/custom.css><script defer src=https://static.cloudflareinsights.com/beacon.min.js data-cf-beacon='{"token": "e897872996734bdd9d6cf975afa873c5"}'></script></head><body class="ma0 bg-dark geek-dark production is-page is-page page-go_08_memory_and_performance"><header class=geek-header><nav class="geek-nav container" role=navigation><div class=geek-nav-inner><a href=/dex-bok/ class=geek-logo><span class=logo-icon>🦞</span>
+<span class=logo-text>DEX 学习笔记 | 去中心化交易所实战指南</span></a><div class=geek-nav-links><ul class=geek-menu><li><a href=/dex-bok/posts/ title=文章>文章</a></li><li><a href=/dex-bok/guides/ title=教程>教程</a></li><li><a href=/dex-bok/tools/ title=工具>工具</a></li><li><a href=/dex-bok/go-language-series/ title="Go 语言">Go 语言</a></li><li><a href=/dex-bok/about/ title=关于>关于</a></li><li><a href=/dex-bok/ title=首页>首页</a></li></ul></div></div></nav></header><main class=pb7 role=main><div class=geek-article-layout><aside class=geek-article-toc><h4>目录</h4><nav id=TableOfContents><ul><li><a href=#go-的内存分配>Go 的内存分配</a><ul><li><a href=#new-vs-make>new vs make</a></li></ul></li><li><a href=#逃逸分析escape-analysis>逃逸分析（Escape Analysis）</a><ul><li><a href=#逃逸示例>逃逸示例</a></li><li><a href=#逃逸分析工具>逃逸分析工具</a></li><li><a href=#避免逃逸的原则>避免逃逸的原则</a></li></ul></li><li><a href=#垃圾回收gc>垃圾回收（GC）</a><ul><li><a href=#gc-调优参数>GC 调优参数</a></li><li><a href=#runtime-包>runtime 包</a></li></ul></li><li><a href=#pprof-性能分析>pprof 性能分析</a><ul><li><a href=#cpu-分析>CPU 分析</a></li><li><a href=#手动采样>手动采样</a></li><li><a href=#内存分析>内存分析</a></li><li><a href=#benchmem-基准测试看内存>benchmem 基准测试看内存</a></li></ul></li><li><a href=#性能优化技巧>性能优化技巧</a><ul><li><a href=#1-对象池syncpool>1. 对象池（sync.Pool）</a></li><li><a href=#2-减少分配>2. 减少分配</a></li><li><a href=#3-使用切片预分配>3. 使用切片预分配</a></li><li><a href=#4-避免反射>4. 避免反射</a></li></ul></li><li><a href=#练习题>练习题</a></li></ul></nav></aside><article class="geek-article-content geek-article-main"><header class=geek-article-header><h1>第8章：内存模型与性能优化</h1><div class=article-meta><time datetime=2026-05-10>2026-05-10</time>
+<span>•</span>
+<span>635 字</span>
+<span>•</span>
+<span>Go语言学习</span></div><div class=article-tags><a href=/dex-bok/tags/go/ class=article-tag>Go</a>
+<a href=/dex-bok/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/ class=article-tag>编程语言</a></div></header><h1 id=第8章内存模型与性能优化>第8章：内存模型与性能优化</h1><h2 id=go-的内存分配>Go 的内存分配</h2><p>Go 的内存分配基于 TCMalloc（Thread-Caching Malloc）算法，分为三个层次：</p><ol><li><strong>微对象</strong>（0~32B）：微分配器管理</li><li><strong>小对象</strong>（32B~32KB）：使用 mcache 中的小对象缓存</li><li><strong>大对象</strong>（>32KB）：直接从堆分配</li></ol><h3 id=new-vs-make>new vs make</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// new：分配任意类型的零值内存，返回指针</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> new(<span style=color:#66d9ef>int</span>)        <span style=color:#75715e>// *int，值为 0</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> new([]<span style=color:#66d9ef>int</span>)      <span style=color:#75715e>// *[]int，值为 nil</span>
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 全局变量引用 → 逃逸</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>global</span> <span style=color:#f92672>*</span><span style=color:#66d9ef>int</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>bar</span>() {
+</span></span><span style=display:flex><span><span style=color:#75715e>// make：专门用于切片、Map、Channel 的初始化</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> make([]<span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>5</span>)  <span style=color:#75715e>// slice，长度5，容量5</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>m</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>map</span>[<span style=color:#66d9ef>string</span>]<span style=color:#66d9ef>int</span>)  <span style=color:#75715e>// 空 map</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>ch</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>10</span>)   <span style=color:#75715e>// 有缓冲 channel</span>
+</span></span></code></pre></div><h2 id=逃逸分析escape-analysis>逃逸分析（Escape Analysis）</h2><p>Go 编译器会分析变量的作用域，决定变量应该分配在**栈（Stack）<strong>还是</strong>堆（Heap）**上。</p><ul><li><strong>栈分配</strong>：函数返回即释放，无需垃圾回收，速度快</li><li><strong>堆分配</strong>：生命周期超出函数作用域，需要 GC 回收</li></ul><h3 id=逃逸示例>逃逸示例</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// 这个变量不会逃逸（栈上分配）</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>notEscape</span>() {
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>x</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>10</span>
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>global</span> = <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>x</span> <span style=color:#75715e>// x 逃逸</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>x</span>)  <span style=color:#75715e>// x 不会逃逸</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// interface 类型 → 逃逸</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>i</span> <span style=color:#66d9ef>any</span> = <span style=color:#ae81ff>10</span>  <span style=color:#75715e>// 装箱，分配在堆</span>
-</span></span></code></pre></div><p><strong>栈 vs 堆：</strong></p><table><thead><tr><th>特性</th><th>栈</th><th>堆</th></tr></thead><tbody><tr><td>分配速度</td><td>O(1)，只需移动栈指针</td><td>O(log n)，需要分配算法</td></tr><tr><td>释放速度</td><td>O(1)，只需恢复栈指针</td><td>依赖 GC</td></tr><tr><td>生命周期</td><td>函数退出即释放</td><td>依赖 GC 回收</td></tr></tbody></table><h2 id=垃圾回收gc>垃圾回收（GC）</h2><p>Go 使用<strong>三色标记</strong>并发 GC：</p><ol><li><strong>白色：</strong> 未处理的对象</li><li><strong>灰色：</strong> 已发现但未处理完的对象</li><li><strong>黑色：</strong> 已处理完的对象</li></ol><p>GC 流程：</p><ul><li>初始所有白色</li><li>从根节点（全局变量、栈）出发，标记灰色</li><li>处理灰色对象，标记其引用为灰色，本身为黑色</li><li>无灰色对象时，清除白色对象</li></ul><p><strong>GC 触发时机：</strong></p><ul><li>堆大小达到阈值（默认 100% 增长）</li><li><code>runtime.GC()</code> 手动触发</li><li><code>debug.SetGCPercent()</code></li></ul><h2 id=性能优化建议>性能优化建议</h2><h3 id=1-减少内存分配>1. 减少内存分配</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// 反例：频繁分配</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>process</span>(<span style=color:#a6e22e>data</span> []<span style=color:#66d9ef>int</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>v</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>data</span> {
-</span></span><span style=display:flex><span>        <span style=color:#a6e22e>result</span> <span style=color:#f92672>:=</span> append([]<span style=color:#66d9ef>int</span>{}, <span style=color:#a6e22e>v</span><span style=color:#f92672>*</span><span style=color:#ae81ff>2.</span>..) <span style=color:#75715e>// 每次分配</span>
-</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>result</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>// 这个变量会逃逸（堆上分配）</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>escapeToHeap</span>() <span style=color:#f92672>*</span><span style=color:#66d9ef>int</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>x</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>10</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>x</span>  <span style=color:#75715e>// &amp;x 被返回，x 逃逸到堆</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=逃逸分析工具>逃逸分析工具</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 编译时加上 -gcflags=&#34;-m&#34; 可以看到逃逸分析结果</span>
+</span></span><span style=display:flex><span>go build -gcflags<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-m&#34;</span> main.go
+</span></span></code></pre></div><p>示例输出：</p><pre tabindex=0><code>./main.go:10:6: cannot inline foo: unexported function
+./main.go:13:2: x escapes to heap  &lt;-- x 逃逸到堆
+./main.go:13:2:   from return (./main.go:13:2)
+./main.go:13:2:   from assignment (./main.go:13:2)
+</code></pre><h3 id=避免逃逸的原则>避免逃逸的原则</h3><ul><li>尽量使用<strong>值传递</strong>而非指针传递（小对象复制开销小于指针）</li><li>返回局部变量的指针要谨慎（必然逃逸）</li><li>短生命周期对象尽量在栈上分配</li></ul><h2 id=垃圾回收gc>垃圾回收（GC）</h2><p>Go 使用<strong>并发三色标记清扫回收器</strong>，GC 期间应用仍可运行（Stop The World 时间极短）。</p><h3 id=gc-调优参数>GC 调优参数</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 设置 GC 目标时间（默认 2ms）</span>
+</span></span><span style=display:flex><span>GOGC<span style=color:#f92672>=</span>off     <span style=color:#75715e># 禁用 GC（调试用，不推荐）</span>
+</span></span><span style=display:flex><span>GOGC<span style=color:#f92672>=</span><span style=color:#ae81ff>100</span>     <span style=color:#75715e># 默认，下次 GC 前堆增长 100%</span>
+</span></span><span style=display:flex><span>GOGC<span style=color:#f92672>=</span><span style=color:#ae81ff>50</span>      <span style=color:#75715e># 更激进，更频繁 GC，堆更小</span>
+</span></span><span style=display:flex><span>GOGC<span style=color:#f92672>=</span><span style=color:#ae81ff>200</span>     <span style=color:#75715e># 更宽松，GC 更少，堆更大</span>
+</span></span></code></pre></div><h3 id=runtime-包>runtime 包</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;runtime&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>runtime</span>.<span style=color:#a6e22e>GC</span>()          <span style=color:#75715e>// 手动触发 GC</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>runtime</span>.<span style=color:#a6e22e>MemStats</span>{}    <span style=color:#75715e>// 内存统计</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>runtime</span>.<span style=color:#a6e22e>NumCPU</span>()      <span style=color:#75715e>// CPU 核心数</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>runtime</span>.<span style=color:#a6e22e>NumGoroutine</span>() <span style=color:#75715e>// 当前 goroutine 数量</span>
+</span></span></code></pre></div><h2 id=pprof-性能分析>pprof 性能分析</h2><p>Go 内置了 pprof 性能分析工具，可以分析 CPU、内存、goroutine、阻塞等：</p><h3 id=cpu-分析>CPU 分析</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#a6e22e>_</span> <span style=color:#e6db74>&#34;net/http/pprof&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;net/http&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 启用 pprof</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>go</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#e6db74>&#34;:6060&#34;</span>, <span style=color:#66d9ef>nil</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ... 业务代码 ...</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>启动后访问：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># 查看 CPU 占用（30秒采样）</span>
+</span></span><span style=display:flex><span>go tool pprof http://localhost:6060/debug/pprof/profile
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 查看内存分配</span>
+</span></span><span style=display:flex><span>go tool pprof http://localhost:6060/debug/pprof/heap
+</span></span></code></pre></div><h3 id=手动采样>手动采样</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;runtime/pprof&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;os&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 创建 CPU profile 文件</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>f</span>, <span style=color:#a6e22e>_</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Create</span>(<span style=color:#e6db74>&#34;cpu.prof&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>pprof</span>.<span style=color:#a6e22e>StartCPUProfile</span>(<span style=color:#a6e22e>f</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>pprof</span>.<span style=color:#a6e22e>StopCPUProfile</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ... 需要分析的业务代码 ...</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>Close</span>()
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=内存分析>内存分析</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;runtime/pprof&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>f</span>, <span style=color:#a6e22e>_</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Create</span>(<span style=color:#e6db74>&#34;mem.prof&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>pprof</span>.<span style=color:#a6e22e>WriteHeapProfile</span>(<span style=color:#a6e22e>f</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>Close</span>()
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=benchmem-基准测试看内存>benchmem 基准测试看内存</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// benchmark_test.go</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;testing&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>BenchmarkAllocate</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>N</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>_</span> = make([]<span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>1024</span>)  <span style=color:#75715e>// 每次分配 1024 个 int</span>
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 正例：预分配</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>process</span>(<span style=color:#a6e22e>data</span> []<span style=color:#66d9ef>int</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>result</span> <span style=color:#f92672>:=</span> make([]<span style=color:#66d9ef>int</span>, len(<span style=color:#a6e22e>data</span>))
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>v</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>data</span> {
-</span></span><span style=display:flex><span>        <span style=color:#a6e22e>result</span>[<span style=color:#a6e22e>i</span>] = <span style=color:#a6e22e>v</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>2</span>
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=2-预分配切片容量>2. 预分配切片容量</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// 反例</span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>int</span>{}
-</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>1000</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>s</span> = append(<span style=color:#a6e22e>s</span>, <span style=color:#a6e22e>i</span>) <span style=color:#75715e>// 多次扩容</span>
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 正例</span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> make([]<span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1000</span>)
-</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>1000</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>s</span> = append(<span style=color:#a6e22e>s</span>, <span style=color:#a6e22e>i</span>) <span style=color:#75715e>// 一次扩容</span>
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=3-对象池syncpool>3. 对象池（sync.Pool）</h3><p>复用对象，减少 GC 压力：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>bufferPool</span> = <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>Pool</span>{
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>New</span>: <span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>any</span> {
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>go test -bench<span style=color:#f92672>=</span>. -benchmem benchmark_test.go
+</span></span><span style=display:flex><span><span style=color:#75715e># 输出：</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># BenchmarkAllocate-8      1000000        1022 ns/op       8192 B/op          1 allocs/op</span>
+</span></span></code></pre></div><h2 id=性能优化技巧>性能优化技巧</h2><h3 id=1-对象池syncpool>1. 对象池（sync.Pool）</h3><p>重复使用的对象用 <code>sync.Pool</code> 复用，减少 GC 压力：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>bufferPool</span> = <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>Pool</span>{
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>New</span>: <span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>interface</span>{} {
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>bytes</span>.<span style=color:#a6e22e>Buffer</span>{}
 </span></span><span style=display:flex><span>    },
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>getBuffer</span>() <span style=color:#f92672>*</span><span style=color:#a6e22e>bytes</span>.<span style=color:#a6e22e>Buffer</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>buf</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>bufferPool</span>.<span style=color:#a6e22e>Get</span>().(<span style=color:#f92672>*</span><span style=color:#a6e22e>bytes</span>.<span style=color:#a6e22e>Buffer</span>)
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>buf</span>.<span style=color:#a6e22e>Reset</span>()
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>buf</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>bufferPool</span>.<span style=color:#a6e22e>Get</span>().(<span style=color:#f92672>*</span><span style=color:#a6e22e>bytes</span>.<span style=color:#a6e22e>Buffer</span>)
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>putBuffer</span>(<span style=color:#a6e22e>buf</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>bytes</span>.<span style=color:#a6e22e>Buffer</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>bufferPool</span>.<span style=color:#a6e22e>Put</span>(<span style=color:#a6e22e>buf</span>)
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=4-减少指针使用>4. 减少指针使用</h3><p>结构体字段使用值而非指针，减少 GC 扫描范围：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// 反例</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Node</span> <span style=color:#66d9ef>struct</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Value</span> <span style=color:#f92672>*</span><span style=color:#66d9ef>int</span>
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Next</span>  <span style=color:#f92672>*</span><span style=color:#a6e22e>Node</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>putBuffer</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>bytes</span>.<span style=color:#a6e22e>Buffer</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>Reset</span>()
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>bufferPool</span>.<span style=color:#a6e22e>Put</span>(<span style=color:#a6e22e>b</span>)
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 正例（如果 Value 不需要为 nil）</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Node</span> <span style=color:#66d9ef>struct</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Value</span> <span style=color:#66d9ef>int</span>
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Next</span>  <span style=color:#f92672>*</span><span style=color:#a6e22e>Node</span>
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h2 id=基准测试>基准测试</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;testing&#34;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Sum</span>(<span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>) <span style=color:#66d9ef>int</span> {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>total</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;=</span> <span style=color:#a6e22e>n</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
-</span></span><span style=display:flex><span>        <span style=color:#a6e22e>total</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>i</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 使用</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>buf</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>getBuffer</span>()
+</span></span><span style=display:flex><span><span style=color:#a6e22e>buf</span>.<span style=color:#a6e22e>WriteString</span>(<span style=color:#e6db74>&#34;hello&#34;</span>)
+</span></span><span style=display:flex><span><span style=color:#a6e22e>putBuffer</span>(<span style=color:#a6e22e>buf</span>)
+</span></span></code></pre></div><h3 id=2-减少分配>2. 减少分配</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// 不推荐：频繁分配</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>concat</span>() <span style=color:#66d9ef>string</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>s</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>10</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>s</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%d-&#34;</span>, <span style=color:#a6e22e>i</span>)
 </span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>total</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>s</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// 基准测试</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>BenchmarkSum</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>N</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
-</span></span><span style=display:flex><span>        <span style=color:#a6e22e>Sum</span>(<span style=color:#ae81ff>100000</span>)
+</span></span><span style=display:flex><span><span style=color:#75715e>// 推荐：使用 strings.Builder</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>concatGood</span>() <span style=color:#66d9ef>string</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>b</span> <span style=color:#a6e22e>strings</span>.<span style=color:#a6e22e>Builder</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>10</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>WriteString</span>(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%d-&#34;</span>, <span style=color:#a6e22e>i</span>))
 </span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>String</span>()
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>运行基准测试：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>go test -bench<span style=color:#f92672>=</span>. -benchmem main_test.go
-</span></span></code></pre></div><p>输出示例：</p><pre tabindex=0><code>goos: darwin
-goarch: arm64
-BenchmarkSum-8      1000000000           0.305 ns/op       0 B/op          0 allocs/op
-</code></pre><table><thead><tr><th>指标</th><th>说明</th></tr></thead><tbody><tr><td><code>ns/op</code></td><td>每次操作耗时</td></tr><tr><td><code>B/op</code></td><td>每次操作分配字节数</td></tr><tr><td><code>allocs/op</code></td><td>每次操作分配次数</td></tr></tbody></table><h2 id=pprof-使用>pprof 使用</h2><p>pprof 是 Go 的性能分析工具，可以分析 CPU 和内存热点。</p><p><strong>CPU 分析：</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#a6e22e>_</span> <span style=color:#e6db74>&#34;net/http/pprof&#34;</span>
+</span></span></code></pre></div><h3 id=3-使用切片预分配>3. 使用切片预分配</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// 不推荐：多次 append 扩容</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>int</span>{}
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>1000</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>s</span> = append(<span style=color:#a6e22e>s</span>, <span style=color:#a6e22e>i</span>)
+</span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>go</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#e6db74>&#34;:6060&#34;</span>, <span style=color:#66d9ef>nil</span>)
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// 访问 http://localhost:6060/debug/pprof/</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 推荐：预分配容量</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> make([]<span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1000</span>)  <span style=color:#75715e>// 预分配容量 1000</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>1000</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>s</span> = append(<span style=color:#a6e22e>s</span>, <span style=color:#a6e22e>i</span>)
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>然后用 <code>go tool pprof</code> 分析：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>go tool pprof -http<span style=color:#f92672>=</span>:8080 http://localhost:6060/debug/pprof/profile
-</span></span></code></pre></div><p><strong>内存分析：</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>go tool pprof http://localhost:6060/debug/pprof/heap
-</span></span></code></pre></div><h2 id=内存泄漏常见场景>内存泄漏常见场景</h2><ol><li><strong>全局 map 持续增长</strong>：不断写入不清理</li><li><strong>Channel 未关闭</strong>：goroutine 永久阻塞</li><li><strong>Timer 未清理</strong>：<code>time.NewTicker</code> 后不调用 <code>Stop()</code></li><li><strong>闭包捕获大对象</strong>：闭包持有大对象引用</li></ol><h2 id=练习题>练习题</h2><p><strong>练习 8-1：使用 pprof 分析 CPU 热点</strong></p><p>写一个程序，计算 1-100000 的所有质数，对比不同算法的性能差异。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span></code></pre></div><h3 id=4-避免反射>4. 避免反射</h3><p>反射开销较大，尽可能使用具体类型或接口：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// 反射慢</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>v</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>reflect</span>.<span style=color:#a6e22e>ValueOf</span>(<span style=color:#a6e22e>x</span>)
+</span></span><span style=display:flex><span><span style=color:#a6e22e>v</span>.<span style=color:#a6e22e>Interface</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 直接调用快</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;%v&#34;</span>, <span style=color:#a6e22e>x</span>)
+</span></span></code></pre></div><h2 id=练习题>练习题</h2><p><strong>1. 逃逸分析练习：</strong>
+用 <code>-gcflags="-m"</code> 编译以下代码，找出哪些变量会逃逸：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>a</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>10</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>b</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>a</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#f92672>*</span><span style=color:#a6e22e>b</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>c</span> <span style=color:#f92672>:=</span> make([]<span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>5</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>c</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><strong>2. GC 调优练习：</strong>
+设置 <code>GOGC=50</code> 运行一个内存密集型程序，观察内存使用变化。</p><p><strong>3. pprof 练习：</strong>
+编写一个有性能瓶颈的 Web 服务，用 pprof 分析 CPU 占用最高的函数。</p><p><strong>4. 对象池练习：</strong>
+使用 <code>sync.Pool</code> 实现一个整数类型的对象池，复用频繁分配的数字。</p><hr><p><strong>答案：</strong></p><ol><li>逃逸分析结果：</li></ol><ul><li><code>a</code>：不逃逸，栈上分配</li><li><code>b</code>：指向 <code>a</code>，但 <code>b</code> 本身不逃逸</li><li><code>*b</code>：仍然是 <code>a</code>，不逃逸</li><li><code>c</code>（切片）：make 创建的切片会逃逸（因为 <code>fmt.Println</code> 可能保留引用）</li><li><code>c</code> 本身：会逃逸到堆</li></ul><ol start=2><li>运行方式：</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>GOGC<span style=color:#f92672>=</span><span style=color:#ae81ff>50</span> go run main.go
+</span></span><span style=display:flex><span><span style=color:#75715e># 或者</span>
+</span></span><span style=display:flex><span>export GOGC<span style=color:#f92672>=</span><span style=color:#ae81ff>50</span>
+</span></span><span style=display:flex><span>go run main.go
+</span></span></code></pre></div><ol start=3><li>示例（有性能瓶颈的代码）：</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;fmt&#34;</span>
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;testing&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;net/http&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>_</span> <span style=color:#e6db74>&#34;net/http/pprof&#34;</span>
 </span></span><span style=display:flex><span>)
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>isPrime</span>(<span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>) <span style=color:#66d9ef>bool</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>n</span> &lt; <span style=color:#ae81ff>2</span> {
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>slowFunction</span>() <span style=color:#66d9ef>int</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>sum</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>10000000</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>sum</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>i</span>
 </span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>2</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>*</span><span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;=</span> <span style=color:#a6e22e>n</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>n</span><span style=color:#f92672>%</span><span style=color:#a6e22e>i</span> <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> {
-</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>
-</span></span><span style=display:flex><span>        }
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>sum</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>primes1</span>(<span style=color:#a6e22e>n</span> <span style=color:#66d9ef>int</span>) []<span style=color:#66d9ef>int</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>result</span> []<span style=color:#66d9ef>int</span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>2</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;=</span> <span style=color:#a6e22e>n</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>isPrime</span>(<span style=color:#a6e22e>i</span>) {
-</span></span><span style=display:flex><span>            <span style=color:#a6e22e>result</span> = append(<span style=color:#a6e22e>result</span>, <span style=color:#a6e22e>i</span>)
-</span></span><span style=display:flex><span>        }
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>result</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>handler</span>(<span style=color:#a6e22e>w</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ResponseWriter</span>, <span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Request</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>result</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>slowFunction</span>()
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>w</span>.<span style=color:#a6e22e>Write</span>([]byte(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;结果：%d&#34;</span>, <span style=color:#a6e22e>result</span>)))
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>BenchmarkPrimes1</span>(<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>B</span>) {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>b</span>.<span style=color:#a6e22e>N</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
-</span></span><span style=display:flex><span>        <span style=color:#a6e22e>primes1</span>(<span style=color:#ae81ff>100000</span>)
-</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>HandleFunc</span>(<span style=color:#e6db74>&#34;/&#34;</span>, <span style=color:#a6e22e>handler</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#e6db74>&#34;:6060&#34;</span>, <span style=color:#66d9ef>nil</span>)
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>运行 <code>go test -bench=BenchmarkPrimes1 -benchmem</code> 查看性能。</p><hr><p>下一章我们将学习 Go 标准库的重要模块。</p><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
-<a href=https://tiao0303.github.io/dex-bok/go-language-series/go_09_standard_library/></a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
-<a href=https://tiao0303.github.io/dex-bok/go-language-series/go_07_concurrency/></a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
+</span></span></code></pre></div><p>用 <code>curl localhost:6060/debug/pprof/profile</code> 采样，然后用 <code>go tool pprof</code> 分析。</p><ol start=4><li></li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>intPool</span> = <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>Pool</span>{
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>New</span>: <span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>interface</span>{} {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> new(<span style=color:#66d9ef>int</span>)
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>getInt</span>() <span style=color:#f92672>*</span><span style=color:#66d9ef>int</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>intPool</span>.<span style=color:#a6e22e>Get</span>().(<span style=color:#f92672>*</span><span style=color:#66d9ef>int</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>putInt</span>(<span style=color:#a6e22e>p</span> <span style=color:#f92672>*</span><span style=color:#66d9ef>int</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span><span style=color:#a6e22e>p</span> = <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>intPool</span>.<span style=color:#a6e22e>Put</span>(<span style=color:#a6e22e>p</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>getInt</span>()
+</span></span><span style=display:flex><span>    <span style=color:#f92672>*</span><span style=color:#a6e22e>p</span> = <span style=color:#ae81ff>42</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#f92672>*</span><span style=color:#a6e22e>p</span>)   <span style=color:#75715e>// 42</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>putInt</span>(<span style=color:#a6e22e>p</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><div class="article-nav article-nav-prev"><span class=nav-label>← 上一篇</span>
+<a href=https://tiao0303.github.io/dex-bok/go-language-series/go_07_concurrency/>第7章：并发——Goroutine 与 Channel</a></div><div class="article-nav article-nav-next"><span class=nav-label>下一篇 →</span>
+<a href=https://tiao0303.github.io/dex-bok/go-language-series/go_09_standard_library/>第9章：Go 标准库精讲</a></div></article></div></main><footer class=geek-footer><div class=container><div class=geek-footer-inner><div class=geek-footer-brand><a href=https://tiao0303.github.io/dex-bok/ class=geek-footer-logo><span class=logo-icon>🦞</span>
 <span>DEX 学习笔记 | 去中心化交易所实战指南</span></a><p class=geek-footer-desc>DEX 理论与实战心得 - AMM 原理、流动性策略、MEV 防护、链上数据分析</p></div><div class=geek-footer-links><div class=geek-footer-col><h4>导航</h4><ul><li><a href=/>首页</a></li><li><a href=/dex-bok/posts/>文章</a></li><li><a href=/dex-bok/guides/>教程</a></li><li><a href=/dex-bok/tools/>工具</a></li></ul></div><div class=geek-footer-col><h4>关于</h4><ul><li><a href=/dex-bok/about/>关于本站</a></li></ul></div><div class=geek-footer-col><h4>关注</h4><ul><li><a href=https://github.com/tiao0303 target=_blank rel=noopener>GitHub</a></li><li><a href=https://x.com/qing87762 target=_blank rel=noopener>X (Twitter)</a></li></ul></div></div></div><div class=geek-footer-bottom><p>&copy; 2026 DEX 学习笔记 | 去中心化交易所实战指南</p><p class=geek-footer-tech>Built with Hugo & DeFi ❤️</p></div></div></footer></body></html>
