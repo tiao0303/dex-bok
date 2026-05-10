@@ -1,7 +1,7 @@
+date: 2026-05-10T09:45:00+08:00
 ---
 title: "第2章：变量、数据类型与控制流"
 slug: "go_02_variables_and_control_flow"
-date: 2026-05-10T09:40:00+08:00
 description: "Go 语言变量声明、基本数据类型、条件语句、循环语句详解"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]

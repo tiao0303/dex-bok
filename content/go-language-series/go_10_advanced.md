@@ -1,7 +1,7 @@
+date: 2026-05-10T10:25:00+08:00
 ---
 title: "第10章：工程化、测试与高级主题"
 slug: "go_10_advanced"
-date: 2026-05-10T09:40:00+08:00
 description: "Go 语言单元测试、模糊测试、Go Modules、反射、泛型、CGO、交叉编译详解"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]

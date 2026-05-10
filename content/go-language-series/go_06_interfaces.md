@@ -1,7 +1,7 @@
+date: 2026-05-10T10:05:00+08:00
 ---
 title: "第6章：接口——Go 的多态哲学"
 slug: "go_06_interfaces"
-date: 2026-05-10T09:40:00+08:00
 description: "Go 语言接口定义、隐式实现、空接口、类型断言与常用标准接口详解"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]

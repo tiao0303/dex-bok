@@ -1,7 +1,7 @@
+date: 2026-05-10T10:00:00+08:00
 ---
 title: "第5章：结构体与方法"
 slug: "go_05_structs_and_methods"
-date: 2026-05-10T09:40:00+08:00
 description: "Go 语言结构体定义、字段标签、方法、组合与可见性详解"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]

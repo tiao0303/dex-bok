@@ -1,7 +1,7 @@
+date: 2026-05-10T10:15:00+08:00
 ---
 title: "第8章：内存模型与性能优化"
 slug: "go_08_memory_and_performance"
-date: 2026-05-10T09:40:00+08:00
 description: "Go 语言逃逸分析、垃圾回收机制、性能优化与 pprof 使用详解"
 tags: ["Go", "编程语言"]
 categories: ["Go语言学习"]
